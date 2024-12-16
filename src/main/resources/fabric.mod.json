@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "debris_client",
+  "version": "${version}",
+  "name": "DebrisClient",
+  "description": "Some tricks",
+  "authors": [
+    "Debris"
+  ],
+  "contact": {
+    "repo": "https://github.com/De6ris/DebrisClient"
+  },
+  "license": "MIT",
+  "icon": "assets/DebrisClient/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.github.Debris.DebrisClient.DebrisClient"
+    ],
+    "modmenu": [
+      "com.github.Debris.DebrisClient.compat.ModMenu"
+    ]
+  },
+  "mixins": [
+    "DebrisClient.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": ">=1.21.4",
+    "malilib": "*"
+  },
+  "accessWidener": "DebrisClient.accesswidener"
+}

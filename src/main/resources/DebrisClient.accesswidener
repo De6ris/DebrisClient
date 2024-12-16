@@ -1,0 +1,8 @@
+accessWidener	v1	named
+accessible field net/minecraft/client/gui/screen/ingame/HandledScreen quickMovingStack Lnet/minecraft/item/ItemStack;
+
+accessible field net/minecraft/client/gui/screen/ingame/CreativeInventoryScreen$CreativeSlot slot Lnet/minecraft/screen/slot/Slot;
+
+accessible class net/minecraft/client/render/BackgroundRenderer$StatusEffectFogModifier
+
+accessible class net/minecraft/client/gui/screen/ingame/CreativeInventoryScreen$CreativeSlot
