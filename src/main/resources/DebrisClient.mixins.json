@@ -4,7 +4,6 @@
   "package": "com.github.Debris.DebrisClient.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "compat.carpet.CarpetFix",
     "compat.malilib.WidgetConfigOptionMixin",
     "misc.PortalForcerMixin"
   ],
@@ -29,6 +28,5 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "plugin": "com.github.Debris.DebrisClient.MixinConfigPlugin"
+  }
 }

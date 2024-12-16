@@ -44,7 +44,6 @@ public class DCCommonConfig implements IConfigHandler {
 
     // fix
     public static final ConfigBoolean FreeCamKeepAutoMoving = new ConfigBoolean("灵魂出窍时允许自动移动", true, "本模组的自动移动, 在灵魂出窍时会默认停止移动");
-    public static final ConfigBoolean CarpetSinglePlayerFix = new ConfigBoolean("Carpet单人崩溃修复", true, "仅1.21有效, 更改后重启有效");
     public static final ConfigBoolean FreeCamSpectatorFix = new ConfigBoolean("旁观模式灵魂出窍修复", true, "当你附身别的生物, 启动灵魂出窍时相机仍在附身地");
 
 
@@ -131,7 +130,6 @@ public class DCCommonConfig implements IConfigHandler {
         );
         Fix = ImmutableList.of(
                 FreeCamKeepAutoMoving,
-                CarpetSinglePlayerFix,
                 FreeCamSpectatorFix
         );
         KeyPress = ImmutableList.of(

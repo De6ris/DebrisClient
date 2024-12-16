@@ -1,6 +1,5 @@
 package com.github.Debris.DebrisClient;
 
-import com.github.Debris.DebrisClient.config.early.DCEarlyConfig;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -20,9 +19,6 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.equals("com.github.Debris.DebrisClient.mixin.compat.carpet.CarpetFix")) {
-            return DCEarlyConfig.getInstance().CarpetFix;
-        }
         return true;
     }
 
