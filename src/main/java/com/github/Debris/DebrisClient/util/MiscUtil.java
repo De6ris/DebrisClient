@@ -12,7 +12,6 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.PlayerInput;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOfferList;
 
@@ -28,16 +27,10 @@ public class MiscUtil {
     }
 
     public static void handleMovement(Input input) {
-        PlayerInput oldInput = input.playerInput;
-        input.playerInput = new PlayerInput(
-                oldInput.forward() || DCCommonConfig.AUTO_WALK.getBooleanValue(),
-                oldInput.backward() || DCCommonConfig.AUTO_BACK.getBooleanValue(),
-                oldInput.left() || DCCommonConfig.AUTO_LEFT.getBooleanValue(),
-                oldInput.right() || DCCommonConfig.AUTO_RIGHT.getBooleanValue(),
-                oldInput.jump(),
-                oldInput.sneak(),
-                oldInput.sprint()
-        );
+        input.pressingForward |= DCCommonConfig.AUTO_WALK.getBooleanValue();
+        input.pressingBack |= DCCommonConfig.AUTO_BACK.getBooleanValue();
+        input.pressingLeft |= DCCommonConfig.AUTO_LEFT.getBooleanValue();
+        input.pressingRight |= DCCommonConfig.AUTO_RIGHT.getBooleanValue();
         if (DCCommonConfig.AUTO_WALK.getBooleanValue()) {
             input.movementForward = 1.0F;
         }
@@ -53,7 +46,12 @@ public class MiscUtil {
     }
 
     public static void clearMovement(Input input) {
-        input.playerInput = PlayerInput.DEFAULT;
+        input.pressingForward = false;
+        input.pressingBack = false;
+        input.pressingLeft = false;
+        input.pressingRight = false;
+        input.jumping = false;
+        input.sneaking = false;
         input.movementForward = 0.0F;
         input.movementSideways = 0.0F;
     }

@@ -46,8 +46,8 @@ public class StoneCutterRecipePattern {
     // Assuming Valid
     public NbtCompound writeToNBT(DynamicRegistryManager registryManager) {
         NbtCompound nbt = new NbtCompound();
-        NbtCompound inputNbt = (NbtCompound) this.input.toNbt(registryManager);
-        NbtCompound resultNbt = (NbtCompound) this.result.toNbt(registryManager);
+        NbtCompound inputNbt = (NbtCompound) this.input.encode(registryManager);
+        NbtCompound resultNbt = (NbtCompound) this.result.encode(registryManager);
         nbt.put("Input", inputNbt);
         nbt.put("Result", resultNbt);
         return nbt;

@@ -10,7 +10,7 @@ import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.NetworkRecipeId;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
@@ -143,7 +143,7 @@ public class InventoryUtil {
         getController().clickButton(getWindowID(), buttonId);
     }
 
-    public static void clickRecipe(NetworkRecipeId recipe, boolean craftAll) {
+    public static void clickRecipe(RecipeEntry<?> recipe, boolean craftAll) {
         getController().clickRecipe(getWindowID(), recipe, craftAll);
     }
 

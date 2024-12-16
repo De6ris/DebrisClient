@@ -4,8 +4,8 @@ import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.recipe.NetworkRecipeId;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.input.RecipeInput;
 import org.slf4j.Logger;
 
@@ -23,16 +23,16 @@ public class MassCraftingRecipeBook extends AbstractMassCrafting {
             return;
         }
 
-        NetworkRecipeId networkRecipeId = selectedRecipe.getNetworkRecipeId();
+        RecipeEntry<?> vanillaRecipeEntry = selectedRecipe.getVanillaRecipeEntry();
 
         if (!checkResultSlot()) {// if no result, click once
-            InventoryUtil.clickRecipe(networkRecipeId, true);// just send packet, slot moving is done by the server
+            InventoryUtil.clickRecipe(vanillaRecipeEntry, true);// just send packet, slot moving is done by the server
         }
 
         while (checkResultSlot()) {// while correct result
             dropAllProduct();
             tryTakeResultSlot();
-            InventoryUtil.clickRecipe(networkRecipeId, true);
+            InventoryUtil.clickRecipe(vanillaRecipeEntry, true);
         }
 
     }

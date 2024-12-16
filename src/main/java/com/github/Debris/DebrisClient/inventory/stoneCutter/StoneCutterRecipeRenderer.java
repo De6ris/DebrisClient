@@ -1,6 +1,7 @@
 package com.github.Debris.DebrisClient.inventory.stoneCutter;
 
 import com.github.Debris.DebrisClient.util.AccessorUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.StringUtils;
@@ -9,8 +10,10 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.DiffuseLighting;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import org.joml.Matrix4fStack;
 
 public class StoneCutterRecipeRenderer {
     private static final StoneCutterRecipeRenderer INSTANCE = new StoneCutterRecipeRenderer();
@@ -41,20 +44,20 @@ public class StoneCutterRecipeRenderer {
 
             this.calculateRecipePositions(gui);
 
-            drawContext.getMatrices().push();
-            drawContext.getMatrices().translate(this.recipeListX, this.recipeListY, 0);
-            drawContext.getMatrices().scale((float) this.scale, (float) this.scale, 1);
+//            drawContext.getMatrices().push();
+//            drawContext.getMatrices().translate(this.recipeListX, this.recipeListY, 0);
+//            drawContext.getMatrices().scale((float) this.scale, (float) this.scale, 1);
 
-//            Matrix4fStack matrix4fStack = RenderSystem.getModelViewStack();
-//            matrix4fStack.pushMatrix();
-//            matrix4fStack.translate(this.recipeListX, this.recipeListY, 0);
-//            matrix4fStack.scale((float) this.scale, (float) this.scale, 1);
+            Matrix4fStack matrix4fStack = RenderSystem.getModelViewStack();
+            matrix4fStack.pushMatrix();
+            matrix4fStack.translate(this.recipeListX, this.recipeListY, 0);
+            matrix4fStack.scale((float) this.scale, (float) this.scale, 1);
 
             String str = StringUtils.translate("itemscroller.gui.label.recipe_page", (first / countPerPage) + 1, recipeStorage.getTotalRecipeCount() / countPerPage);
 
             drawContext.drawText(this.mc.textRenderer, str, 16, -12, 0xC0C0C0C0, false);
 
-            RenderUtils.forceDraw(drawContext);
+//            RenderUtils.forceDraw(drawContext);
 
             for (int i = 0, recipeId = first; recipeId <= lastOnPage; ++i, ++recipeId) {
                 ItemStack stack = recipeStorage.getRecipe(recipeId).getResult();
@@ -70,10 +73,10 @@ public class StoneCutterRecipeRenderer {
 
             this.renderRecipeDetail(recipe, recipeStorage.getRecipeCountPerPage(), gui, drawContext);
 
-            drawContext.getMatrices().pop();
-//            matrix4fStack.popMatrix();
-//            RenderSystem.applyModelViewMatrix();
-//            RenderSystem.enableBlend(); // Fixes the crafting book icon rendering
+//            drawContext.getMatrices().pop();
+            matrix4fStack.popMatrix();
+            RenderSystem.applyModelViewMatrix();
+            RenderSystem.enableBlend(); // Fixes the crafting book icon rendering
         }
     }
 
@@ -120,12 +123,17 @@ public class StoneCutterRecipeRenderer {
         x = x - (int) (font.getWidth(indexStr) * scale) - 2;
         y = row * this.entryHeight + this.entryHeight / 2 - font.fontHeight / 2;
 
-        drawContext.getMatrices().push();
-        drawContext.getMatrices().translate(x, y, 0);
-        drawContext.getMatrices().scale(scale, scale, 1);
+//        drawContext.getMatrices().push();
+//        drawContext.getMatrices().translate(x, y, 0);
+//        drawContext.getMatrices().scale(scale, scale, 1);
+
+        MatrixStack matrixStack = drawContext.getMatrices();
+        matrixStack.push();
+        matrixStack.translate(x, y, 0);
+        matrixStack.scale(scale, scale, 1);
 
         drawContext.drawText(font, indexStr, 0, 0, 0xFFC0C0C0, false);
-        RenderUtils.forceDraw(drawContext);
+//        RenderUtils.forceDraw(drawContext);
 
         drawContext.getMatrices().pop();
     }
@@ -163,9 +171,12 @@ public class StoneCutterRecipeRenderer {
 
     private void renderStackAt(ItemStack stack, int x, int y, boolean border, DrawContext drawContext) {
         final int w = 16;
-        int xAdj = (int) ((x) * this.scale) + this.recipeListX;
-        int yAdj = (int) ((y) * this.scale) + this.recipeListY;
-        int wAdj = (int) ((w) * this.scale);
+//        int xAdj = (int) ((x) * this.scale) + this.recipeListX;
+//        int yAdj = (int) ((y) * this.scale) + this.recipeListY;
+//        int wAdj = (int) ((w) * this.scale);
+        int xAdj = x;
+        int yAdj = y;
+        int wAdj = w;
 
         if (border) {
             // Draw a light/white border around the stack
@@ -181,13 +192,18 @@ public class StoneCutterRecipeRenderer {
             stack = stack.copy();
             stack.setCount(1);
 
-            drawContext.getMatrices().push();
-            drawContext.getMatrices().translate(0, 0, 100.f);
+//            drawContext.getMatrices().push();
+//            drawContext.getMatrices().translate(0, 0, 100.f);
+
+            MatrixStack matrixStack = drawContext.getMatrices();
+            matrixStack.push();
+            matrixStack.translate(0, 0, 100.f);
 
             drawContext.drawItem(stack, x, y);
-            RenderUtils.forceDraw(drawContext);
+            matrixStack.pop();
+//            RenderUtils.forceDraw(drawContext);
 
-            drawContext.getMatrices().pop();
+//            drawContext.getMatrices().pop();
         }
     }
 }
