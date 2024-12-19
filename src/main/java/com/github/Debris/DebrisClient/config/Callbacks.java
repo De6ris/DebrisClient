@@ -53,8 +53,6 @@ public class Callbacks {
             return false;
         });
 
-        DCCommonConfig.CarpetSinglePlayerFix.setValueChangeCallback(config -> DCEarlyConfig.getInstance().CarpetFix = config.getBooleanValue());
-
         DCCommonConfig.RestoreKicking.getKeybind().setCallback((action, key) -> BotUtil.restoreKicking(client));
 
         DCCommonConfig.ResendLastChat.getKeybind().setCallback((action, key) -> ChatUtil.resendLast(client));
