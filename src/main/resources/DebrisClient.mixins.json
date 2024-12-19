@@ -17,6 +17,7 @@
     "gui.AbstractInventoryScreenMixin",
     "gui.CreativeInventoryScreenMixin",
     "gui.HandledScreenMixin",
+    "gui.IMixinChatHud",
     "gui.IMixinGuiContainer",
     "gui.ScreenMixin",
     "misc.KeyboardInputMixin",

@@ -2,6 +2,7 @@ package com.github.Debris.DebrisClient.inventory.util;
 
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
 import com.github.Debris.DebrisClient.util.AccessorUtil;
+import fi.dy.masa.malilib.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -119,7 +120,7 @@ public class InventoryUtil {
 
     // This is the final click slot, act as a valve
     public static void clickSlot(int index, int button, SlotActionType type) {
-        if (getGuiContainer() instanceof CreativeInventoryScreen) {
+        if (GuiUtils.getCurrentScreen() instanceof CreativeInventoryScreen) {
             ScreenHandler currentContainer = getCurrentContainer();
             currentContainer.onSlotClick(index, button, type, getClientPlayer());
             currentContainer.sendContentUpdates();

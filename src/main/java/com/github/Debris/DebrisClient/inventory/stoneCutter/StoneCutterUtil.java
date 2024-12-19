@@ -41,11 +41,11 @@ public class StoneCutterUtil {
         return EnumSection.CraftResult.isOf(containerSection);
     }
 
+    @SuppressWarnings("ConstantConditions")
     private static void chooseRecipe(ItemStack result) {
         StonecutterScreen guiContainer = (StonecutterScreen) InventoryUtil.getGuiContainer();
         StonecutterScreenHandler container = guiContainer.getScreenHandler();
         List<RecipeEntry<StonecuttingRecipe>> entries = container.getAvailableRecipes();
-        assert MinecraftClient.getInstance().world != null;
         for (int i = 0; i < entries.size(); i++) {
             RecipeEntry<StonecuttingRecipe> recipeEntry = entries.get(i);
             if (ItemUtil.compareIDMeta(result, recipeEntry.value().getResult(MinecraftClient.getInstance().world.getRegistryManager()))) {

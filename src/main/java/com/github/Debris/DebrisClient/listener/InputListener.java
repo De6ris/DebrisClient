@@ -1,7 +1,6 @@
 package com.github.Debris.DebrisClient.listener;
 
 import com.github.Debris.DebrisClient.DebrisClient;
-import com.github.Debris.DebrisClient.config.Callbacks;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
 import com.github.Debris.DebrisClient.inventory.section.SectionHandler;
@@ -9,6 +8,7 @@ import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterRecipeRen
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterRecipeStorage;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
+import com.github.Debris.DebrisClient.util.Predicates;
 import fi.dy.masa.malilib.hotkeys.*;
 import net.minecraft.client.MinecraftClient;
 
@@ -50,7 +50,7 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
                 return true;
             }
 
-            if (Callbacks.nonContainerEnvironment(MinecraftClient.getInstance())) return false;// the below assuming valid environment
+            if (Predicates.notInGuiContainer(MinecraftClient.getInstance())) return false;// the below assuming valid environment
 
             if (DCCommonConfig.ModifierMoveAll.getKeybind().isKeybindHeld()) {
                 Optional<ContainerSection> optional = SectionHandler.getSectionMouseOver();

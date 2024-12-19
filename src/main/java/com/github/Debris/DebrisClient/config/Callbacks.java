@@ -6,14 +6,12 @@ import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
 import com.github.Debris.DebrisClient.inventory.util.InventoryTweaks;
 import com.github.Debris.DebrisClient.unsafe.mgButtons.MGButtonReloader;
 import com.github.Debris.DebrisClient.util.BotUtil;
+import com.github.Debris.DebrisClient.util.ChatUtil;
+import com.github.Debris.DebrisClient.util.Predicates;
 import fi.dy.masa.malilib.gui.Message;
-import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 
@@ -34,7 +32,7 @@ public class Callbacks {
         });
 
         DCCommonConfig.SortItem.getKeybind().setCallback((action, key) -> {
-            if (nonContainerEnvironment(client)) return false;
+            if (Predicates.notInGuiContainer(client)) return false;
             playClickSound(client);
             return InventoryTweaks.trySort();// this will block other click consumers
         });
@@ -57,12 +55,11 @@ public class Callbacks {
 
         DCCommonConfig.CarpetSinglePlayerFix.setValueChangeCallback(config -> DCEarlyConfig.getInstance().CarpetFix = config.getBooleanValue());
 
-        DCCommonConfig.RestoreKicking.getKeybind().setCallback((action, key) -> {
-            if (BotUtil.restoreKicking(client)) {
-                return true;
-            }
-            return false;
-        });
+        DCCommonConfig.RestoreKicking.getKeybind().setCallback((action, key) -> BotUtil.restoreKicking(client));
+
+        DCCommonConfig.ResendLastChat.getKeybind().setCallback((action, key) -> ChatUtil.resendLast(client));
+
+        DCCommonConfig.RepeatNewestChat.getKeybind().setCallback((action, key) -> ChatUtil.repeatNewestChat(client));
 
         DCCommonConfig.TEST.getKeybind().setCallback((action, key) -> {
             return false;
@@ -72,20 +69,6 @@ public class Callbacks {
             return false;
         });
 
-    }
-
-    public static boolean nonContainerEnvironment(MinecraftClient client) {
-        if (client.world == null) return true;
-        if (client.player == null) return true;
-        if (client.player.isSpectator()) return true;
-        Screen currentScreen = GuiUtils.getCurrentScreen();
-        if (currentScreen instanceof HandledScreen<?>) {// container screen
-            if (currentScreen instanceof CreativeInventoryScreen creativeInventoryScreen && !creativeInventoryScreen.isInventoryTabSelected()) {
-                return true;
-            }
-            return false;
-        }
-        return true;
     }
 
     private static void playClickSound(MinecraftClient client) {
