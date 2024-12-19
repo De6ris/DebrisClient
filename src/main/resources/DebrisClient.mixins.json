@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "compat.malilib.WidgetConfigOptionMixin",
+    "item.TridentItemMixin",
     "misc.PortalForcerMixin"
   ],
   "client": [

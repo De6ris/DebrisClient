@@ -2,6 +2,7 @@ package com.github.Debris.DebrisClient.inventory.sort;
 
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.util.PinYinSupport;
+import fi.dy.masa.malilib.config.IConfigOptionListEntry;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.Item;
@@ -13,21 +14,24 @@ import net.minecraft.registry.Registries;
 import java.util.Collection;
 import java.util.Comparator;
 
-public enum SortCategory {
-    TRANSLATION_KEY(Comparator.comparing(Registries.ITEM::getId)),
-    CREATIVE_INVENTORY(SortCategory::compareByCreativeInventory),
-    TRANSLATION_RESULT(Comparator.comparing(x -> StringUtils.translate(x.getTranslationKey()))),
-    PINYIN(SortCategory::compareByPinyin);
+public enum SortCategory implements IConfigOptionListEntry {
+    TRANSLATION_KEY("translation_key", "翻译键", Comparator.comparing(Registries.ITEM::getId)),
+    CREATIVE_INVENTORY("creative_inventory", "创造模式物品栏", SortCategory::compareByCreativeInventory),
+    TRANSLATION_RESULT("translation_result", "翻译结果", Comparator.comparing(x -> StringUtils.translate(x.getTranslationKey()))),
+    PINYIN("pinyin", "拼音(需要Rei)", SortCategory::compareByPinyin);
 
+    private final String configString;
+    private final String translationKey;
     private final Comparator<Item> order;// this assumes they are distinct
 
-    SortCategory(Comparator<Item> order) {
+    SortCategory(String configString, String translationKey, Comparator<Item> order) {
+        this.configString = configString;
+        this.translationKey = translationKey;
         this.order = order;
     }
 
     public static SortCategory getCategory() {
-        int category = DCCommonConfig.ItemSortingOrder.getIntegerValue();
-        return values()[category - 1];// in config, it starts with 1
+        return (SortCategory) DCCommonConfig.ItemSortingOrder.getOptionListValue();
     }
 
     /*
@@ -109,4 +113,43 @@ public enum SortCategory {
 
     private static ItemGroup.DisplayContext displayContext;
     private static boolean loadedPinyinData;
+
+    @Override
+    public String getStringValue() {
+        return this.configString;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return this.translationKey;
+    }
+
+    @Override
+    public IConfigOptionListEntry cycle(boolean forward) {
+        int id = this.ordinal();
+        if (forward) {
+            if (++id >= values().length) {
+                id = 0;
+            }
+        } else {
+            if (--id < 0) {
+                id = values().length - 1;
+            }
+        }
+        return values()[id % values().length];
+    }
+
+    @Override
+    public IConfigOptionListEntry fromString(String name) {
+        return fromStringStatic(name);
+    }
+
+    public static SortCategory fromStringStatic(String name) {
+        for (SortCategory val : values()) {
+            if (val.configString.equalsIgnoreCase(name)) {
+                return val;
+            }
+        }
+        return SortCategory.CREATIVE_INVENTORY;
+    }
 }
