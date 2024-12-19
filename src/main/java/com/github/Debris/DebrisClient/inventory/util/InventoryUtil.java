@@ -25,7 +25,7 @@ public class InventoryUtil {
         clickSlot(slot, ctrl ? 1 : 0, SlotActionType.THROW);
     }
 
-    // hotBar: 0-8
+    // hotBar: 0-8 or 40
     public static void swapHotBar(Slot slot, int hotBar) {
         clickSlot(slot, hotBar, SlotActionType.SWAP);
     }

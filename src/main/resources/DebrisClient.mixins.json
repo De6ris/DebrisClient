@@ -6,6 +6,7 @@
   "mixins": [
     "compat.carpet.CarpetFix",
     "compat.malilib.WidgetConfigOptionMixin",
+    "item.TridentItemMixin",
     "misc.PortalForcerMixin"
   ],
   "client": [

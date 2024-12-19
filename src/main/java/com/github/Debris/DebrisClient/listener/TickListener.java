@@ -4,6 +4,7 @@ import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.MassCraftingApi;
 import com.github.Debris.DebrisClient.util.BotUtil;
+import com.github.Debris.DebrisClient.util.TridentUtil;
 import fi.dy.masa.malilib.interfaces.IClientTickHandler;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -36,6 +37,8 @@ public class TickListener implements IClientTickHandler {
                 BotUtil.tryKickBot(minecraftClient);
             }
         }
+
+        TridentUtil.onClientTick(minecraftClient);
     }
 
     private boolean hasNewerItemScroller() {
