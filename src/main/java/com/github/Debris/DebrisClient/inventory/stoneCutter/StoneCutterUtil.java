@@ -12,12 +12,10 @@ import fi.dy.masa.malilib.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.StonecutterScreen;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.StonecuttingRecipe;
-import net.minecraft.recipe.display.CuttingRecipeDisplay;
-import net.minecraft.recipe.display.SlotDisplayContexts;
 import net.minecraft.screen.StonecutterScreenHandler;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.context.ContextParameterMap;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -43,15 +41,14 @@ public class StoneCutterUtil {
         return EnumSection.CraftResult.isOf(containerSection);
     }
 
+    @SuppressWarnings("ConstantConditions")
     private static void chooseRecipe(ItemStack result) {
         StonecutterScreen guiContainer = (StonecutterScreen) InventoryUtil.getGuiContainer();
         StonecutterScreenHandler container = guiContainer.getScreenHandler();
-        List<CuttingRecipeDisplay.GroupEntry<StonecuttingRecipe>> entries = container.getAvailableRecipes().entries();
-        assert MinecraftClient.getInstance().world != null;
-        ContextParameterMap contextParameterMap = SlotDisplayContexts.createParameters(MinecraftClient.getInstance().world);
+        List<RecipeEntry<StonecuttingRecipe>> entries = container.getAvailableRecipes();
         for (int i = 0; i < entries.size(); i++) {
-            ItemStack recipeResult = entries.get(i).recipe().optionDisplay().getFirst(contextParameterMap);
-            if (ItemUtil.compareIDMeta(result, recipeResult)) {
+            RecipeEntry<StonecuttingRecipe> recipeEntry = entries.get(i);
+            if (ItemUtil.compareIDMeta(result, recipeEntry.value().getResult(MinecraftClient.getInstance().world.getRegistryManager()))) {
                 container.onButtonClick(MinecraftClient.getInstance().player, i);
                 InventoryUtil.clickButton(i);
                 return;// success

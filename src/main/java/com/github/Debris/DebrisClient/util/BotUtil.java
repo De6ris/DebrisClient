@@ -22,8 +22,7 @@ public class BotUtil {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static void tryKickBot(MinecraftClient client) {
-        if (client.world == null) return;
-        if (client.player == null) return;
+        if (Predicates.notInGame(client)) return;
 
         World world = WorldUtils.getBestWorld(client);
 
