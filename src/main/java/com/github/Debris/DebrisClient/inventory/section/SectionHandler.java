@@ -17,6 +17,7 @@ public class SectionHandler {
     static final Map<EnumSection, ContainerSection> sectionMap = new EnumMap<>(EnumSection.class);
 
     public static void updateSection(HandledScreen<?> guiContainer) {
+        clear();
         ScreenHandler container = InventoryUtil.getContainer(guiContainer);
         Text title = guiContainer.getTitle();
         List<Slot> slots = InventoryUtil.getSlots(container);

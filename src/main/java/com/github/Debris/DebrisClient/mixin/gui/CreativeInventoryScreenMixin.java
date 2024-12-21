@@ -32,7 +32,6 @@ public abstract class CreativeInventoryScreenMixin extends HandledScreen<Creativ
     @Inject(method = "setSelectedTab", at = @At("RETURN"))
     private void onReturn(ItemGroup group, CallbackInfo ci) {
         if (this.cache.getType() == ItemGroup.Type.INVENTORY || group.getType() == ItemGroup.Type.INVENTORY) {
-            SectionHandler.clear();
             SectionHandler.updateSection(this);
         }
     }
