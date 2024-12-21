@@ -3,6 +3,8 @@ package com.github.Debris.DebrisClient.util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.util.StringHelper;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +52,8 @@ public class ChatUtil {
 
     @SuppressWarnings("ConstantConditions")
     public static void sendChat(MinecraftClient client, String content) {
+        content = StringHelper.truncateChat(StringUtils.normalizeSpace(content.trim()));
+        if (content.isEmpty()) return;
         if (content.startsWith("/")) {
             client.player.networkHandler.sendChatCommand(content.substring(1));
         } else {
