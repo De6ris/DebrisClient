@@ -27,6 +27,7 @@
     "render.BackgroundRenderMixin",
     "render.BlockEntityRenderDispatcherMixin",
     "render.EntityRenderDispatcherMixin",
+    "render.EntityRendererMixin",
     "render.LightmapTextureManagerMixin",
     "render.WorldRendererMixin"
   ],
