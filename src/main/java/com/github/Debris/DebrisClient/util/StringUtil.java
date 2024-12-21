@@ -10,9 +10,17 @@ import java.util.List;
 
 public class StringUtil {
     public static List<String> getConfigOptionListHoverString(IConfigOptionList config) {
-        ImmutableList<IConfigOptionListEntry> entries = AccessorUtil.getConfigOptionListEntries(config);
-        IConfigOptionListEntry currentEntry = config.getOptionListValue();
         IConfigOptionListEntry defaultEntry = config.getDefaultOptionListValue();
+        ImmutableList.Builder<IConfigOptionListEntry> builder = ImmutableList.builder();
+        builder.add(defaultEntry);
+        IConfigOptionListEntry next = defaultEntry.cycle(true);
+        while (next != defaultEntry) {
+            builder.add(next);
+            next = next.cycle(true);
+        }
+        ImmutableList<IConfigOptionListEntry> entries = builder.build();
+
+        IConfigOptionListEntry currentEntry = config.getOptionListValue();
         List<String> hover = new ArrayList<>();
         hover.add("可用值:");
         for (IConfigOptionListEntry entry : entries) {
