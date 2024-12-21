@@ -2,6 +2,7 @@ package com.github.Debris.DebrisClient.config;
 
 import com.github.Debris.DebrisClient.DebrisClient;
 import com.github.Debris.DebrisClient.config.options.ConfigHotKeyExtend;
+import com.github.Debris.DebrisClient.config.options.ConfigOptionListExtend;
 import com.github.Debris.DebrisClient.inventory.sort.SortCategory;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
@@ -29,7 +30,7 @@ public class DCCommonConfig implements IConfigHandler {
     // value
     public static final ConfigBoolean SortingBoxesLast = new ConfigBoolean("整理时潜影盒置于末端", true, "");
     public static final ConfigBoolean CachedSorting = new ConfigBoolean("整理时使用缓存算法", true, "相比直接操作, 可减少发包");
-    public static final ConfigOptionList ItemSortingOrder = new ConfigOptionList("物品整理顺序", SortCategory.CREATIVE_INVENTORY, "1.翻译键顺序\n2.按创造模式物品栏顺序\n3.按翻译后名称顺序\n4.按拼音顺序(需要Rei)");
+    public static final ConfigOptionList ItemSortingOrder = new ConfigOptionListExtend("物品整理顺序", SortCategory.CREATIVE_INVENTORY, "1.翻译键顺序\n2.按创造模式物品栏顺序\n3.按翻译后名称顺序\n4.按拼音顺序(需要Rei)");
     public static final ConfigBoolean UseRecipeBookToCraft = new ConfigBoolean("喷射合成使用配方书", true, "可能比较的优雅");
     public static final ConfigBoolean Use64Q = new ConfigBoolean("使用64次Q扔出合成结果", true, "这样不必让物品栏腾出空间\n减少无关物品丢出\n但会导致发包较多\n1.22+将支持Ctrl丢出");
     public static final ConfigInteger TriggerButtonOffset = new ConfigInteger("触发按钮的坐标偏移", 42, -100, 100, true, "自动对齐可能有问题");
@@ -80,6 +81,8 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed AutoGuiQuitting = new ConfigBooleanHotkeyed("自动关闭容器GUI", false, "", KeybindSettings.INGAME_BOTH, "不会关闭容器之外的GUI", "自动关闭GUI");
     public static final ConfigBooleanHotkeyed OrientedAutoTrading = new ConfigBooleanHotkeyed("定向自动交易", false, "", "打开交易GUI时自动交易所有在名单上的物品");
     public static final ConfigBooleanHotkeyed LoyalerTrident = new ConfigBooleanHotkeyed("更忠诚的三叉戟", false, "", "发射的忠诚三叉戟能够回到副手");
+    public static final ConfigBooleanHotkeyed PathNodesVisibility = new ConfigBooleanHotkeyed("寻路节点可视化", false, "", "");
+    public static final ConfigBooleanHotkeyed PathNodesOnlyNamed = new ConfigBooleanHotkeyed("寻路节点仅限命名生物", false, "","");
 
 
     // yeet
@@ -165,7 +168,9 @@ public class DCCommonConfig implements IConfigHandler {
                 StartMassCrafting,
                 AutoGuiQuitting,
                 OrientedAutoTrading,
-                LoyalerTrident
+                LoyalerTrident,
+                PathNodesVisibility,
+                PathNodesOnlyNamed
         );
         Yeets = ImmutableList.of(
                 CancelSignRendering,
