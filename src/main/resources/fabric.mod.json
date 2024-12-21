@@ -11,7 +11,7 @@
     "repo": "https://github.com/De6ris/DebrisClient"
   },
   "license": "MIT",
-  "icon": "assets/DebrisClient/icon.png",
+  "icon": "assets/debris_client/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
