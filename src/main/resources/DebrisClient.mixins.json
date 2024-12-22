@@ -16,6 +16,7 @@
     "compat.tweakeroo.CameraEntityMixin",
     "compat.tweakeroo.DummyMovementInputMixin",
     "gui.AbstractInventoryScreenMixin",
+    "gui.ChatHudMixin",
     "gui.CreativeInventoryScreenMixin",
     "gui.HandledScreenMixin",
     "gui.IMixinChatHud",

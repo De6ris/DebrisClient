@@ -36,6 +36,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigInteger TriggerButtonOffset = new ConfigInteger("触发按钮的坐标偏移", 42, -100, 100, true, "自动对齐可能有问题");
     public static final ConfigBoolean ProgressResuming = new ConfigBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度");
     public static final ConfigStringList TradingTargets = new ConfigStringList("定向交易目标", ImmutableList.of(), "需打开定向自动交易功能");
+    public static final ConfigStringList AutoRepeatBlackList = new ConfigStringList("自动复读字符串黑名单", ImmutableList.of(), "关于自动复读:\n首先你需要安装有clientcommands或者clientarguments模组\n在指令中输入dc即可自动补全");
 
 
     // key settings
@@ -134,7 +135,8 @@ public class DCCommonConfig implements IConfigHandler {
                 Use64Q,
                 TriggerButtonOffset,
                 ProgressResuming,
-                TradingTargets
+                TradingTargets,
+                AutoRepeatBlackList
         );
         Fix = ImmutableList.of(
                 FreeCamKeepAutoMoving,

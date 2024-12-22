@@ -15,8 +15,8 @@ import java.util.Collection;
 import java.util.Comparator;
 
 public enum SortCategory implements IConfigOptionListEntry {
-    TRANSLATION_KEY("translation_key", "翻译键", Comparator.comparing(Registries.ITEM::getId)),
     CREATIVE_INVENTORY("creative_inventory", "创造模式物品栏", SortCategory::compareByCreativeInventory),
+    TRANSLATION_KEY("translation_key", "翻译键", Comparator.comparing(Registries.ITEM::getId)),
     TRANSLATION_RESULT("translation_result", "翻译结果", Comparator.comparing(x -> StringUtils.translate(x.getTranslationKey()))),
     PINYIN("pinyin", "拼音(需要Rei)", SortCategory::compareByPinyin);
 
@@ -66,7 +66,6 @@ public enum SortCategory implements IConfigOptionListEntry {
                 }// this make the collection non-empty
             }
             case PINYIN -> {
-
                 if (!loadedPinyinData && PinYinSupport.dataExists()) {
                     loadedPinyinData = PinYinSupport.tryLoad();
                 }
