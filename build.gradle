@@ -24,6 +24,9 @@ repositories {
     maven {
         url 'https://jitpack.io'
     }
+    maven {
+        url = 'https://maven.xpple.dev/maven2'
+    }
     repositories {
         maven { url = "https://maven.bawnorton.com/releases" }
     }
@@ -55,6 +58,7 @@ dependencies {
 
     modImplementation(files("libs\\fabric-carpet-1.21.4-1.4.161+v241203.jar"))
 
+    modImplementation("dev.xpple:clientarguments:${project.clientarguments_version}")
 //    modImplementation "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
 //
 //    modImplementation("io.github.cottonmc:Jankson-Fabric:${project.jankson_version}")

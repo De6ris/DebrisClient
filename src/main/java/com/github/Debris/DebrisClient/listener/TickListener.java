@@ -4,6 +4,7 @@ import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.MassCraftingApi;
 import com.github.Debris.DebrisClient.util.BotUtil;
+import com.github.Debris.DebrisClient.util.StringUtil;
 import com.github.Debris.DebrisClient.util.TridentUtil;
 import fi.dy.masa.malilib.interfaces.IClientTickHandler;
 import net.fabricmc.loader.api.FabricLoader;
@@ -25,7 +26,7 @@ public class TickListener implements IClientTickHandler {
         }
 
         if (DCCommonConfig.MyMassCrafting.getKeybind().isKeybindHeld() || DCCommonConfig.StartMassCrafting.getBooleanValue()) {
-            if (this.hasNewerItemScroller()) {
+            if (StringUtil.isModLoadedWithNewEnoughVersion("itemscroller", "0.24.50")) {
                 if (MassCraftingApi.isCraftingGui()) {
                     MassCraftingApi.tryMassCrafting();
                 }
@@ -39,20 +40,6 @@ public class TickListener implements IClientTickHandler {
         }
 
         TridentUtil.onClientTick(minecraftClient);
-    }
-
-    private boolean hasNewerItemScroller() {
-        Optional<ModContainer> optional = FabricLoader.getInstance().getModContainer("itemscroller");
-        if (optional.isPresent()) {
-            Version version = optional.get().getMetadata().getVersion();
-            try {
-                Version parse = Version.parse("0.24.50");
-                if (version.compareTo(parse) >= 0) return true;
-            } catch (VersionParsingException e) {
-                return false;
-            }
-        }
-        return false;
     }
 
 

@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.util;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.client.network.PlayerListEntry;
@@ -7,6 +8,7 @@ import net.minecraft.util.StringHelper;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,15 +41,22 @@ public class ChatUtil {
 
     @SuppressWarnings("ConstantConditions")
     private static Optional<String> checkSentByPlayer(MinecraftClient client, String original) {
-        for (PlayerListEntry listedPlayerListEntry : client.player.networkHandler.getListedPlayerListEntries()) {
-            String name = listedPlayerListEntry.getProfile().getName();
-            String angled = "<" + name + ">";
-            int index = original.indexOf(angled);
-            if (index != -1) {
-                return Optional.of(original.substring(index + angled.length()).trim());
-            }
-        }
-        return Optional.empty();
+        return client.player.networkHandler.getListedPlayerListEntries().stream()
+                .map(PlayerListEntry::getProfile)
+                .map(GameProfile::getName)
+                .map(ChatUtil::angleName)
+                .flatMap(x -> filterMessageContent(x, original).stream())
+                .max(Comparator.comparing(String::length));
+    }
+
+    public static String angleName(String rawName) {
+        return "<" + rawName + ">";
+    }
+
+    public static Optional<String> filterMessageContent(String senderNameAngled, String original) {
+        int index = original.indexOf(senderNameAngled);
+        if (index == -1) return Optional.empty();
+        return Optional.of(original.substring(index + senderNameAngled.length()));
     }
 
     @SuppressWarnings("ConstantConditions")

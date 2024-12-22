@@ -4,9 +4,14 @@ import com.google.common.collect.ImmutableList;
 import fi.dy.masa.malilib.config.IConfigOptionList;
 import fi.dy.masa.malilib.config.IConfigOptionListEntry;
 import fi.dy.masa.malilib.gui.GuiBase;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.Version;
+import net.fabricmc.loader.api.VersionParsingException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class StringUtil {
     public static List<String> getConfigOptionListHoverString(IConfigOptionList config) {
@@ -33,5 +38,18 @@ public class StringUtil {
             }
         }
         return hover;
+    }
+
+    public static boolean isModLoadedWithNewEnoughVersion(String modId, String leastVersion) {
+        Optional<ModContainer> optional = FabricLoader.getInstance().getModContainer(modId);
+        if (optional.isEmpty()) return false;
+        Version version = optional.get().getMetadata().getVersion();
+        try {
+            Version parse = Version.parse(leastVersion);
+            if (version.compareTo(parse) >= 0) return true;
+        } catch (VersionParsingException e) {
+            return false;
+        }
+        return false;
     }
 }
