@@ -37,6 +37,8 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean ProgressResuming = new ConfigBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度");
     public static final ConfigStringList TradingTargets = new ConfigStringList("定向交易目标", ImmutableList.of(), "需打开定向自动交易功能");
     public static final ConfigStringList AutoRepeatBlackList = new ConfigStringList("自动复读字符串黑名单", ImmutableList.of(), "关于自动复读:\n首先你需要安装有clientcommands或者clientarguments模组\n在指令中输入dc即可自动补全");
+    public static final ConfigBoolean AutoRepeatAntiDDos = new ConfigBoolean("自动复读防刷屏", false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
+    public static final ConfigInteger AutoRepeatAntiDDosThreshold = new ConfigInteger("自动复读刷屏阈值", 4, 1, 16, "");
 
 
     // key settings
@@ -83,7 +85,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed OrientedAutoTrading = new ConfigBooleanHotkeyed("定向自动交易", false, "", "打开交易GUI时自动交易所有在名单上的物品");
     public static final ConfigBooleanHotkeyed LoyalerTrident = new ConfigBooleanHotkeyed("更忠诚的三叉戟", false, "", "发射的忠诚三叉戟能够回到副手");
     public static final ConfigBooleanHotkeyed PathNodesVisibility = new ConfigBooleanHotkeyed("寻路节点可视化", false, "", "");
-    public static final ConfigBooleanHotkeyed PathNodesOnlyNamed = new ConfigBooleanHotkeyed("寻路节点仅限命名生物", false, "","");
+    public static final ConfigBooleanHotkeyed PathNodesOnlyNamed = new ConfigBooleanHotkeyed("寻路节点仅限命名生物", false, "", "");
 
 
     // yeet
@@ -136,7 +138,9 @@ public class DCCommonConfig implements IConfigHandler {
                 TriggerButtonOffset,
                 ProgressResuming,
                 TradingTargets,
-                AutoRepeatBlackList
+                AutoRepeatBlackList,
+                AutoRepeatAntiDDos,
+                AutoRepeatAntiDDosThreshold
         );
         Fix = ImmutableList.of(
                 FreeCamKeepAutoMoving,

@@ -40,6 +40,8 @@ public class TickListener implements IClientTickHandler {
         }
 
         TridentUtil.onClientTick(minecraftClient);
+
+        ChatListener.onClientTick(minecraftClient);
     }
 
 
