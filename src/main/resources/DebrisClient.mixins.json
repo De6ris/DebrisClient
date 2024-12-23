@@ -11,6 +11,7 @@
     "misc.PortalForcerMixin"
   ],
   "client": [
+    "compat.libgui.CottonClientScreenMixin",
     "compat.malilib.GuiConfigsBaseMixin",
     "compat.malilib.GuiListBaseMixin",
     "compat.tweakeroo.CameraEntityMixin",

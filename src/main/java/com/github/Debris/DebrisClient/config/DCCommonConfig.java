@@ -34,7 +34,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean UseRecipeBookToCraft = new ConfigBoolean("喷射合成使用配方书", true, "可能比较的优雅");
     public static final ConfigBoolean Use64Q = new ConfigBoolean("使用64次Q扔出合成结果", true, "这样不必让物品栏腾出空间\n减少无关物品丢出\n但会导致发包较多\n1.22+将支持Ctrl丢出");
     public static final ConfigInteger TriggerButtonOffset = new ConfigInteger("触发按钮的坐标偏移", 42, -100, 100, true, "自动对齐可能有问题");
-    public static final ConfigBoolean ProgressResuming = new ConfigBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度");
+    public static final ConfigBoolean ProgressResuming = new ConfigBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度\n对MaLiLib驱动的模组和CommandButton有效");
     public static final ConfigStringList TradingTargets = new ConfigStringList("定向交易目标", ImmutableList.of(), "需打开定向自动交易功能");
     public static final ConfigStringList AutoRepeatBlackList = new ConfigStringList("自动复读字符串黑名单", ImmutableList.of(), "关于自动复读:\n首先你需要安装有clientcommands或者clientarguments模组\n在指令中输入dc即可自动补全");
     public static final ConfigBoolean AutoRepeatAntiDDos = new ConfigBoolean("自动复读防刷屏", false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
