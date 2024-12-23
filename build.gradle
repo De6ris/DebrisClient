@@ -54,7 +54,7 @@ dependencies {
 
     modImplementation(files("libs\\CommandGUIButtons-mc1.21-2.3.0+build.235+bb785b5.jar"))
 
-//    modImplementation(files("libs\\LibGui-12.0.0+1.21.2.jar"))
+    modImplementation(files("libs\\LibGui-12.0.1+1.21.2.jar"))
 
     modImplementation(files("libs\\fabric-carpet-1.21.4-1.4.161+v241203.jar"))
 

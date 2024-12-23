@@ -21,9 +21,10 @@ public class RenderUtil {
 
         Tessellator tesselator = Tessellator.getInstance();
 
-        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-        RenderSystem.applyModelViewMatrix();
+//        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+//        RenderSystem.applyModelViewMatrix();
         // what they do? can not render if commented
+        // TODO can not render on 1.21.4
 
         BufferBuilder builder = tesselator.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
         RenderUtils.drawBoxAllEdgesBatchedLines(

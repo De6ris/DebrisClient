@@ -4,6 +4,7 @@ import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.render.PathNodesRenderer;
 import com.github.Debris.DebrisClient.render.RenderContext;
 import net.minecraft.client.render.*;
+import net.minecraft.client.util.ObjectAllocator;
 import net.minecraft.client.world.ClientWorld;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
@@ -26,8 +27,8 @@ public class WorldRendererMixin {
         }
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lorg/joml/Matrix4fStack;popMatrix()Lorg/joml/Matrix4fStack;", remap = false))
-    private void onRenderWorldPost(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
-        PathNodesRenderer.getInstance().onRenderWorldPost(this.world, RenderContext.ofWorld(matrix4f, matrix4f2), tickCounter.getTickDelta(false));
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;renderLateDebug(Lnet/minecraft/client/render/FrameGraphBuilder;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/client/render/Fog;)V", remap = false))
+    private void onRenderWorldPost(ObjectAllocator allocator, RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, Matrix4f positionMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
+        PathNodesRenderer.getInstance().onRenderWorldPost(this.world, RenderContext.ofWorld(positionMatrix, projectionMatrix), tickCounter.getTickDelta(false));
     }
 }
