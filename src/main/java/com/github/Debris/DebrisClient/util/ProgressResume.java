@@ -1,24 +1,23 @@
 package com.github.Debris.DebrisClient.util;
 
-import fi.dy.masa.malilib.gui.GuiConfigsBase;
-import fi.dy.masa.malilib.gui.GuiListBase;
+import net.minecraft.client.gui.screen.Screen;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalInt;
 
 public class ProgressResume {
-    public static final Map<Class<? extends GuiConfigsBase>, Integer> PROGRESS = new HashMap<>();
+    public static final Map<Class<? extends Screen>, Integer> PROGRESS_MAP = new HashMap<>();
 
-    public static OptionalInt getProgress(GuiListBase guiListBase) {
-        Class<? extends GuiListBase> clazz = guiListBase.getClass();
-        if (PROGRESS.containsKey(clazz)) {
-            return OptionalInt.of(PROGRESS.get(clazz));
+    public static OptionalInt getProgress(Screen guiListBase) {
+        Class<? extends Screen> clazz = guiListBase.getClass();
+        if (PROGRESS_MAP.containsKey(clazz)) {
+            return OptionalInt.of(PROGRESS_MAP.get(clazz));
         }
         return OptionalInt.empty();
     }
 
-    public static void saveProgress(GuiConfigsBase guiListBase, int progress) {
-        PROGRESS.put(guiListBase.getClass(), progress);
+    public static void saveProgress(Screen screen, int progress) {
+        PROGRESS_MAP.put(screen.getClass(), progress);
     }
 }
