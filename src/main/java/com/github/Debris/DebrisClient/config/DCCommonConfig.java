@@ -67,6 +67,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey ModifierMoveAll = new ConfigHotKeyExtend("移动全部:修饰键", "SPACE", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域全部\n兼容carpet假人不会乱点按钮");
     public static final ConfigHotkey ResendLastChat = new ConfigHotKeyExtend("重发上一条消息", "", "相当于按UP键");
     public static final ConfigHotkey RepeatNewestChat = new ConfigHotKeyExtend("消息复读", "", "复读聊天栏中最新消息");
+    public static final ConfigHotkey QuickDataGet = new ConfigHotKeyExtend("快速DataGet指令","","准心的方块或实体");
 
 
     public static final ConfigHotkey TEST = new ConfigHotKeyExtend("测试", "", KeybindSettings.GUI, "测试");
@@ -161,6 +162,7 @@ public class DCCommonConfig implements IConfigHandler {
                 ModifierMoveAll,
                 ResendLastChat,
                 RepeatNewestChat,
+                QuickDataGet,
                 TEST,
                 TEST2
         );

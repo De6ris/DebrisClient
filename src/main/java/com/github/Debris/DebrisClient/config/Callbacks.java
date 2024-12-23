@@ -61,6 +61,8 @@ public class Callbacks {
 
         DCCommonConfig.RepeatNewestChat.getKeybind().setCallback((action, key) -> ChatUtil.repeatNewestChat(client));
 
+        DCCommonConfig.QuickDataGet.getKeybind().setCallback((action, key) ->  ChatUtil.dataGet(client));
+
         DCCommonConfig.TEST.getKeybind().setCallback((action, key) -> {
             return false;
         });

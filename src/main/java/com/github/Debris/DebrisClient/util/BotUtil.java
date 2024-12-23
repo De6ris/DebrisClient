@@ -1,55 +1,26 @@
 package com.github.Debris.DebrisClient.util;
 
-import com.mojang.logging.LogUtils;
-import fi.dy.masa.malilib.util.EntityUtils;
-import fi.dy.masa.malilib.util.WorldUtils;
-import fi.dy.masa.tweakeroo.util.RayTraceUtils;
+import com.github.Debris.DebrisClient.unsafe.tweakeroo.RayTraceUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.world.World;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class BotUtil {
-    private static final Logger LOGGER = LogUtils.getLogger();
-
     public static void tryKickBot(MinecraftClient client) {
         if (Predicates.notInGame(client)) return;
 
-        World world = WorldUtils.getBestWorld(client);
+        Optional<HitResult> optional = RayTraceUtil.getPlayerRayTrace(client);
 
-        if (world == null) {
-            LOGGER.warn("why world is null");
-            return;
-        }
+        if (optional.isEmpty()) return;
 
-        Entity cameraEntity = EntityUtils.getCameraEntity();
-
-        if (cameraEntity == null) {
-            LOGGER.warn("why camera is null");
-            return;
-        }
-
-        if (cameraEntity == client.player && world instanceof ServerWorld) {
-            // We need to get the player from the server world (if available, ie. in single player),
-            // so that the player itself won't be included in the ray trace
-            Entity serverPlayer = world.getPlayerByUuid(client.player.getUuid());
-
-            if (serverPlayer != null) {
-                cameraEntity = serverPlayer;
-            }
-        }
-
-        // why not use client.targetedEntity? for compatible with tweakeroo free cam
-        HitResult trace = RayTraceUtils.getRayTraceFromEntity(world, cameraEntity, false);
+        HitResult trace = optional.get();
 
         if (trace.getType() != HitResult.Type.ENTITY) return;
 
