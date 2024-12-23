@@ -1,6 +1,7 @@
 package com.github.Debris.DebrisClient.util;
 
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
+import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.UtilCaller;
 import fi.dy.masa.malilib.util.GuiUtils;
 import net.fabricmc.loader.api.FabricLoader;
@@ -9,10 +10,11 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.MerchantScreen;
 import net.minecraft.client.input.Input;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.MerchantScreenHandler;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
-import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOfferList;
 
 import java.util.List;
@@ -60,12 +62,13 @@ public class MiscUtil {
         if (!DCCommonConfig.OrientedAutoTrading.getBooleanValue()) return;
         if (!FabricLoader.getInstance().isModLoaded("itemscroller")) return;
         Screen currentScreen = GuiUtils.getCurrentScreen();
+        List<String> targets = DCCommonConfig.TradingTargets.getStrings();
         if (currentScreen instanceof MerchantScreen merchantScreen) {
             MerchantScreenHandler merchantContainer = merchantScreen.getScreenHandler();
             TradeOfferList recipes = merchantContainer.getRecipes();
             for (int i = 0; i < recipes.size(); i++) {
-                TradeOffer recipe = recipes.get(i);
-                if (isTargetRecipe(recipe)) {
+                ItemStack sellItem = recipes.get(i).getSellItem();
+                if (isItemInList(sellItem, targets)) {
                     UtilCaller.tryHardTrading(i);
                 }
             }
@@ -74,12 +77,20 @@ public class MiscUtil {
         }
     }
 
-    private static boolean isTargetRecipe(TradeOffer recipe) {
-        List<String> strings = DCCommonConfig.TradingTargets.getStrings();
-        for (String string : strings) {
+    public static void runAutoThrow() {
+        List<String> identifiers = DCCommonConfig.AutoThrowWhiteList.getStrings();
+        for (Slot slot : InventoryUtil.getInventoryContainer().slots) {
+            if (isItemInList(slot.getStack(), identifiers)) {
+                InventoryUtil.drop(slot, true);
+            }
+        }
+    }
+
+    private static boolean isItemInList(ItemStack itemStack, List<String> identifiers) {
+        for (String string : identifiers) {
             Identifier identifier = Identifier.of(string);
             Item item = Registries.ITEM.get(identifier);
-            if (recipe.getSellItem().isOf(item)) {
+            if (itemStack.isOf(item)) {
                 return true;
             }
         }
