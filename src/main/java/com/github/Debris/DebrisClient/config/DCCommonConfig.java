@@ -40,7 +40,6 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean AutoRepeatAntiDDos = new ConfigBoolean("自动复读防刷屏", false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
     public static final ConfigInteger AutoRepeatAntiDDosThreshold = new ConfigInteger("自动复读刷屏阈值", 4, 1, 16, "");
     public static final ConfigStringList AutoThrowWhiteList = new ConfigStringList("自动丢弃白名单", ImmutableList.of(), "");
-    public static final ConfigBoolean WorldEditVisibility = new ConfigBoolean("WorldEdit可视化", false, "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
     public static final ConfigColor WorldEditOverlay = new ConfigColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
 
 
@@ -91,6 +90,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed PathNodesVisibility = new ConfigBooleanHotkeyed("寻路节点可视化", false, "", "");
     public static final ConfigBooleanHotkeyed PathNodesOnlyNamed = new ConfigBooleanHotkeyed("寻路节点仅限命名生物", false, "", "");
     public static final ConfigBooleanHotkeyed AutoThrow = new ConfigBooleanHotkeyed("自动丢弃", false, "", "在GUI中不生效");
+    public static final ConfigBooleanHotkeyed WorldEditVisibility = new ConfigBooleanHotkeyed("WorldEdit可视化", false, "", "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
 
 
     // yeet
@@ -147,7 +147,6 @@ public class DCCommonConfig implements IConfigHandler {
                 AutoRepeatAntiDDos,
                 AutoRepeatAntiDDosThreshold,
                 AutoThrowWhiteList,
-                WorldEditVisibility,
                 WorldEditOverlay
         );
         Fix = ImmutableList.of(
@@ -186,7 +185,8 @@ public class DCCommonConfig implements IConfigHandler {
                 LoyalerTrident,
                 PathNodesVisibility,
                 PathNodesOnlyNamed,
-                AutoThrow
+                AutoThrow,
+                WorldEditVisibility
         );
         Yeets = ImmutableList.of(
                 CancelSignRendering,
