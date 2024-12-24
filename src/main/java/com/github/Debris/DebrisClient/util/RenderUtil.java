@@ -1,12 +1,17 @@
 package com.github.Debris.DebrisClient.util;
 
+import com.github.Debris.DebrisClient.config.DCCommonConfig;
+import com.github.Debris.DebrisClient.unsafe.litematica.LitematicaRenderUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.Color4f;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 
 public class RenderUtil {
     @SuppressWarnings("ConstantConditions")
@@ -59,6 +64,28 @@ public class RenderUtil {
         RenderUtil.end(builder);
 
         RenderSystem.enableDepthTest();
+    }
+
+    public static void renderWorldEditSelectionBox(BlockPos pos1, BlockPos pos2, Matrix4f matrix4f, MinecraftClient client) {
+        if (FabricLoader.getInstance().isModLoaded("litematica")) {
+            fi.dy.masa.malilib.render.RenderUtils.color(1f, 1f, 1f, 1f);
+            fi.dy.masa.malilib.render.RenderUtils.setupBlend();
+
+            RenderSystem.enableDepthTest();
+            RenderSystem.depthMask(false);
+
+            RenderSystem.enablePolygonOffset();
+            RenderSystem.polygonOffset(-1.2f, -0.2f);
+
+            LitematicaRenderUtil.renderSelectionBox(pos1, pos2, matrix4f);// those set up codes from OverlayRenderer.renderBoxes
+            // a yellow outline to differ from the original
+            fi.dy.masa.litematica.render.RenderUtils.renderAreaSides(pos1, pos2, DCCommonConfig.WorldEditOverlay.getColor(), matrix4f, client);
+
+            RenderSystem.polygonOffset(0f, 0f);
+            RenderSystem.disablePolygonOffset();
+
+            RenderSystem.depthMask(true);
+        }
     }
 
 

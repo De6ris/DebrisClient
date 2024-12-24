@@ -40,6 +40,8 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean AutoRepeatAntiDDos = new ConfigBoolean("自动复读防刷屏", false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
     public static final ConfigInteger AutoRepeatAntiDDosThreshold = new ConfigInteger("自动复读刷屏阈值", 4, 1, 16, "");
     public static final ConfigStringList AutoThrowWhiteList = new ConfigStringList("自动丢弃白名单", ImmutableList.of(), "");
+    public static final ConfigBoolean WorldEditVisibility = new ConfigBoolean("WorldEdit可视化", false, "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
+    public static final ConfigColor WorldEditOverlay = new ConfigColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
 
 
     // key settings
@@ -68,7 +70,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey ModifierMoveAll = new ConfigHotKeyExtend("移动全部:修饰键", "SPACE", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域全部\n兼容carpet假人不会乱点按钮");
     public static final ConfigHotkey ResendLastChat = new ConfigHotKeyExtend("重发上一条消息", "", "相当于按UP键");
     public static final ConfigHotkey RepeatNewestChat = new ConfigHotKeyExtend("消息复读", "", "复读聊天栏中最新消息");
-    public static final ConfigHotkey QuickDataGet = new ConfigHotKeyExtend("快速DataGet指令","","准心的方块或实体");
+    public static final ConfigHotkey QuickDataGet = new ConfigHotKeyExtend("快速DataGet指令", "", "准心的方块或实体");
 
 
     public static final ConfigHotkey TEST = new ConfigHotKeyExtend("测试", "", KeybindSettings.GUI, "测试");
@@ -144,7 +146,9 @@ public class DCCommonConfig implements IConfigHandler {
                 AutoRepeatBlackList,
                 AutoRepeatAntiDDos,
                 AutoRepeatAntiDDosThreshold,
-                AutoThrowWhiteList
+                AutoThrowWhiteList,
+                WorldEditVisibility,
+                WorldEditOverlay
         );
         Fix = ImmutableList.of(
                 FreeCamKeepAutoMoving,
