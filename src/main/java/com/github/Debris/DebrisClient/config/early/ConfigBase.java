@@ -97,9 +97,9 @@ public class ConfigBase {
         propertyBase.put(key, b + "");
     }
 
-    private String configPath;
-    private Properties propertyBase;
-    private File configFile;
+    private final String configPath;
+    private final Properties propertyBase;
+    private final File configFile;
 
     private void saveConfig0() {
         Arrays.stream(this.getClass().getFields()).filter(field -> field.isAnnotationPresent(ConfigEntry.class)).forEach(field -> {

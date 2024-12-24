@@ -4,6 +4,8 @@ import com.github.Debris.DebrisClient.DebrisClient;
 import com.github.Debris.DebrisClient.config.options.ConfigHotKeyExtend;
 import com.github.Debris.DebrisClient.config.options.ConfigOptionListExtend;
 import com.github.Debris.DebrisClient.inventory.sort.SortCategory;
+import com.github.Debris.DebrisClient.unsafe.itemScroller.MassCraftingImpl;
+import com.github.Debris.DebrisClient.util.AutoRepeat;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -31,15 +33,20 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean SortingBoxesLast = new ConfigBoolean("整理时潜影盒置于末端", true, "");
     public static final ConfigBoolean CachedSorting = new ConfigBoolean("整理时使用缓存算法", true, "相比直接操作, 可减少发包");
     public static final ConfigOptionList ItemSortingOrder = new ConfigOptionListExtend("物品整理顺序", SortCategory.CREATIVE_INVENTORY, "1.翻译键顺序\n2.按创造模式物品栏顺序\n3.按翻译后名称顺序\n4.按拼音顺序(需要Rei)");
-    public static final ConfigBoolean UseRecipeBookToCraft = new ConfigBoolean("喷射合成使用配方书", true, "可能比较的优雅");
+    public static final ConfigOptionList MassCraftingMode = new ConfigOptionListExtend("喷射合成实现", MassCraftingImpl.RECIPE_BOOK, "配方书依赖服务器,较慢但不出错\n手动依赖客户端,可能与服务器不同步导致合成错误");
     public static final ConfigBoolean Use64Q = new ConfigBoolean("使用64次Q扔出合成结果", true, "这样不必让物品栏腾出空间\n减少无关物品丢出\n但会导致发包较多\n1.22+将支持Ctrl丢出");
     public static final ConfigInteger TriggerButtonOffset = new ConfigInteger("触发按钮的坐标偏移", 42, -100, 100, true, "自动对齐可能有问题");
     public static final ConfigBoolean ProgressResuming = new ConfigBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度\n对MaLiLib驱动的模组和CommandButton有效");
     public static final ConfigStringList TradingTargets = new ConfigStringList("定向交易目标", ImmutableList.of("lapis_lazuli"), "需打开定向自动交易功能");
     public static final ConfigStringList AutoRepeatBlackList = new ConfigStringList("自动复读字符串黑名单", ImmutableList.of(), "关于自动复读:\n首先你需要安装有clientcommands或者clientarguments模组\n在指令中输入dc即可自动补全");
+    public static final ConfigOptionList AutoRepeatBlackListMode = new ConfigOptionListExtend("自动复读字符串黑名单模式", AutoRepeat.BlackListMode.CANCEL, "");
+    public static final ConfigString AutoRepeatBlackListReplace = new ConfigString("自动复读字符串替换", "", "");
     public static final ConfigBoolean AutoRepeatAntiDDos = new ConfigBoolean("自动复读防刷屏", false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
     public static final ConfigInteger AutoRepeatAntiDDosThreshold = new ConfigInteger("自动复读刷屏阈值", 4, 1, 16, "");
     public static final ConfigStringList AutoThrowWhiteList = new ConfigStringList("自动丢弃白名单", ImmutableList.of(), "");
+    public static final ConfigColor WorldEditOverlay = new ConfigColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
+    public static final ConfigBoolean MuteGLDebugInfo = new ConfigBoolean("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
+    public static final ConfigBoolean InventoryPreviewSupportComparator = new ConfigBoolean("物品栏预览支持比较器", false, "需要MiniHud和MagicLib,因为MasaGadget未更新,以此暂代");
 
 
     // key settings
@@ -67,7 +74,8 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey ModifierMoveAll = new ConfigHotKeyExtend("移动全部:修饰键", "SPACE", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域全部\n兼容carpet假人不会乱点按钮");
     public static final ConfigHotkey ResendLastChat = new ConfigHotKeyExtend("重发上一条消息", "", "相当于按UP键");
     public static final ConfigHotkey RepeatNewestChat = new ConfigHotKeyExtend("消息复读", "", "复读聊天栏中最新消息");
-    public static final ConfigHotkey QuickDataGet = new ConfigHotKeyExtend("快速DataGet指令","","准心的方块或实体");
+    public static final ConfigHotkey QuickDataGet = new ConfigHotKeyExtend("快速DataGet指令", "", "准心的方块或实体");
+    public static final ConfigHotkey AlignWithEnderEye = new ConfigHotKeyExtend("对齐末影之眼", "", "");
 
 
     public static final ConfigHotkey TEST = new ConfigHotKeyExtend("测试", "", KeybindSettings.GUI, "测试");
@@ -88,6 +96,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed PathNodesVisibility = new ConfigBooleanHotkeyed("寻路节点可视化", false, "", "");
     public static final ConfigBooleanHotkeyed PathNodesOnlyNamed = new ConfigBooleanHotkeyed("寻路节点仅限命名生物", false, "", "");
     public static final ConfigBooleanHotkeyed AutoThrow = new ConfigBooleanHotkeyed("自动丢弃", false, "", "在GUI中不生效");
+    public static final ConfigBooleanHotkeyed WorldEditVisibility = new ConfigBooleanHotkeyed("WorldEdit可视化", false, "", "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
 
 
     // yeet
@@ -135,15 +144,20 @@ public class DCCommonConfig implements IConfigHandler {
                 SortingBoxesLast,
                 CachedSorting,
                 ItemSortingOrder,
-                UseRecipeBookToCraft,
+                MassCraftingMode,
                 Use64Q,
                 TriggerButtonOffset,
                 ProgressResuming,
                 TradingTargets,
                 AutoRepeatBlackList,
+                AutoRepeatBlackListMode,
+                AutoRepeatBlackListReplace,
                 AutoRepeatAntiDDos,
                 AutoRepeatAntiDDosThreshold,
-                AutoThrowWhiteList
+                AutoThrowWhiteList,
+                WorldEditOverlay,
+                MuteGLDebugInfo,
+                InventoryPreviewSupportComparator
         );
         Fix = ImmutableList.of(
                 FreeCamKeepAutoMoving,
@@ -164,6 +178,7 @@ public class DCCommonConfig implements IConfigHandler {
                 ResendLastChat,
                 RepeatNewestChat,
                 QuickDataGet,
+                AlignWithEnderEye,
                 TEST,
                 TEST2
         );
@@ -180,7 +195,8 @@ public class DCCommonConfig implements IConfigHandler {
                 LoyalerTrident,
                 PathNodesVisibility,
                 PathNodesOnlyNamed,
-                AutoThrow
+                AutoThrow,
+                WorldEditVisibility
         );
         Yeets = ImmutableList.of(
                 CancelSignRendering,

@@ -11,7 +11,7 @@ public class DCEarlyConfig extends ConfigBase {
         super(DebrisClient.CONFIG_DIR + "config_early" + ".prop");
     }
 
-    public static DCEarlyConfig Instance;
+    private static DCEarlyConfig Instance;
 
     public static DCEarlyConfig getInstance() {
         return Instance == null ? (Instance = createInstance()) : Instance;
@@ -21,5 +21,16 @@ public class DCEarlyConfig extends ConfigBase {
         DCEarlyConfig DCEarlyConfig = new DCEarlyConfig();
         DCEarlyConfig.loadConfig();
         return DCEarlyConfig;
+    }
+
+    private boolean dirty = false;
+
+    public void markDirty() {
+        this.dirty = true;
+    }
+
+    public void refresh() {
+        if (this.dirty) this.saveConfig();
+        this.dirty = false;
     }
 }

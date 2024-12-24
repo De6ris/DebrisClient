@@ -22,6 +22,7 @@
     "gui.IMixinChatHud",
     "gui.IMixinGuiContainer",
     "gui.ScreenMixin",
+    "misc.GLDebugMixin",
     "misc.KeyboardInputMixin",
     "misc.MinecraftClientMixin",
     "network.ClientPlayNetworkHandlerMixin",

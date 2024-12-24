@@ -34,14 +34,6 @@ public abstract class AbstractMassCrafting {
 
     public abstract void run();
 
-    public static AbstractMassCrafting create() {
-        if (DCCommonConfig.UseRecipeBookToCraft.getBooleanValue()) {
-            return new MassCraftingRecipeBook();
-        } else {
-            return new MassCraftingManual();
-        }
-    }
-
     // called as much as possible
     protected void dropAllProduct() {
         InventoryUtil.dropAllMatching(ItemUtil.predicateIDMeta(selectedRecipe.getResult()));
