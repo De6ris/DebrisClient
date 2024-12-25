@@ -41,6 +41,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigInteger AutoRepeatAntiDDosThreshold = new ConfigInteger("自动复读刷屏阈值", 4, 1, 16, "");
     public static final ConfigStringList AutoThrowWhiteList = new ConfigStringList("自动丢弃白名单", ImmutableList.of(), "");
     public static final ConfigColor WorldEditOverlay = new ConfigColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
+    public static final ConfigBoolean MuteGLDebugInfo = new ConfigBoolean("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
 
 
     // key settings
@@ -147,7 +148,8 @@ public class DCCommonConfig implements IConfigHandler {
                 AutoRepeatAntiDDos,
                 AutoRepeatAntiDDosThreshold,
                 AutoThrowWhiteList,
-                WorldEditOverlay
+                WorldEditOverlay,
+                MuteGLDebugInfo
         );
         Fix = ImmutableList.of(
                 FreeCamKeepAutoMoving,
