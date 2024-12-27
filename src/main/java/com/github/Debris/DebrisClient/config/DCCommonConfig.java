@@ -71,6 +71,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey ResendLastChat = new ConfigHotKeyExtend("重发上一条消息", "", "相当于按UP键");
     public static final ConfigHotkey RepeatNewestChat = new ConfigHotKeyExtend("消息复读", "", "复读聊天栏中最新消息");
     public static final ConfigHotkey QuickDataGet = new ConfigHotKeyExtend("快速DataGet指令", "", "准心的方块或实体");
+    public static final ConfigHotkey AlignWithEnderEye = new ConfigHotKeyExtend("对齐末影之眼","","");
 
 
     public static final ConfigHotkey TEST = new ConfigHotKeyExtend("测试", "", KeybindSettings.GUI, "测试");
@@ -171,6 +172,7 @@ public class DCCommonConfig implements IConfigHandler {
                 ResendLastChat,
                 RepeatNewestChat,
                 QuickDataGet,
+                AlignWithEnderEye,
                 TEST,
                 TEST2
         );

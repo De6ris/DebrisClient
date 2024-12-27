@@ -3,18 +3,25 @@ package com.github.Debris.DebrisClient.util;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.UtilCaller;
+import com.google.common.collect.Lists;
 import fi.dy.masa.malilib.util.GuiUtils;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.MerchantScreen;
 import net.minecraft.client.input.Input;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EyeOfEnderEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TypeFilter;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.village.TradeOfferList;
 
 import java.util.List;
@@ -95,6 +102,28 @@ public class MiscUtil {
             }
         }
         return false;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static boolean alignWithEnderEye(MinecraftClient client) {
+        if (Predicates.notInGame(client)) return false;
+        ClientPlayerEntity player = client.player;
+        Box expand = player.getBoundingBox().expand(32);
+        List<Entity> list = Lists.newArrayList();
+        client.world.collectEntitiesByType(TypeFilter.instanceOf(EyeOfEnderEntity.class), expand, entity -> true, list, 1);
+        if (list.isEmpty()) return false;
+        lookAtDirection(player, list.getFirst().getEyePos().subtract(player.getEyePos()));
+        return true;
+    }
+
+    private static void lookAtDirection(ClientPlayerEntity player, Vec3d directionVec) {
+        double dx = directionVec.x;
+        double dy = directionVec.y;
+        double dz = directionVec.z;
+        double dh = Math.sqrt(dx * dx + dz * dz);
+        float yaw = (float) Math.toDegrees(Math.atan2(dz, dx)) - 90;
+        float pitch = (float) -Math.toDegrees(Math.atan2(dy, dh));
+        player.refreshPositionAndAngles(player.getX(), player.getY(), player.getZ(), yaw, pitch);
     }
 
 }
