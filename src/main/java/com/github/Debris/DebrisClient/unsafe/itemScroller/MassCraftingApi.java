@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.unsafe.itemScroller;
 
+import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
 import com.github.Debris.DebrisClient.inventory.section.EnumSection;
 import com.github.Debris.DebrisClient.inventory.util.InventoryTweaks;
@@ -28,6 +29,6 @@ public class MassCraftingApi {
 
         InventoryUtil.dropAllMatching(ItemUtil.predicateIDMeta(selectedRecipe.getResult()));// first throw those crafting result
 
-        AbstractMassCrafting.create().run();
+        ((MassCraftingImpl) DCCommonConfig.MassCraftingMode.getOptionListValue()).create().run();
     }
 }
