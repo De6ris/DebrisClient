@@ -54,7 +54,11 @@ public class Callbacks {
             return false;
         });
 
-        DCCommonConfig.CarpetSinglePlayerFix.setValueChangeCallback(config -> DCEarlyConfig.getInstance().CarpetFix = config.getBooleanValue());
+        DCCommonConfig.CarpetSinglePlayerFix.setValueChangeCallback(config -> {
+            DCEarlyConfig instance = DCEarlyConfig.getInstance();
+            instance.CarpetFix = config.getBooleanValue();
+            instance.markDirty();
+        });
 
         DCCommonConfig.RestoreKicking.getKeybind().setCallback((action, key) -> BotUtil.restoreKicking(client));
 

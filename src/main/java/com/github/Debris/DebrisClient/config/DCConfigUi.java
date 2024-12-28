@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.config;
 
+import com.github.Debris.DebrisClient.config.early.DCEarlyConfig;
 import fi.dy.masa.malilib.config.IConfigBase;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
@@ -54,6 +55,12 @@ public class DCConfigUi extends GuiConfigsBase {
         };
 
         return ConfigOptionWrapper.createFor(configs);
+    }
+
+    @Override
+    public void removed() {
+        super.removed();
+        DCEarlyConfig.getInstance().refresh();
     }
 
     private static class ButtonListener implements IButtonActionListener {
