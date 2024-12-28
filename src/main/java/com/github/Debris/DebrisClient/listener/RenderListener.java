@@ -1,6 +1,7 @@
 package com.github.Debris.DebrisClient.listener;
 
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
+import com.github.Debris.DebrisClient.render.ComparatorRenderer;
 import com.github.Debris.DebrisClient.render.WorldEditRenderer;
 import com.github.Debris.DebrisClient.util.Predicates;
 import fi.dy.masa.malilib.interfaces.IRenderer;
@@ -24,5 +25,7 @@ public class RenderListener implements IRenderer {
         if (DCCommonConfig.WorldEditVisibility.getBooleanValue() && FabricLoader.getInstance().isModLoaded("worldedit")) {
             WorldEditRenderer.getInstance().render(matrix4f);
         }
+
+        ComparatorRenderer.onRenderWorldLast(this.client);
     }
 }

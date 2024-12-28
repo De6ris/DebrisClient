@@ -46,6 +46,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigStringList AutoThrowWhiteList = new ConfigStringList("自动丢弃白名单", ImmutableList.of(), "");
     public static final ConfigColor WorldEditOverlay = new ConfigColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
     public static final ConfigBoolean MuteGLDebugInfo = new ConfigBoolean("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
+    public static final ConfigBoolean InventoryPreviewSupportComparator = new ConfigBoolean("物品栏预览支持比较器", false, "需要MiniHud和MagicLib,因为MasaGadget未更新,以此暂代");
 
 
     // key settings
@@ -156,7 +157,8 @@ public class DCCommonConfig implements IConfigHandler {
                 AutoRepeatAntiDDosThreshold,
                 AutoThrowWhiteList,
                 WorldEditOverlay,
-                MuteGLDebugInfo
+                MuteGLDebugInfo,
+                InventoryPreviewSupportComparator
         );
         Fix = ImmutableList.of(
                 FreeCamKeepAutoMoving,
