@@ -15,10 +15,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ChatHud.class)
 public class ChatHudMixin {
-    @Shadow @Final private MinecraftClient client;
+    @Shadow
+    @Final
+    private MinecraftClient client;
 
     @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;Lnet/minecraft/client/gui/hud/MessageIndicator;)V", at = @At("RETURN"))
     private void onMessageAdd(Text message, MessageSignatureData signatureData, MessageIndicator indicator, CallbackInfo ci) {
-        ChatListener.onMessageAdd(this.client,message);
+        ChatListener.onMessageAdd(this.client, message);
     }
 }

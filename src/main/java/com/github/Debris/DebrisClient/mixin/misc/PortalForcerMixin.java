@@ -1,8 +1,7 @@
 package com.github.Debris.DebrisClient.mixin.misc;
 
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
-import fi.dy.masa.malilib.util.InfoUtils;
-import net.minecraft.client.MinecraftClient;
+import com.github.Debris.DebrisClient.util.ChatUtil;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -24,10 +23,7 @@ public class PortalForcerMixin {
     private void onPortalCreated(BlockPos pos, Direction.Axis axis, CallbackInfoReturnable<Optional<BlockLocating.Rectangle>> cir) {
         if (DCCommonConfig.MonitorPortalGeneration.getBooleanValue()) {
             String string = cir.getReturnValue().get().lowerLeft.toString();
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(
-                    Text.empty().append(Text.translatable("debug.prefix").formatted(Formatting.YELLOW, Formatting.BOLD)).append(ScreenTexts.SPACE).append(string)
-            );
-            InfoUtils.sendVanillaMessage(Text.literal(string));
+            ChatUtil.addLocalMessage(Text.empty().append(Text.translatable("debug.prefix").formatted(Formatting.YELLOW, Formatting.BOLD)).append(ScreenTexts.SPACE).append(string));
         }
     }
 }

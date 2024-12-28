@@ -3,10 +3,7 @@ package com.github.Debris.DebrisClient.listener;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.MassCraftingApi;
-import com.github.Debris.DebrisClient.util.BotUtil;
-import com.github.Debris.DebrisClient.util.MiscUtil;
-import com.github.Debris.DebrisClient.util.StringUtil;
-import com.github.Debris.DebrisClient.util.TridentUtil;
+import com.github.Debris.DebrisClient.util.*;
 import fi.dy.masa.malilib.interfaces.IClientTickHandler;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
@@ -41,7 +38,7 @@ public class TickListener implements IClientTickHandler {
 
         TridentUtil.onClientTick(client);
 
-        ChatListener.onClientTick(client);
+        AutoRepeat.onClientTick(client);
     }
 
 

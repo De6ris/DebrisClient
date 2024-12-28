@@ -4,6 +4,7 @@ import com.github.Debris.DebrisClient.DebrisClient;
 import com.github.Debris.DebrisClient.config.options.ConfigHotKeyExtend;
 import com.github.Debris.DebrisClient.config.options.ConfigOptionListExtend;
 import com.github.Debris.DebrisClient.inventory.sort.SortCategory;
+import com.github.Debris.DebrisClient.util.AutoRepeat;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -37,6 +38,8 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean ProgressResuming = new ConfigBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度\n对MaLiLib驱动的模组和CommandButton有效");
     public static final ConfigStringList TradingTargets = new ConfigStringList("定向交易目标", ImmutableList.of("lapis_lazuli"), "需打开定向自动交易功能");
     public static final ConfigStringList AutoRepeatBlackList = new ConfigStringList("自动复读字符串黑名单", ImmutableList.of(), "关于自动复读:\n首先你需要安装有clientcommands或者clientarguments模组\n在指令中输入dc即可自动补全");
+    public static final ConfigOptionList AutoRepeatBlackListMode = new ConfigOptionListExtend("自动复读字符串黑名单模式", AutoRepeat.BlackListMode.CANCEL, "");
+    public static final ConfigString AutoRepeatBlackListReplace = new ConfigString("自动复读字符串替换", "", "");
     public static final ConfigBoolean AutoRepeatAntiDDos = new ConfigBoolean("自动复读防刷屏", false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
     public static final ConfigInteger AutoRepeatAntiDDosThreshold = new ConfigInteger("自动复读刷屏阈值", 4, 1, 16, "");
     public static final ConfigStringList AutoThrowWhiteList = new ConfigStringList("自动丢弃白名单", ImmutableList.of(), "");
@@ -71,7 +74,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey ResendLastChat = new ConfigHotKeyExtend("重发上一条消息", "", "相当于按UP键");
     public static final ConfigHotkey RepeatNewestChat = new ConfigHotKeyExtend("消息复读", "", "复读聊天栏中最新消息");
     public static final ConfigHotkey QuickDataGet = new ConfigHotKeyExtend("快速DataGet指令", "", "准心的方块或实体");
-    public static final ConfigHotkey AlignWithEnderEye = new ConfigHotKeyExtend("对齐末影之眼","","");
+    public static final ConfigHotkey AlignWithEnderEye = new ConfigHotKeyExtend("对齐末影之眼", "", "");
 
 
     public static final ConfigHotkey TEST = new ConfigHotKeyExtend("测试", "", KeybindSettings.GUI, "测试");
@@ -146,6 +149,8 @@ public class DCCommonConfig implements IConfigHandler {
                 ProgressResuming,
                 TradingTargets,
                 AutoRepeatBlackList,
+                AutoRepeatBlackListMode,
+                AutoRepeatBlackListReplace,
                 AutoRepeatAntiDDos,
                 AutoRepeatAntiDDosThreshold,
                 AutoThrowWhiteList,

@@ -6,6 +6,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHudLine;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.text.Text;
 import net.minecraft.util.StringHelper;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -101,6 +102,10 @@ public class ChatUtil {
             }
         }
         return false;
+    }
+
+    public static void addLocalMessage(Text message) {
+        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
     }
 
 }
