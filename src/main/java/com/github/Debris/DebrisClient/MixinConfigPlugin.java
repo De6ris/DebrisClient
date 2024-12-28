@@ -23,6 +23,9 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
         if (mixinClassName.equals("com.github.Debris.DebrisClient.mixin.compat.carpet.CarpetFix")) {
             return DCEarlyConfig.getInstance().CarpetFix;
         }
+        if (mixinClassName.equals("com.github.Debris.DebrisClient.mixin.compat.carpet.CarpetTisFix")) {
+            return DCEarlyConfig.getInstance().CarpetFix;
+        }
         return true;
     }
 

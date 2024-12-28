@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "compat.carpet.CarpetFix",
+    "compat.carpet.CarpetTisFix",
     "compat.malilib.ConfigButtonOptionListMixin",
     "compat.malilib.WidgetConfigOptionMixin",
     "item.TridentItemMixin",
