@@ -161,4 +161,27 @@ public class InventoryTweaks {
             }
         }
     }
+
+    public static boolean trySpreading(boolean rightClick) {
+        if (!InventoryUtil.isHoldingItem()) return false;
+
+        Optional<ContainerSection> sectionOptional = SectionHandler.getSectionMouseOver();
+        if (sectionOptional.isEmpty()) return false;
+        ContainerSection section = sectionOptional.get();
+
+        InventoryUtil.startSpreading(rightClick);
+        section.emptyRun(x -> InventoryUtil.addToSpreading(x, rightClick));
+        InventoryUtil.finishSpreading(rightClick);
+
+        return true;
+    }
+
+    public static void tryMoveSimilar() {
+        InventoryUtil.getSlotMouseOver().ifPresent(slot -> {
+            if (slot.hasStack()) {
+                ItemStack template = slot.getStack().copy();
+                SectionHandler.getSection(slot).predicateRun(ItemUtil.predicateIDMeta(template), InventoryUtil::quickMove);
+            }
+        });
+    }
 }

@@ -152,6 +152,13 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
         }
     }
 
+    public void emptyRun(Consumer<Slot> runnable) {
+        for (Slot slot : this.slots) {
+            if (slot.hasStack()) continue;
+            runnable.accept(slot);
+        }
+    }
+
     public ContainerSection mergeWith(ContainerSection other) {
         if (this.inventory != other.inventory) {
             throw new IllegalArgumentException();

@@ -89,6 +89,18 @@ public class InventoryUtil {
         click(index, false, SlotActionType.QUICK_MOVE);
     }
 
+    public static void startSpreading(boolean rightClick) {
+        clickSlot(-999, ScreenHandler.packQuickCraftData(0, rightClick ? 1 : 0), SlotActionType.QUICK_CRAFT);
+    }
+
+    public static void addToSpreading(Slot slot, boolean rightClick) {
+        clickSlot(slot, ScreenHandler.packQuickCraftData(1, rightClick ? 1 : 0), SlotActionType.QUICK_CRAFT);
+    }
+
+    public static void finishSpreading(boolean rightClick) {
+        clickSlot(-999, ScreenHandler.packQuickCraftData(2, rightClick ? 1 : 0), SlotActionType.QUICK_CRAFT);
+    }
+
     public static void leftClick(Slot slot) {
         click(slot, false, SlotActionType.PICKUP);
     }
