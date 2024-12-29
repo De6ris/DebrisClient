@@ -23,7 +23,6 @@ public class InventoryTweaks {
         if (!shouldSort(section)) return false;
         int before = InventoryUtil.getChangeCount();
         makeSureNotHoldingItem(section);
-        section.mergeSlots();
         sortInternal(section);
         int after = InventoryUtil.getChangeCount();
         return after != before;// seen as sort success
@@ -79,16 +78,14 @@ public class InventoryTweaks {
 
             Map<Boolean, List<Slot>> grouped = section.slots().stream().filter(Slot::hasStack).collect(Collectors.partitioningBy(x -> isShulkerBox(x.getStack())));
 
-            List<Slot> nonBoxes = grouped.get(false);
-            section.subSection(nonBoxes).fillBlanks();
-
-            Slot[] nonBoxesArray = nonBoxes.stream().filter(Slot::hasStack).toArray(Slot[]::new);
-
+            Slot[] nonBoxes = grouped.get(false).toArray(Slot[]::new);
             Slot[] boxes = grouped.get(true).toArray(Slot[]::new);
 
-            runSorting(nonBoxesArray, slotSorter, swapAction);
+            runSorting(nonBoxes, slotSorter, swapAction);
             runSorting(boxes, slotSorter, swapAction);
         } else {
+            section.fillBlanks();
+            section.mergeSlots();
             section.fillBlanks();
             Slot[] nonEmptySlots = section.slots().stream().filter(Slot::hasStack).toArray(Slot[]::new);
             runSorting(nonEmptySlots, slotSorter, swapAction);
@@ -113,8 +110,10 @@ public class InventoryTweaks {
             theIndexNonBox = i;
             break;
         }
-        List<Slot> theFormerPart = section.slots().subList(0, theIndexNonBox + 1);
-        section.subSection(theFormerPart).fillBlanks();
+        ContainerSection theFormerPart = section.subSection(section.slots().subList(0, theIndexNonBox + 1));
+        theFormerPart.fillBlanks();
+        theFormerPart.mergeSlots();
+        theFormerPart.fillBlanks();
     }
 
     private static void moveToNextNonBox(ContainerSection section, int index, Slot currentSlot) {
@@ -161,5 +160,28 @@ public class InventoryTweaks {
                 if (flag) break;
             }
         }
+    }
+
+    public static boolean trySpreading(boolean rightClick) {
+        if (!InventoryUtil.isHoldingItem()) return false;
+
+        Optional<ContainerSection> sectionOptional = SectionHandler.getSectionMouseOver();
+        if (sectionOptional.isEmpty()) return false;
+        ContainerSection section = sectionOptional.get();
+
+        InventoryUtil.startSpreading(rightClick);
+        section.emptyRun(x -> InventoryUtil.addToSpreading(x, rightClick));
+        InventoryUtil.finishSpreading(rightClick);
+
+        return true;
+    }
+
+    public static void tryMoveSimilar() {
+        InventoryUtil.getSlotMouseOver().ifPresent(slot -> {
+            if (slot.hasStack()) {
+                ItemStack template = slot.getStack().copy();
+                SectionHandler.getSection(slot).predicateRun(ItemUtil.predicateIDMeta(template), InventoryUtil::quickMove);
+            }
+        });
     }
 }

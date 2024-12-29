@@ -47,6 +47,8 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigColor WorldEditOverlay = new ConfigColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
     public static final ConfigBoolean MuteGLDebugInfo = new ConfigBoolean("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
     public static final ConfigBoolean InventoryPreviewSupportComparator = new ConfigBoolean("物品栏预览支持比较器", false, "需要MiniHud和MagicLib,因为MasaGadget未更新,以此暂代");
+    public static final ConfigBoolean PinYinSearch = new ConfigBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组");
+    public static final ConfigBoolean CommentSearch = new ConfigBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
 
 
     // key settings
@@ -72,6 +74,8 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey KickBot = new ConfigHotKeyExtend("踢出假人", "", KeybindSettings.PRESS_ALLOWEXTRA, "按住时踢出准心所指假人\n支持灵魂出窍");
     public static final ConfigHotkey RestoreKicking = new ConfigHotKeyExtend("假人复原", "", "召回误踢的假人");
     public static final ConfigHotkey ModifierMoveAll = new ConfigHotKeyExtend("移动全部:修饰键", "SPACE", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域全部\n兼容carpet假人不会乱点按钮");
+    public static final ConfigHotkey ModifierSpreadItem = new ConfigHotKeyExtend("分散物品:修饰键", "LEFT_ALT", GUI_RELAXED_CANCEL, "按住时点击会尝试将手中物品均分到点击区域的空白槽位");
+    public static final ConfigHotkey ModifierMoveSimilar = new ConfigHotKeyExtend("移动类似:修饰键", "LEFT_CONTROL", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域类似物品");
     public static final ConfigHotkey ResendLastChat = new ConfigHotKeyExtend("重发上一条消息", "", "相当于按UP键");
     public static final ConfigHotkey RepeatNewestChat = new ConfigHotKeyExtend("消息复读", "", "复读聊天栏中最新消息");
     public static final ConfigHotkey QuickDataGet = new ConfigHotKeyExtend("快速DataGet指令", "", "准心的方块或实体");
@@ -97,12 +101,20 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed PathNodesOnlyNamed = new ConfigBooleanHotkeyed("寻路节点仅限命名生物", false, "", "");
     public static final ConfigBooleanHotkeyed AutoThrow = new ConfigBooleanHotkeyed("自动丢弃", false, "", "在GUI中不生效");
     public static final ConfigBooleanHotkeyed WorldEditVisibility = new ConfigBooleanHotkeyed("WorldEdit可视化", false, "", "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
+    public static final ConfigBooleanHotkeyed AutoContainerTaker = new ConfigBooleanHotkeyed("自动从容器取出", false, "", "若完全取出, 自动关闭GUI");
 
 
     // yeet
     public static final ConfigBooleanHotkeyed CancelSignRendering = new ConfigBooleanHotkeyed("取消告示牌渲染", false, "", "");
     public static final ConfigBooleanHotkeyed CancelFrameRendering = new ConfigBooleanHotkeyed("取消物品展示框渲染", false, "", "");
+    public static final ConfigBooleanHotkeyed CancelItemEntityRendering = new ConfigBooleanHotkeyed("取消物品实体渲染", false, "", "");
+    public static final ConfigBooleanHotkeyed CancelExperienceOrbRendering = new ConfigBooleanHotkeyed("取消经验球渲染", false, "", "");
     public static final ConfigBooleanHotkeyed DarknessOverride = new ConfigBooleanHotkeyed("禁用失明和黑暗", false, "", "");
+    public static final ConfigBooleanHotkeyed MuteExplosion = new ConfigBooleanHotkeyed("爆炸静音", false, "", "不包括龙息爆炸");
+    public static final ConfigBooleanHotkeyed MuteWither = new ConfigBooleanHotkeyed("凋灵静音", false, "", "");
+    public static final ConfigBooleanHotkeyed MuteEnderman = new ConfigBooleanHotkeyed("末影人静音", false, "");
+    public static final ConfigBooleanHotkeyed MuteDispenser = new ConfigBooleanHotkeyed("发射器静音", false, "包括投掷器, 仅屏蔽发射失败音效");
+    public static final ConfigBooleanHotkeyed CullPoofParticle = new ConfigBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
 
 
     public static final List<IConfigBase> ALL_CONFIGS;
@@ -157,7 +169,9 @@ public class DCCommonConfig implements IConfigHandler {
                 AutoThrowWhiteList,
                 WorldEditOverlay,
                 MuteGLDebugInfo,
-                InventoryPreviewSupportComparator
+                InventoryPreviewSupportComparator,
+                PinYinSearch,
+                CommentSearch
         );
         Fix = ImmutableList.of(
                 FreeCamKeepAutoMoving,
@@ -175,6 +189,8 @@ public class DCCommonConfig implements IConfigHandler {
                 KickBot,
                 RestoreKicking,
                 ModifierMoveAll,
+                ModifierMoveSimilar,
+                ModifierSpreadItem,
                 ResendLastChat,
                 RepeatNewestChat,
                 QuickDataGet,
@@ -196,12 +212,20 @@ public class DCCommonConfig implements IConfigHandler {
                 PathNodesVisibility,
                 PathNodesOnlyNamed,
                 AutoThrow,
-                WorldEditVisibility
+                WorldEditVisibility,
+                AutoContainerTaker
         );
         Yeets = ImmutableList.of(
                 CancelSignRendering,
                 CancelFrameRendering,
-                DarknessOverride
+                CancelItemEntityRendering,
+                CancelExperienceOrbRendering,
+                DarknessOverride,
+                MuteExplosion,
+                MuteWither,
+                MuteEnderman,
+                MuteDispenser,
+                CullPoofParticle
         );
         ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();
         builder.addAll(Values);

@@ -4,12 +4,15 @@ import com.google.common.collect.ImmutableList;
 import fi.dy.masa.malilib.config.IConfigOptionList;
 import fi.dy.masa.malilib.config.IConfigOptionListEntry;
 import fi.dy.masa.malilib.gui.GuiBase;
+import fi.dy.masa.malilib.util.StringUtils;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.VersionParsingException;
+import net.minecraft.item.Item;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,5 +54,13 @@ public class StringUtil {
             return false;
         }
         return false;
+    }
+
+    public static String translateItem(Item item) {
+        return StringUtils.translate(item.getTranslationKey());
+    }
+
+    public static String translateItemCollection(Collection<Item> items) {
+        return items.stream().map(StringUtil::translateItem).toList().toString();
     }
 }

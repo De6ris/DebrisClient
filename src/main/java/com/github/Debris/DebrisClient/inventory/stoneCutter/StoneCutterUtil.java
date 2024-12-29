@@ -74,9 +74,7 @@ public class StoneCutterUtil {
             InventoryUtil.quickMove(stoneCutterInput);// move to inventory
         }
 
-        if (stoneCutterInput.hasStack()) {// if still, then drop
-            InventoryUtil.drop(stoneCutterInput, true);
-        }
+        InventoryUtil.dropStackIfPossible(stoneCutterInput);// force clear
 
         EnumSection.InventoryWhole.get().predicateRun(ItemUtil.predicateIDMeta(input), x -> {
             InventoryUtil.quickMove(x);
@@ -104,9 +102,7 @@ public class StoneCutterUtil {
             InventoryUtil.quickMove(stoneCutterInput);
         }
 
-        if (stoneCutterInput.hasStack()) {
-            InventoryUtil.drop(stoneCutterInput, true);// force clear
-        }
+        InventoryUtil.dropStackIfPossible(stoneCutterInput);// force clear
 
         for (Slot slot : playerInventory.slots()) {
             if (ItemUtil.compareIDMeta(slot.getStack(), input)) {// can craft
@@ -115,7 +111,7 @@ public class StoneCutterUtil {
                 InventoryUtil.quickMove(stoneCutterOutput);
             }
             if (ItemUtil.compareIDMeta(slot.getStack(), result)) {// should drop
-                InventoryUtil.drop(slot, true);
+                InventoryUtil.dropStack(slot);
             }
         }
     }

@@ -21,6 +21,18 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class InventoryUtil {
+    public static void dropOne(Slot slot) {
+        drop(slot, false);
+    }
+
+    public static void dropStack(Slot slot) {
+        drop(slot, true);
+    }
+
+    public static void dropStackIfPossible(Slot slot){
+        if (slot.hasStack()) dropStack(slot);
+    }
+
     // the second param is special
     public static void drop(Slot slot, boolean ctrl) {
         clickSlot(slot, ctrl ? 1 : 0, SlotActionType.THROW);
@@ -89,6 +101,18 @@ public class InventoryUtil {
         click(index, false, SlotActionType.QUICK_MOVE);
     }
 
+    public static void startSpreading(boolean rightClick) {
+        clickSlot(-999, ScreenHandler.packQuickCraftData(0, rightClick ? 1 : 0), SlotActionType.QUICK_CRAFT);
+    }
+
+    public static void addToSpreading(Slot slot, boolean rightClick) {
+        clickSlot(slot, ScreenHandler.packQuickCraftData(1, rightClick ? 1 : 0), SlotActionType.QUICK_CRAFT);
+    }
+
+    public static void finishSpreading(boolean rightClick) {
+        clickSlot(-999, ScreenHandler.packQuickCraftData(2, rightClick ? 1 : 0), SlotActionType.QUICK_CRAFT);
+    }
+
     public static void leftClick(Slot slot) {
         click(slot, false, SlotActionType.PICKUP);
     }
@@ -149,7 +173,7 @@ public class InventoryUtil {
     }
 
     public static void dropAllMatching(Predicate<ItemStack> predicate) {
-        getSlots().stream().filter(x -> predicate.test(x.getStack())).forEach(x -> drop(x, true));
+        getSlots().stream().filter(x -> predicate.test(x.getStack())).forEach(InventoryUtil::dropStack);
     }
 
     public static Optional<Slot> getSlotMouseOver() {

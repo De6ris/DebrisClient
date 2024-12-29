@@ -6,6 +6,7 @@
   "mixins": [
     "compat.malilib.ConfigButtonOptionListMixin",
     "compat.malilib.WidgetConfigOptionMixin",
+    "gui.ScreenHandlerMixin",
     "item.TridentItemMixin",
     "misc.PortalForcerMixin"
   ],
@@ -13,6 +14,8 @@
     "compat.libgui.CottonClientScreenMixin",
     "compat.malilib.GuiConfigsBaseMixin",
     "compat.malilib.GuiListBaseMixin",
+    "compat.malilib.WidgetListBaseMixin",
+    "compat.malilib.WidgetListConfigOptionsMixin",
     "compat.tweakeroo.CameraEntityMixin",
     "compat.tweakeroo.DummyMovementInputMixin",
     "gui.AbstractInventoryScreenMixin",
@@ -25,11 +28,13 @@
     "misc.GLDebugMixin",
     "misc.KeyboardInputMixin",
     "misc.MinecraftClientMixin",
+    "misc.SoundSystemMixin",
     "network.ClientPlayNetworkHandlerMixin",
     "render.BackgroundRenderMixin",
     "render.BlockEntityRenderDispatcherMixin",
     "render.EntityRenderDispatcherMixin",
     "render.LightmapTextureManagerMixin",
+    "render.ParticleManagerMixin",
     "render.WorldRendererMixin"
   ],
   "injectors": {
