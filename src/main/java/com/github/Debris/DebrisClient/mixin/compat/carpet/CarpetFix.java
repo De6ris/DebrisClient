@@ -2,6 +2,7 @@ package com.github.Debris.DebrisClient.mixin.compat.carpet;
 
 import carpet.CarpetExtension;
 import carpet.CarpetServer;
+import carpet.CarpetSettings;
 import carpet.logging.HUDController;
 import carpet.logging.LoggerRegistry;
 import carpet.network.ServerNetworkHandler;
@@ -48,9 +49,11 @@ public class CarpetFix {
             LoggerRegistry.stopLoggers();
             HUDController.resetScarpetHUDs();
             ParticleParser.resetCache();
-            extensions.forEach((e) -> {
-                e.onServerClosed(server);
-            });
+            if (server == null) {
+                CarpetSettings.LOG.warn("onServerClosed: why server is null");
+            } else {
+                extensions.forEach((e) -> e.onServerClosed(server));
+            }
             minecraft_server = null;
         }
 
