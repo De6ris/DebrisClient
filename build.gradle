@@ -49,7 +49,7 @@ dependencies {
 
 
     // misc
-//    modImplementation "curse.maven:roughly-enough-items-${project.rei_projectid}:${project.rei_fileid}"
+    modImplementation "curse.maven:roughly-enough-items-${project.rei_projectid}:${project.rei_fileid}"
     modImplementation "curse.maven:worldedit-${project.worldedit_projectid}:${project.worldedit_fileid}"
 
     modImplementation "com.terraformersmc:modmenu:${project.mod_menu}"
