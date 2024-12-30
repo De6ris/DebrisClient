@@ -27,12 +27,14 @@
     "misc.GLDebugMixin",
     "misc.KeyboardInputMixin",
     "misc.MinecraftClientMixin",
+    "misc.SoundSystemMixin",
     "network.ClientPlayNetworkHandlerMixin",
     "render.BackgroundRenderMixin",
     "render.BlockEntityRenderDispatcherMixin",
     "render.EntityRenderDispatcherMixin",
     "render.EntityRendererMixin",
     "render.LightmapTextureManagerMixin",
+    "render.ParticleManagerMixin",
     "render.WorldRendererMixin"
   ],
   "injectors": {

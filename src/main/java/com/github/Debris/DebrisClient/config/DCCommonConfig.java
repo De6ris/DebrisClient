@@ -105,7 +105,12 @@ public class DCCommonConfig implements IConfigHandler {
     // yeet
     public static final ConfigBooleanHotkeyed CancelSignRendering = new ConfigBooleanHotkeyed("取消告示牌渲染", false, "", "");
     public static final ConfigBooleanHotkeyed CancelFrameRendering = new ConfigBooleanHotkeyed("取消物品展示框渲染", false, "", "");
+    public static final ConfigBooleanHotkeyed CancelItemEntityRendering = new ConfigBooleanHotkeyed("取消物品实体渲染", false, "", "");
+    public static final ConfigBooleanHotkeyed CancelExperienceOrbRendering = new ConfigBooleanHotkeyed("取消经验球渲染", false, "", "");
     public static final ConfigBooleanHotkeyed DarknessOverride = new ConfigBooleanHotkeyed("禁用失明和黑暗", false, "", "");
+    public static final ConfigBooleanHotkeyed MuteExplosion = new ConfigBooleanHotkeyed("爆炸静音", false, "", "不包括龙息爆炸");
+    public static final ConfigBooleanHotkeyed MuteWither = new ConfigBooleanHotkeyed("凋灵静音", false, "", "包括凋灵的各种音效");
+    public static final ConfigBooleanHotkeyed CullPoofParticle = new ConfigBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
 
 
     public static final List<IConfigBase> ALL_CONFIGS;
@@ -207,7 +212,12 @@ public class DCCommonConfig implements IConfigHandler {
         Yeets = ImmutableList.of(
                 CancelSignRendering,
                 CancelFrameRendering,
-                DarknessOverride
+                CancelItemEntityRendering,
+                CancelExperienceOrbRendering,
+                DarknessOverride,
+                MuteExplosion,
+                MuteWither,
+                CullPoofParticle
         );
         ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();
         builder.addAll(Values);
