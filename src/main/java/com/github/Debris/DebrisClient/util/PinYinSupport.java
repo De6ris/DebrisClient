@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.util;
 
+import com.github.Debris.DebrisClient.unsafe.rei.ReiPinYinMatcher;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
@@ -15,6 +16,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.IntSupplier;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -51,13 +53,38 @@ public class PinYinSupport {
         return compareByDefault.getAsInt();
     }
 
+    public static boolean matchesFilter(String entryString, String filterText) {
+        if (FabricLoader.getInstance().isModLoaded("roughlyenoughitems")) {
+            Optional<Boolean> optionalB = ReiPinYinMatcher.matchesFilter(entryString, filterText);
+            if (optionalB.isPresent()) return optionalB.get();
+        }
+        return entryString.codePoints().anyMatch(codePoint -> {
+            if (PINYIN_MAP.containsKey(codePoint)) {
+                return PINYIN_MAP.get(codePoint).startsWith(filterText);
+            }
+            return false;
+        });// this is my simple algorithm
+    }
+
     private static final Path unihanPath = FabricLoader.getInstance().getConfigDir().resolve("roughlyenoughitems/unihan.zip");
 
-    public static boolean dataExists() {
+    private static boolean loadedPinyinData = false;
+
+    public static boolean available() {
+        return loadedPinyinData;
+    }
+
+    public static void tryInit() {
+        if (!loadedPinyinData && dataExists()) {
+            loadedPinyinData = tryLoad();
+        }
+    }
+
+    private static boolean dataExists() {
         return Files.exists(unihanPath);
     }
 
-    public static boolean tryLoad() {
+    private static boolean tryLoad() {
         String readingsFileName = "Unihan_Readings.txt";
         DataConsumer consumer = (codePoint, fieldKey, data) -> {
             if (fieldKey.equals("kMandarin")) {// only mandarin pinyin used

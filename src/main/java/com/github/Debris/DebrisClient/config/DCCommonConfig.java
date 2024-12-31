@@ -47,6 +47,8 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigColor WorldEditOverlay = new ConfigColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
     public static final ConfigBoolean MuteGLDebugInfo = new ConfigBoolean("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
     public static final ConfigBoolean InventoryPreviewSupportComparator = new ConfigBoolean("物品栏预览支持比较器", false, "需要MiniHud和MagicLib,因为MasaGadget未更新,以此暂代");
+    public static final ConfigBoolean PinYinSearch = new ConfigBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组");
+    public static final ConfigBoolean CommentSearch = new ConfigBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
 
 
     // key settings
@@ -109,7 +111,9 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed CancelExperienceOrbRendering = new ConfigBooleanHotkeyed("取消经验球渲染", false, "", "");
     public static final ConfigBooleanHotkeyed DarknessOverride = new ConfigBooleanHotkeyed("禁用失明和黑暗", false, "", "");
     public static final ConfigBooleanHotkeyed MuteExplosion = new ConfigBooleanHotkeyed("爆炸静音", false, "", "不包括龙息爆炸");
-    public static final ConfigBooleanHotkeyed MuteWither = new ConfigBooleanHotkeyed("凋灵静音", false, "", "包括凋灵的各种音效");
+    public static final ConfigBooleanHotkeyed MuteWither = new ConfigBooleanHotkeyed("凋灵静音", false, "", "");
+    public static final ConfigBooleanHotkeyed MuteEnderman = new ConfigBooleanHotkeyed("末影人静音", false, "");
+    public static final ConfigBooleanHotkeyed MuteDispenser = new ConfigBooleanHotkeyed("发射器静音", false, "包括投掷器, 仅屏蔽发射失败音效");
     public static final ConfigBooleanHotkeyed CullPoofParticle = new ConfigBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
 
 
@@ -165,7 +169,9 @@ public class DCCommonConfig implements IConfigHandler {
                 AutoThrowWhiteList,
                 WorldEditOverlay,
                 MuteGLDebugInfo,
-                InventoryPreviewSupportComparator
+                InventoryPreviewSupportComparator,
+                PinYinSearch,
+                CommentSearch
         );
         Fix = ImmutableList.of(
                 FreeCamKeepAutoMoving,
@@ -217,6 +223,8 @@ public class DCCommonConfig implements IConfigHandler {
                 DarknessOverride,
                 MuteExplosion,
                 MuteWither,
+                MuteEnderman,
+                MuteDispenser,
                 CullPoofParticle
         );
         ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();

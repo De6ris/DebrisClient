@@ -65,11 +65,7 @@ public enum SortCategory implements IConfigOptionListEntry {
                     displayContext = buildDisplayContext(MinecraftClient.getInstance());
                 }// this make the collection non-empty
             }
-            case PINYIN -> {
-                if (!loadedPinyinData && PinYinSupport.dataExists()) {
-                    loadedPinyinData = PinYinSupport.tryLoad();
-                }
-            }
+            case PINYIN -> PinYinSupport.tryInit();
         }
     }
 
@@ -88,7 +84,7 @@ public enum SortCategory implements IConfigOptionListEntry {
     }
 
     private static int compareByPinyin(Item c1, Item c2) {
-        if (loadedPinyinData) {
+        if (PinYinSupport.available()) {
             String translate1 = StringUtils.translate(c1.getTranslationKey());
             String translate2 = StringUtils.translate(c2.getTranslationKey());
             return PinYinSupport.compareString(translate1, translate2, () -> TRANSLATION_KEY.order.compare(c1, c2));

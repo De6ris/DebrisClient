@@ -26,8 +26,15 @@ public class CullingUtil {
         if (SoundEvents.ENTITY_GENERIC_EXPLODE.matchesId(id)) {
             return DCCommonConfig.MuteExplosion.getBooleanValue();
         }
-        if (id.getPath().startsWith("entity.wither")) {
+        if (SoundEvents.BLOCK_DISPENSER_FAIL.getId().equals(id)) {
+            return DCCommonConfig.MuteDispenser.getBooleanValue();
+        }
+        String path = id.getPath();
+        if (path.startsWith("entity.wither")) {
             return DCCommonConfig.MuteWither.getBooleanValue();
+        }
+        if (path.startsWith("entity.enderman")) {
+            return DCCommonConfig.MuteEnderman.getBooleanValue();
         }
         return false;
     }
