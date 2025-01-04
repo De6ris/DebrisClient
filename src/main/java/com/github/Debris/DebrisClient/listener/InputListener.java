@@ -70,7 +70,7 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
             if (DCCommonConfig.ModifierMoveAll.getKeybind().isKeybindHeld()) {
                 Optional<ContainerSection> optional = SectionHandler.getSectionMouseOver();
                 if (optional.isPresent()) {
-                    optional.get().predicateRun(x -> true, InventoryUtil::quickMove);
+                    optional.get().notEmptyRun(InventoryUtil::quickMove);
                     return true;
                 }
             }

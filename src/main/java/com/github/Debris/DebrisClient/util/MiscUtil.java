@@ -88,7 +88,7 @@ public class MiscUtil {
         List<String> identifiers = DCCommonConfig.AutoThrowWhiteList.getStrings();
         for (Slot slot : InventoryUtil.getInventoryContainer().slots) {
             if (isItemInList(slot.getStack(), identifiers)) {
-                InventoryUtil.drop(slot, true);
+                InventoryUtil.dropStack(slot);
             }
         }
     }

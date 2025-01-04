@@ -47,11 +47,11 @@ public abstract class AbstractMassCrafting {
 
         if (DCCommonConfig.Use64Q.getBooleanValue()) {
             do {
-                InventoryUtil.drop(outputSlot, true);
+                InventoryUtil.dropStack(outputSlot);
             } while (outputSlot.hasStack());
         } else {
             for (Slot slot : playerInventory.slots()) {
-                InventoryUtil.drop(slot, true);
+                InventoryUtil.dropStack(slot);
                 InventoryUtil.quickMove(outputSlot);// move result to inventory
                 if (!outputSlot.hasStack()) {// success
                     dropAllProduct();

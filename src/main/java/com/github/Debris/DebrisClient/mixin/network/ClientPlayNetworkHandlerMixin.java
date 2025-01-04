@@ -1,11 +1,16 @@
 package com.github.Debris.DebrisClient.mixin.network;
 
+import com.github.Debris.DebrisClient.inventory.autoProcess.AutoProcessManager;
 import com.github.Debris.DebrisClient.util.MiscUtil;
+import fi.dy.masa.malilib.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.network.ClientCommonNetworkHandler;
 import net.minecraft.client.network.ClientConnectionState;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.ClientConnection;
+import net.minecraft.network.packet.s2c.play.OpenScreenS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,7 +30,15 @@ public abstract class ClientPlayNetworkHandlerMixin extends ClientCommonNetworkH
                     shift = At.Shift.AFTER
             )
     )
-    private void autoVillagerTradeFavorites(CallbackInfo ci) {
+    private void onTradeInfoUpdate(CallbackInfo ci) {
         MiscUtil.runOrientedTrading(this.client);
     }// This injection point from tweakemore
+
+    @Inject(method = "onOpenScreen", at = @At("RETURN"))
+    private void onContainerOpen(OpenScreenS2CPacket packet, CallbackInfo ci) {
+        Screen screen = GuiUtils.getCurrentScreen();
+        if (screen instanceof HandledScreen<?> guiContainer) {
+            AutoProcessManager.onGuiContainerOpen(guiContainer);
+        }
+    }
 }

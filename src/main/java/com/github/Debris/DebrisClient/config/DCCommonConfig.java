@@ -102,6 +102,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed PathNodesOnlyNamed = new ConfigBooleanHotkeyed("寻路节点仅限命名生物", false, "", "");
     public static final ConfigBooleanHotkeyed AutoThrow = new ConfigBooleanHotkeyed("自动丢弃", false, "", "在GUI中不生效");
     public static final ConfigBooleanHotkeyed WorldEditVisibility = new ConfigBooleanHotkeyed("WorldEdit可视化", false, "", "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
+    public static final ConfigBooleanHotkeyed AutoContainerTaker = new ConfigBooleanHotkeyed("自动从容器取出", false, "", "若完全取出, 自动关闭GUI");
 
 
     // yeet
@@ -213,7 +214,8 @@ public class DCCommonConfig implements IConfigHandler {
                 PathNodesVisibility,
                 PathNodesOnlyNamed,
                 AutoThrow,
-                WorldEditVisibility
+                WorldEditVisibility,
+                AutoContainerTaker
         );
         Yeets = ImmutableList.of(
                 CancelSignRendering,

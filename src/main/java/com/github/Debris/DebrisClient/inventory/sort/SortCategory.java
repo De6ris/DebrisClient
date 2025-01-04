@@ -2,6 +2,7 @@ package com.github.Debris.DebrisClient.inventory.sort;
 
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.util.PinYinSupport;
+import com.github.Debris.DebrisClient.util.StringUtil;
 import fi.dy.masa.malilib.config.IConfigOptionListEntry;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
@@ -17,7 +18,7 @@ import java.util.Comparator;
 public enum SortCategory implements IConfigOptionListEntry {
     CREATIVE_INVENTORY("creative_inventory", "创造模式物品栏", SortCategory::compareByCreativeInventory),
     TRANSLATION_KEY("translation_key", "翻译键", Comparator.comparing(Registries.ITEM::getId)),
-    TRANSLATION_RESULT("translation_result", "翻译结果", Comparator.comparing(x -> StringUtils.translate(x.getTranslationKey()))),
+    TRANSLATION_RESULT("translation_result", "翻译结果", Comparator.comparing(StringUtil::translateItem)),
     PINYIN("pinyin", "拼音(需要Rei)", SortCategory::compareByPinyin);
 
     private final String configString;
@@ -85,8 +86,8 @@ public enum SortCategory implements IConfigOptionListEntry {
 
     private static int compareByPinyin(Item c1, Item c2) {
         if (PinYinSupport.available()) {
-            String translate1 = StringUtils.translate(c1.getTranslationKey());
-            String translate2 = StringUtils.translate(c2.getTranslationKey());
+            String translate1 = StringUtil.translateItem(c1);
+            String translate2 = StringUtil.translateItem(c2);
             return PinYinSupport.compareString(translate1, translate2, () -> TRANSLATION_KEY.order.compare(c1, c2));
         }
 

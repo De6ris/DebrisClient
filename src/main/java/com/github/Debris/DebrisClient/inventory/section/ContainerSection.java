@@ -57,6 +57,10 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
         return 0;
     }
 
+    public boolean isEmpty() {
+        return this.slots.stream().noneMatch(Slot::hasStack);
+    }
+
     public Optional<Slot> getEmptySlot() {
         return this.slots.stream().filter(x -> !x.hasStack()).findFirst();
     }
@@ -147,6 +151,14 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
     public void predicateRun(Predicate<ItemStack> predicate, Consumer<Slot> runnable) {
         for (Slot slot : this.slots) {
             if (slot.hasStack() && predicate.test(slot.getStack())) {
+                runnable.accept(slot);
+            }
+        }
+    }
+
+    public void notEmptyRun(Consumer<Slot> runnable) {
+        for (Slot slot : this.slots) {
+            if (slot.hasStack()) {
                 runnable.accept(slot);
             }
         }

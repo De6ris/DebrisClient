@@ -36,9 +36,7 @@ public class MassCraftingManual extends AbstractMassCrafting {
                 if (ItemUtil.compareIDMeta(slot.getStack(), requiredArray[i]))
                     continue;// means this is ready for crafting
                 InventoryUtil.quickMove(slot);
-                if (slot.hasStack()) {
-                    InventoryUtil.drop(slot, true);// if we can not move to inventory, just throw
-                }
+                InventoryUtil.dropStackIfPossible(slot);// if we can not move to inventory, just throw
             }
         }
 

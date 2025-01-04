@@ -21,6 +21,18 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class InventoryUtil {
+    public static void dropOne(Slot slot) {
+        drop(slot, false);
+    }
+
+    public static void dropStack(Slot slot) {
+        drop(slot, true);
+    }
+
+    public static void dropStackIfPossible(Slot slot){
+        if (slot.hasStack()) dropStack(slot);
+    }
+
     // the second param is special
     public static void drop(Slot slot, boolean ctrl) {
         clickSlot(slot, ctrl ? 1 : 0, SlotActionType.THROW);
@@ -161,7 +173,7 @@ public class InventoryUtil {
     }
 
     public static void dropAllMatching(Predicate<ItemStack> predicate) {
-        getSlots().stream().filter(x -> predicate.test(x.getStack())).forEach(x -> drop(x, true));
+        getSlots().stream().filter(x -> predicate.test(x.getStack())).forEach(InventoryUtil::dropStack);
     }
 
     public static Optional<Slot> getSlotMouseOver() {

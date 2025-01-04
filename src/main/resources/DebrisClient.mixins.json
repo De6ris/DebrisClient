@@ -8,6 +8,7 @@
     "compat.carpet.CarpetTisFix",
     "compat.malilib.ConfigButtonOptionListMixin",
     "compat.malilib.WidgetConfigOptionMixin",
+    "gui.ScreenHandlerMixin",
     "item.TridentItemMixin",
     "misc.PortalForcerMixin"
   ],
