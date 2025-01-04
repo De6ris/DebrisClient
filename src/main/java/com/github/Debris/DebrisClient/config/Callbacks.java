@@ -66,9 +66,9 @@ public class Callbacks {
 
         DCCommonConfig.RepeatNewestChat.getKeybind().setCallback((action, key) -> ChatUtil.repeatNewestChat(client));
 
-        DCCommonConfig.QuickDataGet.getKeybind().setCallback((action, key) ->  ChatUtil.dataGet(client));
+        DCCommonConfig.QuickDataGet.getKeybind().setCallback((action, key) -> ChatUtil.dataGet(client));
 
-        DCCommonConfig.AlignWithEnderEye.getKeybind().setCallback((action, key) ->  MiscUtil.alignWithEnderEye(client));
+        DCCommonConfig.AlignWithEnderEye.getKeybind().setCallback((action, key) -> MiscUtil.alignWithEnderEye(client));
 
         DCCommonConfig.TEST.getKeybind().setCallback((action, key) -> {
             return false;

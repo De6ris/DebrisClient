@@ -181,8 +181,9 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
         return new ContainerSection(this.inventory, builder.build());
     }
 
-    public ContainerSection subSection(List<Slot> slots) {
-        return new ContainerSection(this.inventory, slots);
+
+    public ContainerSection subSection(int fromIndex, int toIndex) {
+        return new ContainerSection(this.inventory, this.slots.subList(fromIndex, toIndex));
     }
 
     @Override
