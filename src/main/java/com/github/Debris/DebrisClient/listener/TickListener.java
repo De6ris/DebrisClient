@@ -39,6 +39,8 @@ public class TickListener implements IClientTickHandler {
         TridentUtil.onClientTick(client);
 
         AutoRepeat.onClientTick(client);
+
+        AutoExtinguisher.onClientTick(client);
     }
 
 

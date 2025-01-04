@@ -7,6 +7,6 @@ import net.minecraft.command.CommandRegistryAccess;
 public class Commands {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess context) {
         DCAutoRepeatCommand.register(dispatcher);
-        DCFindItemCommand.register(dispatcher,context);
+        DCWhereIsItCommand.register(dispatcher,context);
     }
 }

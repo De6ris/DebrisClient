@@ -1,6 +1,6 @@
 package com.github.Debris.DebrisClient.inventory.autoProcess;
 
-import com.github.Debris.DebrisClient.command.DCFindItemCommand;
+import com.github.Debris.DebrisClient.command.DCWhereIsItCommand;
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
 import com.github.Debris.DebrisClient.inventory.section.SectionHandler;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
@@ -17,7 +17,7 @@ import java.util.Set;
 public class ItemFinder implements IAutoProcessor {
     @Override
     public boolean isActive() {
-        return DCFindItemCommand.isActive();
+        return DCWhereIsItCommand.isActive();
     }
 
     @Override
@@ -25,7 +25,7 @@ public class ItemFinder implements IAutoProcessor {
         List<ContainerSection> sections = SectionHandler.getUnIdentifiedSections();
 
         if (sections.size() != 1) {
-            InfoUtils.printActionbarMessage("物品搜索: 不支持的容器!");
+            InfoUtils.printActionbarMessage("物品寻找: 不支持的容器!");
             return ProcessResult.SKIP;
         }
 
@@ -42,11 +42,11 @@ public class ItemFinder implements IAutoProcessor {
     }
 
     private static boolean isTarget(ItemStack itemStack) {
-        return DCFindItemCommand.streamItems().anyMatch(itemStack::isOf);
+        return DCWhereIsItCommand.streamItems().anyMatch(itemStack::isOf);
     }
 
     private static void dealFound(Collection<Item> found) {
-        DCFindItemCommand.markFound(found);
-        InfoUtils.printActionbarMessage(String.format("物品搜索: 已找到%s", StringUtil.translateItemCollection(found)));
+        DCWhereIsItCommand.markFound(found);
+        InfoUtils.printActionbarMessage(String.format("物品寻找: 已找到%s", StringUtil.translateItemCollection(found)));
     }
 }

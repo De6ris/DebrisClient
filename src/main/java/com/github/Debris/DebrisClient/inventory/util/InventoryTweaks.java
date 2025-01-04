@@ -6,7 +6,9 @@ import com.github.Debris.DebrisClient.inventory.section.EnumSection;
 import com.github.Debris.DebrisClient.inventory.section.SectionHandler;
 import com.github.Debris.DebrisClient.inventory.sort.SortCategory;
 import com.github.Debris.DebrisClient.util.PermutationUtil;
+import fi.dy.masa.malilib.util.GuiUtils;
 import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
@@ -110,7 +112,7 @@ public class InventoryTweaks {
             theIndexNonBox = i;
             break;
         }
-        ContainerSection theFormerPart = section.subSection(section.slots().subList(0, theIndexNonBox + 1));
+        ContainerSection theFormerPart = section.subSection(0, theIndexNonBox + 1);
         theFormerPart.fillBlanks();
         theFormerPart.mergeSlots();
         theFormerPart.fillBlanks();
@@ -180,8 +182,17 @@ public class InventoryTweaks {
         InventoryUtil.getSlotMouseOver().ifPresent(slot -> {
             if (slot.hasStack()) {
                 ItemStack template = slot.getStack().copy();
-                SectionHandler.getSection(slot).predicateRun(ItemUtil.predicateIDMeta(template), InventoryUtil::quickMove);
+                ContainerSection section = SectionHandler.getSection(slot);
+                section = expandSectionIfPossible(section);
+                section.predicateRun(ItemUtil.predicateIDMeta(template), InventoryUtil::quickMove);
             }
         });
+    }
+
+    private static ContainerSection expandSectionIfPossible(ContainerSection section) {
+        if (GuiUtils.getCurrentScreen() instanceof InventoryScreen) return section;
+        if (EnumSection.InventoryHotBar.isOf(section) || EnumSection.InventoryStorage.isOf(section))
+            return EnumSection.InventoryWhole.get();
+        return section;
     }
 }
