@@ -40,7 +40,7 @@ public class TickListener implements IClientTickHandler {
 
         AutoRepeat.onClientTick(client);
 
-        AutoExtinguisher.onClientTick(client);
+        MiscUtil.tickAutoExtinguisher(client);
     }
 
 

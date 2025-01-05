@@ -67,10 +67,6 @@ public class Callbacks {
             return false;
         });
 
-        DCCommonConfig.TEST2.getKeybind().setCallback((action, key) -> {
-            return false;
-        });
-
     }
 
     private static void playClickSound(MinecraftClient client) {

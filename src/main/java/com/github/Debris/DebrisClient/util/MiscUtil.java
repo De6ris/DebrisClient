@@ -6,6 +6,8 @@ import com.github.Debris.DebrisClient.unsafe.itemScroller.UtilCaller;
 import com.google.common.collect.Lists;
 import fi.dy.masa.malilib.util.GuiUtils;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.MerchantScreen;
@@ -27,6 +29,7 @@ import net.minecraft.village.TradeOfferList;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 public class MiscUtil {
     public static boolean isAutoMoving() {
@@ -128,5 +131,11 @@ public class MiscUtil {
         player.refreshPositionAndAngles(player.getX(), player.getY(), player.getZ(), yaw, pitch);
     }
 
+    public static void tickAutoExtinguisher(MinecraftClient client){
+        if (!DCCommonConfig.AutoExtinguisher.getBooleanValue()) return;
+        if (Predicates.notInGame(client)) return;
+        Predicate<BlockState> fireTest = state -> state.isOf(Blocks.FIRE);
+        InteractionUtil.digNear(client, fireTest);
+    }
 
 }
