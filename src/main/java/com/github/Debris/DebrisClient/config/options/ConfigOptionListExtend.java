@@ -5,11 +5,19 @@ import fi.dy.masa.malilib.config.IConfigOptionListEntry;
 import fi.dy.masa.malilib.config.options.ConfigOptionList;
 
 public class ConfigOptionListExtend extends ConfigOptionList implements IConfigEnum {
+    public ConfigOptionListExtend(String name, IConfigOptionListEntry defaultValue) {
+        super(name, defaultValue);
+    }
+
     public ConfigOptionListExtend(String name, IConfigOptionListEntry defaultValue, String comment) {
         super(name, defaultValue, comment);
     }
 
     public ConfigOptionListExtend(String name, IConfigOptionListEntry defaultValue, String comment, String prettyName) {
         super(name, defaultValue, comment, prettyName);
+    }
+
+    public ConfigOptionListExtend(String name, IConfigOptionListEntry defaultValue, String comment, String prettyName, String translatedName) {
+        super(name, defaultValue, comment, prettyName, translatedName);
     }
 }

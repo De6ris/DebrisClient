@@ -3,12 +3,14 @@
   "id": "debris_client",
   "version": "${version}",
   "name": "DebrisClient",
-  "description": "Some tricks",
+  "description": "Some client tricks",
   "authors": [
     "Debris"
   ],
   "contact": {
-    "repo": "https://github.com/De6ris/DebrisClient"
+    "homepage": "https://github.com/De6ris",
+    "issues": "https://github.com/De6ris/DebrisClient",
+    "sources": "https://github.com/De6ris/DebrisClient"
   },
   "license": "MIT",
   "icon": "assets/debris_client/icon.png",
@@ -27,7 +29,7 @@
   "depends": {
     "fabricloader": "*",
     "minecraft": ">=1.21",
-    "malilib": "*"
+    "malilib": ">=0.21.5"
   },
   "accessWidener": "DebrisClient.accesswidener"
 }
