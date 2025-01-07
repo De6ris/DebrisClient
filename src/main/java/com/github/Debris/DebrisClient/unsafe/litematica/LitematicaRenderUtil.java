@@ -32,10 +32,11 @@ public class LitematicaRenderUtil {
     // I can not widen the BoxType class by aw, do not know why
     private static boolean setupReflection() {
         try {
-            Class<?> clazzOut = Class.forName("fi.dy.masa.litematica.render.OverlayRenderer");
+            Class<OverlayRenderer> clazzOut = OverlayRenderer.class;
             for (Method declaredMethod : clazzOut.getDeclaredMethods()) {
                 if (declaredMethod.getName().equals("renderSelectionBox")) {
                     renderSelectionBox = declaredMethod;
+                    break;
                 }
             }
             Class<?> clazzIn = Class.forName("fi.dy.masa.litematica.render.OverlayRenderer$BoxType");

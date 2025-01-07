@@ -24,4 +24,9 @@ public class Predicates {
         }
         return true;
     }
+
+    public static boolean inGameNoGui(MinecraftClient client) {
+        if (notInGame(client)) return false;
+        return client.currentScreen == null;
+    }
 }

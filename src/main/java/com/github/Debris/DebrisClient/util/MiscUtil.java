@@ -28,7 +28,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.village.TradeOfferList;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Predicate;
 
 public class MiscUtil {
@@ -70,22 +69,24 @@ public class MiscUtil {
         input.movementSideways = 0.0F;
     }
 
+    public static void onTradeInfoUpdate(MinecraftClient client) {
+        if (DCCommonConfig.OrientedAutoTrading.getBooleanValue()) runOrientedTrading(client);
+    }
+
     public static void runOrientedTrading(MinecraftClient client) {
-        if (!DCCommonConfig.OrientedAutoTrading.getBooleanValue()) return;
         if (!FabricLoader.getInstance().isModLoaded("itemscroller")) return;
-        Screen currentScreen = GuiUtils.getCurrentScreen();
-        List<String> targets = DCCommonConfig.TradingTargets.getStrings();
+        Screen currentScreen = client.currentScreen;
         if (currentScreen instanceof MerchantScreen merchantScreen) {
             MerchantScreenHandler merchantContainer = merchantScreen.getScreenHandler();
             TradeOfferList recipes = merchantContainer.getRecipes();
+            List<String> targets = DCCommonConfig.TradingTargets.getStrings();
             for (int i = 0; i < recipes.size(); i++) {
                 ItemStack sellItem = recipes.get(i).getSellItem();
                 if (isItemInList(sellItem, targets)) {
                     UtilCaller.tryHardTrading(i);
                 }
             }
-
-            Objects.requireNonNull(client.player).closeHandledScreen();
+            merchantScreen.close();
         }
     }
 
@@ -131,8 +132,7 @@ public class MiscUtil {
         player.refreshPositionAndAngles(player.getX(), player.getY(), player.getZ(), yaw, pitch);
     }
 
-    public static void tickAutoExtinguisher(MinecraftClient client){
-        if (!DCCommonConfig.AutoExtinguisher.getBooleanValue()) return;
+    public static void runAutoExtinguisher(MinecraftClient client) {
         if (Predicates.notInGame(client)) return;
         Predicate<BlockState> fireTest = state -> state.isOf(Blocks.FIRE);
         InteractionUtil.digNear(client, fireTest);
