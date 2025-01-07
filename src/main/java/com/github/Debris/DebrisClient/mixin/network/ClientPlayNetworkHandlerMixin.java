@@ -31,7 +31,7 @@ public abstract class ClientPlayNetworkHandlerMixin extends ClientCommonNetworkH
             )
     )
     private void onTradeInfoUpdate(CallbackInfo ci) {
-        MiscUtil.runOrientedTrading(this.client);
+        MiscUtil.onTradeInfoUpdate(this.client);
     }// This injection point from tweakemore
 
     @Inject(method = "onOpenScreen", at = @At("RETURN"))

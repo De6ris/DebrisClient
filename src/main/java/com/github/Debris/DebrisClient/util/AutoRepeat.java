@@ -36,6 +36,7 @@ public class AutoRepeat {
     }
 
     public static void onClientTick(MinecraftClient client) {
+        if (TIME_STAMP_MAP.isEmpty()) return;
         long currentTime = System.currentTimeMillis();
         TIME_STAMP_MAP.values().forEach(x -> x.removeIf(y -> currentTime - y > 1000));
         TIME_STAMP_MAP.values().removeIf(List::isEmpty);

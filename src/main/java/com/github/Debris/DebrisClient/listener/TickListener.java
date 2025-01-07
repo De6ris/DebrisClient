@@ -32,7 +32,7 @@ public class TickListener implements IClientTickHandler {
             }
         }
 
-        if (DCCommonConfig.AutoThrow.getBooleanValue() && client.world != null && client.currentScreen == null) {
+        if (DCCommonConfig.AutoThrow.getBooleanValue() && Predicates.inGameNoGui(client)) {
             MiscUtil.runAutoThrow();
         }
 
@@ -40,7 +40,9 @@ public class TickListener implements IClientTickHandler {
 
         AutoRepeat.onClientTick(client);
 
-        MiscUtil.tickAutoExtinguisher(client);
+        if (DCCommonConfig.AutoExtinguisher.getBooleanValue()) {
+            MiscUtil.runAutoExtinguisher(client);
+        }
     }
 
 
