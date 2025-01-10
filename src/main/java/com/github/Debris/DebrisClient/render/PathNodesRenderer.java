@@ -39,7 +39,6 @@ public class PathNodesRenderer {
         }
     }
 
-    // called during render, not same as in malilib
     public void onRenderWorldPost(World world, RenderContext context, float partialTicks) {
         if (!DCCommonConfig.PathNodesVisibility.getBooleanValue()) return;
 

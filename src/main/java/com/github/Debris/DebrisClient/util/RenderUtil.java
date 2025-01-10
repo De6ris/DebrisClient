@@ -7,6 +7,7 @@ import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.Color4f;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.ShaderProgramKeys;
 import net.minecraft.client.render.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -26,10 +27,13 @@ public class RenderUtil {
 
         Tessellator tesselator = Tessellator.getInstance();
 
+        fi.dy.masa.malilib.render.RenderUtils.color(1f, 1f, 1f, 1f);
+        fi.dy.masa.malilib.render.RenderUtils.setupBlend();
+        RenderSystem.setShader(ShaderProgramKeys.POSITION_COLOR);
 //        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 //        RenderSystem.applyModelViewMatrix();
         // what they do? can not render if commented
-        // TODO can not render on 1.21.4
+        // can render now, but theory still unknown
 
         BufferBuilder builder = tesselator.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
         RenderUtils.drawBoxAllEdgesBatchedLines(

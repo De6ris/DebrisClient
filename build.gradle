@@ -78,7 +78,7 @@ dependencies {
 //
 //    include(modImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
 //    include(annotationProcessor(implementation("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
-    modCompileOnly(files("libs\\magiclib-minecraft-api-mc1.21-fabric-0.6.67-beta.jar"))
+    modCompileOnly(files("libs\\magiclib-minecraft-api-mc1.21.4-fabric-0.6.83-stable.jar"))
     modCompileOnly(files("libs\\LibGui-12.0.1+1.21.2.jar"))
     modCompileOnly(files("libs\\CommandGUIButtons-mc1.21-2.3.0+build.235+bb785b5.jar"))
 }
