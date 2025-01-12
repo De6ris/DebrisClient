@@ -34,7 +34,6 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean CachedSorting = new ConfigBoolean("整理时使用缓存算法", true, "相比直接操作, 可减少发包");
     public static final ConfigOptionList ItemSortingOrder = new ConfigOptionListExtend("物品整理顺序", SortCategory.CREATIVE_INVENTORY, "1.翻译键顺序\n2.按创造模式物品栏顺序\n3.按翻译后名称顺序\n4.按拼音顺序(需要Rei)");
     public static final ConfigOptionList MassCraftingMode = new ConfigOptionListExtend("喷射合成实现", MassCraftingImpl.RECIPE_BOOK, "配方书依赖服务器,较慢但不出错\n手动依赖客户端,可能与服务器不同步导致合成错误");
-    public static final ConfigBoolean Use64Q = new ConfigBoolean("使用64次Q扔出合成结果", true, "这样不必让物品栏腾出空间\n减少无关物品丢出\n但会导致发包较多\n1.22+将支持Ctrl丢出");
     public static final ConfigInteger TriggerButtonOffset = new ConfigInteger("触发按钮的坐标偏移", 42, -100, 100, true, "自动对齐可能有问题");
     public static final ConfigBoolean ProgressResuming = new ConfigBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度\n对MaLiLib驱动的模组和CommandButton有效");
     public static final ConfigStringList TradingTargets = new ConfigStringList("定向交易目标", ImmutableList.of("lapis_lazuli"), "需打开定向自动交易功能");
@@ -157,7 +156,6 @@ public class DCCommonConfig implements IConfigHandler {
                 CachedSorting,
                 ItemSortingOrder,
                 MassCraftingMode,
-                Use64Q,
                 TriggerButtonOffset,
                 ProgressResuming,
                 TradingTargets,
