@@ -10,6 +10,7 @@ import fi.dy.masa.malilib.util.GuiUtils;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.BundleItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 
@@ -73,18 +74,17 @@ public class InventoryTweaks {
         Comparator<Slot> slotSorter = (x, y) -> itemStackSorter.compare(x.getStack(), y.getStack());
 
         BiConsumer<Slot, Slot> swapAction = InventoryUtil::swapSlots;
-//                    DebrisClient.logger.info("swapping the {} and {}", j, j + 1);
 
-        if (DCCommonConfig.SortingBoxesLast.getBooleanValue()) {
-            putBoxesLast(section);
+        if (DCCommonConfig.SortingContainersLast.getBooleanValue()) {
+            putContainersLast(section);
 
-            Map<Boolean, List<Slot>> grouped = section.slots().stream().filter(Slot::hasStack).collect(Collectors.partitioningBy(x -> isShulkerBox(x.getStack())));
+            Map<Boolean, List<Slot>> grouped = section.slots().stream().filter(Slot::hasStack).collect(Collectors.partitioningBy(x -> isContainer(x.getStack())));
 
-            Slot[] nonBoxes = grouped.get(false).toArray(Slot[]::new);
-            Slot[] boxes = grouped.get(true).toArray(Slot[]::new);
+            Slot[] nonContainers = grouped.get(false).toArray(Slot[]::new);
+            Slot[] containers = grouped.get(true).toArray(Slot[]::new);
 
-            runSorting(nonBoxes, slotSorter, swapAction);
-            runSorting(boxes, slotSorter, swapAction);
+            runSorting(nonContainers, slotSorter, swapAction);
+            runSorting(containers, slotSorter, swapAction);
         } else {
             section.fillBlanks();
             section.mergeSlots();
@@ -94,35 +94,35 @@ public class InventoryTweaks {
         }
     }
 
-    private static void putBoxesLast(ContainerSection section) {
+    private static void putContainersLast(ContainerSection section) {
         List<Slot> slots = section.slots();
         int iterateStart = slots.size() - 1;
         for (int i = iterateStart; i >= 0; i--) {// inverse order reduce operations
             if (i == iterateStart) continue;// skip the first
             Slot slot = slots.get(i);
-            if (!isShulkerBox(slot.getStack())) continue;// skip those not box
-            moveToNextNonBox(section, i, slot);
+            if (!isContainer(slot.getStack())) continue;// skip those not container
+            moveToNextNonContainer(section, i, slot);
         }
 
         // now fill in the blanks
-        int theIndexNonBox = iterateStart;
+        int theIndexNonContainer = iterateStart;
         for (int i = iterateStart; i >= 0; i--) {// inverse order reduce operations
             Slot slot = slots.get(i);
-            if (isShulkerBox(slot.getStack())) continue;// skip those box
-            theIndexNonBox = i;
+            if (isContainer(slot.getStack())) continue;// skip those container
+            theIndexNonContainer = i;
             break;
         }
-        ContainerSection theFormerPart = section.subSection(0, theIndexNonBox + 1);
+        ContainerSection theFormerPart = section.subSection(0, theIndexNonContainer + 1);
         theFormerPart.fillBlanks();
         theFormerPart.mergeSlots();
         theFormerPart.fillBlanks();
     }
 
-    private static void moveToNextNonBox(ContainerSection section, int index, Slot currentSlot) {
+    private static void moveToNextNonContainer(ContainerSection section, int index, Slot currentSlot) {
         List<Slot> slots = section.slots();
         for (int i = slots.size() - 1; i > index; i--) {// inverse order reduce operations
             Slot slot = slots.get(i);
-            if (isShulkerBox(slot.getStack())) continue;// skip those are box
+            if (isContainer(slot.getStack())) continue;// skip those containers
             if (slot.hasStack()) {
                 InventoryUtil.swapSlots(slot, currentSlot);
             } else {
@@ -132,8 +132,18 @@ public class InventoryTweaks {
         }
     }
 
+    public static boolean isContainer(ItemStack itemStack) {
+        if (isShulkerBox(itemStack)) return true;
+        if (isBundle(itemStack)) return true;
+        return false;
+    }
+
     public static boolean isShulkerBox(ItemStack itemStack) {
         return itemStack.getItem() instanceof BlockItem bi && bi.getBlock() instanceof ShulkerBoxBlock;
+    }
+
+    public static boolean isBundle(ItemStack itemStack) {
+        return itemStack.getItem() instanceof BundleItem;
     }
 
     /*
@@ -172,7 +182,7 @@ public class InventoryTweaks {
         ContainerSection section = sectionOptional.get();
 
         InventoryUtil.startSpreading(rightClick);
-        section.emptyRun(x -> InventoryUtil.addToSpreading(x, rightClick));
+        section.allRun(x -> InventoryUtil.addToSpreading(x, rightClick));
         InventoryUtil.finishSpreading(rightClick);
 
         return true;
@@ -194,5 +204,42 @@ public class InventoryTweaks {
         if (EnumSection.InventoryHotBar.isOf(section) || EnumSection.InventoryStorage.isOf(section))
             return EnumSection.InventoryWhole.get();
         return section;
+    }
+
+    public static boolean tryClearBundle() {
+        ItemStack heldStack = InventoryUtil.getHeldStack();
+
+        if (heldStack.isEmpty()) {// empty hand, try clear cursor bundle
+            Optional<Slot> slotMouseOver = InventoryUtil.getSlotMouseOver();
+            if (slotMouseOver.isPresent()) {
+                Slot slot = slotMouseOver.get();
+                if (isBundle(slot.getStack())) {
+                    clearCursorBundle(slot);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        if (isBundle(heldStack)) {
+            Optional<ContainerSection> sectionOptional = SectionHandler.getSectionMouseOver();
+            if (sectionOptional.isPresent()) {
+                clearHeldBundle(sectionOptional.get());
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static void clearHeldBundle(ContainerSection section) {
+        section.emptyRun(InventoryUtil::rightClick);
+    }
+
+    private static void clearCursorBundle(Slot slot) {
+        InventoryUtil.leftClick(slot);// take up
+        ContainerSection section = SectionHandler.getSection(slot);
+        section.emptyRun(InventoryUtil::rightClick);
+        if (slot.getStack().isEmpty()) InventoryUtil.leftClick(slot);// put down
     }
 }

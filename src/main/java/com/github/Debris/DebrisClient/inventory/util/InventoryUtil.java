@@ -62,7 +62,7 @@ public class InventoryUtil {
 
     public static void swapSlots(Slot slot, Slot other) {
         leftClick(slot);
-        leftClick(other);
+        rightClick(other);
         leftClick(slot);
     }
 

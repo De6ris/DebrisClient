@@ -30,7 +30,7 @@ public class DCCommonConfig implements IConfigHandler {
 
 
     // value
-    public static final ConfigBoolean SortingBoxesLast = new ConfigBoolean("整理时潜影盒置于末端", true);
+    public static final ConfigBoolean SortingContainersLast = new ConfigBoolean("整理时容器置于末端", true, "潜影盒, 收纳袋");
     public static final ConfigBoolean CachedSorting = new ConfigBoolean("整理时使用缓存算法", true, "相比直接操作, 可减少发包");
     public static final ConfigOptionList ItemSortingOrder = new ConfigOptionListExtend("物品整理顺序", SortCategory.CREATIVE_INVENTORY, "1.翻译键顺序\n2.按创造模式物品栏顺序\n3.按翻译后名称顺序\n4.按拼音顺序(需要Rei)");
     public static final ConfigOptionList MassCraftingMode = new ConfigOptionListExtend("喷射合成实现", MassCraftingImpl.RECIPE_BOOK, "配方书依赖服务器,较慢但不出错\n手动依赖客户端,可能与服务器不同步导致合成错误");
@@ -73,8 +73,9 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey KickBot = new ConfigHotKeyExtend("踢出假人", "", KeybindSettings.PRESS_ALLOWEXTRA, "按住时踢出准心所指假人\n支持灵魂出窍");
     public static final ConfigHotkey RestoreKicking = new ConfigHotKeyExtend("假人复原", "", "召回误踢的假人");
     public static final ConfigHotkey ModifierMoveAll = new ConfigHotKeyExtend("移动全部:修饰键", "SPACE", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域全部\n兼容carpet假人不会乱点按钮");
-    public static final ConfigHotkey ModifierSpreadItem = new ConfigHotKeyExtend("分散物品:修饰键", "LEFT_ALT", GUI_RELAXED_CANCEL, "按住时点击会尝试将手中物品均分到点击区域的空白槽位");
+    public static final ConfigHotkey ModifierSpreadItem = new ConfigHotKeyExtend("分散物品:修饰键", "LEFT_ALT", GUI_RELAXED_CANCEL, "按住时点击会尝试将手中物品均分到点击区域全部槽位");
     public static final ConfigHotkey ModifierMoveSimilar = new ConfigHotKeyExtend("移动类似:修饰键", "LEFT_CONTROL", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域类似物品");
+    public static final ConfigHotkey ModifierClearBundle = new ConfigHotKeyExtend("清空收纳袋:修饰键", "LEFT_SHIFT", GUI_RELAXED_CANCEL, "");
     public static final ConfigHotkey ResendLastChat = new ConfigHotKeyExtend("重发上一条消息", "", "相当于按UP键");
     public static final ConfigHotkey RepeatNewestChat = new ConfigHotKeyExtend("消息复读", "", "复读聊天栏中最新消息");
     public static final ConfigHotkey QuickDataGet = new ConfigHotKeyExtend("快速DataGet指令", "", "准心的方块或实体");
@@ -113,7 +114,9 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed MuteWither = new ConfigBooleanHotkeyed("凋灵静音", false, "");
     public static final ConfigBooleanHotkeyed MuteEnderman = new ConfigBooleanHotkeyed("末影人静音", false, "");
     public static final ConfigBooleanHotkeyed MuteDispenser = new ConfigBooleanHotkeyed("发射器静音", false, "包括投掷器, 仅屏蔽发射失败音效");
+    public static final ConfigBooleanHotkeyed MuteMinecart = new ConfigBooleanHotkeyed("矿车静音", false, "");
     public static final ConfigBooleanHotkeyed CullPoofParticle = new ConfigBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
+    public static final ConfigBooleanHotkeyed BlockBreakingCooldownOverride = new ConfigBooleanHotkeyed("禁用方块挖掘冷却", false, "", "不影响创造模式");
 
 
     public static final List<IConfigBase> ALL_CONFIGS;
@@ -152,7 +155,7 @@ public class DCCommonConfig implements IConfigHandler {
 
     static {
         Values = ImmutableList.of(
-                SortingBoxesLast,
+                SortingContainersLast,
                 CachedSorting,
                 ItemSortingOrder,
                 MassCraftingMode,
@@ -189,6 +192,7 @@ public class DCCommonConfig implements IConfigHandler {
                 ModifierMoveAll,
                 ModifierMoveSimilar,
                 ModifierSpreadItem,
+                ModifierClearBundle,
                 ResendLastChat,
                 RepeatNewestChat,
                 QuickDataGet,
@@ -223,7 +227,9 @@ public class DCCommonConfig implements IConfigHandler {
                 MuteWither,
                 MuteEnderman,
                 MuteDispenser,
-                CullPoofParticle
+                MuteMinecart,
+                CullPoofParticle,
+                BlockBreakingCooldownOverride
         );
         ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();
         builder.addAll(Values);

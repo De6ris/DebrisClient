@@ -36,6 +36,9 @@ public class CullingUtil {
         if (path.startsWith("entity.enderman")) {
             return DCCommonConfig.MuteEnderman.getBooleanValue();
         }
+        if (path.startsWith("entity.minecart")) {
+            return DCCommonConfig.MuteMinecart.getBooleanValue();
+        }
         return false;
     }
 
