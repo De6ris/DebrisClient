@@ -42,7 +42,7 @@ public class PinYinSupport {
         return compare != 0 ? compare : fallback.getAsInt();
     }
 
-    public static int compareCodePoint(int codePoint1, int codePoint2, IntSupplier compareByDefault) {
+    private static int compareCodePoint(int codePoint1, int codePoint2, IntSupplier compareByDefault) {
         boolean isChinese1 = PINYIN_MAP.containsKey(codePoint1);
         boolean isChinese2 = PINYIN_MAP.containsKey(codePoint2);
         if (isChinese1 && isChinese2) {

@@ -4,7 +4,6 @@ import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.util.PinYinSupport;
 import com.github.Debris.DebrisClient.util.StringUtil;
 import fi.dy.masa.malilib.config.IConfigOptionListEntry;
-import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -53,6 +52,7 @@ public enum SortCategory implements IConfigOptionListEntry {
         return itemTypeComparator
                 .thenComparing(ItemStackComparators.COUNT.reversed())// large stacks come first
                 .thenComparing(ItemStackComparators.SHULKER_BOX)
+                .thenComparing(ItemStackComparators.BUNDLE)
                 .thenComparing(ItemStackComparators.ENCHANTMENT.reversed())// more enchantments come first
                 .thenComparing(ItemStackComparators.DAMAGE)// here damage is lost durability, so lossless items come first
                 .thenComparing(x -> x.getName().getString())
@@ -108,7 +108,6 @@ public enum SortCategory implements IConfigOptionListEntry {
     }
 
     private static ItemGroup.DisplayContext displayContext;
-    private static boolean loadedPinyinData;
 
     @Override
     public String getStringValue() {
