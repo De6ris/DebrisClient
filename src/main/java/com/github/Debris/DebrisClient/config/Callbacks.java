@@ -54,6 +54,11 @@ public class Callbacks {
             return false;
         });
 
+        DCCommonConfig.ThrowSection.getKeybind().setCallback((action, key) -> {
+            if (Predicates.notInGuiContainer(client)) return false;
+            return InventoryTweaks.tryThrowSection();
+        });
+
         DCCommonConfig.CarpetSinglePlayerFix.setValueChangeCallback(config -> {
             DCEarlyConfig instance = DCEarlyConfig.getInstance();
             instance.CarpetFix = config.getBooleanValue();

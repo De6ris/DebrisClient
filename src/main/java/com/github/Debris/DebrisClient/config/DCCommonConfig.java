@@ -70,8 +70,9 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey StoneCutterRecipeView = new ConfigHotKeyExtend("展示切石机配方", "A", GUI_RELAXED);
     public static final ConfigHotkey StoreStoneCutterRecipe = new ConfigHotKeyExtend("储存切石机配方", "BUTTON_3", GUI_RELAXED_CANCEL);
     public static final ConfigHotkey CutStone = new ConfigHotKeyExtend("切石", "LEFT_CONTROL, C", GUI_NO_ORDER);
-    public static final ConfigHotkey CutStoneThenDrop = new ConfigHotKeyExtend("切石并丢出", "LEFT_CONTROL,LEFT_ALT,C", GUI_NO_ORDER);
+    public static final ConfigHotkey CutStoneThenThrow = new ConfigHotKeyExtend("切石并丢出", "LEFT_CONTROL,LEFT_ALT,C", GUI_NO_ORDER);
     public static final ConfigHotkey MyMassCrafting = new ConfigHotKeyExtend("我的喷射合成", "", GUI_NO_ORDER, "作为ItemScroller的替代品\n虽然仍然需要安装它才能用(以便读取配方)\n而且需要较高版本");
+    public static final ConfigHotkey ThrowSection = new ConfigHotKeyExtend("清空区域", "SPACE,Q", KeybindSettings.GUI, "全部丢出");
     public static final ConfigHotkey KickBot = new ConfigHotKeyExtend("踢出假人", "", KeybindSettings.PRESS_ALLOWEXTRA, "按住时踢出准心所指假人\n支持灵魂出窍");
     public static final ConfigHotkey RestoreKicking = new ConfigHotKeyExtend("假人复原", "", "召回误踢的假人");
     public static final ConfigHotkey ModifierMoveAll = new ConfigHotKeyExtend("移动全部:修饰键", "SPACE", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域全部\n兼容carpet假人不会乱点按钮");
@@ -189,8 +190,9 @@ public class DCCommonConfig implements IConfigHandler {
                 StoneCutterRecipeView,
                 StoreStoneCutterRecipe,
                 CutStone,
-                CutStoneThenDrop,
+                CutStoneThenThrow,
                 MyMassCrafting,
+                ThrowSection,
                 KickBot,
                 RestoreKicking,
                 ModifierMoveAll,

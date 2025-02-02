@@ -242,4 +242,11 @@ public class InventoryTweaks {
         section.emptyRun(InventoryUtil::rightClick);
         if (slot.getStack().isEmpty()) InventoryUtil.leftClick(slot);// put down
     }
+
+    public static boolean tryThrowSection() {
+        Optional<ContainerSection> section = SectionHandler.getSectionMouseOver();
+        if (section.isEmpty()) return false;
+        section.get().notEmptyRun(InventoryUtil::dropStack);
+        return true;
+    }
 }
