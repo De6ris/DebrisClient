@@ -12,7 +12,8 @@ import java.util.List;
 public class AutoProcessManager {
     private static final List<IAutoProcessor> PROCESSORS = ImmutableList.of(
             new ContainerTaker(),
-            new ItemFinder()
+            new ItemFinder(),
+            new ContainerClassifier()
     );
 
     public static void onGuiContainerOpen(HandledScreen<?> screen) {

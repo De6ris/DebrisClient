@@ -104,6 +104,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed AutoThrow = new ConfigBooleanHotkeyed("自动丢弃", false, "", "在GUI中不生效");
     public static final ConfigBooleanHotkeyed WorldEditVisibility = new ConfigBooleanHotkeyed("WorldEdit可视化", false, "", "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
     public static final ConfigBooleanHotkeyed AutoContainerTaker = new ConfigBooleanHotkeyed("自动从容器取出", false, "", "若完全取出, 自动关闭GUI");
+    public static final ConfigBooleanHotkeyed AutoContainerClassifier = new ConfigBooleanHotkeyed("自动向容器归类", false, "", "例如: 若容器中有圆石, 则将物品栏的圆石移入");
     public static final ConfigBooleanHotkeyed AutoExtinguisher = new ConfigBooleanHotkeyed("自动灭火", false, "", "不影响灵魂火");
 
 
@@ -222,6 +223,7 @@ public class DCCommonConfig implements IConfigHandler {
                 AutoThrow,
                 WorldEditVisibility,
                 AutoContainerTaker,
+                AutoContainerClassifier,
                 AutoExtinguisher
         );
         Yeets = ImmutableList.of(

@@ -61,6 +61,10 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
         return this.slots.stream().noneMatch(Slot::hasStack);
     }
 
+    public boolean isFull() {
+        return this.slots.stream().allMatch(Slot::hasStack);
+    }
+
     public Optional<Slot> getEmptySlot() {
         return this.slots.stream().filter(x -> !x.hasStack()).findFirst();
     }

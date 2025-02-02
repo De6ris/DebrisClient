@@ -249,4 +249,16 @@ public class InventoryTweaks {
         section.get().notEmptyRun(InventoryUtil::dropStack);
         return true;
     }
+
+    /**
+     * @return Those simple containers that own one single section.
+     */
+    public static Optional<ContainerSection> getChestSection() {
+        List<ContainerSection> sections = SectionHandler.getUnIdentifiedSections();
+        if (sections.size() == 1) {
+            ContainerSection section = sections.getFirst();
+            return Optional.of(section);
+        }
+        return Optional.empty();
+    }
 }
