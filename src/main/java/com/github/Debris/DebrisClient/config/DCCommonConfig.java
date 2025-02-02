@@ -48,6 +48,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean InventoryPreviewSupportComparator = new ConfigBoolean("物品栏预览支持比较器", false, "需要MiniHud和MagicLib,因为MasaGadget未更新,以此暂代");
     public static final ConfigBoolean PinYinSearch = new ConfigBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组");
     public static final ConfigBoolean CommentSearch = new ConfigBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
+    public static final ConfigBoolean FullDebugInfo = new ConfigBoolean("完整调试权限", false, "");
 
 
     // key settings
@@ -175,7 +176,8 @@ public class DCCommonConfig implements IConfigHandler {
                 MuteGLDebugInfo,
                 InventoryPreviewSupportComparator,
                 PinYinSearch,
-                CommentSearch
+                CommentSearch,
+                FullDebugInfo
         );
         Fix = ImmutableList.of(
                 FreeCamKeepAutoMoving,
