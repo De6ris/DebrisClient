@@ -29,7 +29,7 @@ public class InteractionUtil {
                 DIG_PROGRESS_POS = null;
             }
         }
-        digAreaAndSwingHand(client, PositionUtil.streamNear3D(playerPos, 3), predicate).ifPresent(pos -> DIG_PROGRESS_POS = pos);
+        digAreaAndSwingHand(client, PositionUtil.streamNear3D(playerPos, 4), predicate).ifPresent(pos -> DIG_PROGRESS_POS = pos);
     }
 
     // return a progressing pos

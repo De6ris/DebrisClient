@@ -1,6 +1,5 @@
 package com.github.Debris.DebrisClient.util;
 
-import com.google.common.collect.ImmutableList;
 import fi.dy.masa.malilib.config.IConfigOptionList;
 import fi.dy.masa.malilib.config.IConfigOptionListEntry;
 import fi.dy.masa.malilib.gui.GuiBase;
@@ -17,17 +16,23 @@ import java.util.List;
 import java.util.Optional;
 
 public class StringUtil {
-    public static List<String> getConfigOptionListHoverString(IConfigOptionList config) {
+    public static List<String> createOptionListTooltip(IConfigOptionList config) {
         IConfigOptionListEntry defaultEntry = config.getDefaultOptionListValue();
-        ImmutableList.Builder<IConfigOptionListEntry> builder = ImmutableList.builder();
-        builder.add(defaultEntry);
+        return mapTooltip(config, collectAllEntries(defaultEntry), defaultEntry);
+    }
+
+    private static List<IConfigOptionListEntry> collectAllEntries(IConfigOptionListEntry defaultEntry) {
+        List<IConfigOptionListEntry> list = new ArrayList<>();
+        list.add(defaultEntry);
         IConfigOptionListEntry next = defaultEntry.cycle(true);
         while (next != defaultEntry) {
-            builder.add(next);
+            list.add(next);
             next = next.cycle(true);
         }
-        ImmutableList<IConfigOptionListEntry> entries = builder.build();
+        return list;
+    }
 
+    private static List<String> mapTooltip(IConfigOptionList config, List<IConfigOptionListEntry> entries, IConfigOptionListEntry defaultEntry) {
         IConfigOptionListEntry currentEntry = config.getOptionListValue();
         List<String> hover = new ArrayList<>();
         hover.add("可用值:");

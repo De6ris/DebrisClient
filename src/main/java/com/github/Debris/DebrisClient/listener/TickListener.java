@@ -12,7 +12,7 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 public class TickListener implements IClientTickHandler {
     @Override
     public void onClientTick(MinecraftClient client) {
-        if (DCCommonConfig.CutStoneThenDrop.getKeybind().isKeybindHeld() || DCCommonConfig.StartStoneCutting.getBooleanValue()) {
+        if (DCCommonConfig.CutStoneThenThrow.getKeybind().isKeybindHeld() || DCCommonConfig.StartStoneCutting.getBooleanValue()) {
             if (StoneCutterUtil.isStoneCutterGui()) {
                 StoneCutterUtil.cutStoneThenDrop();
             }

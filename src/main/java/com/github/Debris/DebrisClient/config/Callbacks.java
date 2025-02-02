@@ -53,6 +53,11 @@ public class Callbacks {
             return false;
         });
 
+        DCCommonConfig.ThrowSection.getKeybind().setCallback((action, key) -> {
+            if (Predicates.notInGuiContainer(client)) return false;
+            return InventoryTweaks.tryThrowSection();
+        });
+
         DCCommonConfig.RestoreKicking.getKeybind().setCallback((action, key) -> BotUtil.restoreKicking(client));
 
         DCCommonConfig.ResendLastChat.getKeybind().setCallback((action, key) -> ChatUtil.resendLast(client));

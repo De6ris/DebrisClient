@@ -25,7 +25,7 @@ public abstract class ConfigButtonOptionListMixin extends ButtonGeneric {
     @Inject(method = "updateDisplayString", at = @At("RETURN"))
     private void onDisplayStringUpdate(CallbackInfo ci) {
         if (this.config instanceof IConfigEnum) {
-            this.setHoverStrings(StringUtil.getConfigOptionListHoverString(this.config));
+            this.setHoverStrings(StringUtil.createOptionListTooltip(this.config));
         }
     }
 }
