@@ -4,7 +4,6 @@ import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.UtilCaller;
 import com.google.common.collect.Lists;
-import fi.dy.masa.malilib.util.GuiUtils;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -20,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.PlayerInput;
 import net.minecraft.util.TypeFilter;
@@ -136,6 +136,14 @@ public class MiscUtil {
         if (Predicates.notInGame(client)) return;
         Predicate<BlockState> fireTest = state -> state.isOf(Blocks.FIRE);
         InteractionUtil.digNear(client, fireTest);
+    }
+
+    public static void onThunderSync(boolean thunder) {
+        if (!DCCommonConfig.MonitorThunderWeather.getBooleanValue()) return;
+        if (WorldState.THUNDER != thunder) {
+            ChatUtil.addLocalMessage(Text.literal(thunder ? "雷暴开始了" : "雷暴结束了"));
+        }
+        WorldState.THUNDER = thunder;
     }
 
 }

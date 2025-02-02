@@ -91,7 +91,8 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed AUTO_LEFT = new ConfigBooleanHotkeyed("自动向左", false, "LEFT_ALT,LEFT", "可用于走路，划船");
     public static final ConfigBooleanHotkeyed AUTO_BACK = new ConfigBooleanHotkeyed("自动后退", false, "LEFT_ALT,DOWN", "可用于走路，划船");
     public static final ConfigBooleanHotkeyed AUTO_RIGHT = new ConfigBooleanHotkeyed("自动向右", false, "LEFT_ALT,RIGHT", "可用于走路，划船");
-    public static final ConfigBooleanHotkeyed MonitorPortalGeneration = new ConfigBooleanHotkeyed("监听传送门生成", false, "");
+    public static final ConfigBooleanHotkeyed MonitorPortalGeneration = new ConfigBooleanHotkeyed("监听传送门生成", false, "", "限单机游戏");
+    public static final ConfigBooleanHotkeyed MonitorThunderWeather = new ConfigBooleanHotkeyed("监听雷暴天气", false, "");
     public static final ConfigBooleanHotkeyed StartStoneCutting = new ConfigBooleanHotkeyed("启动连续切石", false, "", KeybindSettings.INGAME_BOTH);
     public static final ConfigBooleanHotkeyed StartMassCrafting = new ConfigBooleanHotkeyed("启动连续喷射合成", false, "", KeybindSettings.INGAME_BOTH);
     public static final ConfigBooleanHotkeyed AutoGuiQuitting = new ConfigBooleanHotkeyed("自动关闭容器GUI", false, "", KeybindSettings.INGAME_BOTH, "不会关闭容器之外的GUI", "自动关闭GUI");
@@ -116,6 +117,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed MuteEnderman = new ConfigBooleanHotkeyed("末影人静音", false, "");
     public static final ConfigBooleanHotkeyed MuteDispenser = new ConfigBooleanHotkeyed("发射器静音", false, "包括投掷器, 仅屏蔽发射失败音效");
     public static final ConfigBooleanHotkeyed MuteMinecart = new ConfigBooleanHotkeyed("矿车静音", false, "");
+    public static final ConfigBooleanHotkeyed MuteThunder = new ConfigBooleanHotkeyed("雷声静音", false, "");
     public static final ConfigBooleanHotkeyed CullPoofParticle = new ConfigBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
     public static final ConfigBooleanHotkeyed BlockBreakingCooldownOverride = new ConfigBooleanHotkeyed("禁用方块挖掘冷却", false, "", "不影响创造模式");
 
@@ -207,6 +209,7 @@ public class DCCommonConfig implements IConfigHandler {
                 AUTO_RIGHT,
                 AUTO_BACK,
                 MonitorPortalGeneration,
+                MonitorThunderWeather,
                 StartStoneCutting,
                 StartMassCrafting,
                 AutoGuiQuitting,
@@ -230,6 +233,7 @@ public class DCCommonConfig implements IConfigHandler {
                 MuteEnderman,
                 MuteDispenser,
                 MuteMinecart,
+                MuteThunder,
                 CullPoofParticle,
                 BlockBreakingCooldownOverride
         );

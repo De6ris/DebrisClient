@@ -39,6 +39,9 @@ public class CullingUtil {
         if (path.startsWith("entity.minecart")) {
             return DCCommonConfig.MuteMinecart.getBooleanValue();
         }
+        if (path.startsWith("entity.lightning_bolt")){
+            return DCCommonConfig.MuteThunder.getBooleanValue();
+        }
         return false;
     }
 

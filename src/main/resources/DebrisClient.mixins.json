@@ -8,7 +8,8 @@
     "compat.malilib.WidgetConfigOptionMixin",
     "gui.ScreenHandlerMixin",
     "item.TridentItemMixin",
-    "misc.PortalForcerMixin"
+    "misc.PortalForcerMixin",
+    "misc.WorldMixin"
   ],
   "client": [
     "compat.libgui.CottonClientScreenMixin",
