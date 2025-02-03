@@ -35,6 +35,7 @@
     "network.ClientPlayNetworkHandlerMixin",
     "render.BackgroundRenderMixin",
     "render.BlockEntityRenderDispatcherMixin",
+    "render.EndGatewayBlockEntityRendererMixin",
     "render.EntityRenderDispatcherMixin",
     "render.LightmapTextureManagerMixin",
     "render.ParticleManagerMixin",
