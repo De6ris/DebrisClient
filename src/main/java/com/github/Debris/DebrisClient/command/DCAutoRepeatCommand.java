@@ -18,17 +18,17 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.lit
 
 public class DCAutoRepeatCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(literal("dc_auto_repeat")
+        dispatcher.register(literal("dcauto_repeat")
                 .then(literal("add")
                         .then(argument("filter", gameProfile())
-                                .executes(ctx -> add(ctx.getSource(), ctx.getArgument("filter", CGameProfileArgument.GameProfileArgument.class)))))
+                                .executes(ctx -> add(ctx.getSource(), ctx.getArgument("filter", CGameProfileArgument.Result.class)))))
                 .then(literal("list")
                         .executes(ctx -> list(ctx.getSource())))
                 .then(literal("remove")
                         .then(literal("all")
                                 .executes(ctx -> removeAll(ctx.getSource())))
                         .then(argument("filter", gameProfile())
-                                .executes(ctx -> remove(ctx.getSource(), ctx.getArgument("filter", CGameProfileArgument.GameProfileArgument.class))))
+                                .executes(ctx -> remove(ctx.getSource(), ctx.getArgument("filter", CGameProfileArgument.Result.class))))
 
                 )
         );
@@ -36,7 +36,7 @@ public class DCAutoRepeatCommand {
 
     private static final List<String> NAMES = new ArrayList<>();
 
-    private static int add(FabricClientCommandSource source, CGameProfileArgument.GameProfileArgument selector) throws CommandSyntaxException {
+    private static int add(FabricClientCommandSource source, CGameProfileArgument.Result selector) throws CommandSyntaxException {
         String self = source.getPlayer().getGameProfile().getName();
         List<String> successList = new ArrayList<>();
         for (GameProfile player : selector.getNames(source)) {
@@ -63,7 +63,7 @@ public class DCAutoRepeatCommand {
     }
 
 
-    private static int remove(FabricClientCommandSource source, CGameProfileArgument.GameProfileArgument selector) throws CommandSyntaxException {
+    private static int remove(FabricClientCommandSource source, CGameProfileArgument.Result selector) throws CommandSyntaxException {
         List<String> list = selector.getNames(source).stream()
                 .map(GameProfile::getName)
                 .filter(NAMES::contains)

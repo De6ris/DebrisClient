@@ -8,10 +8,11 @@ import net.minecraft.command.CommandRegistryAccess;
 public class Commands {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess context) {
         DCAutoRepeatCommand.register(dispatcher);
-        DCWhereIsItCommand.register(dispatcher,context);
+        DCWhereIsItCommand.register(dispatcher, context);
+        DCCountEntityCommand.register(dispatcher);
 
         if (FabricLoader.getInstance().isModLoaded("clientcommands")) {
-            DCFindInFrameCommand.register(dispatcher,context);
+            DCFindInFrameCommand.register(dispatcher, context);
         }
     }
 }
