@@ -49,6 +49,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean PinYinSearch = new ConfigBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组");
     public static final ConfigBoolean CommentSearch = new ConfigBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
     public static final ConfigBoolean FullDebugInfo = new ConfigBoolean("完整调试权限", false, "");
+    public static final ConfigBoolean XRayAutoColor = new ConfigBoolean("XRay自动取色", false, "");
 
 
     // key settings
@@ -60,6 +61,7 @@ public class DCCommonConfig implements IConfigHandler {
     // fix
     public static final ConfigBoolean FreeCamKeepAutoMoving = new ConfigBoolean("灵魂出窍时允许自动移动", true, "本模组的自动移动, 在灵魂出窍时会默认停止移动");
     public static final ConfigBoolean FreeCamSpectatorFix = new ConfigBoolean("旁观模式灵魂出窍修复", true, "当你附身别的生物, 启动灵魂出窍时相机仍在附身地");
+    public static final ConfigBoolean ToolSwitchFix = new ConfigBoolean("工具切换修复", true, "无合适工具时, 不应切换到第一个快捷栏");
 
 
     // key
@@ -179,11 +181,13 @@ public class DCCommonConfig implements IConfigHandler {
                 InventoryPreviewSupportComparator,
                 PinYinSearch,
                 CommentSearch,
-                FullDebugInfo
+                FullDebugInfo,
+                XRayAutoColor
         );
         Fix = ImmutableList.of(
                 FreeCamKeepAutoMoving,
-                FreeCamSpectatorFix
+                FreeCamSpectatorFix,
+                ToolSwitchFix
         );
         KeyPress = ImmutableList.of(
                 OpenWindow,

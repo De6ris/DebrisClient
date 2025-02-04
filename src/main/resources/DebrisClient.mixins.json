@@ -6,6 +6,7 @@
   "mixins": [
     "compat.malilib.ConfigButtonOptionListMixin",
     "compat.malilib.WidgetConfigOptionMixin",
+    "compat.tweakeroo.InventoryUtilsMixin",
     "gui.ScreenHandlerMixin",
     "item.TridentItemMixin",
     "misc.PlayerEntityMixin",
@@ -20,6 +21,7 @@
     "compat.malilib.WidgetListConfigOptionsMixin",
     "compat.tweakeroo.CameraEntityMixin",
     "compat.tweakeroo.DummyMovementInputMixin",
+    "compat.xray.GuiAddBlockMixin",
     "gui.AbstractInventoryScreenMixin",
     "gui.ChatHudMixin",
     "gui.CreativeInventoryScreenMixin",
