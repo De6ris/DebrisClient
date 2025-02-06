@@ -60,11 +60,11 @@ public class Callbacks {
 
         DCCommonConfig.RestoreKicking.getKeybind().setCallback((action, key) -> BotUtil.restoreKicking(client));
 
+        DCCommonConfig.BotSpawnCommand.getKeybind().setCallback((action, key) -> BotUtil.suggestBotSpawnCommand(client));
+
         DCCommonConfig.ResendLastChat.getKeybind().setCallback((action, key) -> ChatUtil.resendLast(client));
 
         DCCommonConfig.RepeatNewestChat.getKeybind().setCallback((action, key) -> ChatUtil.repeatNewestChat(client));
-
-        DCCommonConfig.QuickDataGet.getKeybind().setCallback((action, key) -> ChatUtil.dataGet(client));
 
         DCCommonConfig.AlignWithEnderEye.getKeybind().setCallback((action, key) -> MiscUtil.alignWithEnderEye(client));
 

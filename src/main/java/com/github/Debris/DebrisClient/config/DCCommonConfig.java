@@ -79,13 +79,13 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey ThrowSection = new ConfigHotKeyExtend("清空区域", "SPACE,Q", KeybindSettings.GUI, "全部丢出");
     public static final ConfigHotkey KickBot = new ConfigHotKeyExtend("踢出假人", "", KeybindSettings.PRESS_ALLOWEXTRA, "按住时踢出准心所指假人\n支持灵魂出窍");
     public static final ConfigHotkey RestoreKicking = new ConfigHotKeyExtend("假人复原", "", "召回误踢的假人");
+    public static final ConfigHotkey BotSpawnCommand = new ConfigHotKeyExtend("假人召唤指令", "", "在聊天栏中建议当前位置");
     public static final ConfigHotkey ModifierMoveAll = new ConfigHotKeyExtend("移动全部:修饰键", "SPACE", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域全部\n兼容carpet假人不会乱点按钮");
     public static final ConfigHotkey ModifierSpreadItem = new ConfigHotKeyExtend("分散物品:修饰键", "LEFT_ALT", GUI_RELAXED_CANCEL, "按住时点击会尝试将手中物品均分到点击区域全部槽位");
     public static final ConfigHotkey ModifierMoveSimilar = new ConfigHotKeyExtend("移动类似:修饰键", "LEFT_CONTROL", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域类似物品");
     public static final ConfigHotkey ModifierClearBundle = new ConfigHotKeyExtend("清空收纳袋:修饰键", "LEFT_SHIFT", GUI_RELAXED_CANCEL, "");
     public static final ConfigHotkey ResendLastChat = new ConfigHotKeyExtend("重发上一条消息", "", "相当于按UP键");
     public static final ConfigHotkey RepeatNewestChat = new ConfigHotKeyExtend("消息复读", "", "复读聊天栏中最新消息");
-    public static final ConfigHotkey QuickDataGet = new ConfigHotKeyExtend("快速DataGet指令", "", "准心的方块或实体");
     public static final ConfigHotkey AlignWithEnderEye = new ConfigHotKeyExtend("对齐末影之眼", "");
 
 
@@ -208,13 +208,13 @@ public class DCCommonConfig implements IConfigHandler {
                 ThrowSection,
                 KickBot,
                 RestoreKicking,
+                BotSpawnCommand,
                 ModifierMoveAll,
                 ModifierMoveSimilar,
                 ModifierSpreadItem,
                 ModifierClearBundle,
                 ResendLastChat,
                 RepeatNewestChat,
-                QuickDataGet,
                 AlignWithEnderEye,
                 TEST
         );

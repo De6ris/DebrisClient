@@ -2,7 +2,10 @@ package com.github.Debris.DebrisClient.util;
 
 import com.github.Debris.DebrisClient.unsafe.tweakeroo.RayTraceUtil;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.hit.EntityHitResult;
@@ -13,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class BotUtil {
+    @SuppressWarnings("ConstantConditions")
     public static void tryKickBot(MinecraftClient client) {
         if (Predicates.notInGame(client)) return;
 
@@ -39,15 +43,37 @@ public class BotUtil {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static boolean restoreKicking(MinecraftClient client) {
         if (KICK_QUEUE.isEmpty()) {
             return false;
         }
-        if (client.world == null) return false;
-        if (client.player == null) return false;
+        if (Predicates.notInGame(client)) return false;
 
         KickEntry last = KICK_QUEUE.getLast();
         sendSpawnCommandAndRemoveFromQueue(client.player.networkHandler, last);
+        return true;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static boolean suggestBotSpawnCommand(MinecraftClient client) {
+        if (Predicates.notInGame(client)) return false;
+
+        ClientPlayerEntity player = client.player;
+        String command = String.format("/player bot_ spawn at %.2f %.2f %.2f facing %.2f %.2f in %s",
+                player.getX(),
+                player.getY(),
+                player.getZ(),
+                player.getYaw(),
+                player.getPitch(),
+                player.getWorld().getRegistryKey().getValue());
+
+        ChatScreen chatScreen = new ChatScreen(command);
+        client.setScreen(chatScreen);
+        TextFieldWidget chatField = chatScreen.chatField;
+        chatField.setText(command);
+        chatField.setCursor("/player bot_".length(), false);
+
         return true;
     }
 

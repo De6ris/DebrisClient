@@ -10,6 +10,7 @@ public class Commands {
         DCAutoRepeatCommand.register(dispatcher);
         DCWhereIsItCommand.register(dispatcher, context);
         DCCountEntityCommand.register(dispatcher);
+        DCDataGetCommand.register(dispatcher);
 
         if (FabricLoader.getInstance().isModLoaded("clientcommands")) {
             DCFindInFrameCommand.register(dispatcher, context);
