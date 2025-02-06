@@ -50,6 +50,9 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean CommentSearch = new ConfigBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
     public static final ConfigBoolean FullDebugInfo = new ConfigBoolean("完整调试权限", false, "");
     public static final ConfigBoolean XRayAutoColor = new ConfigBoolean("XRay自动取色", false, "");
+    public static final ConfigStringList CullEntityList = new ConfigStringList("剔除实体渲染列表", ImmutableList.of(), "见EntityTypes");
+    public static final ConfigStringList MuteSoundList = new ConfigStringList("静音音效列表", ImmutableList.of(), "见SoundEvents");
+    public static final ConfigStringList CullParticleList = new ConfigStringList("剔除粒子列表", ImmutableList.of(), "见ParticleTypes");
 
 
     // key settings
@@ -112,15 +115,15 @@ public class DCCommonConfig implements IConfigHandler {
 
 
     // yeet
-    public static final ConfigBooleanHotkeyed CancelSignRendering = new ConfigBooleanHotkeyed("取消告示牌渲染", false, "");
-    public static final ConfigBooleanHotkeyed CancelFrameRendering = new ConfigBooleanHotkeyed("取消物品展示框渲染", false, "");
-    public static final ConfigBooleanHotkeyed CancelItemEntityRendering = new ConfigBooleanHotkeyed("取消物品实体渲染", false, "");
-    public static final ConfigBooleanHotkeyed CancelExperienceOrbRendering = new ConfigBooleanHotkeyed("取消经验球渲染", false, "");
+    public static final ConfigBooleanHotkeyed CullSignRendering = new ConfigBooleanHotkeyed("剔除告示牌渲染", false, "");
+    public static final ConfigBooleanHotkeyed CullItemFrame = new ConfigBooleanHotkeyed("剔除物品展示框渲染", false, "");
+    public static final ConfigBooleanHotkeyed CullItemEntity = new ConfigBooleanHotkeyed("剔除物品实体渲染", false, "");
+    public static final ConfigBooleanHotkeyed CullExperienceOrb = new ConfigBooleanHotkeyed("剔除经验球渲染", false, "");
     public static final ConfigBooleanHotkeyed DarknessOverride = new ConfigBooleanHotkeyed("禁用失明和黑暗", false, "");
     public static final ConfigBooleanHotkeyed MuteExplosion = new ConfigBooleanHotkeyed("爆炸静音", false, "", "不包括龙息爆炸");
     public static final ConfigBooleanHotkeyed MuteWither = new ConfigBooleanHotkeyed("凋灵静音", false, "");
     public static final ConfigBooleanHotkeyed MuteEnderman = new ConfigBooleanHotkeyed("末影人静音", false, "");
-    public static final ConfigBooleanHotkeyed MuteDispenser = new ConfigBooleanHotkeyed("发射器静音", false, "包括投掷器, 仅屏蔽发射失败音效");
+    public static final ConfigBooleanHotkeyed MuteDispenser = new ConfigBooleanHotkeyed("发射器静音", false, "", "包括投掷器, 仅屏蔽发射失败音效");
     public static final ConfigBooleanHotkeyed MuteMinecart = new ConfigBooleanHotkeyed("矿车静音", false, "");
     public static final ConfigBooleanHotkeyed MuteThunder = new ConfigBooleanHotkeyed("雷声静音", false, "");
     public static final ConfigBooleanHotkeyed CullPoofParticle = new ConfigBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
@@ -183,7 +186,10 @@ public class DCCommonConfig implements IConfigHandler {
                 PinYinSearch,
                 CommentSearch,
                 FullDebugInfo,
-                XRayAutoColor
+                XRayAutoColor,
+                CullEntityList,
+                MuteSoundList,
+                CullParticleList
         );
         Fix = ImmutableList.of(
                 FreeCamKeepAutoMoving,
@@ -234,10 +240,10 @@ public class DCCommonConfig implements IConfigHandler {
                 ForceRenderEndGatewayBeam
         );
         Yeets = ImmutableList.of(
-                CancelSignRendering,
-                CancelFrameRendering,
-                CancelItemEntityRendering,
-                CancelExperienceOrbRendering,
+                CullSignRendering,
+                CullItemFrame,
+                CullItemEntity,
+                CullExperienceOrb,
                 DarknessOverride,
                 MuteExplosion,
                 MuteWither,
