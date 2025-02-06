@@ -19,6 +19,7 @@
     "compat.malilib.GuiListBaseMixin",
     "compat.malilib.WidgetListBaseMixin",
     "compat.malilib.WidgetListConfigOptionsMixin",
+    "compat.rei.ImportantWarningsWidgetMixin",
     "compat.tweakeroo.CameraEntityMixin",
     "compat.tweakeroo.DummyMovementInputMixin",
     "compat.xray.GuiAddBlockMixin",
