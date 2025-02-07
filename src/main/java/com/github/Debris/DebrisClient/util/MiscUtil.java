@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.util;
 
+import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.UtilCaller;
@@ -74,7 +75,7 @@ public class MiscUtil {
     }
 
     public static void runOrientedTrading(MinecraftClient client) {
-        if (!FabricLoader.getInstance().isModLoaded("itemscroller")) return;
+        if (!FabricLoader.getInstance().isModLoaded(ModReference.ItemScroller)) return;
         Screen currentScreen = client.currentScreen;
         if (currentScreen instanceof MerchantScreen merchantScreen) {
             MerchantScreenHandler merchantContainer = merchantScreen.getScreenHandler();

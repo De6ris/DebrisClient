@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.config;
 
+import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterRecipeStorage;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
 import com.github.Debris.DebrisClient.inventory.util.InventoryTweaks;
@@ -23,7 +24,7 @@ public class Callbacks {
         });
 
         DCCommonConfig.ReloadCommandButton.getKeybind().setCallback((action, key) -> {
-            if (FabricLoader.getInstance().isModLoaded("mgbuttons-1_21")) {
+            if (FabricLoader.getInstance().isModLoaded(ModReference.CommandButton)) {
                 MGButtonReloader.reload();
                 InfoUtils.showInGameMessage(Message.MessageType.SUCCESS, "命令按钮: 重载成功");
                 return true;

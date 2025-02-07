@@ -1,6 +1,7 @@
 package com.github.Debris.DebrisClient;
 
 import com.github.Debris.DebrisClient.command.Commands;
+import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.listener.InitListener;
 import com.mojang.logging.LogUtils;
 import fi.dy.masa.malilib.event.InitializationHandler;
@@ -23,7 +24,7 @@ public class DebrisClient implements ClientModInitializer {
     public void onInitializeClient() {
         InitializationHandler.getInstance().registerInitializationHandler(new InitListener());
 
-        if (FabricLoader.getInstance().isModLoaded("clientarguments")) {
+        if (FabricLoader.getInstance().isModLoaded(ModReference.ClientArguments)) {
             ClientCommandRegistrationCallback.EVENT.register(Commands::register);
         }
     }

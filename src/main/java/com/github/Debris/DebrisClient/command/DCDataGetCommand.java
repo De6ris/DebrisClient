@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.command;
 
+import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.unsafe.tweakeroo.RayTraceUtil;
 import com.github.Debris.DebrisClient.util.ChatUtil;
 import com.mojang.brigadier.Command;
@@ -31,7 +32,7 @@ public class DCDataGetCommand {
     }
 
     private static void dataGet(FabricClientCommandSource source) {
-        if (!FabricLoader.getInstance().isModLoaded("tweakeroo")) {
+        if (!FabricLoader.getInstance().isModLoaded(ModReference.Tweakeroo)) {
             source.sendFeedback(Text.literal("此功能需安装tweakeroo"));
             return;
         }

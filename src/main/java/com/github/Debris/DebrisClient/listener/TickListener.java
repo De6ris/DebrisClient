@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.listener;
 
+import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.MassCraftingApi;
@@ -19,7 +20,7 @@ public class TickListener implements IClientTickHandler {
         }
 
         if (DCCommonConfig.MyMassCrafting.getKeybind().isKeybindHeld() || DCCommonConfig.StartMassCrafting.getBooleanValue()) {
-            if (StringUtil.isModLoadedWithNewEnoughVersion("itemscroller", "0.24.50")) {
+            if (FabricLoader.getInstance().isModLoaded(ModReference.ItemScroller)) {
                 if (MassCraftingApi.isCraftingGui()) {
                     MassCraftingApi.tryMassCrafting();
                 }
@@ -27,7 +28,7 @@ public class TickListener implements IClientTickHandler {
         }
 
         if (DCCommonConfig.KickBot.getKeybind().isKeybindHeld()) {
-            if (FabricLoader.getInstance().isModLoaded("tweakeroo")) {
+            if (FabricLoader.getInstance().isModLoaded(ModReference.Tweakeroo)) {
                 BotUtil.tryKickBot(client);
             }
         }

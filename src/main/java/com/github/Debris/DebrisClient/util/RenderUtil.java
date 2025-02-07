@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.util;
 
+import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.unsafe.litematica.LitematicaRenderUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -72,7 +73,7 @@ public class RenderUtil {
     }
 
     public static void renderWorldEditSelectionBox(BlockPos pos1, BlockPos pos2, Matrix4f matrix4f, MinecraftClient client) {
-        if (FabricLoader.getInstance().isModLoaded("litematica")) {
+        if (FabricLoader.getInstance().isModLoaded(ModReference.Litematica)) {
             fi.dy.masa.malilib.render.RenderUtils.color(1f, 1f, 1f, 1f);
             fi.dy.masa.malilib.render.RenderUtils.setupBlend();
 

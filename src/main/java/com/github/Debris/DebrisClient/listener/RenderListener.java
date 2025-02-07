@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.listener;
 
+import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.render.ComparatorRenderer;
 import com.github.Debris.DebrisClient.render.PathNodesRenderer;
@@ -24,7 +25,7 @@ public class RenderListener implements IRenderer {
     public void onRenderWorldLast(Matrix4f matrix4f, Matrix4f projMatrix) {
         if (Predicates.notInGame(this.client)) return;
 
-        if (DCCommonConfig.WorldEditVisibility.getBooleanValue() && FabricLoader.getInstance().isModLoaded("worldedit")) {
+        if (DCCommonConfig.WorldEditVisibility.getBooleanValue() && FabricLoader.getInstance().isModLoaded(ModReference.WorldEdit)) {
             WorldEditRenderer.getInstance().render(matrix4f);
         }
 

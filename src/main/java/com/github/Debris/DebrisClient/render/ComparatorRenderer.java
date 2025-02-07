@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.render;
 
+import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.unsafe.magicLib.MagicLibTextRenderer;
 import com.github.Debris.DebrisClient.unsafe.miniHud.MiniHudConfigAccessor;
@@ -42,9 +43,9 @@ public class ComparatorRenderer {
 
     private static boolean shouldSkip() {
         if (!DCCommonConfig.InventoryPreviewSupportComparator.getBooleanValue()) return true;
-        if (!FabricLoader.getInstance().isModLoaded("minihud")) return true;
+        if (!FabricLoader.getInstance().isModLoaded(ModReference.MiniHud)) return true;
         if (!MiniHudConfigAccessor.isPreviewingInventory()) return true;
-        if (!FabricLoader.getInstance().isModLoaded("magiclib_minecraft_api")) return true;
+        if (!FabricLoader.getInstance().isModLoaded(ModReference.MagicLibMCApi)) return true;
         return false;
     }
 }

@@ -7,7 +7,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 public class ModMenu implements ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return (screen)->{
+        return (screen) -> {
             DCConfigUi ui = new DCConfigUi();
             ui.setParent(screen);
             return ui;

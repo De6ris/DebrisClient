@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.util;
 
+import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.unsafe.rei.ReiPinYinMatcher;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
@@ -54,7 +55,7 @@ public class PinYinSupport {
     }
 
     public static boolean matchesFilter(String entryString, String filterText) {
-        if (FabricLoader.getInstance().isModLoaded("roughlyenoughitems")) {
+        if (FabricLoader.getInstance().isModLoaded(ModReference.REI)) {
             Optional<Boolean> optionalB = ReiPinYinMatcher.matchesFilter(entryString, filterText);
             if (optionalB.isPresent()) return optionalB.get();
         }
