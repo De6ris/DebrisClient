@@ -14,7 +14,7 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.lit
 
 public class DCFindInFrameCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess context) {
-        dispatcher.register(literal("dcfind_in_frame")
+        dispatcher.register(literal(Commands.PREFIX + "find_in_frame")
                 .then(argument("item", itemStack(context))
                         .executes(ctx -> find(ctx.getSource(), getItemStackArgument(ctx, "item")))
                 )

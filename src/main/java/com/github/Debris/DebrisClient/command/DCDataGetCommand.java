@@ -20,7 +20,7 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.lit
 
 public class DCDataGetCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(literal("dcdata_get")
+        dispatcher.register(literal(Commands.PREFIX + "data_get")
                 .executes(ctx -> processCommand(ctx.getSource()))
         );
     }

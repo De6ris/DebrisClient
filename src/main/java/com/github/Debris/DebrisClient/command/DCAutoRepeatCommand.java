@@ -18,7 +18,7 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.lit
 
 public class DCAutoRepeatCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(literal("dcauto_repeat")
+        dispatcher.register(literal(Commands.PREFIX + "auto_repeat")
                 .then(literal("add")
                         .then(argument("filter", gameProfile())
                                 .executes(ctx -> add(ctx.getSource(), ctx.getArgument("filter", CGameProfileArgument.Result.class)))))

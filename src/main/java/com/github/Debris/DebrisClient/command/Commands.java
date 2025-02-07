@@ -6,6 +6,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.CommandRegistryAccess;
 
 public class Commands {
+    public static final String PREFIX = "dc";
+
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess context) {
         DCAutoRepeatCommand.register(dispatcher);
         DCWhereIsItCommand.register(dispatcher, context);

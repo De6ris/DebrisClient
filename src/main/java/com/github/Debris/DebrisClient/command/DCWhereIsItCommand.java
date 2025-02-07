@@ -21,7 +21,7 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.lit
 
 public class DCWhereIsItCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess context) {
-        dispatcher.register(literal("dcwhere_is_it")
+        dispatcher.register(literal(Commands.PREFIX + "where_is_it")
                 .then(literal("add")
                         .then(argument("item", itemStack(context))
                                 .executes(ctx -> find(ctx.getSource(), getItemStackArgument(ctx, "item")))

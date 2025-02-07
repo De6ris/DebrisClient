@@ -27,7 +27,7 @@ public class DCCountEntityCommand {
     private static final int DISTRIBUTION_PRINT_LIMIT = 10;
 
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(literal("dccount_entity")
+        dispatcher.register(literal(Commands.PREFIX + "count_entity")
                 .executes(ctx -> countEntity(ctx.getSource()))
                 .then(argument("filter", entities())
                         .executes(ctx -> countEntity(ctx.getSource(), ctx.getArgument("filter", CEntitySelector.class))))
