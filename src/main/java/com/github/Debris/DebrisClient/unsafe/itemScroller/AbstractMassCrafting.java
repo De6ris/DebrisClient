@@ -29,7 +29,7 @@ public abstract class AbstractMassCrafting {
         this.currentScreen = InventoryUtil.getGuiContainer();
         this.playerInventory = EnumSection.InventoryWhole.get();
         this.inputSlots = EnumSection.CraftMatrix.get().slots();
-        this.outputSlot = EnumSection.CraftResult.get().slots().getFirst();
+        this.outputSlot = EnumSection.CraftResult.get().getFirstSlot();
     }
 
     public abstract void run();

@@ -24,8 +24,8 @@ public class StoneCutterRecipePattern {
     }
 
     public void storeRecipe() {
-        this.input = EnumSection.StoneCutterIn.get().slots().getFirst().getStack().copy();
-        this.result = EnumSection.CraftResult.get().slots().getFirst().getStack().copy();
+        this.input = EnumSection.StoneCutterIn.get().getFirstSlot().getStack().copy();
+        this.result = EnumSection.CraftResult.get().getFirstSlot().getStack().copy();
         this.searchVanillaRecipe();
     }
 

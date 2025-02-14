@@ -138,6 +138,7 @@ public class SectionIdentifier {
 
         if (container instanceof CreativeInventoryScreen.CreativeScreenHandler) {
             putSection(EnumSection.CreativeTab, theWholeSection);
+            return;
         }
 
         SectionHandler.sectionMap.putIfAbsent(EnumSection.Other, theWholeSection);

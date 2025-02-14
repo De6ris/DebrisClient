@@ -38,7 +38,7 @@ public class InventoryTweaks {
 
     private static boolean shouldSort(ContainerSection section) {
         for (EnumSection enumSection : SortBlackList) {
-            if (enumSection.isOf(section)) return false;
+            if (section.isOf(enumSection)) return false;
         }
         return true;
     }
@@ -201,7 +201,7 @@ public class InventoryTweaks {
 
     private static ContainerSection expandSectionIfPossible(ContainerSection section) {
         if (GuiUtils.getCurrentScreen() instanceof InventoryScreen) return section;
-        if (EnumSection.InventoryHotBar.isOf(section) || EnumSection.InventoryStorage.isOf(section))
+        if (section.isOf(EnumSection.InventoryHotBar) || section.isOf(EnumSection.InventoryStorage))
             return EnumSection.InventoryWhole.get();
         return section;
     }

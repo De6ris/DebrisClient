@@ -40,7 +40,7 @@ public class StoneCutterUtil {
         Optional<ContainerSection> sectionMouseOver = SectionHandler.getSectionMouseOver();
         if (sectionMouseOver.isEmpty()) return false;
         ContainerSection containerSection = sectionMouseOver.get();
-        return EnumSection.CraftResult.isOf(containerSection);
+        return containerSection.isOf(EnumSection.CraftResult);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -65,8 +65,8 @@ public class StoneCutterUtil {
         ItemStack input = selectedRecipe.getInput();
         ItemStack result = selectedRecipe.getResult();
 
-        Slot stoneCutterInput = EnumSection.StoneCutterIn.get().slots().getFirst();
-        Slot stoneCutterOutput = EnumSection.CraftResult.get().slots().getFirst();
+        Slot stoneCutterInput = EnumSection.StoneCutterIn.get().getFirstSlot();
+        Slot stoneCutterOutput = EnumSection.CraftResult.get().getFirstSlot();
 
         InventoryTweaks.makeSureNotHoldingItem(EnumSection.InventoryWhole.get());
 
@@ -89,8 +89,8 @@ public class StoneCutterUtil {
         ItemStack input = selectedRecipe.getInput();
         ItemStack result = selectedRecipe.getResult();
 
-        Slot stoneCutterInput = EnumSection.StoneCutterIn.get().slots().getFirst();
-        Slot stoneCutterOutput = EnumSection.CraftResult.get().slots().getFirst();
+        Slot stoneCutterInput = EnumSection.StoneCutterIn.get().getFirstSlot();
+        Slot stoneCutterOutput = EnumSection.CraftResult.get().getFirstSlot();
 
         ContainerSection playerInventory = EnumSection.InventoryWhole.get();
 

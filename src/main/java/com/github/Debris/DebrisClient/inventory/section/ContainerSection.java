@@ -34,6 +34,10 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
         return 0;
     }
 
+    public Slot getFirstSlot() {
+        return this.slots.getFirst();
+    }
+
     public Slot getSlot(int index) {
         return this.slots.get(index);
     }
@@ -191,6 +195,9 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
         return new ContainerSection(this.inventory, builder.build());
     }
 
+    public boolean isOf(EnumSection section) {
+        return SectionHandler.getSection(section) == this;
+    }
 
     public ContainerSection subSection(int fromIndex, int toIndex) {
         return new ContainerSection(this.inventory, this.slots.subList(fromIndex, toIndex));

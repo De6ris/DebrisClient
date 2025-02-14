@@ -60,8 +60,4 @@ public enum EnumSection {
         return SectionHandler.getSection(this);
     }
 
-    public boolean isOf(ContainerSection section) {
-        return SectionHandler.getSection(this) == section;
-    }
-
 }
