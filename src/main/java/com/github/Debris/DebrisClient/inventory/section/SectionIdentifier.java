@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.RecipeInputInventory;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.*;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
@@ -26,7 +27,17 @@ public class SectionIdentifier {
     }
 
     public void identify(Text title, ScreenHandler container, List<Slot> slotList) {
+        try {
+            this.identifyInternal(title, container, slotList);
+        } catch (Exception e) {
+            LOGGER.warn("Error identifying container: ");
+            LOGGER.warn("Menu type: {}", container.getType() != null ? Registries.SCREEN_HANDLER.getId(container.getType()) : "<no type>");
+            LOGGER.warn("Stack trace: ", e);
+            this.handleUnidentified(createSection(slotList));
+        }
+    }
 
+    private void identifyInternal(Text title, ScreenHandler container, List<Slot> slotList) {
         ContainerSection theWholeSection = createSection(slotList);
 
         if (InventoryUtil.isPlayerInventory(iInventory)) {
@@ -141,8 +152,12 @@ public class SectionIdentifier {
             return;
         }
 
-        SectionHandler.sectionMap.putIfAbsent(EnumSection.Other, theWholeSection);
-        SectionHandler.unIdentifiedSections.add(theWholeSection);
+        this.handleUnidentified(theWholeSection);
+    }
+
+    private void handleUnidentified(ContainerSection section) {
+        SectionHandler.sectionMap.putIfAbsent(EnumSection.Other, section);
+        SectionHandler.unIdentifiedSections.add(section);
     }
 
     private ContainerSection createSection(List<Slot> slots) {
@@ -162,7 +177,7 @@ public class SectionIdentifier {
 
 
     private static List<Slot> createFakePlayerActions(List<Slot> total) {
-        ArrayList<Slot> slots = new ArrayList<>(total.subList(8, 18));
+        List<Slot> slots = new ArrayList<>(total.subList(8, 18));
         slots.add(total.getFirst());
         slots.add(total.get(5));
         slots.add(total.get(6));
