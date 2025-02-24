@@ -126,6 +126,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed MuteDispenser = new ConfigBooleanHotkeyed("发射器静音", false, "", "包括投掷器, 仅屏蔽发射失败音效");
     public static final ConfigBooleanHotkeyed MuteMinecart = new ConfigBooleanHotkeyed("矿车静音", false, "");
     public static final ConfigBooleanHotkeyed MuteThunder = new ConfigBooleanHotkeyed("雷声静音", false, "");
+    public static final ConfigBooleanHotkeyed MuteGuardian = new ConfigBooleanHotkeyed("守卫者静音", false, "");
     public static final ConfigBooleanHotkeyed CullPoofParticle = new ConfigBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
     public static final ConfigBooleanHotkeyed BlockBreakingCooldownOverride = new ConfigBooleanHotkeyed("禁用方块挖掘冷却", false, "", "不影响创造模式");
     public static final ConfigBooleanHotkeyed DisableREIWarning = new ConfigBooleanHotkeyed("禁用REI警告", false, "", "至少在18.0.796版本仍然每次进服都在弹窗");
@@ -251,6 +252,7 @@ public class DCCommonConfig implements IConfigHandler {
                 MuteDispenser,
                 MuteMinecart,
                 MuteThunder,
+                MuteGuardian,
                 CullPoofParticle,
                 BlockBreakingCooldownOverride,
                 DisableREIWarning

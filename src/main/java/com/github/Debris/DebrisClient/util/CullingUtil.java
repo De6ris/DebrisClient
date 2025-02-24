@@ -55,6 +55,9 @@ public class CullingUtil {
         if (path.startsWith("entity.lightning_bolt")) {
             return DCCommonConfig.MuteThunder.getBooleanValue();
         }
+        if (path.startsWith("entity.guardian")) {
+            return DCCommonConfig.MuteGuardian.getBooleanValue();
+        }
         return false;
     }
 
