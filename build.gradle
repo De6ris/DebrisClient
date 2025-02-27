@@ -47,10 +47,10 @@ dependencies {
 //    implementation "com.github.sakura-ryoko:tweakeroo:${project.tweakeroo_version}"
 //    implementation "com.github.sakura-ryoko:minihud:${project.minihud_version}"
     modImplementation(files("libs\\malilib-fabric-1.21.4-0.23.1.jar"))
-    modImplementation(files("libs\\litematica-fabric-1.21.4-0.21.0.jar"))
+    modImplementation(files("libs\\litematica-fabric-1.21.4-0.21.1.jar"))
     modImplementation(files("libs\\itemscroller-fabric-1.21.4-0.26.0.jar"))
     modImplementation(files("libs\\tweakeroo-fabric-1.21.4-0.23.1.jar"))
-    modImplementation(files("libs\\minihud-fabric-1.21.4-0.34.2.jar"))
+    modImplementation(files("libs\\minihud-fabric-1.21.4-0.34.3.jar"))
 
 
     //misc
