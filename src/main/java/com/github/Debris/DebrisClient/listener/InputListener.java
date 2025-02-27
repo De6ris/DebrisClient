@@ -102,7 +102,7 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
                 }
             }
 
-            if (DCCommonConfig.ModifierClearBundle.getKeybind().isKeybindHeld()){
+            if (DCCommonConfig.ModifierClearBundle.getKeybind().isKeybindHeld()) {
                 if (InventoryTweaks.tryClearBundle()) {
                     this.cancelButtonUp(eventButton);
                     return true;// cancel this click

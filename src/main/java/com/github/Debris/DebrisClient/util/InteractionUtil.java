@@ -6,6 +6,7 @@ import net.minecraft.block.FluidBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +55,7 @@ public class InteractionUtil {
         Block block = currentState.getBlock();
         if (!predicate.test(currentState)) return DigResult.SKIP;
         if (shouldSkipDigging(client, world, pos, currentState)) return DigResult.SKIP;
-        client.interactionManager.updateBlockBreakingProgress(pos, Direction.DOWN);
+        attackBlock(client, pos);
         return world.getBlockState(pos).isOf(block) ? DigResult.PROGRESS : DigResult.FINISH;
     }
 
@@ -91,5 +92,15 @@ public class InteractionUtil {
         public boolean finished() {
             return this == FINISH;
         }
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private static void attackBlock(MinecraftClient client, BlockPos pos) {
+        client.interactionManager.updateBlockBreakingProgress(pos, Direction.UP);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private static void interactBlock(MinecraftClient client, BlockHitResult hitResult) {
+        client.interactionManager.interactBlock(client.player, Hand.MAIN_HAND, hitResult);
     }
 }

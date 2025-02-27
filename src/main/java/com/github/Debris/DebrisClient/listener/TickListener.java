@@ -28,9 +28,7 @@ public class TickListener implements IClientTickHandler {
         }
 
         if (DCCommonConfig.KickBot.getKeybind().isKeybindHeld()) {
-            if (FabricLoader.getInstance().isModLoaded(ModReference.Tweakeroo)) {
-                BotUtil.tryKickBot(client);
-            }
+            BotUtil.tryKickBot(client);
         }
 
         if (DCCommonConfig.AutoThrow.getBooleanValue() && Predicates.inGameNoGui(client)) {

@@ -1,8 +1,6 @@
 package com.github.Debris.DebrisClient.config;
 
 import com.github.Debris.DebrisClient.DebrisClient;
-import com.github.Debris.DebrisClient.config.options.ConfigHotKeyExtend;
-import com.github.Debris.DebrisClient.config.options.ConfigOptionListExtend;
 import com.github.Debris.DebrisClient.inventory.sort.SortCategory;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.MassCraftingImpl;
 import com.github.Debris.DebrisClient.util.AutoRepeat;
@@ -22,6 +20,7 @@ import java.io.File;
 import java.util.List;
 
 import static com.github.Debris.DebrisClient.DebrisClient.MOD_ID;
+import static com.github.Debris.DebrisClient.config.ConfigFactory.*;
 
 public class DCCommonConfig implements IConfigHandler {
     private static final DCCommonConfig INSTANCE = new DCCommonConfig();
@@ -30,29 +29,29 @@ public class DCCommonConfig implements IConfigHandler {
 
 
     // value
-    public static final ConfigBoolean SortingContainersLast = new ConfigBoolean("整理时容器置于末端", true, "潜影盒, 收纳袋");
-    public static final ConfigBoolean CachedSorting = new ConfigBoolean("整理时使用缓存算法", true, "相比直接操作, 可减少发包");
-    public static final ConfigOptionList ItemSortingOrder = new ConfigOptionListExtend("物品整理顺序", SortCategory.CREATIVE_INVENTORY, "1.翻译键顺序\n2.按创造模式物品栏顺序\n3.按翻译后名称顺序\n4.按拼音顺序(需要Rei)");
-    public static final ConfigOptionList MassCraftingMode = new ConfigOptionListExtend("喷射合成实现", MassCraftingImpl.RECIPE_BOOK, "配方书依赖服务器,较慢但不出错\n手动依赖客户端,可能与服务器不同步导致合成错误");
-    public static final ConfigInteger TriggerButtonOffset = new ConfigInteger("触发按钮的坐标偏移", 42, -100, 100, true, "自动对齐可能有问题");
-    public static final ConfigBoolean ProgressResuming = new ConfigBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度\n对MaLiLib驱动的模组和CommandButton有效");
-    public static final ConfigStringList TradingTargets = new ConfigStringList("定向交易目标", ImmutableList.of("lapis_lazuli"), "需打开定向自动交易功能");
-    public static final ConfigStringList AutoRepeatBlackList = new ConfigStringList("自动复读字符串黑名单", ImmutableList.of(), "关于自动复读:\n首先你需要安装有clientcommands或者clientarguments模组\n在指令中输入dc即可自动补全");
-    public static final ConfigOptionList AutoRepeatBlackListMode = new ConfigOptionListExtend("自动复读字符串黑名单模式", AutoRepeat.BlackListMode.CANCEL);
-    public static final ConfigString AutoRepeatBlackListReplace = new ConfigString("自动复读字符串替换", "");
-    public static final ConfigBoolean AutoRepeatAntiDDos = new ConfigBoolean("自动复读防刷屏", false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
-    public static final ConfigInteger AutoRepeatAntiDDosThreshold = new ConfigInteger("自动复读刷屏阈值", 4, 1, 16);
-    public static final ConfigStringList AutoThrowWhiteList = new ConfigStringList("自动丢弃白名单", ImmutableList.of());
-    public static final ConfigColor WorldEditOverlay = new ConfigColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
-    public static final ConfigBoolean MuteGLDebugInfo = new ConfigBoolean("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
-    public static final ConfigBoolean InventoryPreviewSupportComparator = new ConfigBoolean("物品栏预览支持比较器", false, "需要MiniHud和MagicLib,因为MasaGadget未更新,以此暂代");
-    public static final ConfigBoolean PinYinSearch = new ConfigBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组");
-    public static final ConfigBoolean CommentSearch = new ConfigBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
-    public static final ConfigBoolean FullDebugInfo = new ConfigBoolean("完整调试权限", false, "");
-    public static final ConfigBoolean XRayAutoColor = new ConfigBoolean("XRay自动取色", false, "");
-    public static final ConfigStringList CullEntityList = new ConfigStringList("剔除实体渲染列表", ImmutableList.of(), "见EntityTypes");
-    public static final ConfigStringList MuteSoundList = new ConfigStringList("静音音效列表", ImmutableList.of(), "见SoundEvents");
-    public static final ConfigStringList CullParticleList = new ConfigStringList("剔除粒子列表", ImmutableList.of(), "见ParticleTypes");
+    public static final ConfigBoolean SortingContainersLast = ofBoolean("整理时容器置于末端", true, "潜影盒, 收纳袋");
+    public static final ConfigBoolean CachedSorting = ofBoolean("整理时使用缓存算法", true, "相比直接操作, 可减少发包");
+    public static final ConfigOptionList ItemSortingOrder = ofOptionList("物品整理顺序", SortCategory.CREATIVE_INVENTORY, "1.翻译键顺序\n2.按创造模式物品栏顺序\n3.按翻译后名称顺序\n4.按拼音顺序(需要Rei)");
+    public static final ConfigOptionList MassCraftingMode = ofOptionList("喷射合成实现", MassCraftingImpl.RECIPE_BOOK, "配方书依赖服务器,较慢但不出错\n手动依赖客户端,可能与服务器不同步导致合成错误");
+    public static final ConfigInteger TriggerButtonOffset = ofInteger("触发按钮的坐标偏移", 42, -100, 100, true, "自动对齐可能有问题");
+    public static final ConfigBoolean ProgressResuming = ofBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度\n对MaLiLib驱动的模组和CommandButton有效");
+    public static final ConfigStringList TradingTargets = ofStringList("定向交易目标", ImmutableList.of("lapis_lazuli"), "需打开定向自动交易功能");
+    public static final ConfigStringList AutoRepeatBlackList = ofStringList("自动复读字符串黑名单", ImmutableList.of(), "关于自动复读:\n首先你需要安装有clientcommands或者clientarguments模组\n在指令中输入dc即可自动补全");
+    public static final ConfigOptionList AutoRepeatBlackListMode = ofOptionList("自动复读字符串黑名单模式", AutoRepeat.BlackListMode.CANCEL);
+    public static final ConfigString AutoRepeatBlackListReplace = ofString("自动复读字符串替换", "");
+    public static final ConfigBoolean AutoRepeatAntiDDos = ofBoolean("自动复读防刷屏", false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
+    public static final ConfigInteger AutoRepeatAntiDDosThreshold = ofInteger("自动复读刷屏阈值", 4, 1, 16);
+    public static final ConfigStringList AutoThrowWhiteList = ofStringList("自动丢弃白名单", ImmutableList.of());
+    public static final ConfigColor WorldEditOverlay = ofColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
+    public static final ConfigBoolean MuteGLDebugInfo = ofBoolean("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
+    public static final ConfigBoolean InventoryPreviewSupportComparator = ofBoolean("物品栏预览支持比较器", false, "需要MiniHud和MagicLib,因为MasaGadget未更新,以此暂代");
+    public static final ConfigBoolean PinYinSearch = ofBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组");
+    public static final ConfigBoolean CommentSearch = ofBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
+    public static final ConfigBoolean FullDebugInfo = ofBoolean("完整调试权限", false);
+    public static final ConfigBoolean XRayAutoColor = ofBoolean("XRay自动取色", false);
+    public static final ConfigStringList CullEntityList = ofStringList("剔除实体渲染列表", ImmutableList.of(), "见EntityTypes");
+    public static final ConfigStringList MuteSoundList = ofStringList("静音音效列表", ImmutableList.of(), "见SoundEvents");
+    public static final ConfigStringList CullParticleList = ofStringList("剔除粒子列表", ImmutableList.of(), "见ParticleTypes");
 
 
     // key settings
@@ -62,74 +61,75 @@ public class DCCommonConfig implements IConfigHandler {
 
 
     // fix
-    public static final ConfigBoolean FreeCamKeepAutoMoving = new ConfigBoolean("灵魂出窍时允许自动移动", true, "本模组的自动移动, 在灵魂出窍时会默认停止移动");
-    public static final ConfigBoolean FreeCamSpectatorFix = new ConfigBoolean("旁观模式灵魂出窍修复", true, "当你附身别的生物, 启动灵魂出窍时相机仍在附身地");
-    public static final ConfigBoolean ToolSwitchFix = new ConfigBoolean("工具切换修复", true, "无合适工具时, 不应切换到第一个快捷栏");
+    public static final ConfigBoolean FreeCamKeepAutoMoving = ofBoolean("灵魂出窍时允许自动移动", true, "本模组的自动移动, 在灵魂出窍时会默认停止移动");
+    public static final ConfigBoolean FreeCamSpectatorFix = ofBoolean("旁观模式灵魂出窍修复", true, "当你附身别的生物, 启动灵魂出窍时相机仍在附身地");
+    public static final ConfigBoolean ToolSwitchFix = ofBoolean("工具切换修复", true, "无合适工具时, 不应切换到第一个快捷栏");
 
 
     // key
-    public static final ConfigHotkey OpenWindow = new ConfigHotKeyExtend("打开设置菜单", "D,C", "打开设置菜单");
-    public static final ConfigHotkey ReloadCommandButton = new ConfigHotKeyExtend("重载CommandButton", "", "需要有CommandButton模组");
-    public static final ConfigHotkey SortItem = new ConfigHotKeyExtend("整理物品", "R", KeybindSettings.GUI, "按区域进行\n兼容carpet假人不会乱点按钮\n兼容创造模式物品栏");
-    public static final ConfigHotkey StoneCutterRecipeView = new ConfigHotKeyExtend("展示切石机配方", "A", GUI_RELAXED);
-    public static final ConfigHotkey StoreStoneCutterRecipe = new ConfigHotKeyExtend("储存切石机配方", "BUTTON_3", GUI_RELAXED_CANCEL);
-    public static final ConfigHotkey CutStone = new ConfigHotKeyExtend("切石", "LEFT_CONTROL, C", GUI_NO_ORDER);
-    public static final ConfigHotkey CutStoneThenThrow = new ConfigHotKeyExtend("切石并丢出", "LEFT_CONTROL,LEFT_ALT,C", GUI_NO_ORDER);
-    public static final ConfigHotkey MyMassCrafting = new ConfigHotKeyExtend("我的喷射合成", "", GUI_NO_ORDER, "作为ItemScroller的替代品\n虽然仍然需要安装它才能用(以便读取配方)\n而且需要较高版本");
-    public static final ConfigHotkey ThrowSection = new ConfigHotKeyExtend("清空区域", "SPACE,Q", KeybindSettings.GUI, "全部丢出");
-    public static final ConfigHotkey KickBot = new ConfigHotKeyExtend("踢出假人", "", KeybindSettings.PRESS_ALLOWEXTRA, "按住时踢出准心所指假人\n支持灵魂出窍");
-    public static final ConfigHotkey RestoreKicking = new ConfigHotKeyExtend("假人复原", "", "召回误踢的假人");
-    public static final ConfigHotkey BotSpawnCommand = new ConfigHotKeyExtend("假人召唤指令", "", "在聊天栏中建议当前位置");
-    public static final ConfigHotkey ModifierMoveAll = new ConfigHotKeyExtend("移动全部:修饰键", "SPACE", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域全部\n兼容carpet假人不会乱点按钮");
-    public static final ConfigHotkey ModifierSpreadItem = new ConfigHotKeyExtend("分散物品:修饰键", "LEFT_ALT", GUI_RELAXED_CANCEL, "按住时点击会尝试将手中物品均分到点击区域全部槽位");
-    public static final ConfigHotkey ModifierMoveSimilar = new ConfigHotKeyExtend("移动类似:修饰键", "LEFT_CONTROL", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域类似物品");
-    public static final ConfigHotkey ModifierClearBundle = new ConfigHotKeyExtend("清空收纳袋:修饰键", "LEFT_SHIFT", GUI_RELAXED_CANCEL, "");
-    public static final ConfigHotkey ResendLastChat = new ConfigHotKeyExtend("重发上一条消息", "", "相当于按UP键");
-    public static final ConfigHotkey RepeatNewestChat = new ConfigHotKeyExtend("消息复读", "", "复读聊天栏中最新消息");
-    public static final ConfigHotkey AlignWithEnderEye = new ConfigHotKeyExtend("对齐末影之眼", "");
+    public static final ConfigHotkey OpenWindow = ofHotkey("打开设置菜单", "D,C", "打开设置菜单");
+    public static final ConfigHotkey ReloadCommandButton = ofHotkey("重载CommandButton", "", "需要有CommandButton模组");
+    public static final ConfigHotkey SortItem = ofHotkey("整理物品", "", KeybindSettings.GUI, "按区域进行\n兼容carpet假人不会乱点按钮\n兼容创造模式物品栏");
+    public static final ConfigHotkey StoneCutterRecipeView = ofHotkey("展示切石机配方", "A", GUI_RELAXED);
+    public static final ConfigHotkey StoreStoneCutterRecipe = ofHotkey("储存切石机配方", "BUTTON_3", GUI_RELAXED_CANCEL);
+    public static final ConfigHotkey CutStone = ofHotkey("切石", "LEFT_CONTROL, C", GUI_NO_ORDER);
+    public static final ConfigHotkey CutStoneThenThrow = ofHotkey("切石并丢出", "LEFT_CONTROL,LEFT_ALT,C", GUI_NO_ORDER);
+    public static final ConfigHotkey MyMassCrafting = ofHotkey("我的喷射合成", "", GUI_NO_ORDER, "作为ItemScroller的替代品\n虽然仍然需要安装它才能用(以便读取配方)\n而且需要较高版本");
+    public static final ConfigHotkey ThrowSection = ofHotkey("清空区域", "", KeybindSettings.GUI, "全部丢出");
+    public static final ConfigHotkey KickBot = ofHotkey("踢出假人", "", KeybindSettings.PRESS_ALLOWEXTRA, "按住时踢出准心所指假人\n支持灵魂出窍");
+    public static final ConfigHotkey RestoreKicking = ofHotkey("假人复原", "", "召回误踢的假人");
+    public static final ConfigHotkey BotSpawnCommand = ofHotkey("假人召唤指令", "", "在聊天栏中建议当前位置");
+    public static final ConfigHotkey ModifierMoveAll = ofHotkey("移动全部:修饰键", "", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域全部\n兼容carpet假人不会乱点按钮");
+    public static final ConfigHotkey ModifierSpreadItem = ofHotkey("分散物品:修饰键", "", GUI_RELAXED_CANCEL, "按住时点击会尝试将手中物品均分到点击区域全部槽位");
+    public static final ConfigHotkey ModifierMoveSimilar = ofHotkey("移动类似:修饰键", "", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域类似物品");
+    public static final ConfigHotkey ModifierClearBundle = ofHotkey("清空收纳袋:修饰键", "", GUI_RELAXED_CANCEL, "");
+    public static final ConfigHotkey ResendLastChat = ofHotkey("重发上一条消息", "", "相当于按UP键");
+    public static final ConfigHotkey RepeatNewestChat = ofHotkey("消息复读", "", "复读聊天栏中最新消息");
+    public static final ConfigHotkey AlignWithEnderEye = ofHotkey("对齐末影之眼", "");
+    public static final ConfigHotkey ModifierFreeCamInput = ofHotkey("灵魂出窍输入:修饰键", "", "按住时输入将对实际画面生效\n仍需开启tweakeroo中的灵魂出窍用户输入");
 
 
-    public static final ConfigHotkey TEST = new ConfigHotKeyExtend("测试", "", KeybindSettings.GUI);
+    public static final ConfigHotkey TEST = ofHotkey("测试", "", KeybindSettings.GUI);
 
 
     // toggle
-    public static final ConfigBooleanHotkeyed AUTO_WALK = new ConfigBooleanHotkeyed("自动前进", false, "LEFT_ALT,UP", "可用于走路，划船");
-    public static final ConfigBooleanHotkeyed AUTO_LEFT = new ConfigBooleanHotkeyed("自动向左", false, "LEFT_ALT,LEFT", "可用于走路，划船");
-    public static final ConfigBooleanHotkeyed AUTO_BACK = new ConfigBooleanHotkeyed("自动后退", false, "LEFT_ALT,DOWN", "可用于走路，划船");
-    public static final ConfigBooleanHotkeyed AUTO_RIGHT = new ConfigBooleanHotkeyed("自动向右", false, "LEFT_ALT,RIGHT", "可用于走路，划船");
-    public static final ConfigBooleanHotkeyed MonitorPortalGeneration = new ConfigBooleanHotkeyed("监听传送门生成", false, "", "限单机游戏");
-    public static final ConfigBooleanHotkeyed MonitorThunderWeather = new ConfigBooleanHotkeyed("监听雷暴天气", false, "");
-    public static final ConfigBooleanHotkeyed StartStoneCutting = new ConfigBooleanHotkeyed("启动连续切石", false, "", KeybindSettings.INGAME_BOTH);
-    public static final ConfigBooleanHotkeyed StartMassCrafting = new ConfigBooleanHotkeyed("启动连续喷射合成", false, "", KeybindSettings.INGAME_BOTH);
-    public static final ConfigBooleanHotkeyed AutoGuiQuitting = new ConfigBooleanHotkeyed("自动关闭容器GUI", false, "", KeybindSettings.INGAME_BOTH, "不会关闭容器之外的GUI", "自动关闭GUI");
-    public static final ConfigBooleanHotkeyed OrientedAutoTrading = new ConfigBooleanHotkeyed("定向自动交易", false, "", "打开交易GUI时自动交易所有在名单上的物品");
-    public static final ConfigBooleanHotkeyed LoyalerTrident = new ConfigBooleanHotkeyed("更忠诚的三叉戟", false, "", "发射的忠诚三叉戟能够回到副手");
-    public static final ConfigBooleanHotkeyed PathNodesVisibility = new ConfigBooleanHotkeyed("寻路节点可视化", false, "");
-    public static final ConfigBooleanHotkeyed PathNodesOnlyNamed = new ConfigBooleanHotkeyed("寻路节点仅限命名生物", false, "");
-    public static final ConfigBooleanHotkeyed AutoThrow = new ConfigBooleanHotkeyed("自动丢弃", false, "", "在GUI中不生效");
-    public static final ConfigBooleanHotkeyed WorldEditVisibility = new ConfigBooleanHotkeyed("WorldEdit可视化", false, "", "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
-    public static final ConfigBooleanHotkeyed AutoContainerTaker = new ConfigBooleanHotkeyed("自动从容器取出", false, "", "若完全取出, 自动关闭GUI");
-    public static final ConfigBooleanHotkeyed AutoContainerClassifier = new ConfigBooleanHotkeyed("自动向容器归类", false, "", "例如: 若容器中有圆石, 则将物品栏的圆石移入");
-    public static final ConfigBooleanHotkeyed AutoExtinguisher = new ConfigBooleanHotkeyed("自动灭火", false, "", "不影响灵魂火");
-    public static final ConfigBooleanHotkeyed ForceRenderEndGatewayBeam = new ConfigBooleanHotkeyed("强制渲染末地折跃门光柱", false, "", "");
+    public static final ConfigBooleanHotkeyed AUTO_WALK = ofBooleanHotkeyed("自动前进", false, "LEFT_ALT,UP", "可用于走路，划船");
+    public static final ConfigBooleanHotkeyed AUTO_LEFT = ofBooleanHotkeyed("自动向左", false, "LEFT_ALT,LEFT", "可用于走路，划船");
+    public static final ConfigBooleanHotkeyed AUTO_BACK = ofBooleanHotkeyed("自动后退", false, "LEFT_ALT,DOWN", "可用于走路，划船");
+    public static final ConfigBooleanHotkeyed AUTO_RIGHT = ofBooleanHotkeyed("自动向右", false, "LEFT_ALT,RIGHT", "可用于走路，划船");
+    public static final ConfigBooleanHotkeyed MonitorPortalGeneration = ofBooleanHotkeyed("监听传送门生成", false, "", "限单机游戏");
+    public static final ConfigBooleanHotkeyed MonitorThunderWeather = ofBooleanHotkeyed("监听雷暴天气", false, "");
+    public static final ConfigBooleanHotkeyed StartStoneCutting = ofBooleanHotkeyed("启动连续切石", false, "", KeybindSettings.INGAME_BOTH);
+    public static final ConfigBooleanHotkeyed StartMassCrafting = ofBooleanHotkeyed("启动连续喷射合成", false, "", KeybindSettings.INGAME_BOTH);
+    public static final ConfigBooleanHotkeyed AutoGuiQuitting = ofBooleanHotkeyed("自动关闭容器GUI", false, "", KeybindSettings.INGAME_BOTH, "不会关闭容器之外的GUI");
+    public static final ConfigBooleanHotkeyed OrientedAutoTrading = ofBooleanHotkeyed("定向自动交易", false, "", "打开交易GUI时自动交易所有在名单上的物品");
+    public static final ConfigBooleanHotkeyed LoyalerTrident = ofBooleanHotkeyed("更忠诚的三叉戟", false, "", "发射的忠诚三叉戟能够回到副手");
+    public static final ConfigBooleanHotkeyed PathNodesVisibility = ofBooleanHotkeyed("寻路节点可视化", false, "");
+    public static final ConfigBooleanHotkeyed PathNodesOnlyNamed = ofBooleanHotkeyed("寻路节点仅限命名生物", false, "");
+    public static final ConfigBooleanHotkeyed AutoThrow = ofBooleanHotkeyed("自动丢弃", false, "", "在GUI中不生效");
+    public static final ConfigBooleanHotkeyed WorldEditVisibility = ofBooleanHotkeyed("WorldEdit可视化", false, "", "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
+    public static final ConfigBooleanHotkeyed AutoContainerTaker = ofBooleanHotkeyed("自动从容器取出", false, "", "若完全取出, 自动关闭GUI");
+    public static final ConfigBooleanHotkeyed AutoContainerClassifier = ofBooleanHotkeyed("自动向容器归类", false, "", "例如: 若容器中有圆石, 则将物品栏的圆石移入");
+    public static final ConfigBooleanHotkeyed AutoExtinguisher = ofBooleanHotkeyed("自动灭火", false, "", "不影响灵魂火");
+    public static final ConfigBooleanHotkeyed ForceRenderEndGatewayBeam = ofBooleanHotkeyed("强制渲染末地折跃门光柱", false, "", "");
 
 
     // yeet
-    public static final ConfigBooleanHotkeyed CullSignRendering = new ConfigBooleanHotkeyed("剔除告示牌渲染", false, "");
-    public static final ConfigBooleanHotkeyed CullItemFrame = new ConfigBooleanHotkeyed("剔除物品展示框渲染", false, "");
-    public static final ConfigBooleanHotkeyed CullItemEntity = new ConfigBooleanHotkeyed("剔除物品实体渲染", false, "");
-    public static final ConfigBooleanHotkeyed CullExperienceOrb = new ConfigBooleanHotkeyed("剔除经验球渲染", false, "");
-    public static final ConfigBooleanHotkeyed DarknessOverride = new ConfigBooleanHotkeyed("禁用失明和黑暗", false, "");
-    public static final ConfigBooleanHotkeyed MuteExplosion = new ConfigBooleanHotkeyed("爆炸静音", false, "", "不包括龙息爆炸");
-    public static final ConfigBooleanHotkeyed MuteWither = new ConfigBooleanHotkeyed("凋灵静音", false, "");
-    public static final ConfigBooleanHotkeyed MuteEnderman = new ConfigBooleanHotkeyed("末影人静音", false, "");
-    public static final ConfigBooleanHotkeyed MuteDispenser = new ConfigBooleanHotkeyed("发射器静音", false, "", "包括投掷器, 仅屏蔽发射失败音效");
-    public static final ConfigBooleanHotkeyed MuteMinecart = new ConfigBooleanHotkeyed("矿车静音", false, "");
-    public static final ConfigBooleanHotkeyed MuteThunder = new ConfigBooleanHotkeyed("雷声静音", false, "");
-    public static final ConfigBooleanHotkeyed MuteGuardian = new ConfigBooleanHotkeyed("守卫者静音", false, "");
-    public static final ConfigBooleanHotkeyed CullPoofParticle = new ConfigBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
-    public static final ConfigBooleanHotkeyed BlockBreakingCooldownOverride = new ConfigBooleanHotkeyed("禁用方块挖掘冷却", false, "", "不影响创造模式");
-    public static final ConfigBooleanHotkeyed DisableREIWarning = new ConfigBooleanHotkeyed("禁用REI警告", false, "", "至少在18.0.796版本仍然每次进服都在弹窗");
+    public static final ConfigBooleanHotkeyed CullSignRendering = ofBooleanHotkeyed("剔除告示牌渲染", false, "");
+    public static final ConfigBooleanHotkeyed CullItemFrame = ofBooleanHotkeyed("剔除物品展示框渲染", false, "");
+    public static final ConfigBooleanHotkeyed CullItemEntity = ofBooleanHotkeyed("剔除物品实体渲染", false, "");
+    public static final ConfigBooleanHotkeyed CullExperienceOrb = ofBooleanHotkeyed("剔除经验球渲染", false, "");
+    public static final ConfigBooleanHotkeyed DarknessOverride = ofBooleanHotkeyed("禁用失明和黑暗", false, "");
+    public static final ConfigBooleanHotkeyed MuteExplosion = ofBooleanHotkeyed("爆炸静音", false, "", "不包括龙息爆炸");
+    public static final ConfigBooleanHotkeyed MuteWither = ofBooleanHotkeyed("凋灵静音", false, "");
+    public static final ConfigBooleanHotkeyed MuteEnderman = ofBooleanHotkeyed("末影人静音", false, "");
+    public static final ConfigBooleanHotkeyed MuteDispenser = ofBooleanHotkeyed("发射器静音", false, "", "包括投掷器, 仅屏蔽发射失败音效");
+    public static final ConfigBooleanHotkeyed MuteMinecart = ofBooleanHotkeyed("矿车静音", false, "");
+    public static final ConfigBooleanHotkeyed MuteThunder = ofBooleanHotkeyed("雷声静音", false, "");
+    public static final ConfigBooleanHotkeyed MuteGuardian = ofBooleanHotkeyed("守卫者静音", false, "");
+    public static final ConfigBooleanHotkeyed CullPoofParticle = ofBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
+    public static final ConfigBooleanHotkeyed BlockBreakingCooldownOverride = ofBooleanHotkeyed("禁用方块挖掘冷却", false, "", "不影响创造模式");
+    public static final ConfigBooleanHotkeyed DisableREIWarning = ofBooleanHotkeyed("禁用REI警告", false, "", "至少在18.0.796版本仍然每次进服都在弹窗");
 
 
     public static final List<IConfigBase> ALL_CONFIGS;
@@ -217,6 +217,7 @@ public class DCCommonConfig implements IConfigHandler {
                 ResendLastChat,
                 RepeatNewestChat,
                 AlignWithEnderEye,
+                ModifierFreeCamInput,
                 TEST
         );
         KeyToggle = ImmutableList.of(
