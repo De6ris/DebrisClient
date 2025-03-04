@@ -29,7 +29,7 @@ public class InventoryUtil {
         drop(slot, true);
     }
 
-    public static void dropStackIfPossible(Slot slot){
+    public static void dropStackIfPossible(Slot slot) {
         if (slot.hasStack()) dropStack(slot);
     }
 
@@ -233,7 +233,7 @@ public class InventoryUtil {
     }
 
     public static boolean isPlayerInventory(Inventory inventory) {
-        return inventory == getPlayerInventory();
+        return inventory instanceof PlayerInventory;
     }
 
 }

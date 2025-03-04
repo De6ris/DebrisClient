@@ -1,50 +1,96 @@
 package com.github.Debris.DebrisClient.inventory.section;
 
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
+import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SectionHandler {
-    static final List<ContainerSection> unIdentifiedSections = new ArrayList<>();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
-    static final Map<EnumSection, ContainerSection> sectionMap = new EnumMap<>(EnumSection.class);
+    private final List<ContainerSection> unIdentifiedSections = new ArrayList<>();
+    private final Map<EnumSection, ContainerSection> sectionMap = new EnumMap<>(EnumSection.class);
 
-    public static void updateSection(HandledScreen<?> guiContainer) {
-        clear();
-        ScreenHandler container = InventoryUtil.getContainer(guiContainer);
-        Text title = guiContainer.getTitle();
+    public SectionHandler(HandledScreen<?> guiContainer) {
+        this.identifyContainer(guiContainer, guiContainer.getScreenHandler());
+    }
+
+    public SectionHandler(ScreenHandler container) {
+        this.identifyContainer(null, container);
+    }
+
+    private void identifyContainer(@Nullable HandledScreen<?> guiContainer, ScreenHandler container) {
         List<Slot> slots = InventoryUtil.getSlots(container);
         Map<Inventory, List<Slot>> groupedByInventory = slots.stream().collect(Collectors.groupingBy(x -> x.inventory));
 
         for (Map.Entry<Inventory, List<Slot>> inventoryListEntry : groupedByInventory.entrySet()) {
             Inventory iInventory = inventoryListEntry.getKey();
             List<Slot> partSlots = inventoryListEntry.getValue();
-            new SectionIdentifier(iInventory).identify(title, container, partSlots);
+            new SectionIdentifier(this, iInventory).identify(guiContainer, container, partSlots);
         }
     }
 
-    public static void clear() {
-        sectionMap.clear();
-        unIdentifiedSections.clear();
+    void handleUnidentified(ContainerSection section) {
+        this.sectionMap.putIfAbsent(EnumSection.Other, section);
+        this.unIdentifiedSections.add(section);
+    }
+
+    void putSection(EnumSection key, ContainerSection section) {
+        Map<EnumSection, ContainerSection> sectionMap = this.sectionMap;
+        if (sectionMap.containsKey(key)) {
+            LOGGER.warn("duplicate section for key {}: {} replacing {}", key, sectionMap.get(key), section);
+        }
+        sectionMap.put(key, section);
+    }
+
+    public static void onClientPlayerInit(PlayerScreenHandler playerContainer) {
+        SectionHandler sectionHandler = new SectionHandler(playerContainer);
+        ((IContainer) playerContainer).dc$setSectionHandler(sectionHandler);
+    }
+
+    public static void updateSection(HandledScreen<?> guiContainer) {
+        ScreenHandler container = guiContainer.getScreenHandler();
+        ((IContainer) container).dc$setSectionHandler(new SectionHandler(guiContainer));
+    }
+
+    public static SectionHandler getSectionHandler() {
+        SectionHandler sectionHandler = ((IContainer) InventoryUtil.getCurrentContainer()).dc$getSectionHandler();
+        if (sectionHandler == null) {
+            LOGGER.warn("section handler not set for container {}", InventoryUtil.getCurrentContainer());
+            return ((IContainer) InventoryUtil.getInventoryContainer()).dc$getSectionHandler();
+        }
+        return sectionHandler;
     }
 
     public static ContainerSection getSection(EnumSection section) {
-        return sectionMap.get(section);
+        ContainerSection ret = getSectionHandler().sectionMap.get(section);
+        if (ret == null) {
+            LOGGER.warn("no section instance for {}", section);
+            return new ContainerSection(InventoryUtil.getPlayerInventory(), List.of());
+        }
+        return ret;
+    }
+
+    public static boolean hasSection(EnumSection section) {
+        return getSectionHandler().sectionMap.containsKey(section);
     }
 
     public static List<ContainerSection> getUnIdentifiedSections() {
-        return unIdentifiedSections;
+        return getSectionHandler().unIdentifiedSections;
     }
 
     public static Stream<ContainerSection> streamAllSections() {
-        return Stream.concat(unIdentifiedSections.stream(), sectionMap.values().stream());
+        SectionHandler sectionHandler = getSectionHandler();
+        return Stream.concat(sectionHandler.unIdentifiedSections.stream(), sectionHandler.sectionMap.values().stream()).distinct();
     }
 
     public static Optional<ContainerSection> getSectionMouseOver() {

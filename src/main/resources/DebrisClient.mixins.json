@@ -9,6 +9,7 @@
     "compat.tweakeroo.InventoryUtilsMixin",
     "gui.ScreenHandlerMixin",
     "item.TridentItemMixin",
+    "misc.IMixinMinecraftClient",
     "misc.PlayerEntityMixin",
     "misc.PortalForcerMixin",
     "misc.WorldMixin"
@@ -30,6 +31,7 @@
     "gui.IMixinChatHud",
     "gui.IMixinGuiContainer",
     "gui.ScreenMixin",
+    "misc.ClientPlayerEntityMixin",
     "misc.ClientPlayerInteractionManagerMixin",
     "misc.GLDebugMixin",
     "misc.KeyboardInputMixin",

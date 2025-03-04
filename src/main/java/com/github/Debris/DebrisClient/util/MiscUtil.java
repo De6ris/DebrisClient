@@ -2,7 +2,9 @@ package com.github.Debris.DebrisClient.util;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
+import com.github.Debris.DebrisClient.inventory.section.EnumSection;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
+import com.github.Debris.DebrisClient.thread.TakeOffTask;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.UtilCaller;
 import com.google.common.collect.Lists;
 import net.fabricmc.loader.api.FabricLoader;
@@ -17,6 +19,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EyeOfEnderEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.screen.slot.Slot;
@@ -29,6 +32,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.village.TradeOfferList;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class MiscUtil {
@@ -147,4 +151,53 @@ public class MiscUtil {
         WorldState.THUNDER = thunder;
     }
 
+    @SuppressWarnings("ConstantConditions")
+    public static boolean tryTakeOff(MinecraftClient client) {
+        if (!Predicates.inGameNoGui(client)) return false;
+
+        ClientPlayerEntity player = client.player;
+        if (player.getAbilities().flying) return false;
+
+        if (!wearElytra()) return false;
+
+        Optional<Slot> optional = findRocketSlot();
+        if (optional.isEmpty()) return false;
+        Slot slot = optional.get();
+
+        int currentHotBar = InteractionUtil.getCurrentHotBar(client);
+        Runnable swapTask = () -> InventoryUtil.swapHotBar(slot, currentHotBar);
+        swapTask.run();// take out rocket
+
+        if (player.isGliding()) {
+            AccessorUtil.use(client);
+            swapTask.run();// restore
+            return true;
+        }
+
+        if (TakeOffTask.Running) return false;
+        player.jump();
+        TakeOffTask takeOffTask = new TakeOffTask(client, player, swapTask);
+        Thread thread = new Thread(takeOffTask, "TakeOffThread");
+        thread.start();
+        TakeOffTask.Running = true;
+
+        return true;
+    }
+
+    private static boolean wearElytra() {
+        Item elytra = Items.ELYTRA;
+        Slot chestSlot = EnumSection.Armor.get().getSlot(1);
+        if (chestSlot.getStack().isOf(elytra)) return true;
+        Optional<Slot> optional = EnumSection.OffHand.get().mergeWith(EnumSection.InventoryWhole.get()).findItem(elytra);
+        if (optional.isPresent()) {
+            InventoryUtil.swapSlots(chestSlot, optional.get());
+            return true;
+        }
+        return false;
+    }
+
+    private static Optional<Slot> findRocketSlot() {
+        Item rocket = Items.FIREWORK_ROCKET;
+        return InventoryUtil.getSlots().stream().filter(x -> x.getStack().isOf(rocket)).findFirst();
+    }
 }

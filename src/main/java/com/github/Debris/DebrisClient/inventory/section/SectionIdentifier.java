@@ -3,15 +3,16 @@ package com.github.Debris.DebrisClient.inventory.section;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.registry.Registries;
 import net.minecraft.screen.*;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.village.MerchantInventory;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -19,25 +20,24 @@ import java.util.List;
 
 public class SectionIdentifier {
     private static final Logger LOGGER = LogUtils.getLogger();
-
+    private final SectionHandler sectionHandler;
     private final Inventory iInventory;
 
-    public SectionIdentifier(Inventory iInventory) {
+    public SectionIdentifier(SectionHandler sectionHandler, Inventory iInventory) {
+        this.sectionHandler = sectionHandler;
         this.iInventory = iInventory;
     }
 
-    public void identify(Text title, ScreenHandler container, List<Slot> slotList) {
+    public void identify(@Nullable HandledScreen<?> guiContainer, ScreenHandler container, List<Slot> slotList) {
         try {
-            this.identifyInternal(title, container, slotList);
+            this.identifyInternal(guiContainer, container, slotList);
         } catch (Exception e) {
-            LOGGER.warn("Error identifying container: ");
-            LOGGER.warn("Menu type: {}", container.getType() != null ? Registries.SCREEN_HANDLER.getId(container.getType()) : "<no type>");
-            LOGGER.warn("Stack trace: ", e);
+            LOGGER.warn("Error identifying container {}, stacktrace:", container, e);
             this.handleUnidentified(createSection(slotList));
         }
     }
 
-    private void identifyInternal(Text title, ScreenHandler container, List<Slot> slotList) {
+    private void identifyInternal(@Nullable HandledScreen<?> guiContainer, ScreenHandler container, List<Slot> slotList) {
         ContainerSection theWholeSection = createSection(slotList);
 
         if (InventoryUtil.isPlayerInventory(iInventory)) {
@@ -131,33 +131,35 @@ public class SectionIdentifier {
             return;
         }
 
-        if (title.getContent() instanceof TranslatableTextContent translatable) {
-            if (translatable.getKey().equals("gca.player.inventory")) {
-                putSection(EnumSection.FakePlayerActions, createSection(createFakePlayerActions(slotList)));
-                putSection(EnumSection.FakePlayerArmor, createSection(slotList.subList(1, 5)));
-                putSection(EnumSection.FakePlayerOffHand, createSection(slotList.subList(7, 8)));
-                putSection(EnumSection.FakePlayerInventoryStorage, createSection(slotList.subList(18, 45)));
-                putSection(EnumSection.FakePlayerInventoryHotBar, createSection(slotList.subList(45, 54)));
-                return;
-            }
-            if (translatable.getKey().equals("gca.player.ender_chest")) {
-                putSection(EnumSection.FakePlayerEnderChestActions, createSection(slotList.subList(0, 27)));
-                putSection(EnumSection.FakePlayerEnderChestInventory, createSection(slotList.subList(27, 54)));
-                return;
-            }
-        }
-
         if (container instanceof CreativeInventoryScreen.CreativeScreenHandler) {
             putSection(EnumSection.CreativeTab, theWholeSection);
             return;
+        }
+
+        if (guiContainer != null) {
+            Text title = guiContainer.getTitle();
+            if (title.getContent() instanceof TranslatableTextContent translatable) {
+                if (translatable.getKey().equals("gca.player.inventory")) {
+                    putSection(EnumSection.FakePlayerActions, createSection(createFakePlayerActions(slotList)));
+                    putSection(EnumSection.FakePlayerArmor, createSection(slotList.subList(1, 5)));
+                    putSection(EnumSection.FakePlayerOffHand, createSection(slotList.subList(7, 8)));
+                    putSection(EnumSection.FakePlayerInventoryStorage, createSection(slotList.subList(18, 45)));
+                    putSection(EnumSection.FakePlayerInventoryHotBar, createSection(slotList.subList(45, 54)));
+                    return;
+                }
+                if (translatable.getKey().equals("gca.player.ender_chest")) {
+                    putSection(EnumSection.FakePlayerEnderChestActions, createSection(slotList.subList(0, 27)));
+                    putSection(EnumSection.FakePlayerEnderChestInventory, createSection(slotList.subList(27, 54)));
+                    return;
+                }
+            }
         }
 
         this.handleUnidentified(theWholeSection);
     }
 
     private void handleUnidentified(ContainerSection section) {
-        SectionHandler.sectionMap.putIfAbsent(EnumSection.Other, section);
-        SectionHandler.unIdentifiedSections.add(section);
+        this.sectionHandler.handleUnidentified(section);
     }
 
     private ContainerSection createSection(List<Slot> slots) {
@@ -169,10 +171,7 @@ public class SectionIdentifier {
     }
 
     private void putSection(EnumSection key, ContainerSection section) {
-        if (SectionHandler.sectionMap.containsKey(key)) {
-            LOGGER.warn("duplicate section for key {}: {} replacing {}", key, SectionHandler.sectionMap.get(key), section);
-        }
-        SectionHandler.sectionMap.put(key, section);
+        this.sectionHandler.putSection(key, section);
     }
 
 

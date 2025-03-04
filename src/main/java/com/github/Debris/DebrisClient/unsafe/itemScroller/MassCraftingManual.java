@@ -88,7 +88,7 @@ public class MassCraftingManual extends AbstractMassCrafting {
     }
 
     private static void trySupplySlot(Slot matrixEntry, ItemStack requiredItem, ContainerSection playerInventory) {
-        playerInventory.hasItem(requiredItem).ifPresent(x -> InventoryUtil.moveToEmpty(x, matrixEntry));
+        playerInventory.findItem(requiredItem).ifPresent(x -> InventoryUtil.moveToEmpty(x, matrixEntry));
     }
 
     private static ItemStack[] cast3x3RecipeTo2x2(ItemStack[] itemStacks, List<Integer> pattern) {

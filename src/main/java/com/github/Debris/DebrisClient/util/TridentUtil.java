@@ -75,7 +75,7 @@ public class TridentUtil {
      * slot id:
      * 0 craft result
      * 1-4 craft input
-     * 5-8 armor
+     * 5-8 armor 5head, 8feet
      * 9-35 storage
      * 36-44 hotBar
      * 45 offHand
@@ -83,7 +83,7 @@ public class TridentUtil {
      * slot index:
      * 0-8 hotBar
      * 9-35 storage
-     * 36-39 armor
+     * 36-39 armor 39head, 36feet
      * 40 offHand
      *  */
     private static void onTridentFound(Slot slot) {

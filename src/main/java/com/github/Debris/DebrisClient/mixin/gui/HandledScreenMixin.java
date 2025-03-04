@@ -1,7 +1,7 @@
 package com.github.Debris.DebrisClient.mixin.gui;
 
-import com.github.Debris.DebrisClient.inventory.section.SectionHandler;
 import com.github.Debris.DebrisClient.inventory.autoProcess.IAutoProcessScreen;
+import com.github.Debris.DebrisClient.inventory.section.SectionHandler;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -14,11 +14,6 @@ public abstract class HandledScreenMixin implements IAutoProcessScreen {
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onInit(CallbackInfo ci) {
         SectionHandler.updateSection((HandledScreen<?>) (Object) this);
-    }
-
-    @Inject(method = "close", at = @At("RETURN"))
-    private void onClose(CallbackInfo ci) {
-        SectionHandler.clear();
     }
 
     @Unique

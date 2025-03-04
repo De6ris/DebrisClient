@@ -69,6 +69,8 @@ public class Callbacks {
 
         DCCommonConfig.AlignWithEnderEye.getKeybind().setCallback((action, key) -> MiscUtil.alignWithEnderEye(client));
 
+        DCCommonConfig.TakeOff.getKeybind().setCallback((action, key) -> MiscUtil.tryTakeOff(client));
+
         DCCommonConfig.TEST.getKeybind().setCallback((action, key) -> {
             return false;
         });

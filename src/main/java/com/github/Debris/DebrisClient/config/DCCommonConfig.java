@@ -87,6 +87,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey RepeatNewestChat = ofHotkey("消息复读", "", "复读聊天栏中最新消息");
     public static final ConfigHotkey AlignWithEnderEye = ofHotkey("对齐末影之眼", "");
     public static final ConfigHotkey ModifierFreeCamInput = ofHotkey("灵魂出窍输入:修饰键", "", "按住时输入将对实际画面生效\n仍需开启tweakeroo中的灵魂出窍用户输入");
+    public static final ConfigHotkey TakeOff = ofHotkey("起飞", "", "使用鞘翅和烟花火箭起飞");
 
 
     public static final ConfigHotkey TEST = ofHotkey("测试", "", KeybindSettings.GUI);
@@ -218,6 +219,7 @@ public class DCCommonConfig implements IConfigHandler {
                 RepeatNewestChat,
                 AlignWithEnderEye,
                 ModifierFreeCamInput,
+                TakeOff,
                 TEST
         );
         KeyToggle = ImmutableList.of(

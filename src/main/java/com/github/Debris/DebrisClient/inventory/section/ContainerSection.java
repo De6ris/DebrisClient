@@ -5,6 +5,7 @@ import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.inventory.util.ItemUtil;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 
@@ -15,14 +16,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public record ContainerSection(Inventory inventory, List<Slot> slots) {
-    public boolean isInventoryHotBar() {
-        return InventoryUtil.isPlayerInventory(this.inventory) && this.slots.size() == 9;
-    }
-
-    public boolean isInventoryStorage() {
-        return InventoryUtil.isPlayerInventory(this.inventory) && this.slots.size() == 27;
-    }
-
     public boolean hasSlot(Slot slot) {
         return this.slots.contains(slot);
     }
@@ -97,8 +90,17 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
         });
     }
 
-    public Optional<Slot> hasItem(ItemStack itemStack) {
+    public boolean hasItem(Item item) {
+        return this.slots.stream().anyMatch(x -> x.hasStack() && x.getStack().isOf(item));
+    }
+
+    public Optional<Slot> findItem(ItemStack itemStack) {
         return this.slots.stream().filter(x -> x.hasStack() && ItemUtil.compareIDMeta(x.getStack(), itemStack))
+                .max(Comparator.comparingInt(slot -> slot.getStack().getCount()));
+    }
+
+    public Optional<Slot> findItem(Item item) {
+        return this.slots.stream().filter(x -> x.hasStack() && x.getStack().isOf(item))
                 .max(Comparator.comparingInt(slot -> slot.getStack().getCount()));
     }
 
@@ -196,7 +198,10 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
     }
 
     public boolean isOf(EnumSection section) {
-        return SectionHandler.getSection(section) == this;
+        if (SectionHandler.hasSection(section)) {
+            return SectionHandler.getSection(section) == this;
+        }
+        return false;
     }
 
     public ContainerSection subSection(int fromIndex, int toIndex) {

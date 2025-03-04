@@ -103,4 +103,12 @@ public class InteractionUtil {
     private static void interactBlock(MinecraftClient client, BlockHitResult hitResult) {
         client.interactionManager.interactBlock(client.player, Hand.MAIN_HAND, hitResult);
     }
+
+    /**
+     * From 0 to 8 inclusively.
+     */
+    @SuppressWarnings("ConstantConditions")
+    public static int getCurrentHotBar(MinecraftClient client) {
+        return client.player.getInventory().selectedSlot;
+    }
 }
