@@ -16,7 +16,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         super(world, profile);
     }
 
-    @Inject(method = "init", at = @At("RETURN"))
+    @Inject(method = "<init>", at = @At("RETURN"))
     private void onInit(CallbackInfo ci) {
         SectionHandler.onClientPlayerInit(this.playerScreenHandler);
     }
