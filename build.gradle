@@ -57,6 +57,7 @@ dependencies {
     modImplementation "curse.maven:roughly-enough-items-${project.rei_projectid}:${project.rei_fileid}"
     modImplementation "curse.maven:worldedit-${project.worldedit_projectid}:${project.worldedit_fileid}"
     modImplementation "curse.maven:advanced-xray-fabric-edition-${project.xray_projectid}:${project.xray_fileid}"
+    modImplementation "curse.maven:wthit-${project.wthit_projectid}:${project.wthit_fileid}"
 
     modImplementation "com.terraformersmc:modmenu:${project.mod_menu}"
 
