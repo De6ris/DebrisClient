@@ -45,10 +45,11 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigColor WorldEditOverlay = ofColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
     public static final ConfigBoolean MuteGLDebugInfo = ofBoolean("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
     public static final ConfigBoolean InventoryPreviewSupportComparator = ofBoolean("物品栏预览支持比较器", false, "需要MiniHud和MagicLib,因为MasaGadget未更新,以此暂代");
-    public static final ConfigBoolean PinYinSearch = ofBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组");
+    public static final ConfigBoolean PinYinSearch = ofBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组, 创造模式物品栏, 配方书");
     public static final ConfigBoolean CommentSearch = ofBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
     public static final ConfigBoolean FullDebugInfo = ofBoolean("完整调试权限", false);
     public static final ConfigBoolean XRayAutoColor = ofBoolean("XRay自动取色", false);
+    public static final ConfigBoolean WthitLitematicaCompat = ofBoolean("Wthit投影兼容", true);
     public static final ConfigStringList CullEntityList = ofStringList("剔除实体渲染列表", ImmutableList.of(), "见EntityTypes");
     public static final ConfigStringList MuteSoundList = ofStringList("静音音效列表", ImmutableList.of(), "见SoundEvents");
     public static final ConfigStringList CullParticleList = ofStringList("剔除粒子列表", ImmutableList.of(), "见ParticleTypes");
@@ -189,6 +190,7 @@ public class DCCommonConfig implements IConfigHandler {
                 CommentSearch,
                 FullDebugInfo,
                 XRayAutoColor,
+                WthitLitematicaCompat,
                 CullEntityList,
                 MuteSoundList,
                 CullParticleList

@@ -44,13 +44,13 @@ public class PinYinSupport {
     }
 
     private static int compareCodePoint(int codePoint1, int codePoint2, IntSupplier compareByDefault) {
-        boolean isChinese1 = PINYIN_MAP.containsKey(codePoint1);
-        boolean isChinese2 = PINYIN_MAP.containsKey(codePoint2);
-        if (isChinese1 && isChinese2) {
-            return PINYIN_MAP.get(codePoint1).compareTo(PINYIN_MAP.get(codePoint2));
+        boolean isHanzi1 = isHanzi(codePoint1);
+        boolean isHanzi2 = isHanzi(codePoint2);
+        if (isHanzi1 && isHanzi2) {
+            return getPinYin(codePoint1).compareTo(getPinYin(codePoint2));
         }
-        if (isChinese1) return 1;// chinese rank behind, so is larger
-        if (isChinese2) return -1;
+        if (isHanzi1) return 1;// chinese rank behind, so is larger
+        if (isHanzi2) return -1;
         return compareByDefault.getAsInt();
     }
 
@@ -60,25 +60,37 @@ public class PinYinSupport {
             if (optionalB.isPresent()) return optionalB.get();
         }
         return entryString.codePoints().anyMatch(codePoint -> {
-            if (PINYIN_MAP.containsKey(codePoint)) {
-                return PINYIN_MAP.get(codePoint).startsWith(filterText);
-            }
+            if (isHanzi(codePoint)) return getPinYin(codePoint).startsWith(filterText);
             return false;
         });// this is my simple algorithm
     }
 
-    private static final Path unihanPath = FabricLoader.getInstance().getConfigDir().resolve("roughlyenoughitems/unihan.zip");
-
-    private static boolean loadedPinyinData = false;
-
-    public static boolean available() {
-        return loadedPinyinData;
+    public static String convertToPinYin(String original) {
+        StringBuilder stringBuilder = new StringBuilder();
+        original.codePoints().forEach(codePoint -> {
+            if (isHanzi(codePoint)) {
+                stringBuilder.append(getPinYin(codePoint));
+            } else {
+                stringBuilder.appendCodePoint(codePoint);
+            }
+        });
+        return stringBuilder.toString();
     }
 
-    public static void tryInit() {
-        if (!loadedPinyinData && dataExists()) {
-            loadedPinyinData = tryLoad();
-        }
+    public static boolean isHanzi(int codePoint) {
+        return PINYIN_MAP.containsKey(codePoint);
+    }
+
+    public static String getPinYin(int codePoint) {
+        return PINYIN_MAP.get(codePoint);
+    }
+
+    private static final Path unihanPath = FabricLoader.getInstance().getConfigDir().resolve("roughlyenoughitems/unihan.zip");
+
+    private static boolean available = false;
+
+    public static boolean available() {
+        return available;
     }
 
     private static boolean dataExists() {
@@ -166,6 +178,10 @@ public class PinYinSupport {
         addTone('ǘ', "v2");
         addTone('ǚ', "v3");
         addTone('ǜ', "v4");
+
+        if (dataExists()) {
+            available = tryLoad();
+        }
     }
 
     @FunctionalInterface

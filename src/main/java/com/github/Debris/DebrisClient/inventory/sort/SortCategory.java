@@ -60,13 +60,10 @@ public enum SortCategory implements IConfigOptionListEntry {
     }
 
     private static void setup(SortCategory category) {
-        switch (category) {
-            case CREATIVE_INVENTORY -> {
-                if (displayContext == null) {
-                    displayContext = buildDisplayContext(MinecraftClient.getInstance());
-                }// this make the collection non-empty
-            }
-            case PINYIN -> PinYinSupport.tryInit();
+        if (category == SortCategory.CREATIVE_INVENTORY) {
+            if (displayContext == null) {
+                displayContext = buildDisplayContext(MinecraftClient.getInstance());
+            }// this make the collection non-empty
         }
     }
 
