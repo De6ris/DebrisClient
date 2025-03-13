@@ -43,8 +43,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigInteger AutoRepeatAntiDDosThreshold = ofInteger("自动复读刷屏阈值", 4, 1, 16);
     public static final ConfigStringList AutoThrowWhiteList = ofStringList("自动丢弃白名单", ImmutableList.of());
     public static final ConfigColor WorldEditOverlay = ofColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
-    public static final ConfigBoolean MuteGLDebugInfo = ofBoolean("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
-    public static final ConfigBoolean InventoryPreviewSupportComparator = ofBoolean("物品栏预览支持比较器", false, "需要MiniHud和MagicLib,因为MasaGadget未更新,以此暂代");
+    public static final ConfigBoolean InventoryPreviewSupportComparator = ofBoolean("物品栏预览支持比较器", true, "需要MiniHud和MagicLib,因为MasaGadget未更新,以此暂代");
     public static final ConfigBoolean PinYinSearch = ofBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组, 创造模式物品栏, 配方书");
     public static final ConfigBoolean CommentSearch = ofBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
     public static final ConfigBoolean FullDebugInfo = ofBoolean("完整调试权限", false);
@@ -133,6 +132,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed CullPoofParticle = ofBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
     public static final ConfigBooleanHotkeyed BlockBreakingCooldownOverride = ofBooleanHotkeyed("禁用方块挖掘冷却", false, "", "不影响创造模式");
     public static final ConfigBooleanHotkeyed DisableREIWarning = ofBooleanHotkeyed("禁用REI警告", false, "", "至少在18.0.796版本仍然每次进服都在弹窗");
+    public static final ConfigBooleanHotkeyed MuteGLDebugInfo = ofBooleanHotkeyed("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
 
 
     public static final List<IConfigBase> ALL_CONFIGS;
@@ -185,7 +185,6 @@ public class DCCommonConfig implements IConfigHandler {
                 AutoRepeatAntiDDosThreshold,
                 AutoThrowWhiteList,
                 WorldEditOverlay,
-                MuteGLDebugInfo,
                 InventoryPreviewSupportComparator,
                 PinYinSearch,
                 CommentSearch,
@@ -262,7 +261,8 @@ public class DCCommonConfig implements IConfigHandler {
                 MuteAnvil,
                 CullPoofParticle,
                 BlockBreakingCooldownOverride,
-                DisableREIWarning
+                DisableREIWarning,
+                MuteGLDebugInfo
         );
         ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();
         builder.addAll(Values);
