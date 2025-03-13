@@ -58,6 +58,9 @@ public class CullingUtil {
         if (path.startsWith("entity.guardian")) {
             return DCCommonConfig.MuteGuardian.getBooleanValue();
         }
+        if (path.startsWith("block.anvil")) {
+            return DCCommonConfig.MuteAnvil.getBooleanValue();
+        }
         return false;
     }
 
