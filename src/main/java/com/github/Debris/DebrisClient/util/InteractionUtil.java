@@ -5,6 +5,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.network.packet.c2s.play.SpectatorTeleportC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -12,6 +14,7 @@ import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -110,5 +113,15 @@ public class InteractionUtil {
     @SuppressWarnings("ConstantConditions")
     public static int getCurrentHotBar(MinecraftClient client) {
         return client.player.getInventory().selectedSlot;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static void spectatorTeleport(MinecraftClient client, UUID playerUUID) {
+        client.getNetworkHandler().sendPacket(new SpectatorTeleportC2SPacket(playerUUID));
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static void attackEntity(MinecraftClient client, Entity target) {
+        client.interactionManager.attackEntity(client.player, target);
     }
 }
