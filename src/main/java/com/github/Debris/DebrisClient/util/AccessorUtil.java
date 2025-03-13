@@ -1,8 +1,8 @@
 package com.github.Debris.DebrisClient.util;
 
-import com.github.Debris.DebrisClient.mixin.gui.IMixinChatHud;
-import com.github.Debris.DebrisClient.mixin.gui.IMixinGuiContainer;
-import com.github.Debris.DebrisClient.mixin.misc.IMixinMinecraftClient;
+import com.github.Debris.DebrisClient.mixin.client.gui.IMixinChatHud;
+import com.github.Debris.DebrisClient.mixin.client.gui.IMixinGuiContainer;
+import com.github.Debris.DebrisClient.mixin.client.IMixinMinecraftClient;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudLine;
