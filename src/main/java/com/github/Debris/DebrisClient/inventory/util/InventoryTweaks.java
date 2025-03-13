@@ -108,7 +108,7 @@ public class InventoryTweaks {
         int theIndexNonContainer = iterateStart;
         for (int i = iterateStart; i >= 0; i--) {// inverse order reduce operations
             Slot slot = slots.get(i);
-            if (isContainer(slot.getStack())) continue;// skip those container
+            if (isContainer(slot.getStack())) continue;// skip those containers
             theIndexNonContainer = i;
             break;
         }

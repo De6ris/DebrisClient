@@ -22,7 +22,7 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
 
     public int getLocalIndex(Slot slot) {
         for (int i = 0; i < this.slots.size(); i++) {
-            if (this.slots.get(i) == slot) return i;
+            if (getSlot(i) == slot) return i;
         }
         return 0;
     }
@@ -44,12 +44,12 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
     }
 
     public int toGlobalIndex(int localIndex) {
-        return InventoryUtil.getSlotId(this.slots.get(localIndex));
+        return InventoryUtil.getSlotId(getSlot(localIndex));
     }
 
     public int toLocalIndex(int globalIndex) {
         for (int i = 0; i < this.slots.size(); i++) {
-            if (InventoryUtil.getSlotId(this.slots.get(i)) == globalIndex) return i;
+            if (InventoryUtil.getSlotId(getSlot(i)) == globalIndex) return i;
         }
         return 0;
     }
@@ -117,30 +117,30 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
     }
 
     public void mergeSlots() {
-        for (int i = this.slots.size() - 1; i >= 0; i--) {// inverse order reduce operations
-            Slot slot = slots.get(i);
-            if (i == 0) continue;// just skip the first slot
+        for (int i = this.slots.size() - 1; i >= 1; i--) {// inverse order reduce operations; skip first slot
+            Slot slot = getSlot(i);
             if (!slot.hasStack()) continue;// skip those empty
             mergeSlotToPrevious(i, slot);
         }
     }
 
     private void mergeSlotToPrevious(int currentIndex, Slot currentSlot) {
+        InventoryUtil.leftClick(currentSlot);// pick up
         for (int i = 0; i < currentIndex; i++) {
-            Slot slot = this.slots.get(i);
-            if (slot.hasStack() && InventoryUtil.canMergeSlot(slot, currentSlot)) {
-                InventoryUtil.leftClick(currentSlot);
+            Slot slot = getSlot(i);
+            if (slot.hasStack() && ItemUtil.canMerge(slot.getStack(), InventoryUtil.getHeldStack())) {
                 InventoryUtil.leftClick(slot);
-                InventoryUtil.putHeldItemDown(this);
-//                ManyLib.logger.info("merging {} to {}", currentIndex, i);
-                return;
+                if (!InventoryUtil.isHoldingItem()) {
+                    return;
+                }
             }
         }
+        if (InventoryUtil.isHoldingItem()) InventoryUtil.putHeldItemDown(this);
     }
 
     public void fillBlanks() {
         for (int i = this.slots.size() - 1; i >= 0; i--) {// inverse order reduce operations
-            Slot slot = slots.get(i);
+            Slot slot = getSlot(i);
             if (i == 0) continue;// just skip the first slot
             if (!slot.hasStack()) continue;// skip those empty
             this.moveToPreviousEmpty(i, slot);
@@ -149,7 +149,7 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
 
     private void moveToPreviousEmpty(int currentIndex, Slot currentSlot) {
         for (int i = 0; i < currentIndex; i++) {
-            Slot slot = this.slots.get(i);
+            Slot slot = getSlot(i);
             if (!slot.hasStack()) {
                 InventoryUtil.moveToEmpty(currentSlot, slot);
 //                ManyLib.logger.info("moving {} to empty {}", currentIndex, i);
