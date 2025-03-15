@@ -59,14 +59,15 @@ public class BotUtil {
     public static boolean suggestBotSpawnCommand(MinecraftClient client) {
         if (Predicates.notInGame(client)) return false;
 
-        ClientPlayerEntity player = client.player;
+        Entity camera = client.getCameraEntity();
+
         String command = String.format("/player bot_ spawn at %.2f %.2f %.2f facing %.2f %.2f in %s",
-                player.getX(),
-                player.getY(),
-                player.getZ(),
-                player.getYaw(),
-                player.getPitch(),
-                player.getWorld().getRegistryKey().getValue());
+                camera.getX(),
+                camera.getY(),
+                camera.getZ(),
+                camera.getYaw(),
+                camera.getPitch(),
+                camera.getWorld().getRegistryKey().getValue());
 
         ChatScreen chatScreen = new ChatScreen(command);
         client.setScreen(chatScreen);
