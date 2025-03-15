@@ -35,13 +35,10 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigOptionList MassCraftingMode = ofOptionList("喷射合成实现", MassCraftingImpl.RECIPE_BOOK, "配方书依赖服务器,较慢但不出错\n手动依赖客户端,可能与服务器不同步导致合成错误");
     public static final ConfigInteger TriggerButtonOffset = ofInteger("触发按钮的坐标偏移", 42, -100, 100, true, "自动对齐可能有问题");
     public static final ConfigBoolean ProgressResuming = ofBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度\n对MaLiLib驱动的模组和CommandButton有效");
-    public static final ConfigStringList TradingTargets = ofStringList("定向交易目标", ImmutableList.of("lapis_lazuli"), "需打开定向自动交易功能");
-    public static final ConfigStringList AutoRepeatBlackList = ofStringList("自动复读字符串黑名单", ImmutableList.of(), "关于自动复读:\n首先你需要安装有clientcommands或者clientarguments模组\n在指令中输入dc即可自动补全");
     public static final ConfigOptionList AutoRepeatBlackListMode = ofOptionList("自动复读字符串黑名单模式", AutoRepeat.BlackListMode.CANCEL);
     public static final ConfigString AutoRepeatBlackListReplace = ofString("自动复读字符串替换", "");
     public static final ConfigBoolean AutoRepeatAntiDDos = ofBoolean("自动复读防刷屏", false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
     public static final ConfigInteger AutoRepeatAntiDDosThreshold = ofInteger("自动复读刷屏阈值", 4, 1, 16);
-    public static final ConfigStringList AutoThrowWhiteList = ofStringList("自动丢弃白名单", ImmutableList.of());
     public static final ConfigColor WorldEditOverlay = ofColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
     public static final ConfigBoolean InventoryPreviewSupportComparator = ofBoolean("物品栏预览支持比较器", true, "需要MiniHud和MagicLib,因为MasaGadget未更新,以此暂代");
     public static final ConfigBoolean PinYinSearch = ofBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组, 创造模式物品栏, 配方书");
@@ -49,9 +46,6 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean FullDebugInfo = ofBoolean("完整调试权限", false);
     public static final ConfigBoolean XRayAutoColor = ofBoolean("XRay自动取色", false);
     public static final ConfigBoolean WthitLitematicaCompat = ofBoolean("Wthit投影兼容", true);
-    public static final ConfigStringList CullEntityList = ofStringList("剔除实体渲染列表", ImmutableList.of(), "见EntityTypes");
-    public static final ConfigStringList MuteSoundList = ofStringList("静音音效列表", ImmutableList.of(), "见SoundEvents");
-    public static final ConfigStringList CullParticleList = ofStringList("剔除粒子列表", ImmutableList.of(), "见ParticleTypes");
 
 
     // key settings
@@ -64,6 +58,15 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean FreeCamKeepAutoMoving = ofBoolean("灵魂出窍时允许自动移动", true, "本模组的自动移动, 在灵魂出窍时会默认停止移动");
     public static final ConfigBoolean FreeCamSpectatorFix = ofBoolean("旁观模式灵魂出窍修复", true, "当你附身别的生物, 启动灵魂出窍时相机仍在附身地");
     public static final ConfigBoolean ToolSwitchFix = ofBoolean("工具切换修复", true, "无合适工具时, 不应切换到第一个快捷栏");
+
+
+    // list
+    public static final ConfigStringList TradingTargets = ofStringList("定向交易目标", ImmutableList.of("lapis_lazuli"), "需打开定向自动交易功能");
+    public static final ConfigStringList AutoRepeatBlackList = ofStringList("自动复读字符串黑名单", ImmutableList.of(), "关于自动复读:\n首先你需要安装有clientcommands或者clientarguments模组\n在指令中输入dc即可自动补全");
+    public static final ConfigStringList AutoThrowWhiteList = ofStringList("自动丢弃白名单", ImmutableList.of());
+    public static final ConfigStringList CullEntityList = ofStringList("剔除实体渲染列表", ImmutableList.of(), "见EntityTypes");
+    public static final ConfigStringList MuteSoundList = ofStringList("静音音效列表", ImmutableList.of(), "见SoundEvents");
+    public static final ConfigStringList CullParticleList = ofStringList("剔除粒子列表", ImmutableList.of(), "见ParticleTypes");
 
 
     // key
@@ -140,6 +143,7 @@ public class DCCommonConfig implements IConfigHandler {
 
     public static final ImmutableList<IConfigBase> Values;
     public static final ImmutableList<IConfigBase> Fix;
+    public static final ImmutableList<IConfigBase> Lists;
     public static final ImmutableList<ConfigHotkey> KeyPress;
     public static final ImmutableList<IHotkeyTogglable> KeyToggle;
     public static final ImmutableList<IHotkeyTogglable> Yeets;
@@ -177,28 +181,30 @@ public class DCCommonConfig implements IConfigHandler {
                 MassCraftingMode,
                 TriggerButtonOffset,
                 ProgressResuming,
-                TradingTargets,
-                AutoRepeatBlackList,
                 AutoRepeatBlackListMode,
                 AutoRepeatBlackListReplace,
                 AutoRepeatAntiDDos,
                 AutoRepeatAntiDDosThreshold,
-                AutoThrowWhiteList,
                 WorldEditOverlay,
                 InventoryPreviewSupportComparator,
                 PinYinSearch,
                 CommentSearch,
                 FullDebugInfo,
                 XRayAutoColor,
-                WthitLitematicaCompat,
-                CullEntityList,
-                MuteSoundList,
-                CullParticleList
+                WthitLitematicaCompat
         );
         Fix = ImmutableList.of(
                 FreeCamKeepAutoMoving,
                 FreeCamSpectatorFix,
                 ToolSwitchFix
+        );
+        Lists = ImmutableList.of(
+                TradingTargets,
+                AutoRepeatBlackList,
+                AutoThrowWhiteList,
+                CullEntityList,
+                MuteSoundList,
+                CullParticleList
         );
         KeyPress = ImmutableList.of(
                 OpenWindow,
@@ -267,6 +273,7 @@ public class DCCommonConfig implements IConfigHandler {
         ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();
         builder.addAll(Values);
         builder.addAll(Fix);
+        builder.addAll(Lists);
         builder.addAll(KeyToggle);
         builder.addAll(KeyPress);
         builder.addAll(Yeets);

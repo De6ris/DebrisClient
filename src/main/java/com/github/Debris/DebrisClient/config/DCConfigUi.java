@@ -48,6 +48,7 @@ public class DCConfigUi extends GuiConfigsBase {
         configs = switch (tab) {
             case VALUE -> DCCommonConfig.Values;
             case Fix -> DCCommonConfig.Fix;
+            case Lists -> DCCommonConfig.Lists;
             case PRESS -> DCCommonConfig.KeyPress;
             case TOGGLE -> DCCommonConfig.KeyToggle;
             case Yeets -> DCCommonConfig.Yeets;
@@ -85,6 +86,7 @@ public class DCConfigUi extends GuiConfigsBase {
         ALL("全部"),
         VALUE("值"),
         Fix("修复"),
+        Lists("列表"),
         PRESS("按下"),
         TOGGLE("切换"),
         Yeets("禁用"),
