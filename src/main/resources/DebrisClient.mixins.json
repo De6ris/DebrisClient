@@ -15,6 +15,7 @@
     "world.WorldMixin"
   ],
   "client": [
+    "client.IMixinClientRecipeBook",
     "client.IMixinMinecraftClient",
     "client.MinecraftClientMixin",
     "client.gl.GLDebugMixin",
@@ -24,6 +25,7 @@
     "client.gui.HandledScreenMixin",
     "client.gui.IMixinChatHud",
     "client.gui.IMixinGuiContainer",
+    "client.gui.IMixinRecipeBookScreen",
     "client.gui.ScreenMixin",
     "client.input.KeyboardInputMixin",
     "client.network.ClientPlayerEntityMixin",

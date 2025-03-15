@@ -19,6 +19,10 @@ public class ItemUtil {
         return compareID(itemStack, other) && compareMeta(itemStack, other);
     }
 
+    public static Predicate<ItemStack> predicateID(ItemStack template) {
+        return x -> compareID(x, template);
+    }
+
     public static Predicate<ItemStack> predicateIDMeta(ItemStack template) {
         return x -> compareIDMeta(x, template);
     }

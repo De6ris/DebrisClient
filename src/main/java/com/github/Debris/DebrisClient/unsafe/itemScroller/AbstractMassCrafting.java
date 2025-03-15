@@ -1,13 +1,12 @@
 package com.github.Debris.DebrisClient.unsafe.itemScroller;
 
-import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
 import com.github.Debris.DebrisClient.inventory.section.EnumSection;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.inventory.util.ItemUtil;
 import fi.dy.masa.itemscroller.recipes.RecipePattern;
 import fi.dy.masa.itemscroller.recipes.RecipeStorage;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.screen.ingame.RecipeBookScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 
@@ -17,7 +16,7 @@ public abstract class AbstractMassCrafting {
     protected final RecipePattern selectedRecipe;
     protected ItemStack[] requiredArray;
     protected final ItemStack result;
-    protected final HandledScreen<?> currentScreen;
+    protected final RecipeBookScreen<?> currentScreen;
     protected final ContainerSection playerInventory;
     protected final List<Slot> inputSlots;
     protected final Slot outputSlot;
@@ -26,7 +25,7 @@ public abstract class AbstractMassCrafting {
         this.selectedRecipe = RecipeStorage.getInstance().getSelectedRecipe();
         this.requiredArray = this.selectedRecipe.getRecipeItems();
         this.result = this.selectedRecipe.getResult();
-        this.currentScreen = InventoryUtil.getGuiContainer();
+        this.currentScreen = (RecipeBookScreen<?>) InventoryUtil.getGuiContainer();
         this.playerInventory = EnumSection.InventoryWhole.get();
         this.inputSlots = EnumSection.CraftMatrix.get().slots();
         this.outputSlot = EnumSection.CraftResult.get().getFirstSlot();
