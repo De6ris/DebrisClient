@@ -60,10 +60,11 @@ public class InventoryUtil {
         leftClick(from);
     }
 
+    // 40 is off-hand
     public static void swapSlots(Slot slot, Slot other) {
-        leftClick(slot);
-        rightClick(other);
-        leftClick(slot);
+        swapHotBar(slot, 40);
+        swapHotBar(other, 40);
+        swapHotBar(slot, 40);
     }
 
     public static boolean canMergeSlot(Slot to, Slot from) {
