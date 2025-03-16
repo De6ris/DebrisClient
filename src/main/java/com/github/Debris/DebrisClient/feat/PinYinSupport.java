@@ -1,4 +1,4 @@
-package com.github.Debris.DebrisClient.util;
+package com.github.Debris.DebrisClient.feat;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.unsafe.rei.ReiPinYinMatcher;

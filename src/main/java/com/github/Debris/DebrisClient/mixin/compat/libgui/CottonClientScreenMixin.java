@@ -2,7 +2,7 @@ package com.github.Debris.DebrisClient.mixin.compat.libgui;
 
 import com.github.Debris.DebrisClient.DebrisClient;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
-import com.github.Debris.DebrisClient.util.ProgressResume;
+import com.github.Debris.DebrisClient.feat.ProgressResume;
 import io.github.cottonmc.cotton.gui.GuiDescription;
 import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 import io.github.cottonmc.cotton.gui.widget.WScrollBar;

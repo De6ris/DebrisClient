@@ -2,9 +2,9 @@ package com.github.Debris.DebrisClient.config;
 
 import com.github.Debris.DebrisClient.DebrisClient;
 import com.github.Debris.DebrisClient.config.options.ConfigEnum;
+import com.github.Debris.DebrisClient.feat.AutoRepeat;
 import com.github.Debris.DebrisClient.inventory.sort.SortCategory;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.MassCraftingImpl;
-import com.github.Debris.DebrisClient.util.AutoRepeat;
 import com.github.Debris.DebrisClient.util.HeartType;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;

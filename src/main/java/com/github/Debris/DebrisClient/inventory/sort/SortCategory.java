@@ -1,7 +1,7 @@
 package com.github.Debris.DebrisClient.inventory.sort;
 
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
-import com.github.Debris.DebrisClient.util.PinYinSupport;
+import com.github.Debris.DebrisClient.feat.PinYinSupport;
 import com.github.Debris.DebrisClient.util.StringUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.Item;

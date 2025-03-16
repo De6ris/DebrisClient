@@ -1,4 +1,4 @@
-package com.github.Debris.DebrisClient.util;
+package com.github.Debris.DebrisClient.feat;
 
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
@@ -15,7 +15,7 @@ import net.minecraft.item.Items;
 import net.minecraft.screen.slot.Slot;
 import org.slf4j.Logger;
 
-public class TridentUtil {
+public class LoyalTrident {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static ThrownContext CONTEXT = ThrownContext.EMPTY;
     private static boolean THROWN = false;

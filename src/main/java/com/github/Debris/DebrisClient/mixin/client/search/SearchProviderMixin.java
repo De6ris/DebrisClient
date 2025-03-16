@@ -1,7 +1,7 @@
 package com.github.Debris.DebrisClient.mixin.client.search;
 
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
-import com.github.Debris.DebrisClient.util.PinYinSupport;
+import com.github.Debris.DebrisClient.feat.PinYinSupport;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.search.SearchProvider;
 import net.minecraft.client.search.SuffixArray;

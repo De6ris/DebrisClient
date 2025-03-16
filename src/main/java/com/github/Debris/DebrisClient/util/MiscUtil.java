@@ -2,6 +2,7 @@ package com.github.Debris.DebrisClient.util;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
+import com.github.Debris.DebrisClient.feat.WorldState;
 import com.github.Debris.DebrisClient.inventory.section.EnumSection;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.thread.TakeOffTask;

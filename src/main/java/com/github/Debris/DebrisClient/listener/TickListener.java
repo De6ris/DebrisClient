@@ -2,6 +2,8 @@ package com.github.Debris.DebrisClient.listener;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
+import com.github.Debris.DebrisClient.feat.LoyalTrident;
+import com.github.Debris.DebrisClient.feat.AutoRepeat;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.MassCraftingApi;
 import com.github.Debris.DebrisClient.util.*;
@@ -35,7 +37,7 @@ public class TickListener implements IClientTickHandler {
             MiscUtil.runAutoThrow();
         }
 
-        TridentUtil.onClientTick(client);
+        LoyalTrident.onClientTick(client);
 
         AutoRepeat.onClientTick(client);
 

@@ -1,7 +1,8 @@
-package com.github.Debris.DebrisClient.util;
+package com.github.Debris.DebrisClient.feat;
 
 import com.github.Debris.DebrisClient.command.DCAutoRepeatCommand;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
+import com.github.Debris.DebrisClient.util.ChatUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 

@@ -1,7 +1,7 @@
 package com.github.Debris.DebrisClient.mixin.compat.malilib;
 
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
-import com.github.Debris.DebrisClient.util.ProgressResume;
+import com.github.Debris.DebrisClient.feat.ProgressResume;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import fi.dy.masa.malilib.gui.GuiListBase;
 import fi.dy.masa.malilib.gui.GuiScrollBar;

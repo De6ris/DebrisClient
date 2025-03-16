@@ -1,6 +1,6 @@
 package com.github.Debris.DebrisClient.mixin.item;
 
-import com.github.Debris.DebrisClient.util.TridentUtil;
+import com.github.Debris.DebrisClient.feat.LoyalTrident;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,7 +19,7 @@ public class TridentItemMixin {
         if (world.isClient()) {
             float f = EnchantmentHelper.getTridentSpinAttackStrength(stack, user);
             if (f == 0.0f) {// thrown out, rather than spin sprint
-                TridentUtil.onTridentThrown((PlayerEntity) user, stack);
+                LoyalTrident.onTridentThrown((PlayerEntity) user, stack);
             }
         }
     }

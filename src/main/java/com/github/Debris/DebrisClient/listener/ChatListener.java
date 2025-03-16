@@ -1,6 +1,6 @@
 package com.github.Debris.DebrisClient.listener;
 
-import com.github.Debris.DebrisClient.util.AutoRepeat;
+import com.github.Debris.DebrisClient.feat.AutoRepeat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 

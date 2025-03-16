@@ -1,4 +1,4 @@
-package com.github.Debris.DebrisClient.util;
+package com.github.Debris.DebrisClient.feat;
 
 import net.minecraft.client.gui.screen.Screen;
 
