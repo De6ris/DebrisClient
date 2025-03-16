@@ -1,6 +1,10 @@
 package com.github.Debris.DebrisClient.util;
 
+import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
+import com.github.Debris.DebrisClient.unsafe.litematica.LitematicaAccessor;
+import com.github.Debris.DebrisClient.unsafe.miniHud.MiniHudConfigAccessor;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.EntityType;
 import net.minecraft.particle.ParticleEffect;
@@ -76,6 +80,17 @@ public class CullingUtil {
 
         if (particleEffect == ParticleTypes.POOF) {
             return DCCommonConfig.CullPoofParticle.getBooleanValue();
+        }
+        return false;
+    }
+
+    public static boolean shouldCullWthit() {
+        if (!DCCommonConfig.WthitMasaCompat.getBooleanValue()) return false;
+        if (FabricLoader.getInstance().isModLoaded(ModReference.Litematica) && LitematicaAccessor.isRenderingInfoOverlay()) {
+            return true;
+        }
+        if (FabricLoader.getInstance().isModLoaded(ModReference.MiniHud) && MiniHudConfigAccessor.isPreviewingInventory()) {
+            return true;
         }
         return false;
     }

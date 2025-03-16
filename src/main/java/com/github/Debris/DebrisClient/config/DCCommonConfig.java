@@ -45,7 +45,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean CommentSearch = ofBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
     public static final ConfigBoolean FullDebugInfo = ofBoolean("完整调试权限", false);
     public static final ConfigBoolean XRayAutoColor = ofBoolean("XRay自动取色", false);
-    public static final ConfigBoolean WthitLitematicaCompat = ofBoolean("Wthit投影兼容", true);
+    public static final ConfigBoolean WthitMasaCompat = ofBoolean("Wthit与Masa兼容", true, "在合适的时机不渲染tooltip");
 
 
     // key settings
