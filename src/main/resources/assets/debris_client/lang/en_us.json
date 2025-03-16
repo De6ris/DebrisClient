@@ -1,0 +1,16 @@
+{
+  "config.enum.black_list_mode.cancel.name": "Cancel",
+  "config.enum.black_list_mode.replace.name": "Replace",
+  "config.enum.heart_type.absorbing.name": "Absorbing",
+  "config.enum.heart_type.container.name": "Container",
+  "config.enum.heart_type.frozen.name": "Frozen",
+  "config.enum.heart_type.normal.name": "Normal",
+  "config.enum.heart_type.poisoned.name": "Poisoned",
+  "config.enum.heart_type.withered.name": "Withered",
+  "config.enum.mass_crafting_impl.manual.name": "Manual",
+  "config.enum.mass_crafting_impl.recipe_book.name": "Recipe Book",
+  "config.enum.sort_category.creative_inventory.name": "Creative Inventory",
+  "config.enum.sort_category.pinyin.name": "PinYin",
+  "config.enum.sort_category.translation_key.name": "Translation Key",
+  "config.enum.sort_category.translation_result.name": "Translation Result"
+}

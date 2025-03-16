@@ -29,6 +29,6 @@ public class MassCraftingApi {
 
         InventoryUtil.dropAllMatching(ItemUtil.predicateIDMeta(selectedRecipe.getResult()));// first throw those crafting result
 
-        ((MassCraftingImpl) DCCommonConfig.MassCraftingMode.getOptionListValue()).create().run();
+        DCCommonConfig.MassCraftingMode.getEnumValue().create().run();
     }
 }

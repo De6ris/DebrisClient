@@ -2,7 +2,6 @@ package com.github.Debris.DebrisClient.util;
 
 import com.github.Debris.DebrisClient.command.DCAutoRepeatCommand;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
-import fi.dy.masa.malilib.config.IConfigOptionListEntry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
@@ -14,7 +13,7 @@ public class AutoRepeat {
 
     public static void handleAutoRepeat(MinecraftClient client, Text message) {
         String originalString = message.getString();
-        switch (((BlackListMode) DCCommonConfig.AutoRepeatBlackListMode.getOptionListValue())) {
+        switch (DCCommonConfig.AutoRepeatBlackListMode.getEnumValue()) {
             case CANCEL -> {
                 if (DCCommonConfig.AutoRepeatBlackList.getStrings().stream().anyMatch(originalString::contains)) return;
             }
@@ -66,56 +65,9 @@ public class AutoRepeat {
         }
     }
 
-    public enum BlackListMode implements IConfigOptionListEntry {
-        CANCEL("cancel", "取消"),
-        REPLACE("replace", "替换"),
+    public enum BlackListMode {
+        CANCEL,
+        REPLACE,
         ;
-
-        private final String configString;
-        private final String translationKey;
-
-        BlackListMode(String configString, String translationKey) {
-            this.configString = configString;
-            this.translationKey = translationKey;
-        }
-
-        @Override
-        public String getStringValue() {
-            return this.configString;
-        }
-
-        @Override
-        public String getDisplayName() {
-            return this.translationKey;
-        }
-
-        @Override
-        public IConfigOptionListEntry cycle(boolean forward) {
-            int id = this.ordinal();
-            if (forward) {
-                if (++id >= values().length) {
-                    id = 0;
-                }
-            } else {
-                if (--id < 0) {
-                    id = values().length - 1;
-                }
-            }
-            return values()[id % values().length];
-        }
-
-        @Override
-        public IConfigOptionListEntry fromString(String name) {
-            return fromStringStatic(name);
-        }
-
-        public static BlackListMode fromStringStatic(String name) {
-            for (BlackListMode val : values()) {
-                if (val.configString.equalsIgnoreCase(name)) {
-                    return val;
-                }
-            }
-            return BlackListMode.CANCEL;
-        }
     }
 }

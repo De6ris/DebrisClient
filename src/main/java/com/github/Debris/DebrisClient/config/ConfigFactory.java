@@ -1,9 +1,8 @@
 package com.github.Debris.DebrisClient.config;
 
+import com.github.Debris.DebrisClient.config.options.ConfigEnum;
 import com.github.Debris.DebrisClient.config.options.ConfigHotKeyExtend;
-import com.github.Debris.DebrisClient.config.options.ConfigOptionListExtend;
 import com.google.common.collect.ImmutableList;
-import fi.dy.masa.malilib.config.IConfigOptionListEntry;
 import fi.dy.masa.malilib.config.options.*;
 import fi.dy.masa.malilib.hotkeys.KeybindSettings;
 
@@ -28,7 +27,7 @@ public class ConfigFactory {
         return new ConfigInteger(name, defaultValue, minValue, maxValue, useSlider, comment);
     }
 
-    public static ConfigColor ofColor(String name, String defaultValue, String comment){
+    public static ConfigColor ofColor(String name, String defaultValue, String comment) {
         return new ConfigColor(name, defaultValue, comment);
     }
 
@@ -76,11 +75,11 @@ public class ConfigFactory {
         return new ConfigBooleanHotkeyed(name, defaultValue, defaultHotkey, settings, comment);
     }
 
-    public static ConfigOptionList ofOptionList(String name, IConfigOptionListEntry defaultValue) {
-        return new ConfigOptionListExtend(name, defaultValue);
+    public static <T extends Enum<T>> ConfigEnum<T> ofEnum(String name, T defaultValue) {
+        return new ConfigEnum<>(name, defaultValue, "");
     }
 
-    public static ConfigOptionList ofOptionList(String name, IConfigOptionListEntry defaultValue, String comment) {
-        return new ConfigOptionListExtend(name, defaultValue, comment);
+    public static <T extends Enum<T>> ConfigEnum<T> ofEnum(String name, T defaultValue, String comment) {
+        return new ConfigEnum<>(name, defaultValue, comment);
     }
 }

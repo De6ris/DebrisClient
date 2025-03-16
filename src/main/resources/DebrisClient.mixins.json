@@ -26,6 +26,7 @@
     "client.gui.IMixinChatHud",
     "client.gui.IMixinGuiContainer",
     "client.gui.IMixinRecipeBookScreen",
+    "client.gui.InGameHudMixin",
     "client.gui.ScreenMixin",
     "client.input.KeyboardInputMixin",
     "client.network.ClientPlayerEntityMixin",

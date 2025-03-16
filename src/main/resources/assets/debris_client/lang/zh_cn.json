@@ -1,0 +1,16 @@
+{
+  "config.enum.black_list_mode.cancel.name": "取消发送",
+  "config.enum.black_list_mode.replace.name": "替换",
+  "config.enum.heart_type.absorbing.name": "吸收",
+  "config.enum.heart_type.container.name": "容器",
+  "config.enum.heart_type.frozen.name": "霜冻",
+  "config.enum.heart_type.normal.name": "正常",
+  "config.enum.heart_type.poisoned.name": "中毒",
+  "config.enum.heart_type.withered.name": "凋零",
+  "config.enum.mass_crafting_impl.manual.name": "手动",
+  "config.enum.mass_crafting_impl.recipe_book.name": "配方书",
+  "config.enum.sort_category.creative_inventory.name": "创造模式物品栏",
+  "config.enum.sort_category.pinyin.name": "拼音",
+  "config.enum.sort_category.translation_key.name": "翻译键",
+  "config.enum.sort_category.translation_result.name": "翻译结果"
+}

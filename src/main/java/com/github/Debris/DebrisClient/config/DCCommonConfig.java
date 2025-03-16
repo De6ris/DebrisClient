@@ -1,9 +1,11 @@
 package com.github.Debris.DebrisClient.config;
 
 import com.github.Debris.DebrisClient.DebrisClient;
+import com.github.Debris.DebrisClient.config.options.ConfigEnum;
 import com.github.Debris.DebrisClient.inventory.sort.SortCategory;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.MassCraftingImpl;
 import com.github.Debris.DebrisClient.util.AutoRepeat;
+import com.github.Debris.DebrisClient.util.HeartType;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -31,11 +33,11 @@ public class DCCommonConfig implements IConfigHandler {
     // value
     public static final ConfigBoolean SortingContainersLast = ofBoolean("整理时容器置于末端", true, "潜影盒, 收纳袋");
     public static final ConfigBoolean CachedSorting = ofBoolean("整理时使用缓存算法", true, "相比直接操作, 可减少发包");
-    public static final ConfigOptionList ItemSortingOrder = ofOptionList("物品整理顺序", SortCategory.CREATIVE_INVENTORY, "1.翻译键顺序\n2.按创造模式物品栏顺序\n3.按翻译后名称顺序\n4.按拼音顺序(需要Rei)");
-    public static final ConfigOptionList MassCraftingMode = ofOptionList("喷射合成实现", MassCraftingImpl.RECIPE_BOOK, "配方书依赖服务器,较慢但不出错\n手动依赖客户端,可能与服务器不同步导致合成错误");
+    public static final ConfigEnum<SortCategory> ItemSortingOrder = ofEnum("物品整理顺序", SortCategory.CREATIVE_INVENTORY, "1.翻译键顺序\n2.按创造模式物品栏顺序\n3.按翻译后名称顺序\n4.按拼音顺序(需要Rei)");
+    public static final ConfigEnum<MassCraftingImpl> MassCraftingMode = ofEnum("喷射合成实现", MassCraftingImpl.RECIPE_BOOK, "配方书依赖服务器,较慢但不出错\n手动依赖客户端,可能与服务器不同步导致合成错误");
     public static final ConfigInteger TriggerButtonOffset = ofInteger("触发按钮的坐标偏移", 42, -100, 100, true, "自动对齐可能有问题");
     public static final ConfigBoolean ProgressResuming = ofBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度\n对MaLiLib驱动的模组和CommandButton有效");
-    public static final ConfigOptionList AutoRepeatBlackListMode = ofOptionList("自动复读字符串黑名单模式", AutoRepeat.BlackListMode.CANCEL);
+    public static final ConfigEnum<AutoRepeat.BlackListMode> AutoRepeatBlackListMode = ofEnum("自动复读字符串黑名单模式", AutoRepeat.BlackListMode.CANCEL);
     public static final ConfigString AutoRepeatBlackListReplace = ofString("自动复读字符串替换", "");
     public static final ConfigBoolean AutoRepeatAntiDDos = ofBoolean("自动复读防刷屏", false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
     public static final ConfigInteger AutoRepeatAntiDDosThreshold = ofInteger("自动复读刷屏阈值", 4, 1, 16);
@@ -46,6 +48,8 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean FullDebugInfo = ofBoolean("完整调试权限", false);
     public static final ConfigBoolean XRayAutoColor = ofBoolean("XRay自动取色", false);
     public static final ConfigBoolean WthitMasaCompat = ofBoolean("Wthit与Masa兼容", true, "在合适的时机不渲染tooltip");
+    public static final ConfigBoolean HeartTypeOverride = ofBoolean("生命值样式覆写", false);
+    public static final ConfigEnum<HeartType> HeartTypeValue = ofEnum("生命值样式", HeartType.NORMAL);
 
 
     // key settings
@@ -191,7 +195,9 @@ public class DCCommonConfig implements IConfigHandler {
                 CommentSearch,
                 FullDebugInfo,
                 XRayAutoColor,
-                WthitLitematicaCompat
+                WthitMasaCompat,
+                HeartTypeOverride,
+                HeartTypeValue
         );
         Fix = ImmutableList.of(
                 FreeCamKeepAutoMoving,
