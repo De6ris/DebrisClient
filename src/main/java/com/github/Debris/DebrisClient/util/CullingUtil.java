@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public class CullingUtil {
     public static boolean shouldCullEntity(EntityType<?> type) {
-        if (DCCommonConfig.CullEntityList.getStrings().stream().anyMatch(x -> type.getTranslationKey().contains(x))) {
+        if (DCCommonConfig.CullEntityList.getStrings().contains(EntityType.getId(type).toString())) {
             return true;
         }
 
@@ -43,9 +43,10 @@ public class CullingUtil {
         if (SoundEvents.BLOCK_DISPENSER_FAIL.id().equals(id)) {
             return DCCommonConfig.MuteDispenser.getBooleanValue();
         }
-        String path = id.getPath();
 
-        if (DCCommonConfig.MuteSoundList.getStrings().stream().anyMatch(path::contains)) return true;
+        if (DCCommonConfig.MuteSoundList.getStrings().contains(id.toString())) return true;
+
+        String path = id.getPath();
 
         if (path.startsWith("entity.wither")) {
             return DCCommonConfig.MuteWither.getBooleanValue();
@@ -72,8 +73,7 @@ public class CullingUtil {
         RegistryEntry<ParticleType<?>> entry = Registries.PARTICLE_TYPE.getEntry(particleEffect.getType());
         Optional<RegistryKey<ParticleType<?>>> optional = entry.getKey();
         if (optional.isPresent()) {
-            String path = optional.get().getValue().getPath();
-            if (DCCommonConfig.CullParticleList.getStrings().stream().anyMatch(path::contains)) {
+            if (DCCommonConfig.CullParticleList.getStrings().contains(optional.get().getValue().toString())) {
                 return true;
             }
         }
