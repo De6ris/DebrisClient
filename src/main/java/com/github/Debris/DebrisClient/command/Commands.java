@@ -17,6 +17,7 @@ public class Commands {
         DCDebugCommand.register(dispatcher);
         DCSpectateCommand.register(dispatcher);
         DCCullCommand.register(dispatcher);
+        DCHeadCommand.register(dispatcher);
 
         if (FabricLoader.getInstance().isModLoaded(ModReference.ClientCommands)) {
             DCFindInFrameCommand.register(dispatcher, context);
