@@ -34,6 +34,7 @@ import net.minecraft.village.TradeOfferList;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 public class MiscUtil {
@@ -161,12 +162,19 @@ public class MiscUtil {
 
         if (!wearElytra()) return false;
 
-        Optional<Slot> optional = findRocketSlot();
-        if (optional.isEmpty()) return false;
-        Slot slot = optional.get();
+        Runnable swapTask;
 
-        int currentHotBar = InteractionUtil.getCurrentHotBar(client);
-        Runnable swapTask = () -> InventoryUtil.swapHotBar(slot, currentHotBar);
+        if (player.getMainHandStack().isOf(Items.FIREWORK_ROCKET)) {
+            swapTask = () -> {
+            };
+        } else {
+            Optional<Slot> optional = findRocketSlot();
+            if (optional.isEmpty()) return false;
+            Slot slot = optional.get();
+            int currentHotBar = InteractionUtil.getCurrentHotBar(client);
+            swapTask = () -> InventoryUtil.swapHotBar(slot, currentHotBar);
+        }
+
         swapTask.run();// take out rocket
 
         if (player.isGliding()) {
@@ -176,11 +184,12 @@ public class MiscUtil {
         }
 
         if (TakeOffTask.Running) return false;
-        player.jump();
-        TakeOffTask takeOffTask = new TakeOffTask(client, player, swapTask);
-        Thread thread = new Thread(takeOffTask, "TakeOffThread");
-        thread.start();
         TakeOffTask.Running = true;
+
+        player.jump();
+
+        TakeOffTask takeOffTask = new TakeOffTask(client, player, swapTask);
+        CompletableFuture.runAsync(takeOffTask).thenRun(() -> TakeOffTask.Running = false);
 
         return true;
     }
