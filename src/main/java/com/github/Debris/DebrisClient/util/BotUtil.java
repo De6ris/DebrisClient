@@ -1,6 +1,5 @@
 package com.github.Debris.DebrisClient.util;
 
-import com.github.Debris.DebrisClient.unsafe.tweakeroo.RayTraceUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;

@@ -4,7 +4,7 @@ import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.unsafe.magicLib.MagicLibTextRenderer;
 import com.github.Debris.DebrisClient.unsafe.miniHud.MiniHudConfigAccessor;
-import com.github.Debris.DebrisClient.unsafe.tweakeroo.RayTraceUtil;
+import com.github.Debris.DebrisClient.util.RayTraceUtil;
 import fi.dy.masa.malilib.util.WorldUtils;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntityType;
