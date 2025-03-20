@@ -18,9 +18,12 @@ import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EyeOfEnderEntity;
+import net.minecraft.entity.projectile.FireballEntity;
+import net.minecraft.entity.projectile.ShulkerBulletEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.screen.slot.Slot;
@@ -209,5 +212,13 @@ public class MiscUtil {
     private static Optional<Slot> findRocketSlot() {
         Item rocket = Items.FIREWORK_ROCKET;
         return InventoryUtil.getSlots().stream().filter(x -> x.getStack().isOf(rocket)).findFirst();
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public static void runAutoBulletCatcher(MinecraftClient client) {
+        if (Predicates.notInGame(client)) return;
+        Box box = client.player.getBoundingBox().expand(3.0D);
+        client.world.getEntitiesByClass(ShulkerBulletEntity.class, box, EntityPredicates.VALID_ENTITY).forEach(x -> InteractionUtil.attackEntity(client, x));
+        client.world.getEntitiesByClass(FireballEntity.class, box, EntityPredicates.VALID_ENTITY).forEach(x -> InteractionUtil.attackEntity(client, x));
     }
 }

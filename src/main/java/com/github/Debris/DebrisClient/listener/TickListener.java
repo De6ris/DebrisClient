@@ -44,6 +44,10 @@ public class TickListener implements IClientTickHandler {
         if (DCCommonConfig.AutoExtinguisher.getBooleanValue()) {
             MiscUtil.runAutoExtinguisher(client);
         }
+
+        if (DCCommonConfig.AutoBulletCatching.getBooleanValue()){
+            MiscUtil.runAutoBulletCatcher(client);
+        }
     }
 
 
