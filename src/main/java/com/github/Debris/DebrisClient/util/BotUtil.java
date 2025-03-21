@@ -3,7 +3,6 @@ package com.github.Debris.DebrisClient.util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.hit.EntityHitResult;
@@ -36,7 +35,7 @@ public class BotUtil {
             if (inKickQueue(name)) {
                 return;
             } else {
-                sendKickCommandAndAddToQueue(client.player.networkHandler, name);
+                sendKickCommandAndAddToQueue(client, name, bot);
             }
         }
     }
@@ -49,7 +48,7 @@ public class BotUtil {
         if (Predicates.notInGame(client)) return false;
 
         KickEntry last = KICK_QUEUE.getLast();
-        sendSpawnCommandAndRemoveFromQueue(client.player.networkHandler, last);
+        sendSpawnCommandAndRemoveFromQueue(client, last);
         return true;
     }
 
@@ -57,19 +56,11 @@ public class BotUtil {
     public static boolean suggestBotSpawnCommand(MinecraftClient client) {
         if (Predicates.notInGame(client)) return false;
 
-        Entity camera = client.getCameraEntity();
-
-        String command = String.format("/player bot_ spawn at %.2f %.2f %.2f facing %.2f %.2f in %s",
-                camera.getX(),
-                camera.getY(),
-                camera.getZ(),
-                camera.getYaw(),
-                camera.getPitch(),
-                camera.getWorld().getRegistryKey().getValue());
+        String command = SpawnContext.fromEntity(client.getCameraEntity()).getSpawnCommand("bot_");
 
         ChatScreen chatScreen = new ChatScreen(command);
         client.setScreen(chatScreen);
-        TextFieldWidget chatField = chatScreen.chatField;
+        TextFieldWidget chatField = AccessorUtil.getChatField(chatScreen);
         chatField.setText(command);
         chatField.setCursor("/player bot_".length(), false);
 
@@ -92,16 +83,32 @@ public class BotUtil {
         return true;
     }
 
-    private static void sendKickCommandAndAddToQueue(ClientPlayNetworkHandler handler, String name) {
-        handler.sendChatCommand(String.format("player %s kill", name));
-        KICK_QUEUE.add(new KickEntry(name, System.currentTimeMillis()));
+    private static void sendKickCommandAndAddToQueue(MinecraftClient client, String name, Entity bot) {
+        ChatUtil.sendChat(client, String.format("/player %s kill", name));
+        KICK_QUEUE.add(new KickEntry(name, System.currentTimeMillis(), SpawnContext.fromEntity(bot)));
     }
 
-    private static void sendSpawnCommandAndRemoveFromQueue(ClientPlayNetworkHandler handler, KickEntry entry) {
-        handler.sendChatCommand(String.format("player %s spawn", entry.name));
+    private static void sendSpawnCommandAndRemoveFromQueue(MinecraftClient client, KickEntry entry) {
+        ChatUtil.sendChat(client, entry.context.getSpawnCommand(entry.name));
         KICK_QUEUE.remove(entry);
     }
 
-    private record KickEntry(String name, long time) {
+    private record KickEntry(String name, long time, SpawnContext context) {
+    }
+
+    private record SpawnContext(double x, double y, double z, float yaw, float pitch, String dimension) {
+        static SpawnContext fromEntity(Entity entity) {
+            return new SpawnContext(entity.getX(),
+                    entity.getY(),
+                    entity.getZ(),
+                    entity.getYaw(),
+                    entity.getPitch(),
+                    entity.getWorld().getRegistryKey().getValue().toString()
+            );
+        }
+
+        String getSpawnCommand(String name) {
+            return String.format("/player %s spawn at %.2f %.2f %.2f facing %.2f %.2f in %s", name, x, y, z, yaw, pitch, dimension);
+        }
     }
 }

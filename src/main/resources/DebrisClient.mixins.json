@@ -24,6 +24,7 @@
     "client.gui.CreativeInventoryScreenMixin",
     "client.gui.HandledScreenMixin",
     "client.gui.IMixinChatHud",
+    "client.gui.IMixinChatScreen",
     "client.gui.IMixinGuiContainer",
     "client.gui.IMixinRecipeBookScreen",
     "client.gui.InGameHudMixin",
