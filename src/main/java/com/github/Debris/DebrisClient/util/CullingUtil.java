@@ -5,83 +5,58 @@ import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.unsafe.litematica.LitematicaAccessor;
 import com.github.Debris.DebrisClient.unsafe.miniHud.MiniHudConfigAccessor;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.EntityType;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 
-import java.util.Optional;
-
 public class CullingUtil {
-    public static boolean shouldCullEntity(EntityType<?> type) {
-        if (DCCommonConfig.CullEntityList.getStrings().contains(EntityType.getId(type).toString())) {
-            return true;
-        }
+    public static boolean shouldCullBlockEntity(BlockEntityType<?> type) {
+        if (type == BlockEntityType.SIGN && DCCommonConfig.CullSignRendering.getBooleanValue()) return true;
 
+        Identifier id = BlockEntityType.getId(type);
+        if (id == null) return false;
+        return DCCommonConfig.CullBlockEntityList.getStrings().contains(id.toString());
+    }
+
+    public static boolean shouldCullEntity(EntityType<?> type) {
         boolean isFrame = type == EntityType.GLOW_ITEM_FRAME || type == EntityType.ITEM_FRAME;
         if (DCCommonConfig.CullItemFrame.getBooleanValue() && isFrame) return true;
-
         if (DCCommonConfig.CullItemEntity.getBooleanValue() && type == EntityType.ITEM) return true;
+        if (DCCommonConfig.CullExperienceOrb.getBooleanValue() && type == EntityType.EXPERIENCE_ORB) return true;
 
-        if (DCCommonConfig.CullExperienceOrb.getBooleanValue() && type == EntityType.EXPERIENCE_ORB)
-            return true;
-
-        return false;
+        return DCCommonConfig.CullEntityList.getStrings().contains(EntityType.getId(type).toString());
     }
 
     public static boolean shouldMuteSound(SoundInstance soundInstance) {
         Identifier id = soundInstance.getId();
-        if (SoundEvents.ENTITY_GENERIC_EXPLODE.matchesId(id)) {
-            return DCCommonConfig.MuteExplosion.getBooleanValue();
-        }
-        if (SoundEvents.BLOCK_DISPENSER_FAIL.id().equals(id)) {
-            return DCCommonConfig.MuteDispenser.getBooleanValue();
-        }
-
-        if (DCCommonConfig.MuteSoundList.getStrings().contains(id.toString())) return true;
+        if (SoundEvents.ENTITY_GENERIC_EXPLODE.matchesId(id) && DCCommonConfig.MuteExplosion.getBooleanValue())
+            return true;
+        if (SoundEvents.BLOCK_DISPENSER_FAIL.id().equals(id) && DCCommonConfig.MuteDispenser.getBooleanValue())
+            return true;
 
         String path = id.getPath();
 
-        if (path.startsWith("entity.wither")) {
-            return DCCommonConfig.MuteWither.getBooleanValue();
-        }
-        if (path.startsWith("entity.enderman")) {
-            return DCCommonConfig.MuteEnderman.getBooleanValue();
-        }
-        if (path.startsWith("entity.minecart")) {
-            return DCCommonConfig.MuteMinecart.getBooleanValue();
-        }
-        if (path.startsWith("entity.lightning_bolt")) {
-            return DCCommonConfig.MuteThunder.getBooleanValue();
-        }
-        if (path.startsWith("entity.guardian")) {
-            return DCCommonConfig.MuteGuardian.getBooleanValue();
-        }
-        if (path.startsWith("block.anvil")) {
-            return DCCommonConfig.MuteAnvil.getBooleanValue();
-        }
-        return false;
+        if (path.startsWith("entity.wither") && DCCommonConfig.MuteWither.getBooleanValue()) return true;
+        if (path.startsWith("entity.enderman") && DCCommonConfig.MuteEnderman.getBooleanValue()) return true;
+        if (path.startsWith("entity.minecart") && DCCommonConfig.MuteMinecart.getBooleanValue()) return true;
+        if (path.startsWith("entity.lightning_bolt") && DCCommonConfig.MuteThunder.getBooleanValue()) return true;
+        if (path.startsWith("entity.guardian") && DCCommonConfig.MuteGuardian.getBooleanValue()) return true;
+        if (path.startsWith("block.anvil") && DCCommonConfig.MuteAnvil.getBooleanValue()) return true;
+
+        return DCCommonConfig.MuteSoundList.getStrings().contains(id.toString());
     }
 
     public static boolean shouldCullParticle(ParticleEffect particleEffect) {
-        RegistryEntry<ParticleType<?>> entry = Registries.PARTICLE_TYPE.getEntry(particleEffect.getType());
-        Optional<RegistryKey<ParticleType<?>>> optional = entry.getKey();
-        if (optional.isPresent()) {
-            if (DCCommonConfig.CullParticleList.getStrings().contains(optional.get().getValue().toString())) {
-                return true;
-            }
-        }
+        if (particleEffect == ParticleTypes.POOF && DCCommonConfig.CullPoofParticle.getBooleanValue()) return true;
 
-        if (particleEffect == ParticleTypes.POOF) {
-            return DCCommonConfig.CullPoofParticle.getBooleanValue();
-        }
-        return false;
+        Identifier id = Registries.PARTICLE_TYPE.getId(particleEffect.getType());
+        if (id == null) return false;
+        return DCCommonConfig.CullParticleList.getStrings().contains(id.toString());
     }
 
     public static boolean shouldCullWthit() {
