@@ -1,7 +1,7 @@
 import java.text.SimpleDateFormat
 
 plugins {
-    id 'fabric-loom' version '1.9-SNAPSHOT'
+    id 'fabric-loom' version '1.10-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -41,27 +41,26 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     //masa
-//    implementation "com.github.sakura-ryoko:malilib:${project.malilib_version}"
-//    implementation "com.github.sakura-ryoko:litematica:${project.litematica_version}"
-//    implementation "com.github.sakura-ryoko:itemscroller:${project.itemscroller_version}"
-//    implementation "com.github.sakura-ryoko:tweakeroo:${project.tweakeroo_version}"
-//    implementation "com.github.sakura-ryoko:minihud:${project.minihud_version}"
-    modImplementation(files("libs\\malilib-fabric-1.21.4-0.23.1.jar"))
-    modImplementation(files("libs\\litematica-fabric-1.21.4-0.21.1.jar"))
-    modImplementation(files("libs\\itemscroller-fabric-1.21.4-0.26.0.jar"))
-    modImplementation(files("libs\\tweakeroo-fabric-1.21.4-0.23.1.jar"))
-    modImplementation(files("libs\\minihud-fabric-1.21.4-0.34.3.jar"))
+    modImplementation "com.github.sakura-ryoko:malilib:${project.malilib_version}"
+    modImplementation "com.github.sakura-ryoko:litematica:${project.litematica_version}"
+//    modImplementation "com.github.sakura-ryoko:itemscroller:${project.itemscroller_version}"
+    modImplementation "com.github.sakura-ryoko:tweakeroo:${project.tweakeroo_version}"
+    modImplementation "com.github.sakura-ryoko:minihud:${project.minihud_version}"
+//    modImplementation(files("libs\\malilib-fabric-1.21.4-0.23.1.jar"))
+//    modImplementation(files("libs\\litematica-fabric-1.21.4-0.21.1.jar"))
+    modCompileOnly(files("libs\\itemscroller-fabric-1.21.4-0.26.0.jar"))
+//    modImplementation(files("libs\\tweakeroo-fabric-1.21.4-0.23.1.jar"))
+//    modImplementation(files("libs\\minihud-fabric-1.21.4-0.34.3.jar"))
 
 
     //misc
-    modImplementation "curse.maven:roughly-enough-items-${project.rei_projectid}:${project.rei_fileid}"
-    modImplementation "curse.maven:worldedit-${project.worldedit_projectid}:${project.worldedit_fileid}"
+    modCompileOnly "curse.maven:roughly-enough-items-${project.rei_projectid}:${project.rei_fileid}"
+    modCompileOnly "curse.maven:worldedit-${project.worldedit_projectid}:${project.worldedit_fileid}"
     modCompileOnly "curse.maven:advanced-xray-fabric-edition-${project.xray_projectid}:${project.xray_fileid}"
-    modImplementation "curse.maven:wthit-${project.wthit_projectid}:${project.wthit_fileid}"
+    modCompileOnly "curse.maven:wthit-${project.wthit_projectid}:${project.wthit_fileid}"
+    modImplementation "curse.maven:carpet-${project.carpet_projectid}:${project.carpet_fileid}"
 
     modImplementation "com.terraformersmc:modmenu:${project.mod_menu}"
-
-    modImplementation(files("libs\\fabric-carpet-1.21.4-1.4.161+v241203.jar"))
 
     modImplementation("dev.xpple:clientarguments:${project.clientarguments_version}")
 //    modImplementation "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
