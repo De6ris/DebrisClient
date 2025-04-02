@@ -132,24 +132,24 @@ public class StoneCutterRecipeStorage {
     }
 
     private void readFromNBT(NbtCompound nbt, DynamicRegistryManager registryManager) {
-        if (nbt == null || nbt.contains("Recipes", NbtElement.LIST_TYPE) == false) {
+        if (nbt == null || nbt.contains("Recipes") == false) {
             return;
         }
 
-        NbtList tagList = nbt.getList("Recipes", NbtElement.COMPOUND_TYPE);
+        NbtList tagList = nbt.getListOrEmpty("Recipes");
         int count = tagList.size();
 
         for (int i = 0; i < count; i++) {
-            NbtCompound tag = tagList.getCompound(i);
+            NbtCompound tag = tagList.getCompoundOrEmpty(i);
 
-            int index = tag.getByte("RecipeIndex");
+            int index = tag.getByte("RecipeIndex", (byte) -1);
 
             if (index >= 0 && index < this.recipes.length) {
                 this.recipes[index].readFromNBT(tag, registryManager);
             }
         }
 
-        this.setCurrentSelected(nbt.getByte("Selected"));
+        this.setCurrentSelected(nbt.getByte("Selected", (byte) 0));
     }
 
     public void write(DynamicRegistryManager registryManager) {

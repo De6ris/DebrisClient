@@ -10,6 +10,12 @@ import com.github.Debris.DebrisClient.util.Predicates;
 import fi.dy.masa.malilib.interfaces.IRenderer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.render.BufferBuilderStorage;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.Fog;
+import net.minecraft.client.render.Frustum;
+import net.minecraft.util.profiler.Profiler;
 import org.joml.Matrix4f;
 
 public class RenderListener implements IRenderer {
@@ -22,15 +28,16 @@ public class RenderListener implements IRenderer {
     private final MinecraftClient client = MinecraftClient.getInstance();
 
     @Override
-    public void onRenderWorldLast(Matrix4f matrix4f, Matrix4f projMatrix) {
+    public void onRenderWorldLastAdvanced(Framebuffer fb, Matrix4f posMatrix, Matrix4f projMatrix, Frustum frustum, Camera camera, Fog fog, BufferBuilderStorage buffers, Profiler profiler) {
         if (Predicates.notInGame(this.client)) return;
 
         if (DCCommonConfig.WorldEditVisibility.getBooleanValue() && FabricLoader.getInstance().isModLoaded(ModReference.WorldEdit)) {
-            WorldEditRenderer.getInstance().render(matrix4f);
+            WorldEditRenderer.getInstance().render(posMatrix);
         }
 
         ComparatorRenderer.onRenderWorldLast(this.client);
 
-        PathNodesRenderer.getInstance().onRenderWorldPost(this.client.world, RenderContext.ofWorld(matrix4f, projMatrix), this.client.getRenderTickCounter().getTickDelta(false));
+        float tickDelta = this.client.getRenderTickCounter().getTickProgress(false);
+        PathNodesRenderer.getInstance().onRenderWorldPost(this.client.world, RenderContext.ofWorld(fb, posMatrix, projMatrix, frustum, camera, fog, buffers, profiler, tickDelta));
     }
 }

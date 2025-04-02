@@ -37,9 +37,9 @@ public class StoneCutterRecipePattern {
     }
 
     public void readFromNBT(NbtCompound nbt, DynamicRegistryManager registryManager) {
-        if (nbt.contains("Result", NbtElement.COMPOUND_TYPE) && nbt.contains("Input", NbtElement.COMPOUND_TYPE)) {
-            this.input = ItemStack.fromNbtOrEmpty(registryManager, nbt.getCompound("Input"));
-            this.result = ItemStack.fromNbtOrEmpty(registryManager, nbt.getCompound("Result"));
+        if (nbt.contains("Result") && nbt.contains("Input")) {
+            this.input = ItemStack.fromNbt(registryManager, nbt.getCompoundOrEmpty("Input")).orElse(ItemStack.EMPTY);
+            this.result = ItemStack.fromNbt(registryManager, nbt.getCompoundOrEmpty("Result")).orElse(ItemStack.EMPTY);
         }
     }
 

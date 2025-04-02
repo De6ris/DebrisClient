@@ -8,3 +8,5 @@ accessible class net/minecraft/client/render/BackgroundRenderer$StatusEffectFogM
 accessible class net/minecraft/client/gui/screen/ingame/CreativeInventoryScreen$CreativeSlot
 
 accessible class net/minecraft/client/gui/hud/InGameHud$HeartType
+
+accessible field net/minecraft/client/input/Input movementVector Lnet/minecraft/util/math/Vec2f;

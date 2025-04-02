@@ -32,6 +32,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.PlayerInput;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.village.TradeOfferList;
 
@@ -59,24 +60,22 @@ public class MiscUtil {
                 oldInput.sneak(),
                 oldInput.sprint()
         );
-        if (DCCommonConfig.AUTO_WALK.getBooleanValue()) {
-            input.movementForward = 1.0F;
-        }
-        if (DCCommonConfig.AUTO_LEFT.getBooleanValue()) {
-            input.movementSideways = 1.0F;
-        }
-        if (DCCommonConfig.AUTO_RIGHT.getBooleanValue()) {
-            input.movementSideways = -1.0F;
-        }
-        if (DCCommonConfig.AUTO_BACK.getBooleanValue()) {
-            input.movementForward = -1.0F;
-        }
+        float f = getMovementMultiplier(input.playerInput.forward(), input.playerInput.backward());
+        float g = getMovementMultiplier(input.playerInput.left(), input.playerInput.right());
+        input.movementVector = new Vec2f(g, f).normalize();
     }
 
     public static void clearMovement(Input input) {
         input.playerInput = PlayerInput.DEFAULT;
-        input.movementForward = 0.0F;
-        input.movementSideways = 0.0F;
+        input.movementVector = Vec2f.ZERO;
+    }
+
+    private static float getMovementMultiplier(boolean positive, boolean negative) {
+        if (positive == negative) {
+            return 0.0F;
+        } else {
+            return positive ? 1.0F : -1.0F;
+        }
     }
 
     public static void onTradeInfoUpdate(MinecraftClient client) {

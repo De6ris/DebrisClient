@@ -75,19 +75,16 @@ public class DCCountEntityCommand {
             Long count = entry.getValue();
             feedback.append(Text.literal(String.valueOf(count)).styled(
                     style -> style.withColor(Formatting.AQUA)
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                    Texts.bracketed(Text.translatable
-                                            ("chat.coordinates", blockPos.getX(), blockPos.getY(), blockPos.getZ()))))
-                            .withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
-                                    "/tp " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ()))
+                            .withHoverEvent(new HoverEvent.ShowText(Texts.bracketed(Text.translatable
+                                    ("chat.coordinates", blockPos.getX(), blockPos.getY(), blockPos.getZ()))))
+                            .withClickEvent(new ClickEvent.SuggestCommand("/tp " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ()))
             ));
 
             if (i == printSize - 1) {
                 if (reduced) {
                     feedback.append(Text.literal("...").styled(
                             style -> style.withColor(Formatting.LIGHT_PURPLE)
-                                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                            Text.literal("省略了" + (originalSize - printSize) + "处结果")))
+                                    .withHoverEvent(new HoverEvent.ShowText(Text.literal("省略了" + (originalSize - printSize) + "处结果")))
                     ));
                 } else {
                     feedback.append(".");

@@ -24,12 +24,12 @@ public class LoyalTrident {
     public static void onTridentThrown(PlayerEntity playerEntity, ItemStack stack) {
         if (!DCCommonConfig.LoyalerTrident.getBooleanValue()) return;
         PlayerInventory inventory = playerEntity.getInventory();
-        if (ItemStack.areEqual(inventory.offHand.getFirst(), stack)) {
+        if (ItemStack.areEqual(inventory.getStack(40), stack)) {
             CONTEXT = new ThrownContext(stack, 40);
             return;
         }
         for (int i = 0; i < 9; i++) {
-            if (ItemStack.areEqual(inventory.main.get(i), stack)) {
+            if (ItemStack.areEqual(inventory.getStack(i), stack)) {
                 CONTEXT = new ThrownContext(stack, i);
                 return;
             }
@@ -59,15 +59,8 @@ public class LoyalTrident {
 
     private static void checkThrown(PlayerEntity playerEntity) {
         PlayerInventory inventory = playerEntity.getInventory();
-        int index = CONTEXT.index;
-        if (index == 40) {
-            if (inventory.offHand.getFirst().isEmpty()) {
-                THROWN = true;
-            }
-        } else {
-            if (inventory.main.get(index).isEmpty()) {
-                THROWN = true;
-            }
+        if (inventory.getStack(CONTEXT.index).isEmpty()) {
+            THROWN = true;
         }
     }
 

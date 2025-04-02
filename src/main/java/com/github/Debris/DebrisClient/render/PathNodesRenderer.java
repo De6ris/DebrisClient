@@ -4,8 +4,8 @@ import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.util.RenderUtil;
 import com.github.Debris.DebrisClient.util.SyncUtil;
 import com.google.common.collect.Queues;
-import fi.dy.masa.malilib.util.Color4f;
 import fi.dy.masa.malilib.util.EntityUtils;
+import fi.dy.masa.malilib.util.data.Color4f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.ai.pathing.Path;
@@ -26,7 +26,7 @@ public class PathNodesRenderer {
     private final Queue<MobEntity> mobQueue = Queues.newConcurrentLinkedQueue();
 
     @SuppressWarnings("ConstantConditions")
-    public void onEntityRenderPost(Entity entity, RenderContext context, float partialTicks) {
+    public void onEntityRenderPost(Entity entity, RenderContext context) {
         if (!DCCommonConfig.PathNodesVisibility.getBooleanValue()) return;
 
         Vec3d camPos = EntityUtils.getCameraEntity().getPos();
@@ -39,8 +39,10 @@ public class PathNodesRenderer {
         }
     }
 
-    public void onRenderWorldPost(World world, RenderContext context, float partialTicks) {
+    public void onRenderWorldPost(World world, RenderContext context) {
         if (!DCCommonConfig.PathNodesVisibility.getBooleanValue()) return;
+
+        float partialTicks = context.getTickDelta();
 
         for (MobEntity clientEntity : this.mobQueue) {
             MobEntity serverEntity = (MobEntity) SyncUtil.syncEntityDataFromIntegratedServer(clientEntity);

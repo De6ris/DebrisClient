@@ -112,7 +112,7 @@ public class InteractionUtil {
      */
     @SuppressWarnings("ConstantConditions")
     public static int getCurrentHotBar(MinecraftClient client) {
-        return client.player.getInventory().selectedSlot;
+        return client.player.getInventory().getSelectedSlot();
     }
 
     @SuppressWarnings("ConstantConditions")
