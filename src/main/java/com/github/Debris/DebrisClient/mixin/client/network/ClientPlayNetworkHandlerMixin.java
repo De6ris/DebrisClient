@@ -10,7 +10,7 @@ import net.minecraft.client.network.ClientCommonNetworkHandler;
 import net.minecraft.client.network.ClientConnectionState;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.ClientConnection;
-import net.minecraft.network.packet.s2c.play.OpenScreenS2CPacket;
+import net.minecraft.network.packet.s2c.play.OpenWindowS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -34,8 +34,8 @@ public abstract class ClientPlayNetworkHandlerMixin extends ClientCommonNetworkH
         MiscUtil.onTradeInfoUpdate(this.client);
     }// This injection point from tweakemore
 
-    @Inject(method = "onOpenScreen", at = @At("RETURN"))
-    private void onContainerOpen(OpenScreenS2CPacket packet, CallbackInfo ci) {
+    @Inject(method = "onOpenWindow", at = @At("RETURN"))
+    private void onContainerOpen(OpenWindowS2CPacket packet, CallbackInfo ci) {
         Screen screen = GuiUtils.getCurrentScreen();
         if (screen instanceof HandledScreen<?> guiContainer) {
             AutoProcessManager.onGuiContainerOpen(guiContainer);

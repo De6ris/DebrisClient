@@ -1,6 +1,8 @@
 package com.github.Debris.DebrisClient.util;
 
 import com.mojang.logging.LogUtils;
+import fi.dy.masa.malilib.MaLiLib;
+import fi.dy.masa.malilib.util.WorldUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.integrated.IntegratedServer;
@@ -16,7 +18,7 @@ public class SyncUtil {
             return entity;
         }
 
-        ServerWorld serverWorld = server.getWorld(entity.getWorld().getRegistryKey());
+        ServerWorld serverWorld = MaLiLib.GAME_INSTANCE.getWorld(entity.getWorld().getRegistryKey());
         if (serverWorld == null) {
             LOGGER.warn("no world {} on server?", entity.getWorld().getRegistryKey());
             return entity;
