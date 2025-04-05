@@ -1,6 +1,9 @@
 package com.github.Debris.DebrisClient.mixin.compat.xray;
 
+import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
+import me.fallenbreath.conditionalmixin.api.annotation.Condition;
+import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.block.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,7 +18,7 @@ import pro.mikey.fabric.xray.screens.forge.GuiBase;
 import java.awt.*;
 import java.util.function.Supplier;
 
-
+@Restriction(require = @Condition(ModReference.XRay))
 @Mixin(GuiAddBlock.class)
 public class GuiAddBlockMixin {
     @Shadow

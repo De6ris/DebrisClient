@@ -11,4 +11,7 @@ public class ModReference {
     public static final String ClientCommands = "clientcommands";
     public final static String ClientArguments = "clientarguments";
     public static final String ItemScroller = "itemscroller";
+    public static final String LibGui = "libgui";
+    public static final String XRay = "advanced-xray-fabric";
+    public static final String Wthit = "wthit";
 }

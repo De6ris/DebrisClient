@@ -1,11 +1,14 @@
 package com.github.Debris.DebrisClient.mixin.compat.libgui;
 
 import com.github.Debris.DebrisClient.DebrisClient;
+import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.feat.ProgressResume;
 import io.github.cottonmc.cotton.gui.GuiDescription;
 import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 import io.github.cottonmc.cotton.gui.widget.WScrollBar;
+import me.fallenbreath.conditionalmixin.api.annotation.Condition;
+import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,6 +23,7 @@ import work.msdnicrosoft.commandbuttons.gui.CommandListPanel;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Restriction(require = @Condition(ModReference.LibGui))
 @Mixin(value = CottonClientScreen.class, remap = false)
 public abstract class CottonClientScreenMixin extends Screen {
     protected CottonClientScreenMixin(Text title) {

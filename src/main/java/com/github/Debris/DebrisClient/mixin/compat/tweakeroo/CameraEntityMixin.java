@@ -1,14 +1,18 @@
 package com.github.Debris.DebrisClient.mixin.compat.tweakeroo;
 
+import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import fi.dy.masa.tweakeroo.util.CameraEntity;
+import me.fallenbreath.conditionalmixin.api.annotation.Condition;
+import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+@Restriction(require = @Condition(ModReference.Tweakeroo))
 @Mixin(value = CameraEntity.class, remap = false)
 public class CameraEntityMixin {
     @WrapOperation(method = "createCameraEntity", at = @At(value = "INVOKE", target = "Lfi/dy/masa/tweakeroo/util/CameraEntity;refreshPositionAndAngles(DDDFF)V", remap = true), remap = false)

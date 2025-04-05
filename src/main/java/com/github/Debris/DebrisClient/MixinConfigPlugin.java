@@ -1,25 +1,18 @@
 package com.github.Debris.DebrisClient;
 
-import org.objectweb.asm.tree.ClassNode;
-import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
-import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
+import com.mojang.logging.LogUtils;
+import me.fallenbreath.conditionalmixin.api.mixin.RestrictiveMixinConfigPlugin;
+import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.Set;
 
-public class MixinConfigPlugin implements IMixinConfigPlugin {
-    @Override
-    public void onLoad(String mixinPackage) {
-    }
+public class MixinConfigPlugin extends RestrictiveMixinConfigPlugin {
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     @Override
     public String getRefMapperConfig() {
         return null;
-    }
-
-    @Override
-    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return true;
     }
 
     @Override
@@ -32,10 +25,7 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
     }
 
     @Override
-    public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-    }
-
-    @Override
-    public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
+    protected void onRestrictionCheckFailed(String mixinClassName, String reason) {
+        LOGGER.debug("[TweakerMore] Disabled mixin {} due to {}", mixinClassName, reason);
     }
 }
