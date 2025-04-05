@@ -41,14 +41,14 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     //masa
-    modImplementation "com.github.sakura-ryoko:malilib:${project.malilib_version}"
-    modImplementation "com.github.sakura-ryoko:litematica:${project.litematica_version}"
-//    modImplementation "com.github.sakura-ryoko:itemscroller:${project.itemscroller_version}"
-    modImplementation "com.github.sakura-ryoko:tweakeroo:${project.tweakeroo_version}"
-    modImplementation "com.github.sakura-ryoko:minihud:${project.minihud_version}"
-//    modImplementation(files("libs\\malilib-fabric-1.21.4-0.23.1.jar"))
+//    modImplementation "com.github.sakura-ryoko:malilib:${project.malilib_version}"
+    modCompileOnly "com.github.sakura-ryoko:litematica:${project.litematica_version}"
+    modCompileOnly "com.github.sakura-ryoko:itemscroller:${project.itemscroller_version}"
+    modCompileOnly "com.github.sakura-ryoko:tweakeroo:${project.tweakeroo_version}"
+    modCompileOnly "com.github.sakura-ryoko:minihud:${project.minihud_version}"
+    modImplementation(files("libs\\malilib-fabric-25w14craftmine-0.24.0-xiami.2.jar"))
 //    modImplementation(files("libs\\litematica-fabric-1.21.4-0.21.1.jar"))
-    modCompileOnly(files("libs\\itemscroller-fabric-1.21.4-0.26.0.jar"))
+//    modCompileOnly(files("libs\\itemscroller-fabric-1.21.4-0.26.0.jar"))
 //    modImplementation(files("libs\\tweakeroo-fabric-1.21.4-0.23.1.jar"))
 //    modImplementation(files("libs\\minihud-fabric-1.21.4-0.34.3.jar"))
 
