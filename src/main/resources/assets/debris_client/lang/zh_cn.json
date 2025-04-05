@@ -12,5 +12,6 @@
   "config.enum.sort_category.creative_inventory.name": "创造模式物品栏",
   "config.enum.sort_category.pinyin.name": "拼音",
   "config.enum.sort_category.translation_key.name": "翻译键",
-  "config.enum.sort_category.translation_result.name": "翻译结果"
+  "config.enum.sort_category.translation_result.name": "翻译结果",
+  "debris_client.gui.title.configs": "%s 配置 - %s"
 }

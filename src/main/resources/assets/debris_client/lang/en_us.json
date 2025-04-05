@@ -12,5 +12,6 @@
   "config.enum.sort_category.creative_inventory.name": "Creative Inventory",
   "config.enum.sort_category.pinyin.name": "PinYin",
   "config.enum.sort_category.translation_key.name": "Translation Key",
-  "config.enum.sort_category.translation_result.name": "Translation Result"
+  "config.enum.sort_category.translation_result.name": "Translation Result",
+  "debris_client.gui.title.configs": "%s Config - %s"
 }

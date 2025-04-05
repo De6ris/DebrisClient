@@ -21,7 +21,7 @@ import fi.dy.masa.malilib.util.JsonUtils;
 import java.io.File;
 import java.util.List;
 
-import static com.github.Debris.DebrisClient.DebrisClient.MOD_ID;
+import static com.github.Debris.DebrisClient.DebrisClient.MOD_NAME;
 import static com.github.Debris.DebrisClient.config.ConfigFactory.*;
 
 public class DCCommonConfig implements IConfigHandler {
@@ -165,7 +165,7 @@ public class DCCommonConfig implements IConfigHandler {
             JsonElement jsonElement = JsonUtils.parseJsonFile(settingFile);
             if (jsonElement != null && jsonElement.isJsonObject()) {
                 JsonObject obj = jsonElement.getAsJsonObject();
-                ConfigUtils.readConfigBase(obj, MOD_ID, ALL_CONFIGS);
+                ConfigUtils.readConfigBase(obj, MOD_NAME, ALL_CONFIGS);
             }
         }
     }
@@ -174,7 +174,7 @@ public class DCCommonConfig implements IConfigHandler {
     public void save() {
         if ((CONFIG_DIR.exists() && CONFIG_DIR.isDirectory()) || CONFIG_DIR.mkdirs()) {
             JsonObject configRoot = new JsonObject();
-            ConfigUtils.writeConfigBase(configRoot, MOD_ID, ALL_CONFIGS);
+            ConfigUtils.writeConfigBase(configRoot, MOD_NAME, ALL_CONFIGS);
             JsonUtils.writeJsonToFile(configRoot, new File(FILE_PATH));
         }
     }

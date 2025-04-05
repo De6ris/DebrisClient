@@ -42,9 +42,9 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
 
     @Override
     public void addHotkeys(IKeybindManager manager) {
-        manager.addHotkeysForCategory(DebrisClient.MOD_ID, "按下式", DCCommonConfig.KeyPress);
-        manager.addHotkeysForCategory(DebrisClient.MOD_ID, "切换式", DCCommonConfig.KeyToggle);
-        manager.addHotkeysForCategory(DebrisClient.MOD_ID, "禁用", DCCommonConfig.Yeets);
+        manager.addHotkeysForCategory(DebrisClient.MOD_NAME, "按下式", DCCommonConfig.KeyPress);
+        manager.addHotkeysForCategory(DebrisClient.MOD_NAME, "切换式", DCCommonConfig.KeyToggle);
+        manager.addHotkeysForCategory(DebrisClient.MOD_NAME, "禁用", DCCommonConfig.Yeets);
     }
 
     @Override

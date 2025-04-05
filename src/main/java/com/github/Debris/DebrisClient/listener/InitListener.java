@@ -14,7 +14,7 @@ import net.minecraft.client.MinecraftClient;
 public class InitListener implements IInitializationHandler {
     @Override
     public void registerModHandlers() {
-        ConfigManager.getInstance().registerConfigHandler(DebrisClient.MOD_ID, DCCommonConfig.getInstance());
+        ConfigManager.getInstance().registerConfigHandler(DebrisClient.MOD_NAME, DCCommonConfig.getInstance());
         InputEventHandler.getKeybindManager().registerKeybindProvider(InputListener.getInstance());
         InputEventHandler.getInputManager().registerKeyboardInputHandler(InputListener.getInstance());
         InputEventHandler.getInputManager().registerMouseInputHandler(InputListener.getInstance());

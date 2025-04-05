@@ -9,14 +9,15 @@ import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 
 import java.util.List;
 
-import static com.github.Debris.DebrisClient.DebrisClient.MOD_ID;
+import static com.github.Debris.DebrisClient.DebrisClient.MOD_NAME;
+import static com.github.Debris.DebrisClient.DebrisClient.MOD_VERSION;
 
 public class DCConfigUi extends GuiConfigsBase {
 
     private static Tab tab = Tab.ALL;
 
     public DCConfigUi() {
-        super(10, 50, MOD_ID, null, "DebrisClient");
+        super(10, 50, MOD_NAME, null, "debris_client.gui.title.configs", MOD_NAME, MOD_VERSION);
     }
 
     @Override
