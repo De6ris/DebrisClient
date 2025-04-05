@@ -58,7 +58,7 @@ dependencies {
     modCompileOnly "curse.maven:worldedit-${project.worldedit_projectid}:${project.worldedit_fileid}"
     modCompileOnly "curse.maven:advanced-xray-fabric-edition-${project.xray_projectid}:${project.xray_fileid}"
     modCompileOnly "curse.maven:wthit-${project.wthit_projectid}:${project.wthit_fileid}"
-    modImplementation "curse.maven:carpet-${project.carpet_projectid}:${project.carpet_fileid}"
+    modCompileOnly "curse.maven:carpet-${project.carpet_projectid}:${project.carpet_fileid}"
 
     modImplementation "com.terraformersmc:modmenu:${project.mod_menu}"
 
@@ -77,7 +77,7 @@ dependencies {
 //    include api("io.github.juuxel:libninepatch:${project.libninepatch_version}")
 //
 //
-//    include(modImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
+    include(modImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
 //    include(annotationProcessor(implementation("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
     modCompileOnly(files("libs\\magiclib-minecraft-api-mc1.21.4-fabric-0.6.83-stable.jar"))
     modCompileOnly(files("libs\\LibGui-12.0.1+1.21.2.jar"))
