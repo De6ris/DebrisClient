@@ -28,6 +28,7 @@
     "client.gui.IMixinGuiContainer",
     "client.gui.IMixinRecipeBookScreen",
     "client.gui.InGameHudMixin",
+    "client.gui.MineCrafterScreenMixin",
     "client.gui.ScreenMixin",
     "client.input.KeyboardInputMixin",
     "client.network.ClientPlayerEntityMixin",
