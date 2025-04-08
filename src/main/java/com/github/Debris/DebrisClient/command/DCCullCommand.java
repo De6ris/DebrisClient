@@ -4,18 +4,14 @@ import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import dev.xpple.clientarguments.arguments.CResourceKeyArgument;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 
 import java.util.function.Consumer;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class DCCullCommand {
@@ -36,13 +32,12 @@ public class DCCullCommand {
     }
 
     private static <T> RequiredArgumentBuilder<FabricClientCommandSource, ?> makeCommand(String argument, RegistryKey<Registry<T>> registryKey, Consumer<String> keyReader) {
-        return argument(argument, CResourceKeyArgument.key(registryKey))
-                .executes(ctx -> addType(ctx.getSource(),
-                        CResourceKeyArgument.getRegistryEntry(ctx, argument, registryKey,
-                                new DynamicCommandExceptionType(
-                                        element -> Text.stringifiedTranslatable("argument.resource.invalid_type", element, "", registryKey)
-                                )), keyReader
-                ));
+        return CommandFactory.ofRegistryKey(argument, registryKey, (ctx, reference) -> {
+            String key = reference.registryKey().getValue().toString();
+            keyReader.accept(key);
+            ctx.getSource().sendFeedback(Text.literal("已添加到列表: " + key));
+            return Command.SINGLE_SUCCESS;
+        });
     }
 
     private static int help(FabricClientCommandSource source) {
@@ -53,10 +48,4 @@ public class DCCullCommand {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int addType(FabricClientCommandSource source, RegistryEntry.Reference<?> type, Consumer<String> keyReader) {
-        String key = type.registryKey().getValue().toString();
-        keyReader.accept(key);
-        source.sendFeedback(Text.literal("已添加到列表: " + key));
-        return Command.SINGLE_SUCCESS;
-    }
 }

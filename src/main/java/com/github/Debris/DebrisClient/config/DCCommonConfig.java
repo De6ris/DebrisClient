@@ -72,6 +72,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigStringList MuteSoundList = ofStringList("静音音效列表", ImmutableList.of(), "见SoundEvents\n可用cull指令添加");
     public static final ConfigStringList CullParticleList = ofStringList("剔除粒子列表", ImmutableList.of(), "见ParticleTypes\n可用cull指令添加");
     public static final ConfigStringList CullBlockEntityList = ofStringList("剔除方块实体列表", ImmutableList.of(), "见BlockEntityTypes\n可用cull指令添加");
+    public static final ConfigStringList HighlightEntityList = ofStringList("高亮实体列表", ImmutableList.of(), "见EntityTypes\n可用highlight指令添加");
 
 
     // key
@@ -121,7 +122,6 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed AutoContainerClassifier = ofBooleanHotkeyed("自动向容器归类", false, "", "例如: 若容器中有圆石, 则将物品栏的圆石移入");
     public static final ConfigBooleanHotkeyed AutoExtinguisher = ofBooleanHotkeyed("自动灭火", false, "", "不影响灵魂火");
     public static final ConfigBooleanHotkeyed AutoBulletCatching = ofBooleanHotkeyed("自动接子弹", false, "", "潜影贝, 恶魂");
-    public static final ConfigBooleanHotkeyed ForceRenderEndGatewayBeam = ofBooleanHotkeyed("强制渲染末地折跃门光柱", false, "", "");
 
 
     // yeet
@@ -144,6 +144,18 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed MuteGLDebugInfo = ofBooleanHotkeyed("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
 
 
+    // highlight
+    public static final ConfigBooleanHotkeyed ForceRenderEndGatewayBeam = ofBooleanHotkeyed("强制渲染末地折跃门光柱", false, "");
+    public static final ConfigBooleanHotkeyed HighlightAll = new ConfigBooleanHotkeyed("高亮全部实体", false, "");
+    public static final ConfigBooleanHotkeyed HighlightBlaze = ofBooleanHotkeyed("高亮烈焰人", false, "");
+    public static final ConfigBooleanHotkeyed HighlightCreeper = ofBooleanHotkeyed("高亮苦力怕", false, "");
+    public static final ConfigBooleanHotkeyed HighlightEnderman = ofBooleanHotkeyed("高亮末影人", false, "");
+    public static final ConfigBooleanHotkeyed HighlightItem = ofBooleanHotkeyed("高亮物品", false, "");
+    public static final ConfigBooleanHotkeyed HighlightPiglinBrute = ofBooleanHotkeyed("高亮猪灵蛮兵", false, "");
+    public static final ConfigBooleanHotkeyed HighlightWanderingTrader = ofBooleanHotkeyed("高亮流浪商人", false, "");
+    public static final ConfigBooleanHotkeyed HighlightWitherSkeleton = ofBooleanHotkeyed("高亮凋零骷髅", false, "");
+
+
     public static final List<IConfigBase> ALL_CONFIGS;
 
 
@@ -153,6 +165,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ImmutableList<ConfigHotkey> KeyPress;
     public static final ImmutableList<IHotkeyTogglable> KeyToggle;
     public static final ImmutableList<IHotkeyTogglable> Yeets;
+    public static final ImmutableList<IHotkeyTogglable> Highlights;
 
     public static DCCommonConfig getInstance() {
         return INSTANCE;
@@ -213,7 +226,8 @@ public class DCCommonConfig implements IConfigHandler {
                 CullEntityList,
                 MuteSoundList,
                 CullParticleList,
-                CullBlockEntityList
+                CullBlockEntityList,
+                HighlightEntityList
         );
         KeyPress = ImmutableList.of(
                 OpenWindow,
@@ -258,8 +272,7 @@ public class DCCommonConfig implements IConfigHandler {
                 AutoContainerTaker,
                 AutoContainerClassifier,
                 AutoExtinguisher,
-                AutoBulletCatching,
-                ForceRenderEndGatewayBeam
+                AutoBulletCatching
         );
         Yeets = ImmutableList.of(
                 CullSignRendering,
@@ -280,6 +293,17 @@ public class DCCommonConfig implements IConfigHandler {
                 DisableREIWarning,
                 MuteGLDebugInfo
         );
+        Highlights = ImmutableList.of(
+                ForceRenderEndGatewayBeam,
+                HighlightAll,
+                HighlightBlaze,
+                HighlightCreeper,
+                HighlightEnderman,
+                HighlightItem,
+                HighlightPiglinBrute,
+                HighlightWanderingTrader,
+                HighlightWitherSkeleton
+        );
         ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();
         builder.addAll(Values);
         builder.addAll(Fix);
@@ -287,6 +311,7 @@ public class DCCommonConfig implements IConfigHandler {
         builder.addAll(KeyToggle);
         builder.addAll(KeyPress);
         builder.addAll(Yeets);
+        builder.addAll(Highlights);
         ALL_CONFIGS = builder.build();
         INSTANCE.load();
     }

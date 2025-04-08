@@ -53,6 +53,7 @@ public class DCConfigUi extends GuiConfigsBase {
             case PRESS -> DCCommonConfig.KeyPress;
             case TOGGLE -> DCCommonConfig.KeyToggle;
             case Yeets -> DCCommonConfig.Yeets;
+            case Highlights -> DCCommonConfig.Highlights;
             default -> DCCommonConfig.ALL_CONFIGS;
         };
 
@@ -91,6 +92,7 @@ public class DCConfigUi extends GuiConfigsBase {
         PRESS("按下"),
         TOGGLE("切换"),
         Yeets("禁用"),
+        Highlights("高亮"),
         ;
 
         public final String name;
