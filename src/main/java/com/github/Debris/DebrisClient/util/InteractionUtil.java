@@ -11,6 +11,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -27,13 +28,13 @@ public class InteractionUtil {
     public static void digNear(MinecraftClient client, Predicate<BlockState> predicate) {
         BlockPos playerPos = client.player.getBlockPos();
         if (DIG_PROGRESS_POS != null) {// has history
-            if (withinReach(playerPos, DIG_PROGRESS_POS) && digAreaAndSwingHand(client, Stream.of(DIG_PROGRESS_POS), predicate).isPresent()) {// keep digging
+            if (withinReach(client, DIG_PROGRESS_POS) && digAreaAndSwingHand(client, Stream.of(DIG_PROGRESS_POS), predicate).isPresent()) {// keep digging
                 return;
             } else {// skip or finish
                 DIG_PROGRESS_POS = null;
             }
         }
-        digAreaAndSwingHand(client, PositionUtil.streamNear3D(playerPos, 4), predicate).ifPresent(pos -> DIG_PROGRESS_POS = pos);
+        digAreaAndSwingHand(client, BlockPos.streamOutwards(playerPos, 4, 4, 4), predicate).ifPresent(pos -> DIG_PROGRESS_POS = pos);
     }
 
     // return a progressing pos
@@ -62,8 +63,9 @@ public class InteractionUtil {
         return world.getBlockState(pos).isOf(block) ? DigResult.PROGRESS : DigResult.FINISH;
     }
 
-    private static boolean withinReach(BlockPos playerPos, BlockPos blockPos) {
-        return blockPos.isWithinDistance(playerPos, 4);
+    @SuppressWarnings("DataFlowIssue")
+    public static boolean withinReach(MinecraftClient client, BlockPos blockPos) {
+        return blockPos.isWithinDistance(client.player.getBlockPos(), 4);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -102,8 +104,12 @@ public class InteractionUtil {
         client.interactionManager.updateBlockBreakingProgress(pos, Direction.UP);
     }
 
+    public static void interactBlock(MinecraftClient client, BlockPos blockPos) {
+        interactBlock(client, new BlockHitResult(Vec3d.ofCenter(blockPos), Direction.UP, blockPos, false));
+    }
+
     @SuppressWarnings("ConstantConditions")
-    private static void interactBlock(MinecraftClient client, BlockHitResult hitResult) {
+    public static void interactBlock(MinecraftClient client, BlockHitResult hitResult) {
         client.interactionManager.interactBlock(client.player, Hand.MAIN_HAND, hitResult);
     }
 

@@ -4,8 +4,13 @@ import com.github.Debris.DebrisClient.inventory.autoProcess.AutoProcessManager;
 import com.github.Debris.DebrisClient.inventory.section.IContainer;
 import com.github.Debris.DebrisClient.inventory.section.SectionHandler;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerType;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,6 +20,9 @@ import java.util.List;
 
 @Mixin(ScreenHandler.class)
 public class ScreenHandlerMixin implements IContainer {
+    @Shadow
+    @Final
+    private @Nullable ScreenHandlerType<?> type;
     @Unique
     private SectionHandler sectionHandler;
 
@@ -31,5 +39,11 @@ public class ScreenHandlerMixin implements IContainer {
     @Override
     public SectionHandler dc$getSectionHandler() {
         return this.sectionHandler;
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    @Override
+    public String dc$getTypeString() {
+        return this.type != null ? Registries.SCREEN_HANDLER.getId(this.type).toString() : "<no type>";
     }
 }

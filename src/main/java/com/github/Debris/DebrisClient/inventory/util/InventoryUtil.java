@@ -60,6 +60,15 @@ public class InventoryUtil {
         leftClick(from);
     }
 
+    public static void moveSomeItem(Slot to, Slot from, int count) {
+        if (count <= 0) return;
+        leftClick(from);
+        for (int i = 0; i < count; i++) {
+            rightClick(to);
+        }
+        leftClick(from);
+    }
+
     // 40 is off-hand
     public static void swapSlots(Slot slot, Slot other) {
         swapHotBar(slot, 40);

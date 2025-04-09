@@ -8,7 +8,6 @@ import com.github.Debris.DebrisClient.render.RenderContext;
 import com.github.Debris.DebrisClient.render.WorldEditRenderer;
 import com.github.Debris.DebrisClient.util.Predicates;
 import fi.dy.masa.malilib.interfaces.IRenderer;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.render.BufferBuilderStorage;
@@ -31,7 +30,7 @@ public class RenderListener implements IRenderer {
     public void onRenderWorldLastAdvanced(Framebuffer fb, Matrix4f posMatrix, Matrix4f projMatrix, Frustum frustum, Camera camera, Fog fog, BufferBuilderStorage buffers, Profiler profiler) {
         if (Predicates.notInGame(this.client)) return;
 
-        if (DCCommonConfig.WorldEditVisibility.getBooleanValue() && FabricLoader.getInstance().isModLoaded(ModReference.WorldEdit)) {
+        if (DCCommonConfig.WorldEditVisibility.getBooleanValue() && Predicates.hasMod(ModReference.WorldEdit)) {
             WorldEditRenderer.getInstance().render(posMatrix);
         }
 

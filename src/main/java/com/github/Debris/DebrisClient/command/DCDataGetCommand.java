@@ -1,12 +1,12 @@
 package com.github.Debris.DebrisClient.command;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
-import com.github.Debris.DebrisClient.util.RayTraceUtil;
 import com.github.Debris.DebrisClient.util.ChatUtil;
+import com.github.Debris.DebrisClient.util.Predicates;
+import com.github.Debris.DebrisClient.util.RayTraceUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
@@ -32,7 +32,7 @@ public class DCDataGetCommand {
     }
 
     private static void dataGet(FabricClientCommandSource source) {
-        if (!FabricLoader.getInstance().isModLoaded(ModReference.Tweakeroo)) {
+        if (!Predicates.hasMod(ModReference.Tweakeroo)) {
             source.sendFeedback(Text.literal("此功能需安装tweakeroo"));
             return;
         }

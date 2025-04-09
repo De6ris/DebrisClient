@@ -1,6 +1,8 @@
 package com.github.Debris.DebrisClient.config;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
+import com.github.Debris.DebrisClient.feat.ContainerTemplate;
+import com.github.Debris.DebrisClient.feat.TakeOff;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterRecipeStorage;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
 import com.github.Debris.DebrisClient.inventory.util.InventoryTweaks;
@@ -11,7 +13,6 @@ import com.github.Debris.DebrisClient.util.MiscUtil;
 import com.github.Debris.DebrisClient.util.Predicates;
 import fi.dy.masa.malilib.gui.Message;
 import fi.dy.masa.malilib.util.InfoUtils;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
@@ -24,7 +25,7 @@ public class Callbacks {
         });
 
         DCCommonConfig.ReloadCommandButton.getKeybind().setCallback((action, key) -> {
-            if (FabricLoader.getInstance().isModLoaded(ModReference.CommandButton)) {
+            if (Predicates.hasMod(ModReference.CommandButton)) {
                 MGButtonReloader.reload();
                 InfoUtils.showInGameMessage(Message.MessageType.SUCCESS, "命令按钮: 重载成功");
                 return true;
@@ -69,7 +70,11 @@ public class Callbacks {
 
         DCCommonConfig.AlignWithEnderEye.getKeybind().setCallback((action, key) -> MiscUtil.alignWithEnderEye(client));
 
-        DCCommonConfig.TakeOff.getKeybind().setCallback((action, key) -> MiscUtil.tryTakeOff(client));
+        DCCommonConfig.TakeOff.getKeybind().setCallback((action, key) -> TakeOff.tryTakeOff(client));
+
+        DCCommonConfig.RecordContainerTemplate.getKeybind().setCallback((action, key) -> ContainerTemplate.tryRecord(client));
+
+        DCCommonConfig.OpenSelectionContainers.getKeybind().setCallback(((action, key) -> MiscUtil.tryOpenSelectionContainers(client)));
 
         DCCommonConfig.TEST.getKeybind().setCallback((action, key) -> {
             return false;

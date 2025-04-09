@@ -7,7 +7,6 @@ import fi.dy.masa.malilib.render.MaLiLibPipelines;
 import fi.dy.masa.malilib.render.RenderContext;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.data.Color4f;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.util.math.MatrixStack;
@@ -71,7 +70,7 @@ public class RenderUtil {
     }// TODO lines too slim
 
     public static void renderWorldEditSelectionBox(BlockPos pos1, BlockPos pos2, Matrix4f matrix4f, MinecraftClient client) {
-        if (FabricLoader.getInstance().isModLoaded(ModReference.Litematica)) {
+        if (Predicates.hasMod(ModReference.Litematica)) {
             RenderUtils.color(1f, 1f, 1f, 1f);
             RenderUtils.blend(true);
 

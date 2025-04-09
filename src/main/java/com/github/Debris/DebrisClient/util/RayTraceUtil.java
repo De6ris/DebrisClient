@@ -5,7 +5,6 @@ import com.github.Debris.DebrisClient.unsafe.tweakeroo.TweakerooAccessor;
 import com.mojang.logging.LogUtils;
 import fi.dy.masa.malilib.util.EntityUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ServerWorld;
@@ -19,7 +18,7 @@ public class RayTraceUtil {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static Optional<HitResult> getPlayerRayTrace(MinecraftClient client) {
-        if (!FabricLoader.getInstance().isModLoaded(ModReference.Tweakeroo)) return Optional.empty();
+        if (!Predicates.hasMod(ModReference.Tweakeroo)) return Optional.empty();
 
         World world = WorldUtils.getBestWorld(client);
 

@@ -48,12 +48,12 @@ public class DCConfigUi extends GuiConfigsBase {
 
         configs = switch (tab) {
             case VALUE -> DCCommonConfig.Values;
-            case Fix -> DCCommonConfig.Fix;
-            case Lists -> DCCommonConfig.Lists;
+            case COMPAT -> DCCommonConfig.Compat;
+            case LISTS -> DCCommonConfig.Lists;
             case PRESS -> DCCommonConfig.KeyPress;
             case TOGGLE -> DCCommonConfig.KeyToggle;
-            case Yeets -> DCCommonConfig.Yeets;
-            case Highlights -> DCCommonConfig.Highlights;
+            case YEETS -> DCCommonConfig.Yeets;
+            case HIGHLIGHTS -> DCCommonConfig.Highlights;
             default -> DCCommonConfig.ALL_CONFIGS;
         };
 
@@ -87,12 +87,12 @@ public class DCConfigUi extends GuiConfigsBase {
     public enum Tab {
         ALL("全部"),
         VALUE("值"),
-        Fix("修复"),
-        Lists("列表"),
+        COMPAT("兼容"),
+        LISTS("列表"),
         PRESS("按下"),
         TOGGLE("切换"),
-        Yeets("禁用"),
-        Highlights("高亮"),
+        YEETS("禁用"),
+        HIGHLIGHTS("高亮"),
         ;
 
         public final String name;

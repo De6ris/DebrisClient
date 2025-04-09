@@ -1,9 +1,9 @@
 package com.github.Debris.DebrisClient.command;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
+import com.github.Debris.DebrisClient.util.Predicates;
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.CommandRegistryAccess;
 
 public class Commands {
@@ -20,7 +20,7 @@ public class Commands {
         DCHeadCommand.register(dispatcher);
         DCHighlightCommand.register(dispatcher);
 
-        if (FabricLoader.getInstance().isModLoaded(ModReference.ClientCommands)) {
+        if (Predicates.hasMod(ModReference.ClientCommands)) {
             DCFindInFrameCommand.register(dispatcher, context);
         }
     }

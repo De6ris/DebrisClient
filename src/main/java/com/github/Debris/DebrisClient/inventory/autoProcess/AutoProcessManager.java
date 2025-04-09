@@ -13,7 +13,8 @@ public class AutoProcessManager {
     private static final List<IAutoProcessor> PROCESSORS = ImmutableList.of(
             new ContainerTaker(),
             new ItemFinder(),
-            new ContainerClassifier()
+            new ContainerClassifier(),
+            new ContainerTemplateFiller()
     );
 
     public static void onGuiContainerOpen(HandledScreen<?> screen) {

@@ -38,6 +38,9 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
         for (IHotkey hotkey : DCCommonConfig.Yeets) {
             manager.addKeybindToMap(hotkey.getKeybind());
         }
+        for (IHotkey hotkey : DCCommonConfig.Highlights) {
+            manager.addKeybindToMap(hotkey.getKeybind());
+        }
     }
 
     @Override
@@ -45,6 +48,7 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
         manager.addHotkeysForCategory(DebrisClient.MOD_NAME, "按下式", DCCommonConfig.KeyPress);
         manager.addHotkeysForCategory(DebrisClient.MOD_NAME, "切换式", DCCommonConfig.KeyToggle);
         manager.addHotkeysForCategory(DebrisClient.MOD_NAME, "禁用", DCCommonConfig.Yeets);
+        manager.addHotkeysForCategory(DebrisClient.MOD_NAME, "高亮", DCCommonConfig.Highlights);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.github.Debris.DebrisClient.feat;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.unsafe.rei.ReiPinYinMatcher;
+import com.github.Debris.DebrisClient.util.Predicates;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
@@ -55,7 +56,7 @@ public class PinYinSupport {
     }
 
     public static boolean matchesFilter(String entryString, String filterText) {
-        if (FabricLoader.getInstance().isModLoaded(ModReference.REI)) {
+        if (Predicates.hasMod(ModReference.REI)) {
             Optional<Boolean> optionalB = ReiPinYinMatcher.matchesFilter(entryString, filterText);
             if (optionalB.isPresent()) return optionalB.get();
         }

@@ -1,6 +1,7 @@
 package com.github.Debris.DebrisClient.inventory.section;
 
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
+import com.github.Debris.DebrisClient.util.AccessorUtil;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -32,7 +33,7 @@ public class SectionIdentifier {
         try {
             this.identifyInternal(guiContainer, container, slotList);
         } catch (Exception e) {
-            LOGGER.warn("Error identifying container {}, stacktrace:", container, e);
+            LOGGER.warn("Error identifying container {}, stacktrace:", AccessorUtil.getTypeString(container), e);
             this.handleUnidentified(createSection(slotList));
         }
     }

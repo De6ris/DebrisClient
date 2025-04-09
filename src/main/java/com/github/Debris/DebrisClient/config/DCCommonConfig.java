@@ -1,6 +1,7 @@
 package com.github.Debris.DebrisClient.config;
 
 import com.github.Debris.DebrisClient.DebrisClient;
+import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.options.ConfigEnum;
 import com.github.Debris.DebrisClient.feat.AutoRepeat;
 import com.github.Debris.DebrisClient.inventory.sort.SortCategory;
@@ -17,6 +18,7 @@ import fi.dy.masa.malilib.config.options.*;
 import fi.dy.masa.malilib.hotkeys.KeyAction;
 import fi.dy.masa.malilib.hotkeys.KeybindSettings;
 import fi.dy.masa.malilib.util.JsonUtils;
+import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;
 import java.util.List;
@@ -36,18 +38,11 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigEnum<SortCategory> ItemSortingOrder = ofEnum("物品整理顺序", SortCategory.CREATIVE_INVENTORY, "1.翻译键顺序\n2.按创造模式物品栏顺序\n3.按翻译后名称顺序\n4.按拼音顺序(需要Rei)");
     public static final ConfigEnum<MassCraftingImpl> MassCraftingMode = ofEnum("喷射合成实现", MassCraftingImpl.RECIPE_BOOK, "配方书依赖服务器,较慢但不出错\n手动依赖客户端,可能与服务器不同步导致合成错误");
     public static final ConfigInteger TriggerButtonOffset = ofInteger("触发按钮的坐标偏移", 42, -100, 100, true, "自动对齐可能有问题");
-    public static final ConfigBoolean ProgressResuming = ofBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度\n对MaLiLib驱动的模组和CommandButton有效");
     public static final ConfigEnum<AutoRepeat.BlackListMode> AutoRepeatBlackListMode = ofEnum("自动复读字符串黑名单模式", AutoRepeat.BlackListMode.CANCEL);
     public static final ConfigString AutoRepeatBlackListReplace = ofString("自动复读字符串替换", "");
     public static final ConfigBoolean AutoRepeatAntiDDos = ofBoolean("自动复读防刷屏", false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
     public static final ConfigInteger AutoRepeatAntiDDosThreshold = ofInteger("自动复读刷屏阈值", 4, 1, 16);
-    public static final ConfigColor WorldEditOverlay = ofColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
-    public static final ConfigBoolean InventoryPreviewSupportComparator = ofBoolean("物品栏预览支持比较器", true, "需要MiniHud和MagicLib,因为MasaGadget未更新,以此暂代");
-    public static final ConfigBoolean PinYinSearch = ofBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组, 创造模式物品栏, 配方书");
-    public static final ConfigBoolean CommentSearch = ofBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
     public static final ConfigBoolean FullDebugInfo = ofBoolean("完整调试权限", false);
-    public static final ConfigBoolean XRayAutoColor = ofBoolean("XRay自动取色", false);
-    public static final ConfigBoolean WthitMasaCompat = ofBoolean("Wthit与Masa兼容", true, "在合适的时机不渲染tooltip");
     public static final ConfigBoolean HeartTypeOverride = ofBoolean("生命值样式覆写", false);
     public static final ConfigEnum<HeartType> HeartTypeValue = ofEnum("生命值样式", HeartType.NORMAL);
 
@@ -56,12 +51,21 @@ public class DCCommonConfig implements IConfigHandler {
     private static final KeybindSettings GUI_RELAXED = KeybindSettings.create(KeybindSettings.Context.GUI, KeyAction.PRESS, true, false, false, false);
     private static final KeybindSettings GUI_RELAXED_CANCEL = KeybindSettings.create(KeybindSettings.Context.GUI, KeyAction.PRESS, true, false, false, true);
     private static final KeybindSettings GUI_NO_ORDER = KeybindSettings.create(KeybindSettings.Context.GUI, KeyAction.PRESS, false, false, false, true);
+    private static final KeybindSettings ANY = KeybindSettings.create(KeybindSettings.Context.ANY, KeyAction.PRESS, false, true, false, true);
 
 
-    // fix
+    // compat
     public static final ConfigBoolean FreeCamKeepAutoMoving = ofBoolean("灵魂出窍时允许自动移动", true, "本模组的自动移动, 在灵魂出窍时会默认停止移动");
     public static final ConfigBoolean FreeCamSpectatorFix = ofBoolean("旁观模式灵魂出窍修复", true, "当你附身别的生物, 启动灵魂出窍时相机仍在附身地");
     public static final ConfigBoolean ToolSwitchFix = ofBoolean("工具切换修复", true, "无合适工具时, 不应切换到第一个快捷栏");
+    public static final ConfigBoolean ProgressResuming = ofBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度\n对MaLiLib驱动的模组和CommandButton有效");
+    public static final ConfigColor WorldEditOverlay = ofColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
+    public static final ConfigBoolean InventoryPreviewSupportComparator = ofBoolean("物品栏预览支持比较器", true);
+    public static final ConfigBoolean PinYinSearch = ofBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组, 创造模式物品栏, 配方书");
+    public static final ConfigBoolean CommentSearch = ofBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
+    public static final ConfigBoolean XRayAutoColor = ofBoolean("XRay自动取色", false);
+    public static final ConfigBoolean WthitMasaCompat = ofBoolean("Wthit与Masa兼容", true, "在合适的时机不渲染tooltip");
+    public static final ConfigBoolean DisableREIWarning = ofBoolean("禁用REI警告", false, "至少在18.0.796版本仍然每次进服都在弹窗");
 
 
     // list
@@ -97,6 +101,8 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey AlignWithEnderEye = ofHotkey("对齐末影之眼", "");
     public static final ConfigHotkey ModifierFreeCamInput = ofHotkey("灵魂出窍输入:修饰键", "", "按住时输入将对实际画面生效\n仍需开启tweakeroo中的灵魂出窍用户输入");
     public static final ConfigHotkey TakeOff = ofHotkey("起飞", "", "使用鞘翅和烟花火箭起飞");
+    public static final ConfigHotkey RecordContainerTemplate = ofHotkey("记录容器样板", "", KeybindSettings.GUI, "用于自动样板填充容器");
+    public static final ConfigHotkey OpenSelectionContainers = ofHotkey("打开选区内容器", "", ANY, "记录列表, 之后逐个打开");
 
 
     public static final ConfigHotkey TEST = ofHotkey("测试", "", KeybindSettings.GUI);
@@ -120,6 +126,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed WorldEditVisibility = ofBooleanHotkeyed("WorldEdit可视化", false, "", "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
     public static final ConfigBooleanHotkeyed AutoContainerTaker = ofBooleanHotkeyed("自动从容器取出", false, "", "若完全取出, 自动关闭GUI");
     public static final ConfigBooleanHotkeyed AutoContainerClassifier = ofBooleanHotkeyed("自动向容器归类", false, "", "例如: 若容器中有圆石, 则将物品栏的圆石移入");
+    public static final ConfigBooleanHotkeyed AutoContainerTemplateFiller = ofBooleanHotkeyed("自动样板填充容器", false, "", "");
     public static final ConfigBooleanHotkeyed AutoExtinguisher = ofBooleanHotkeyed("自动灭火", false, "", "不影响灵魂火");
     public static final ConfigBooleanHotkeyed AutoBulletCatching = ofBooleanHotkeyed("自动接子弹", false, "", "潜影贝, 恶魂");
 
@@ -140,7 +147,6 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed MuteAnvil = ofBooleanHotkeyed("铁砧静音", false, "");
     public static final ConfigBooleanHotkeyed CullPoofParticle = ofBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
     public static final ConfigBooleanHotkeyed BlockBreakingCooldownOverride = ofBooleanHotkeyed("禁用方块挖掘冷却", false, "", "不影响创造模式");
-    public static final ConfigBooleanHotkeyed DisableREIWarning = ofBooleanHotkeyed("禁用REI警告", false, "", "至少在18.0.796版本仍然每次进服都在弹窗");
     public static final ConfigBooleanHotkeyed MuteGLDebugInfo = ofBooleanHotkeyed("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
 
 
@@ -160,7 +166,7 @@ public class DCCommonConfig implements IConfigHandler {
 
 
     public static final ImmutableList<IConfigBase> Values;
-    public static final ImmutableList<IConfigBase> Fix;
+    public static final ImmutableList<IConfigBase> Compat;
     public static final ImmutableList<IConfigBase> Lists;
     public static final ImmutableList<ConfigHotkey> KeyPress;
     public static final ImmutableList<IHotkeyTogglable> KeyToggle;
@@ -192,6 +198,31 @@ public class DCCommonConfig implements IConfigHandler {
         }
     }
 
+    private static ImmutableList<IConfigBase> buildCompat() {
+        ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();
+        FabricLoader instance = FabricLoader.getInstance();
+        builder.add(ProgressResuming, PinYinSearch, CommentSearch);
+        if (instance.isModLoaded(ModReference.Tweakeroo)) {
+            builder.add(FreeCamKeepAutoMoving, FreeCamSpectatorFix, ToolSwitchFix);
+        }
+        if (instance.isModLoaded(ModReference.MiniHud) && instance.isModLoaded(ModReference.MagicLibMCApi)) {
+            builder.add(InventoryPreviewSupportComparator);
+        }
+        if (instance.isModLoaded(ModReference.WorldEdit) && instance.isModLoaded(ModReference.Litematica)) {
+            builder.add(WorldEditOverlay);
+        }
+        if (instance.isModLoaded(ModReference.XRay)) {
+            builder.add(XRayAutoColor);
+        }
+        if (instance.isModLoaded(ModReference.Wthit)) {
+            builder.add(WthitMasaCompat);
+        }
+        if (instance.isModLoaded(ModReference.REI)) {
+            builder.add(DisableREIWarning);
+        }
+        return builder.build();
+    }
+
     static {
         Values = ImmutableList.of(
                 SortingContainersLast,
@@ -199,26 +230,15 @@ public class DCCommonConfig implements IConfigHandler {
                 ItemSortingOrder,
                 MassCraftingMode,
                 TriggerButtonOffset,
-                ProgressResuming,
                 AutoRepeatBlackListMode,
                 AutoRepeatBlackListReplace,
                 AutoRepeatAntiDDos,
                 AutoRepeatAntiDDosThreshold,
-                WorldEditOverlay,
-                InventoryPreviewSupportComparator,
-                PinYinSearch,
-                CommentSearch,
                 FullDebugInfo,
-                XRayAutoColor,
-                WthitMasaCompat,
                 HeartTypeOverride,
                 HeartTypeValue
         );
-        Fix = ImmutableList.of(
-                FreeCamKeepAutoMoving,
-                FreeCamSpectatorFix,
-                ToolSwitchFix
-        );
+        Compat = buildCompat();
         Lists = ImmutableList.of(
                 TradingTargets,
                 AutoRepeatBlackList,
@@ -251,6 +271,8 @@ public class DCCommonConfig implements IConfigHandler {
                 AlignWithEnderEye,
                 ModifierFreeCamInput,
                 TakeOff,
+                RecordContainerTemplate,
+                OpenSelectionContainers,
                 TEST
         );
         KeyToggle = ImmutableList.of(
@@ -271,6 +293,7 @@ public class DCCommonConfig implements IConfigHandler {
                 WorldEditVisibility,
                 AutoContainerTaker,
                 AutoContainerClassifier,
+                AutoContainerTemplateFiller,
                 AutoExtinguisher,
                 AutoBulletCatching
         );
@@ -290,7 +313,6 @@ public class DCCommonConfig implements IConfigHandler {
                 MuteAnvil,
                 CullPoofParticle,
                 BlockBreakingCooldownOverride,
-                DisableREIWarning,
                 MuteGLDebugInfo
         );
         Highlights = ImmutableList.of(
@@ -306,7 +328,7 @@ public class DCCommonConfig implements IConfigHandler {
         );
         ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();
         builder.addAll(Values);
-        builder.addAll(Fix);
+        builder.addAll(Compat);
         builder.addAll(Lists);
         builder.addAll(KeyToggle);
         builder.addAll(KeyPress);

@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.util;
 
+import com.github.Debris.DebrisClient.inventory.section.IContainer;
 import com.github.Debris.DebrisClient.mixin.client.IMixinClientRecipeBook;
 import com.github.Debris.DebrisClient.mixin.client.IMixinMinecraftClient;
 import com.github.Debris.DebrisClient.mixin.client.gui.IMixinChatHud;
@@ -17,6 +18,7 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.recipebook.ClientRecipeBook;
 import net.minecraft.recipe.NetworkRecipeId;
 import net.minecraft.recipe.RecipeDisplayEntry;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 
 import java.util.List;
@@ -53,5 +55,9 @@ public class AccessorUtil {
 
     public static TextFieldWidget getChatField(ChatScreen screen) {
         return ((IMixinChatScreen) screen).getChatField();
+    }
+
+    public static String getTypeString(ScreenHandler container) {
+        return ((IContainer) container).dc$getTypeString();
     }
 }

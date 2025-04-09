@@ -2,88 +2,52 @@ package com.github.Debris.DebrisClient.util;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
+import com.github.Debris.DebrisClient.feat.BlockInteractor;
 import com.github.Debris.DebrisClient.feat.WorldState;
-import com.github.Debris.DebrisClient.inventory.section.EnumSection;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
-import com.github.Debris.DebrisClient.thread.TakeOffTask;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.UtilCaller;
+import com.github.Debris.DebrisClient.unsafe.litematica.LitematicaAccessor;
 import com.google.common.collect.Lists;
-import net.fabricmc.loader.api.FabricLoader;
+import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.MerchantScreen;
-import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EyeOfEnderEntity;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.entity.projectile.ShulkerBulletEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.MerchantScreenHandler;
+import net.minecraft.screen.ScreenHandlerFactory;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.PlayerInput;
 import net.minecraft.util.TypeFilter;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.village.TradeOfferList;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 public class MiscUtil {
-    public static boolean isAutoMoving() {
-        return DCCommonConfig.AUTO_WALK.getBooleanValue() ||
-                DCCommonConfig.AUTO_LEFT.getBooleanValue() ||
-                DCCommonConfig.AUTO_BACK.getBooleanValue() ||
-                DCCommonConfig.AUTO_RIGHT.getBooleanValue();
-    }
-
-    public static void handleMovement(Input input) {
-        PlayerInput oldInput = input.playerInput;
-        input.playerInput = new PlayerInput(
-                oldInput.forward() || DCCommonConfig.AUTO_WALK.getBooleanValue(),
-                oldInput.backward() || DCCommonConfig.AUTO_BACK.getBooleanValue(),
-                oldInput.left() || DCCommonConfig.AUTO_LEFT.getBooleanValue(),
-                oldInput.right() || DCCommonConfig.AUTO_RIGHT.getBooleanValue(),
-                oldInput.jump(),
-                oldInput.sneak(),
-                oldInput.sprint()
-        );
-        float f = getMovementMultiplier(input.playerInput.forward(), input.playerInput.backward());
-        float g = getMovementMultiplier(input.playerInput.left(), input.playerInput.right());
-        input.movementVector = new Vec2f(g, f).normalize();
-    }
-
-    public static void clearMovement(Input input) {
-        input.playerInput = PlayerInput.DEFAULT;
-        input.movementVector = Vec2f.ZERO;
-    }
-
-    private static float getMovementMultiplier(boolean positive, boolean negative) {
-        if (positive == negative) {
-            return 0.0F;
-        } else {
-            return positive ? 1.0F : -1.0F;
-        }
-    }
-
     public static void onTradeInfoUpdate(MinecraftClient client) {
         if (DCCommonConfig.OrientedAutoTrading.getBooleanValue()) runOrientedTrading(client);
     }
 
     public static void runOrientedTrading(MinecraftClient client) {
-        if (!FabricLoader.getInstance().isModLoaded(ModReference.ItemScroller)) return;
+        if (!Predicates.hasMod(ModReference.ItemScroller)) return;
         Screen currentScreen = client.currentScreen;
         if (currentScreen instanceof MerchantScreen merchantScreen) {
             MerchantScreenHandler merchantContainer = merchantScreen.getScreenHandler();
@@ -156,68 +120,34 @@ public class MiscUtil {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static boolean tryTakeOff(MinecraftClient client) {
-        if (!Predicates.inGameNoGui(client)) return false;
-
-        ClientPlayerEntity player = client.player;
-        if (player.getAbilities().flying) return false;
-
-        if (!wearElytra()) return false;
-
-        Runnable swapTask;
-
-        if (player.getMainHandStack().isOf(Items.FIREWORK_ROCKET)) {
-            swapTask = () -> {
-            };
-        } else {
-            Optional<Slot> optional = findRocketSlot();
-            if (optional.isEmpty()) return false;
-            Slot slot = optional.get();
-            int currentHotBar = InteractionUtil.getCurrentHotBar(client);
-            swapTask = () -> InventoryUtil.swapHotBar(slot, currentHotBar);
-        }
-
-        swapTask.run();// take out rocket
-
-        if (player.isGliding()) {
-            AccessorUtil.use(client);
-            swapTask.run();// restore
-            return true;
-        }
-
-        if (TakeOffTask.Running) return false;
-        TakeOffTask.Running = true;
-
-        player.jump();
-
-        TakeOffTask takeOffTask = new TakeOffTask(client, player, swapTask);
-        CompletableFuture.runAsync(takeOffTask).thenRun(() -> TakeOffTask.Running = false);
-
-        return true;
-    }
-
-    private static boolean wearElytra() {
-        Item elytra = Items.ELYTRA;
-        Slot chestSlot = EnumSection.Armor.get().getSlot(1);
-        if (chestSlot.getStack().isOf(elytra)) return true;
-        Optional<Slot> optional = EnumSection.OffHand.get().mergeWith(EnumSection.InventoryWhole.get()).findItem(elytra);
-        if (optional.isPresent()) {
-            InventoryUtil.swapSlots(chestSlot, optional.get());
-            return true;
-        }
-        return false;
-    }
-
-    private static Optional<Slot> findRocketSlot() {
-        Item rocket = Items.FIREWORK_ROCKET;
-        return InventoryUtil.getSlots().stream().filter(x -> x.getStack().isOf(rocket)).findFirst();
-    }
-
-    @SuppressWarnings("ConstantConditions")
     public static void runAutoBulletCatcher(MinecraftClient client) {
         if (Predicates.notInGame(client)) return;
         Box box = client.player.getBoundingBox().expand(3.0D);
         client.world.getEntitiesByClass(ShulkerBulletEntity.class, box, EntityPredicates.VALID_ENTITY).forEach(x -> InteractionUtil.attackEntity(client, x));
         client.world.getEntitiesByClass(FireballEntity.class, box, EntityPredicates.VALID_ENTITY).forEach(x -> InteractionUtil.attackEntity(client, x));
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    public static boolean tryOpenSelectionContainers(MinecraftClient client) {
+        if (!Predicates.hasMod(ModReference.Litematica)) return false;
+        if (Predicates.notInGame(client)) return false;
+        if (BlockInteractor.running()) {
+            BlockInteractor.stop();
+            InfoUtils.printActionbarMessage("打开选区内容器: 已停止");
+            return true;
+        }
+        ClientWorld world = client.world;
+        Collection<BlockPos> targets = new HashSet<>();
+        LitematicaAccessor.selectionRun(pos -> {
+            BlockEntity blockEntity = world.getChunk(pos).getBlockEntity(pos);
+            if (blockEntity == null) return;
+            if (blockEntity instanceof ScreenHandlerFactory) targets.add(pos.toImmutable());// otherwise the same object
+        });
+        if (targets.isEmpty()) {
+            InfoUtils.printActionbarMessage("打开选区内容器: 未找到容器");
+            return true;
+        }
+        BlockInteractor.addAll(targets);
+        return true;
     }
 }

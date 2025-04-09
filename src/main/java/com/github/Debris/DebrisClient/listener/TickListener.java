@@ -2,13 +2,15 @@ package com.github.Debris.DebrisClient.listener;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
-import com.github.Debris.DebrisClient.feat.LoyalTrident;
 import com.github.Debris.DebrisClient.feat.AutoRepeat;
+import com.github.Debris.DebrisClient.feat.BlockInteractor;
+import com.github.Debris.DebrisClient.feat.LoyalTrident;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.MassCraftingApi;
-import com.github.Debris.DebrisClient.util.*;
+import com.github.Debris.DebrisClient.util.BotUtil;
+import com.github.Debris.DebrisClient.util.MiscUtil;
+import com.github.Debris.DebrisClient.util.Predicates;
 import fi.dy.masa.malilib.interfaces.IClientTickHandler;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 
@@ -22,7 +24,7 @@ public class TickListener implements IClientTickHandler {
         }
 
         if (DCCommonConfig.MyMassCrafting.getKeybind().isKeybindHeld() || DCCommonConfig.StartMassCrafting.getBooleanValue()) {
-            if (FabricLoader.getInstance().isModLoaded(ModReference.ItemScroller)) {
+            if (Predicates.hasMod(ModReference.ItemScroller)) {
                 if (MassCraftingApi.isCraftingGui()) {
                     MassCraftingApi.tryMassCrafting();
                 }
@@ -45,9 +47,11 @@ public class TickListener implements IClientTickHandler {
             MiscUtil.runAutoExtinguisher(client);
         }
 
-        if (DCCommonConfig.AutoBulletCatching.getBooleanValue()){
+        if (DCCommonConfig.AutoBulletCatching.getBooleanValue()) {
             MiscUtil.runAutoBulletCatcher(client);
         }
+
+        BlockInteractor.onClientTick(client);
     }
 
 

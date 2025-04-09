@@ -4,9 +4,9 @@ import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.unsafe.magicLib.MagicLibTextRenderer;
 import com.github.Debris.DebrisClient.unsafe.miniHud.MiniHudConfigAccessor;
+import com.github.Debris.DebrisClient.util.Predicates;
 import com.github.Debris.DebrisClient.util.RayTraceUtil;
 import fi.dy.masa.malilib.util.WorldUtils;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.ComparatorBlockEntity;
 import net.minecraft.client.MinecraftClient;
@@ -43,9 +43,9 @@ public class ComparatorRenderer {
 
     private static boolean shouldSkip() {
         if (!DCCommonConfig.InventoryPreviewSupportComparator.getBooleanValue()) return true;
-        if (!FabricLoader.getInstance().isModLoaded(ModReference.MiniHud)) return true;
+        if (!Predicates.hasMod(ModReference.MiniHud)) return true;
         if (!MiniHudConfigAccessor.isPreviewingInventory()) return true;
-        if (!FabricLoader.getInstance().isModLoaded(ModReference.MagicLibMCApi)) return true;
+        if (!Predicates.hasMod(ModReference.MagicLibMCApi)) return true;
         return false;
     }
 }
