@@ -9,7 +9,9 @@
     "compat.malilib.WidgetConfigOptionMixin",
     "compat.tweakeroo.InventoryUtilsMixin",
     "compat.wthit.TooltipHandlerMixin",
+    "component.ItemEnchantmentsComponentMixin",
     "entity.PlayerEntityMixin",
+    "item.ItemStackMixin",
     "item.TridentItemMixin",
     "world.PortalForcerMixin",
     "world.WorldMixin"

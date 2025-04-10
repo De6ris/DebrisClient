@@ -45,6 +45,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean FullDebugInfo = ofBoolean("完整调试权限", false);
     public static final ConfigBoolean HeartTypeOverride = ofBoolean("生命值样式覆写", false);
     public static final ConfigEnum<HeartType> HeartTypeValue = ofEnum("生命值样式", HeartType.NORMAL);
+    public static final ConfigBoolean ExtraTooltip = ofBoolean("额外物品提示", false);
 
 
     // key settings
@@ -236,7 +237,8 @@ public class DCCommonConfig implements IConfigHandler {
                 AutoRepeatAntiDDosThreshold,
                 FullDebugInfo,
                 HeartTypeOverride,
-                HeartTypeValue
+                HeartTypeValue,
+                ExtraTooltip
         );
         Compat = buildCompat();
         Lists = ImmutableList.of(
