@@ -38,10 +38,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigEnum<SortCategory> ItemSortingOrder = ofEnum("物品整理顺序", SortCategory.CREATIVE_INVENTORY, "1.翻译键顺序\n2.按创造模式物品栏顺序\n3.按翻译后名称顺序\n4.按拼音顺序(需要Rei)");
     public static final ConfigEnum<MassCraftingImpl> MassCraftingMode = ofEnum("喷射合成实现", MassCraftingImpl.RECIPE_BOOK, "配方书依赖服务器,较慢但不出错\n手动依赖客户端,可能与服务器不同步导致合成错误");
     public static final ConfigInteger TriggerButtonOffset = ofInteger("触发按钮的坐标偏移", 42, -100, 100, true, "自动对齐可能有问题");
-    public static final ConfigEnum<AutoRepeat.BlackListMode> AutoRepeatBlackListMode = ofEnum("自动复读字符串黑名单模式", AutoRepeat.BlackListMode.CANCEL);
-    public static final ConfigString AutoRepeatBlackListReplace = ofString("自动复读字符串替换", "");
-    public static final ConfigBoolean AutoRepeatAntiDDos = ofBoolean("自动复读防刷屏", false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
-    public static final ConfigInteger AutoRepeatAntiDDosThreshold = ofInteger("自动复读刷屏阈值", 4, 1, 16);
+    public static final ConfigInteger AutoRepeatAntiDDos = ofInteger("自动复读防刷屏", Integer.MAX_VALUE, 1, Integer.MAX_VALUE, false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
     public static final ConfigBoolean FullDebugInfo = ofBoolean("完整调试权限", false);
     public static final ConfigEnum<HeartType> HeartTypeOverride = ofEnum("生命值样式覆写", HeartType.NONE);
     public static final ConfigBoolean ExtraTooltip = ofBoolean("额外物品提示", false);
@@ -70,7 +67,7 @@ public class DCCommonConfig implements IConfigHandler {
 
     // list
     public static final ConfigStringList TradingTargets = ofStringList("定向交易目标", ImmutableList.of("lapis_lazuli"), "需打开定向自动交易功能");
-    public static final ConfigStringList AutoRepeatBlackList = ofStringList("自动复读字符串黑名单", ImmutableList.of(), "关于自动复读:\n首先你需要安装有clientcommands或者clientarguments模组\n在指令中输入dc即可自动补全");
+    public static final ConfigStringList AutoRepeatBlackList = ofStringList("自动复读字符串黑名单", ImmutableList.of(), "可用样式如下:\n直接取消复读,如\"debris\"\n箭头->表示替换,如\"debris->spirit\"");
     public static final ConfigStringList AutoThrowWhiteList = ofStringList("自动丢弃白名单", ImmutableList.of());
     public static final ConfigStringList CullEntityList = ofStringList("剔除实体渲染列表", ImmutableList.of(), "见EntityTypes\n可用cull指令添加");
     public static final ConfigStringList MuteSoundList = ofStringList("静音音效列表", ImmutableList.of(), "见SoundEvents\n可用cull指令添加");
@@ -230,10 +227,7 @@ public class DCCommonConfig implements IConfigHandler {
                 ItemSortingOrder,
                 MassCraftingMode,
                 TriggerButtonOffset,
-                AutoRepeatBlackListMode,
-                AutoRepeatBlackListReplace,
                 AutoRepeatAntiDDos,
-                AutoRepeatAntiDDosThreshold,
                 FullDebugInfo,
                 HeartTypeOverride,
                 ExtraTooltip

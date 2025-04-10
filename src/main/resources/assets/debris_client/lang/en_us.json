@@ -1,6 +1,4 @@
 {
-  "config.enum.black_list_mode.cancel.name": "Cancel",
-  "config.enum.black_list_mode.replace.name": "Replace",
   "config.enum.heart_type.absorbing.name": "Absorbing",
   "config.enum.heart_type.container.name": "Container",
   "config.enum.heart_type.frozen.name": "Frozen",

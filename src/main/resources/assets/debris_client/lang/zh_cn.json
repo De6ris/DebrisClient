@@ -1,6 +1,4 @@
 {
-  "config.enum.black_list_mode.cancel.name": "取消发送",
-  "config.enum.black_list_mode.replace.name": "替换",
   "config.enum.heart_type.absorbing.name": "吸收",
   "config.enum.heart_type.container.name": "描边",
   "config.enum.heart_type.frozen.name": "霜冻",
