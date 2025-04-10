@@ -5,6 +5,7 @@
   "config.enum.heart_type.container.name": "Container",
   "config.enum.heart_type.frozen.name": "Frozen",
   "config.enum.heart_type.normal.name": "Normal",
+  "config.enum.heart_type.none.name": "None",
   "config.enum.heart_type.poisoned.name": "Poisoned",
   "config.enum.heart_type.withered.name": "Withered",
   "config.enum.mass_crafting_impl.manual.name": "Manual",

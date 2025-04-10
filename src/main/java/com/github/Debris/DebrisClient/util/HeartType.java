@@ -5,13 +5,18 @@ import net.minecraft.client.gui.hud.InGameHud;
 /**
  * A wrapper for vanilla class. Since my config enum uses the class name for translations,
  * vanilla class names will be mapped to bad names, so this is to keep the names.
+ * <br>
+ * The NONE is an extra option to say no override.
+ * <br>
+ * Reordered to present the NORMAL first, and other improvements.
  */
 public enum HeartType {
-    CONTAINER(InGameHud.HeartType.CONTAINER),
+    NONE(null),
     NORMAL(InGameHud.HeartType.NORMAL),
+    ABSORBING(InGameHud.HeartType.ABSORBING),
+    CONTAINER(InGameHud.HeartType.CONTAINER),
     POISONED(InGameHud.HeartType.POISONED),
     WITHERED(InGameHud.HeartType.WITHERED),
-    ABSORBING(InGameHud.HeartType.ABSORBING),
     FROZEN(InGameHud.HeartType.FROZEN),
     ;
 
@@ -22,6 +27,7 @@ public enum HeartType {
     }
 
     public InGameHud.HeartType getVanilla() {
+        if (this == NONE) throw new IllegalArgumentException();
         return this.type;
     }
 }

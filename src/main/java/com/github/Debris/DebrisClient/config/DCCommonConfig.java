@@ -43,8 +43,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean AutoRepeatAntiDDos = ofBoolean("自动复读防刷屏", false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
     public static final ConfigInteger AutoRepeatAntiDDosThreshold = ofInteger("自动复读刷屏阈值", 4, 1, 16);
     public static final ConfigBoolean FullDebugInfo = ofBoolean("完整调试权限", false);
-    public static final ConfigBoolean HeartTypeOverride = ofBoolean("生命值样式覆写", false);
-    public static final ConfigEnum<HeartType> HeartTypeValue = ofEnum("生命值样式", HeartType.NORMAL);
+    public static final ConfigEnum<HeartType> HeartTypeOverride = ofEnum("生命值样式覆写", HeartType.NONE);
     public static final ConfigBoolean ExtraTooltip = ofBoolean("额外物品提示", false);
 
 
@@ -237,7 +236,6 @@ public class DCCommonConfig implements IConfigHandler {
                 AutoRepeatAntiDDosThreshold,
                 FullDebugInfo,
                 HeartTypeOverride,
-                HeartTypeValue,
                 ExtraTooltip
         );
         Compat = buildCompat();
