@@ -3,7 +3,6 @@ package com.github.Debris.DebrisClient.inventory.stoneCutter;
 import com.github.Debris.DebrisClient.inventory.section.EnumSection;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.DynamicRegistryManager;
 
 public class StoneCutterRecipePattern {

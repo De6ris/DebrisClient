@@ -3,7 +3,6 @@ package com.github.Debris.DebrisClient.config;
 import com.github.Debris.DebrisClient.DebrisClient;
 import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.options.ConfigEnum;
-import com.github.Debris.DebrisClient.feat.AutoRepeat;
 import com.github.Debris.DebrisClient.inventory.sort.SortCategory;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.MassCraftingImpl;
 import com.github.Debris.DebrisClient.util.HeartType;
@@ -41,7 +40,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigInteger AutoRepeatAntiDDos = ofInteger("自动复读防刷屏", Integer.MAX_VALUE, 1, Integer.MAX_VALUE, false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
     public static final ConfigBoolean FullDebugInfo = ofBoolean("完整调试权限", false);
     public static final ConfigEnum<HeartType> HeartTypeOverride = ofEnum("生命值样式覆写", HeartType.NONE);
-    public static final ConfigBoolean ExtraTooltip = ofBoolean("额外物品提示", false);
+    public static final ConfigBoolean ExtraTooltip = ofBoolean("额外物品提示", false, "对于非满级附魔,标注其最高等级\n铁砧惩罚,在铁砧操作时所需等级\n附魔价值,将其全部魔咒转移时所需等级");
 
 
     // key settings

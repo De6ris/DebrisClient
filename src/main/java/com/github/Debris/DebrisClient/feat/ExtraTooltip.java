@@ -28,7 +28,7 @@ public class ExtraTooltip {
     private static void appendRepairCost(ItemStack stack, Item.TooltipContext context, Consumer<Text> list) {
         Integer cost = stack.getOrDefault(DataComponentTypes.REPAIR_COST, 0);
         if (cost > 0) {
-            list.accept(Text.literal(String.format("修复成本: %d", cost)).formatted(Formatting.GRAY));
+            list.accept(Text.literal(String.format("铁砧惩罚: %d", cost)).formatted(Formatting.GRAY));
         }
     }
 
@@ -47,7 +47,7 @@ public class ExtraTooltip {
                         if (bl) s = Math.max(1, s / 2);
                         return s * r;
                     }).sum();
-            list.accept(Text.literal("附魔成本: " + cost).formatted(Formatting.GRAY));
+            list.accept(Text.literal("附魔价值: " + cost).formatted(Formatting.GRAY));
         }
     }
 }
