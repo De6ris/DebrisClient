@@ -7,16 +7,10 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import dev.xpple.clientarguments.arguments.CResourceKeyArgument;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.command.CommandSource;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
-
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
@@ -31,7 +25,7 @@ public class DCHeadCommand {
                 .then(literal("help").
                         executes(ctx -> help(ctx.getSource())))
                 .then(argument("name", StringArgumentType.word())
-                        .suggests((ctx, builder) -> CommandSource.suggestMatching(getPlayerSuggestions(ctx.getSource()), builder))
+                        .suggests(CommandFactory.PLAYER_SUGGESTION)
                         .then(argument("sound_type", CResourceKeyArgument.key(RegistryKeys.SOUND_EVENT))
                                 .executes(ctx ->
                                         giveHead(ctx.getSource(), ctx.getArgument("name", String.class),
@@ -41,12 +35,6 @@ public class DCHeadCommand {
     private static int help(FabricClientCommandSource source) {
         source.sendFeedback(Text.literal("用以创建使音符盒拥有特殊音效的玩家头颅"));
         return Command.SINGLE_SUCCESS;
-    }
-
-    private static Collection<String> getPlayerSuggestions(FabricClientCommandSource source) {
-        Set<String> players = new LinkedHashSet<>(List.of("Steve", "Alex"));
-        players.addAll(source.getPlayerNames());
-        return players;
     }
 
     private static int giveHead(FabricClientCommandSource source, String name, RegistryEntry.Reference<SoundEvent> sound) {

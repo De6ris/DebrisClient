@@ -1,6 +1,5 @@
 package com.github.Debris.DebrisClient.feat;
 
-import com.github.Debris.DebrisClient.command.DCAutoRepeatCommand;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.util.ChatUtil;
 import net.minecraft.client.MinecraftClient;
@@ -13,6 +12,9 @@ public class AutoRepeat {
     private static final Map<String, List<Long>> TIME_STAMP_MAP = new ConcurrentHashMap<>();
 
     public static void handleAutoRepeat(MinecraftClient client, Text message) {
+        List<String> strings = DCCommonConfig.AutoRepeatList.getStrings();
+        if (strings.isEmpty()) return;
+
         String originalString = message.getString();
         List<BlackListPattern> patterns = DCCommonConfig.AutoRepeatBlackList.getStrings().stream().map(BlackListPattern::compile).toList();
         for (BlackListPattern pattern : patterns) {
@@ -29,7 +31,7 @@ public class AutoRepeat {
 
         final String finalString = originalString;
 
-        DCAutoRepeatCommand.streamTrackedPlayers()
+        strings.stream()
                 .map(ChatUtil::angleName)
                 .flatMap(x -> ChatUtil.filterMessageContent(x, finalString).stream())
                 .max(Comparator.comparing(String::length))

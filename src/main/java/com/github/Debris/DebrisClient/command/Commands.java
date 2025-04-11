@@ -10,15 +10,13 @@ public class Commands {
     public static final String PREFIX = "dc";
 
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess context) {
-        DCAutoRepeatCommand.register(dispatcher);
         DCWhereIsItCommand.register(dispatcher, context);
         DCCountEntityCommand.register(dispatcher);
         DCDataGetCommand.register(dispatcher);
         DCDebugCommand.register(dispatcher);
         DCSpectateCommand.register(dispatcher);
-        DCCullCommand.register(dispatcher);
         DCHeadCommand.register(dispatcher);
-        DCHighlightCommand.register(dispatcher);
+        DCListCommand.register(dispatcher);
 
         if (Predicates.hasMod(ModReference.ClientCommands)) {
             DCFindInFrameCommand.register(dispatcher, context);

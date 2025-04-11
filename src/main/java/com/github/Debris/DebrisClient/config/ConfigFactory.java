@@ -35,6 +35,10 @@ public class ConfigFactory {
         return new ConfigString(name, defaultValue);
     }
 
+    public static ConfigStringList ofStringList(String name) {
+        return ofStringList(name, ImmutableList.of());
+    }
+
     public static ConfigStringList ofStringList(String name, ImmutableList<String> defaultValue) {
         return new ConfigStringList(name, defaultValue);
     }

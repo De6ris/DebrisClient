@@ -67,12 +67,13 @@ public class DCCommonConfig implements IConfigHandler {
     // list
     public static final ConfigStringList TradingTargets = ofStringList("定向交易目标", ImmutableList.of("lapis_lazuli"), "需打开定向自动交易功能");
     public static final ConfigStringList AutoRepeatBlackList = ofStringList("自动复读字符串黑名单", ImmutableList.of(), "可用样式如下:\n直接取消复读,如\"debris\"\n箭头->表示替换,如\"debris->spirit\"");
-    public static final ConfigStringList AutoThrowWhiteList = ofStringList("自动丢弃白名单", ImmutableList.of());
-    public static final ConfigStringList CullEntityList = ofStringList("剔除实体渲染列表", ImmutableList.of(), "见EntityTypes\n可用cull指令添加");
-    public static final ConfigStringList MuteSoundList = ofStringList("静音音效列表", ImmutableList.of(), "见SoundEvents\n可用cull指令添加");
-    public static final ConfigStringList CullParticleList = ofStringList("剔除粒子列表", ImmutableList.of(), "见ParticleTypes\n可用cull指令添加");
-    public static final ConfigStringList CullBlockEntityList = ofStringList("剔除方块实体列表", ImmutableList.of(), "见BlockEntityTypes\n可用cull指令添加");
-    public static final ConfigStringList HighlightEntityList = ofStringList("高亮实体列表", ImmutableList.of(), "见EntityTypes\n可用highlight指令添加");
+    public static final ConfigStringList AutoThrowWhiteList = ofStringList("自动丢弃白名单");
+    public static final ConfigStringList CullEntityList = ofStringList("剔除实体渲染列表");
+    public static final ConfigStringList MuteSoundList = ofStringList("静音音效列表");
+    public static final ConfigStringList CullParticleList = ofStringList("剔除粒子列表");
+    public static final ConfigStringList CullBlockEntityList = ofStringList("剔除方块实体列表");
+    public static final ConfigStringList HighlightEntityList = ofStringList("高亮实体列表");
+    public static final ConfigStringList AutoRepeatList = ofStringList("自动复读列表");
 
 
     // key
@@ -240,7 +241,8 @@ public class DCCommonConfig implements IConfigHandler {
                 MuteSoundList,
                 CullParticleList,
                 CullBlockEntityList,
-                HighlightEntityList
+                HighlightEntityList,
+                AutoRepeatList
         );
         KeyPress = ImmutableList.of(
                 OpenWindow,

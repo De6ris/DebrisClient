@@ -23,6 +23,7 @@ import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.entity.projectile.ShulkerBulletEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.MerchantScreenHandler;
@@ -52,10 +53,11 @@ public class MiscUtil {
         if (currentScreen instanceof MerchantScreen merchantScreen) {
             MerchantScreenHandler merchantContainer = merchantScreen.getScreenHandler();
             TradeOfferList recipes = merchantContainer.getRecipes();
-            List<String> targets = DCCommonConfig.TradingTargets.getStrings();
+            List<Item> list = parseItemList(DCCommonConfig.TradingTargets.getStrings());
+            if (list.isEmpty()) return;
             for (int i = 0; i < recipes.size(); i++) {
                 ItemStack sellItem = recipes.get(i).getSellItem();
-                if (isItemInList(sellItem, targets)) {
+                if (isItemInList(sellItem, list)) {
                     UtilCaller.tryHardTrading(i);
                 }
             }
@@ -64,18 +66,22 @@ public class MiscUtil {
     }
 
     public static void runAutoThrow() {
-        List<String> identifiers = DCCommonConfig.AutoThrowWhiteList.getStrings();
+        List<Item> list = parseItemList(DCCommonConfig.AutoThrowWhiteList.getStrings());
+        if (list.isEmpty()) return;
         for (Slot slot : InventoryUtil.getInventoryContainer().slots) {
-            if (isItemInList(slot.getStack(), identifiers)) {
+            if (isItemInList(slot.getStack(), list)) {
                 InventoryUtil.dropStack(slot);
             }
         }
     }
 
-    private static boolean isItemInList(ItemStack itemStack, List<String> identifiers) {
-        for (String string : identifiers) {
-            Identifier identifier = Identifier.of(string);
-            Item item = Registries.ITEM.get(identifier);
+    private static List<Item> parseItemList(List<String> list) {
+        return list.stream().map(Identifier::of).map(Registries.ITEM::get).filter(x -> x != Items.AIR).toList();
+    }
+
+    private static boolean isItemInList(ItemStack itemStack, List<Item> items) {
+        if (itemStack.isEmpty()) return false;
+        for (Item item : items) {
             if (itemStack.isOf(item)) {
                 return true;
             }
@@ -138,10 +144,11 @@ public class MiscUtil {
         }
         ClientWorld world = client.world;
         Collection<BlockPos> targets = new HashSet<>();
-        LitematicaAccessor.selectionRun(pos -> {
+        LitematicaAccessor.stream().forEach(pos -> {
             BlockEntity blockEntity = world.getChunk(pos).getBlockEntity(pos);
-            if (blockEntity == null) return;
-            if (blockEntity instanceof ScreenHandlerFactory) targets.add(pos.toImmutable());// otherwise the same object
+            if (blockEntity instanceof ScreenHandlerFactory) {
+                targets.add(pos.toImmutable());// otherwise the same object
+            }
         });
         if (targets.isEmpty()) {
             InfoUtils.printActionbarMessage("打开选区内容器: 未找到容器");
