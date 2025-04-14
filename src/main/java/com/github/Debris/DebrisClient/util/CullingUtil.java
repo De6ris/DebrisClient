@@ -33,19 +33,20 @@ public class CullingUtil {
 
     public static boolean shouldMuteSound(SoundInstance soundInstance) {
         Identifier id = soundInstance.getId();
-        if (SoundEvents.ENTITY_GENERIC_EXPLODE.matchesId(id) && DCCommonConfig.MuteExplosion.getBooleanValue())
+        if (DCCommonConfig.MuteExplosion.getBooleanValue() && SoundEvents.ENTITY_GENERIC_EXPLODE.matchesId(id))
             return true;
-        if (SoundEvents.BLOCK_DISPENSER_FAIL.id().equals(id) && DCCommonConfig.MuteDispenser.getBooleanValue())
+        if (DCCommonConfig.MuteDispenser.getBooleanValue() && SoundEvents.BLOCK_DISPENSER_FAIL.id().equals(id))
             return true;
 
         String path = id.getPath();
 
-        if (path.startsWith("entity.wither") && DCCommonConfig.MuteWither.getBooleanValue()) return true;
-        if (path.startsWith("entity.enderman") && DCCommonConfig.MuteEnderman.getBooleanValue()) return true;
-        if (path.startsWith("entity.minecart") && DCCommonConfig.MuteMinecart.getBooleanValue()) return true;
-        if (path.startsWith("entity.lightning_bolt") && DCCommonConfig.MuteThunder.getBooleanValue()) return true;
-        if (path.startsWith("entity.guardian") && DCCommonConfig.MuteGuardian.getBooleanValue()) return true;
-        if (path.startsWith("block.anvil") && DCCommonConfig.MuteAnvil.getBooleanValue()) return true;
+        if (DCCommonConfig.MuteWither.getBooleanValue() && path.startsWith("entity.wither")) return true;
+        if (DCCommonConfig.MuteEnderman.getBooleanValue() && path.startsWith("entity.enderman")) return true;
+        if (DCCommonConfig.MuteMinecart.getBooleanValue() && path.startsWith("entity.minecart")) return true;
+        if (DCCommonConfig.MuteThunder.getBooleanValue() && path.startsWith("entity.lightning_bolt")) return true;
+        if (DCCommonConfig.MuteGuardian.getBooleanValue() && path.startsWith("entity.guardian")) return true;
+        if (DCCommonConfig.MuteAnvil.getBooleanValue() && path.startsWith("block.anvil")) return true;
+        if (DCCommonConfig.MuteDoor.getBooleanValue() && path.contains("block.") && path.contains("door")) return true;
 
         return DCCommonConfig.MuteSoundList.getStrings().contains(id.toString());
     }

@@ -141,6 +141,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed MuteThunder = ofBooleanHotkeyed("雷声静音", false, "");
     public static final ConfigBooleanHotkeyed MuteGuardian = ofBooleanHotkeyed("守卫者静音", false, "");
     public static final ConfigBooleanHotkeyed MuteAnvil = ofBooleanHotkeyed("铁砧静音", false, "");
+    public static final ConfigBooleanHotkeyed MuteDoor = ofBooleanHotkeyed("门静音", false, "", "包括任何门");
     public static final ConfigBooleanHotkeyed CullPoofParticle = ofBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
     public static final ConfigBooleanHotkeyed BlockBreakingCooldownOverride = ofBooleanHotkeyed("禁用方块挖掘冷却", false, "", "不影响创造模式");
     public static final ConfigBooleanHotkeyed MuteGLDebugInfo = ofBooleanHotkeyed("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
@@ -154,6 +155,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed HighlightEnderman = ofBooleanHotkeyed("高亮末影人", false, "");
     public static final ConfigBooleanHotkeyed HighlightItem = ofBooleanHotkeyed("高亮物品", false, "");
     public static final ConfigBooleanHotkeyed HighlightPiglinBrute = ofBooleanHotkeyed("高亮猪灵蛮兵", false, "");
+    public static final ConfigBooleanHotkeyed HighlightPlayer = ofBooleanHotkeyed("高亮玩家", false, "");
     public static final ConfigBooleanHotkeyed HighlightWanderingTrader = ofBooleanHotkeyed("高亮流浪商人", false, "");
     public static final ConfigBooleanHotkeyed HighlightWitherSkeleton = ofBooleanHotkeyed("高亮凋零骷髅", false, "");
 
@@ -304,6 +306,7 @@ public class DCCommonConfig implements IConfigHandler {
                 MuteThunder,
                 MuteGuardian,
                 MuteAnvil,
+                MuteDoor,
                 CullPoofParticle,
                 BlockBreakingCooldownOverride,
                 MuteGLDebugInfo
@@ -316,6 +319,7 @@ public class DCCommonConfig implements IConfigHandler {
                 HighlightEnderman,
                 HighlightItem,
                 HighlightPiglinBrute,
+                HighlightPlayer,
                 HighlightWanderingTrader,
                 HighlightWitherSkeleton
         );
