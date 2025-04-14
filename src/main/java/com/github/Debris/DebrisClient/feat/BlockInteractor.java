@@ -21,6 +21,10 @@ public class BlockInteractor {
         TARGETS.clear();
     }
 
+    public static void add(BlockPos pos) {
+        TARGETS.add(pos);
+    }
+
     public static void addAll(Collection<BlockPos> list) {
         TARGETS.addAll(list);
     }

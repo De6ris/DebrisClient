@@ -11,7 +11,6 @@ import com.google.common.collect.Lists;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.MerchantScreen;
@@ -27,7 +26,6 @@ import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.MerchantScreenHandler;
-import net.minecraft.screen.ScreenHandlerFactory;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -145,10 +143,7 @@ public class MiscUtil {
         ClientWorld world = client.world;
         Collection<BlockPos> targets = new HashSet<>();
         LitematicaAccessor.stream().forEach(pos -> {
-            BlockEntity blockEntity = world.getChunk(pos).getBlockEntity(pos);
-            if (blockEntity instanceof ScreenHandlerFactory) {
-                targets.add(pos.toImmutable());// otherwise the same object
-            }
+            if (Predicates.isContainerBlock(world, pos)) targets.add(pos.toImmutable());// otherwise the same object
         });
         if (targets.isEmpty()) {
             InfoUtils.printActionbarMessage("打开选区内容器: 未找到容器");

@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.inventory.autoProcess;
 
+import com.github.Debris.DebrisClient.feat.ContainerTemplate;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.util.Predicates;
 import com.google.common.collect.ImmutableList;
@@ -14,7 +15,8 @@ public class AutoProcessManager {
             new ContainerTaker(),
             new ItemFinder(),
             new ContainerClassifier(),
-            new ContainerTemplateFiller()
+            new ContainerTemplate.Recorder(),
+            new ContainerTemplate.Filler()
     );
 
     public static void onGuiContainerOpen(HandledScreen<?> screen) {

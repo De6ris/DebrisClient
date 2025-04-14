@@ -31,16 +31,16 @@ public class SectionHandler {
     private void identifyContainer(@Nullable HandledScreen<?> guiContainer, ScreenHandler container) {
         List<Slot> slots = InventoryUtil.getSlots(container);
         Map<Inventory, List<Slot>> groupedByInventory = slots.stream().collect(Collectors.groupingBy(x -> x.inventory));
-
+        SectionIdentifier identifier = new SectionIdentifier(this);
         for (Map.Entry<Inventory, List<Slot>> inventoryListEntry : groupedByInventory.entrySet()) {
             Inventory iInventory = inventoryListEntry.getKey();
             List<Slot> partSlots = inventoryListEntry.getValue();
-            new SectionIdentifier(this, iInventory).identify(guiContainer, container, partSlots);
+            identifier.identify(guiContainer, container, iInventory, partSlots);
         }
     }
 
     void handleUnidentified(ContainerSection section) {
-        this.sectionMap.putIfAbsent(EnumSection.Other, section);
+        this.sectionMap.putIfAbsent(EnumSection.Unidentified, section);
         this.unIdentifiedSections.add(section);
     }
 
@@ -75,7 +75,7 @@ public class SectionHandler {
         ContainerSection ret = getSectionHandler().sectionMap.get(section);
         if (ret == null) {
             LOGGER.warn("no section instance for {}", section);
-            return new ContainerSection(InventoryUtil.getPlayerInventory(), List.of());
+            return ContainerSection.EMPTY;
         }
         return ret;
     }

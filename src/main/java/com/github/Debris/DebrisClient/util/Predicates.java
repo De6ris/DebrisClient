@@ -2,10 +2,14 @@ package com.github.Debris.DebrisClient.util;
 
 import fi.dy.masa.malilib.util.GuiUtils;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.screen.ScreenHandlerFactory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class Predicates {
     public static boolean notInGame(MinecraftClient client) {
@@ -33,5 +37,10 @@ public class Predicates {
 
     public static boolean hasMod(String modid) {
         return FabricLoader.getInstance().isModLoaded(modid);
+    }
+
+    public static boolean isContainerBlock(World world, BlockPos pos) {
+        BlockEntity blockEntity = world.getChunk(pos).getBlockEntity(pos);
+        return blockEntity instanceof ScreenHandlerFactory;
     }
 }

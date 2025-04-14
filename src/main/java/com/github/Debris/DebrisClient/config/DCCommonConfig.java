@@ -98,7 +98,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey AlignWithEnderEye = ofHotkey("对齐末影之眼", "");
     public static final ConfigHotkey ModifierFreeCamInput = ofHotkey("灵魂出窍输入:修饰键", "", "按住时输入将对实际画面生效\n仍需开启tweakeroo中的灵魂出窍用户输入");
     public static final ConfigHotkey TakeOff = ofHotkey("起飞", "", "使用鞘翅和烟花火箭起飞");
-    public static final ConfigHotkey RecordContainerTemplate = ofHotkey("记录容器样板", "", KeybindSettings.GUI, "用于自动样板填充容器");
+    public static final ConfigHotkey RecordContainerTemplate = ofHotkey("记录容器样板", "", ANY, "记录成功时, 启动自动样板填充模式\n再次按下将重置");
     public static final ConfigHotkey OpenSelectionContainers = ofHotkey("打开选区内容器", "", ANY, "记录列表, 之后逐个打开");
 
 
@@ -123,7 +123,6 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed WorldEditVisibility = ofBooleanHotkeyed("WorldEdit可视化", false, "", "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
     public static final ConfigBooleanHotkeyed AutoContainerTaker = ofBooleanHotkeyed("自动从容器取出", false, "", "若完全取出, 自动关闭GUI");
     public static final ConfigBooleanHotkeyed AutoContainerClassifier = ofBooleanHotkeyed("自动向容器归类", false, "", "例如: 若容器中有圆石, 则将物品栏的圆石移入");
-    public static final ConfigBooleanHotkeyed AutoContainerTemplateFiller = ofBooleanHotkeyed("自动样板填充容器", false, "", "");
     public static final ConfigBooleanHotkeyed AutoExtinguisher = ofBooleanHotkeyed("自动灭火", false, "", "不影响灵魂火");
     public static final ConfigBooleanHotkeyed AutoBulletCatching = ofBooleanHotkeyed("自动接子弹", false, "", "潜影贝, 恶魂");
 
@@ -288,7 +287,6 @@ public class DCCommonConfig implements IConfigHandler {
                 WorldEditVisibility,
                 AutoContainerTaker,
                 AutoContainerClassifier,
-                AutoContainerTemplateFiller,
                 AutoExtinguisher,
                 AutoBulletCatching
         );

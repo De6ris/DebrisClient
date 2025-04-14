@@ -1,10 +1,8 @@
 package com.github.Debris.DebrisClient.inventory.section;
 
-
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.inventory.util.ItemUtil;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
@@ -15,7 +13,9 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public record ContainerSection(Inventory inventory, List<Slot> slots) {
+public record ContainerSection(List<Slot> slots) {
+    public static final ContainerSection EMPTY = new ContainerSection(List.of());
+
     public boolean hasSlot(Slot slot) {
         return this.slots.contains(slot);
     }
@@ -192,13 +192,10 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
     }
 
     public ContainerSection mergeWith(ContainerSection other) {
-        if (this.inventory != other.inventory) {
-            throw new IllegalArgumentException();
-        }
         ImmutableList.Builder<Slot> builder = ImmutableList.builder();
         builder.addAll(this.slots);
         builder.addAll(other.slots);
-        return new ContainerSection(this.inventory, builder.build());
+        return new ContainerSection(builder.build());
     }
 
     public boolean isOf(EnumSection section) {
@@ -209,11 +206,11 @@ public record ContainerSection(Inventory inventory, List<Slot> slots) {
     }
 
     public ContainerSection subSection(int fromIndex, int toIndex) {
-        return new ContainerSection(this.inventory, this.slots.subList(fromIndex, toIndex));
+        return new ContainerSection(this.slots.subList(fromIndex, toIndex));
     }
 
     @Override
     public String toString() {
-        return "ContainerSection[inventory=" + inventory.toString() + ", slots=" + slots.toString() + "]";
+        return "ContainerSection[slots=" + slots.toString() + "]";
     }
 }

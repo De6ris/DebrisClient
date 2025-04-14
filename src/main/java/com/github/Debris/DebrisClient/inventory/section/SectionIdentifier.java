@@ -22,23 +22,21 @@ import java.util.List;
 public class SectionIdentifier {
     private static final Logger LOGGER = LogUtils.getLogger();
     private final SectionHandler sectionHandler;
-    private final Inventory iInventory;
 
-    public SectionIdentifier(SectionHandler sectionHandler, Inventory iInventory) {
+    public SectionIdentifier(SectionHandler sectionHandler) {
         this.sectionHandler = sectionHandler;
-        this.iInventory = iInventory;
     }
 
-    public void identify(@Nullable HandledScreen<?> guiContainer, ScreenHandler container, List<Slot> slotList) {
+    public void identify(@Nullable HandledScreen<?> guiContainer, ScreenHandler container, Inventory iInventory, List<Slot> slotList) {
         try {
-            this.identifyInternal(guiContainer, container, slotList);
+            this.identifyInternal(guiContainer, container, iInventory, slotList);
         } catch (Exception e) {
             LOGGER.warn("Error identifying container {}, stacktrace:", AccessorUtil.getTypeString(container), e);
             this.handleUnidentified(createSection(slotList));
         }
     }
 
-    private void identifyInternal(@Nullable HandledScreen<?> guiContainer, ScreenHandler container, List<Slot> slotList) {
+    private void identifyInternal(@Nullable HandledScreen<?> guiContainer, ScreenHandler container, Inventory iInventory, List<Slot> slotList) {
         ContainerSection theWholeSection = createSection(slotList);
 
         if (InventoryUtil.isPlayerInventory(iInventory)) {
@@ -164,7 +162,7 @@ public class SectionIdentifier {
     }
 
     private ContainerSection createSection(List<Slot> slots) {
-        return new ContainerSection(this.iInventory, slots);
+        return new ContainerSection(slots);
     }
 
     private void putSection(EnumSection key, List<Slot> slots) {
