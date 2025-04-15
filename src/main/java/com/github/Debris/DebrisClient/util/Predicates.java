@@ -2,6 +2,7 @@ package com.github.Debris.DebrisClient.util;
 
 import fi.dy.masa.malilib.util.GuiUtils;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -40,7 +41,6 @@ public class Predicates {
     }
 
     public static boolean isContainerBlock(World world, BlockPos pos) {
-        BlockEntity blockEntity = world.getChunk(pos).getBlockEntity(pos);
-        return blockEntity instanceof ScreenHandlerFactory;
+        return world.getBlockState(pos).hasBlockEntity() && world.getChunk(pos).getBlockEntity(pos) instanceof ScreenHandlerFactory;
     }
 }

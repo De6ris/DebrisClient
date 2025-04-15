@@ -12,26 +12,26 @@ public class AutoRepeat {
     private static final Map<String, List<Long>> TIME_STAMP_MAP = new ConcurrentHashMap<>();
 
     public static void handleAutoRepeat(MinecraftClient client, Text message) {
-        List<String> strings = DCCommonConfig.AutoRepeatList.getStrings();
-        if (strings.isEmpty()) return;
+        List<String> playerNames = DCCommonConfig.AutoRepeatPlayerList.getStrings();
+        if (playerNames.isEmpty()) return;
 
-        String originalString = message.getString();
+        String mutable = message.getString();
         List<BlackListPattern> patterns = DCCommonConfig.AutoRepeatBlackList.getStrings().stream().map(BlackListPattern::compile).toList();
         for (BlackListPattern pattern : patterns) {
             switch (pattern.getMode()) {
                 case CANCEL -> {
-                    if (originalString.contains(((BlackListPattern.Cancel) pattern).string())) return;
+                    if (mutable.contains(((BlackListPattern.Cancel) pattern).string())) return;
                 }
                 case REPLACE -> {
                     BlackListPattern.Replace replace = (BlackListPattern.Replace) pattern;
-                    originalString = originalString.replace(replace.input(), replace.output());
+                    mutable = mutable.replace(replace.input(), replace.output());
                 }
             }
         }
 
-        final String finalString = originalString;
+        final String finalString = mutable;
 
-        strings.stream()
+        playerNames.stream()
                 .map(ChatUtil::angleName)
                 .flatMap(x -> ChatUtil.filterMessageContent(x, finalString).stream())
                 .max(Comparator.comparing(String::length))

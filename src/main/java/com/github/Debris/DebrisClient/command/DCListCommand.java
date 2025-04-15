@@ -34,7 +34,7 @@ public class DCListCommand {
     }
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeAutoRepeatCommand() {
-        List<String> list = DCCommonConfig.AutoRepeatList.getStrings();
+        List<String> list = DCCommonConfig.AutoRepeatPlayerList.getStrings();
         String argument = "player";
         return of("auto_repeat", list)
                 .argumentName(argument)

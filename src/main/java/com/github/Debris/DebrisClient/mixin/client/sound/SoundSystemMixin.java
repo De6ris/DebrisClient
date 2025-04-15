@@ -12,7 +12,12 @@ import org.spongepowered.asm.mixin.injection.At;
 public class SoundSystemMixin {
     @ModifyExpressionValue(method = "play(Lnet/minecraft/client/sound/SoundInstance;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/sound/SoundInstance;canPlay()Z"))
     private boolean modifySound(boolean original, @Local(argsOnly = true) SoundInstance soundInstance) {
-        if (CullingUtil.shouldMuteSound(soundInstance)) return false;
+        return original && !CullingUtil.shouldMuteSound(soundInstance);
+    }
+
+    @ModifyExpressionValue(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;getSoundVolume(Lnet/minecraft/sound/SoundCategory;)F", ordinal = 0))
+    private float muteSound(float original, @Local SoundInstance soundInstance) {
+        if (original <= 0.0F || CullingUtil.shouldMuteSound(soundInstance)) return 0.0F;
         return original;
     }
 }

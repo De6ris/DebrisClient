@@ -42,6 +42,7 @@ public class CullingUtil {
 
         if (DCCommonConfig.MuteWither.getBooleanValue() && path.startsWith("entity.wither")) return true;
         if (DCCommonConfig.MuteEnderman.getBooleanValue() && path.startsWith("entity.enderman")) return true;
+        if (DCCommonConfig.MuteZombifiedPiglin.getBooleanValue() && path.startsWith("entity.zombified_piglin")) return true;
         if (DCCommonConfig.MuteMinecart.getBooleanValue() && path.startsWith("entity.minecart")) return true;
         if (DCCommonConfig.MuteThunder.getBooleanValue() && path.startsWith("entity.lightning_bolt")) return true;
         if (DCCommonConfig.MuteGuardian.getBooleanValue() && path.startsWith("entity.guardian")) return true;

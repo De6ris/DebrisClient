@@ -66,14 +66,14 @@ public class DCCommonConfig implements IConfigHandler {
 
 
     // list
+    public static final ConfigStringList AutoRepeatPlayerList = ofStringList("自动复读玩家列表");
     public static final ConfigStringList AutoRepeatBlackList = ofStringList("自动复读字符串黑名单", ImmutableList.of(), "可用样式如下:\n直接取消复读,如\"debris\"\n箭头->表示替换,如\"debris->spirit\"");
     public static final ConfigStringList AutoThrowWhiteList = ofStringList("自动丢弃白名单");
-    public static final ConfigStringList CullEntityList = ofStringList("剔除实体渲染列表");
-    public static final ConfigStringList MuteSoundList = ofStringList("静音音效列表");
-    public static final ConfigStringList CullParticleList = ofStringList("剔除粒子列表");
     public static final ConfigStringList CullBlockEntityList = ofStringList("剔除方块实体列表");
+    public static final ConfigStringList CullEntityList = ofStringList("剔除实体渲染列表");
+    public static final ConfigStringList CullParticleList = ofStringList("剔除粒子列表");
+    public static final ConfigStringList MuteSoundList = ofStringList("静音音效列表");
     public static final ConfigStringList HighlightEntityList = ofStringList("高亮实体列表");
-    public static final ConfigStringList AutoRepeatList = ofStringList("自动复读列表");
 
 
     // key
@@ -133,10 +133,11 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed MuteExplosion = ofBooleanHotkeyed("爆炸静音", false, "", "不包括龙息爆炸");
     public static final ConfigBooleanHotkeyed MuteWither = ofBooleanHotkeyed("凋灵静音", false, "");
     public static final ConfigBooleanHotkeyed MuteEnderman = ofBooleanHotkeyed("末影人静音", false, "");
-    public static final ConfigBooleanHotkeyed MuteDispenser = ofBooleanHotkeyed("发射器静音", false, "", "包括投掷器, 仅屏蔽发射失败音效");
+    public static final ConfigBooleanHotkeyed MuteZombifiedPiglin = ofBooleanHotkeyed("僵尸猪人静音", false, "");
+    public static final ConfigBooleanHotkeyed MuteGuardian = ofBooleanHotkeyed("守卫者静音", false, "");
     public static final ConfigBooleanHotkeyed MuteMinecart = ofBooleanHotkeyed("矿车静音", false, "");
     public static final ConfigBooleanHotkeyed MuteThunder = ofBooleanHotkeyed("雷声静音", false, "");
-    public static final ConfigBooleanHotkeyed MuteGuardian = ofBooleanHotkeyed("守卫者静音", false, "");
+    public static final ConfigBooleanHotkeyed MuteDispenser = ofBooleanHotkeyed("发射器静音", false, "", "包括投掷器, 仅屏蔽发射失败音效");
     public static final ConfigBooleanHotkeyed MuteAnvil = ofBooleanHotkeyed("铁砧静音", false, "");
     public static final ConfigBooleanHotkeyed MuteDoor = ofBooleanHotkeyed("门静音", false, "", "包括任何门");
     public static final ConfigBooleanHotkeyed CullPoofParticle = ofBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
@@ -233,14 +234,14 @@ public class DCCommonConfig implements IConfigHandler {
         );
         Compat = buildCompat();
         Lists = ImmutableList.of(
+                AutoRepeatPlayerList,
                 AutoRepeatBlackList,
                 AutoThrowWhiteList,
-                CullEntityList,
-                MuteSoundList,
-                CullParticleList,
                 CullBlockEntityList,
-                HighlightEntityList,
-                AutoRepeatList
+                CullEntityList,
+                CullParticleList,
+                MuteSoundList,
+                HighlightEntityList
         );
         KeyPress = ImmutableList.of(
                 OpenWindow,
@@ -295,10 +296,11 @@ public class DCCommonConfig implements IConfigHandler {
                 MuteExplosion,
                 MuteWither,
                 MuteEnderman,
-                MuteDispenser,
+                MuteZombifiedPiglin,
+                MuteGuardian,
                 MuteMinecart,
                 MuteThunder,
-                MuteGuardian,
+                MuteDispenser,
                 MuteAnvil,
                 MuteDoor,
                 CullPoofParticle,
