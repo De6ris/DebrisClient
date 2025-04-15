@@ -5,15 +5,12 @@ import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.feat.BlockInteractor;
 import com.github.Debris.DebrisClient.feat.WorldState;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
-import com.github.Debris.DebrisClient.unsafe.itemScroller.UtilCaller;
 import com.github.Debris.DebrisClient.unsafe.litematica.LitematicaAccessor;
 import com.google.common.collect.Lists;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.MerchantScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
@@ -25,7 +22,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.Registries;
-import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -33,7 +29,6 @@ import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.village.TradeOfferList;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -42,25 +37,6 @@ import java.util.function.Predicate;
 
 public class MiscUtil {
     public static void onTradeInfoUpdate(MinecraftClient client) {
-        if (DCCommonConfig.OrientedAutoTrading.getBooleanValue()) runOrientedTrading(client);
-    }
-
-    public static void runOrientedTrading(MinecraftClient client) {
-        if (!Predicates.hasMod(ModReference.ItemScroller)) return;
-        Screen currentScreen = client.currentScreen;
-        if (currentScreen instanceof MerchantScreen merchantScreen) {
-            MerchantScreenHandler merchantContainer = merchantScreen.getScreenHandler();
-            TradeOfferList recipes = merchantContainer.getRecipes();
-            List<Item> list = parseItemList(DCCommonConfig.TradingTargets.getStrings());
-            if (list.isEmpty()) return;
-            for (int i = 0; i < recipes.size(); i++) {
-                ItemStack sellItem = recipes.get(i).getSellItem();
-                if (isItemInList(sellItem, list)) {
-                    UtilCaller.tryHardTrading(i);
-                }
-            }
-            merchantScreen.close();
-        }
     }
 
     public static void runAutoThrow() {

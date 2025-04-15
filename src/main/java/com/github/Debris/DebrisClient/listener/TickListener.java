@@ -12,7 +12,6 @@ import com.github.Debris.DebrisClient.util.MiscUtil;
 import com.github.Debris.DebrisClient.util.Predicates;
 import fi.dy.masa.malilib.interfaces.IClientTickHandler;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
 
 public class TickListener implements IClientTickHandler {
     @Override
@@ -56,11 +55,6 @@ public class TickListener implements IClientTickHandler {
 
 
     public static void onRenderTick(MinecraftClient client) {
-        if (DCCommonConfig.AutoGuiQuitting.getBooleanValue()) {
-            if (client.currentScreen instanceof HandledScreen<?> guiContainer) {
-                guiContainer.close();
-            }
-        }
     }
 
 }

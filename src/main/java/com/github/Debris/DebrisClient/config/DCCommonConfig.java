@@ -55,6 +55,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean FreeCamSpectatorFix = ofBoolean("旁观模式灵魂出窍修复", true, "当你附身别的生物, 启动灵魂出窍时相机仍在附身地");
     public static final ConfigBoolean ToolSwitchFix = ofBoolean("工具切换修复", true, "无合适工具时, 不应切换到第一个快捷栏");
     public static final ConfigBoolean ProgressResuming = ofBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度\n对MaLiLib驱动的模组和CommandButton有效");
+    public static final ConfigBoolean WorldEditVisibility = ofBoolean("WorldEdit可视化", false, "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
     public static final ConfigColor WorldEditOverlay = ofColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
     public static final ConfigBoolean InventoryPreviewSupportComparator = ofBoolean("物品栏预览支持比较器", true);
     public static final ConfigBoolean PinYinSearch = ofBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组, 创造模式物品栏, 配方书");
@@ -65,7 +66,6 @@ public class DCCommonConfig implements IConfigHandler {
 
 
     // list
-    public static final ConfigStringList TradingTargets = ofStringList("定向交易目标", ImmutableList.of("lapis_lazuli"), "需打开定向自动交易功能");
     public static final ConfigStringList AutoRepeatBlackList = ofStringList("自动复读字符串黑名单", ImmutableList.of(), "可用样式如下:\n直接取消复读,如\"debris\"\n箭头->表示替换,如\"debris->spirit\"");
     public static final ConfigStringList AutoThrowWhiteList = ofStringList("自动丢弃白名单");
     public static final ConfigStringList CullEntityList = ofStringList("剔除实体渲染列表");
@@ -112,15 +112,12 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed AUTO_RIGHT = ofBooleanHotkeyed("自动向右", false, "LEFT_ALT,RIGHT", "可用于走路，划船");
     public static final ConfigBooleanHotkeyed MonitorPortalGeneration = ofBooleanHotkeyed("监听传送门生成", false, "", "限单机游戏");
     public static final ConfigBooleanHotkeyed MonitorThunderWeather = ofBooleanHotkeyed("监听雷暴天气", false, "");
-    public static final ConfigBooleanHotkeyed StartStoneCutting = ofBooleanHotkeyed("启动连续切石", false, "", KeybindSettings.INGAME_BOTH);
-    public static final ConfigBooleanHotkeyed StartMassCrafting = ofBooleanHotkeyed("启动连续喷射合成", false, "", KeybindSettings.INGAME_BOTH);
-    public static final ConfigBooleanHotkeyed AutoGuiQuitting = ofBooleanHotkeyed("自动关闭容器GUI", false, "", KeybindSettings.INGAME_BOTH, "不会关闭容器之外的GUI");
-    public static final ConfigBooleanHotkeyed OrientedAutoTrading = ofBooleanHotkeyed("定向自动交易", false, "", "打开交易GUI时自动交易所有在名单上的物品");
+    public static final ConfigBooleanHotkeyed StartStoneCutting = ofBooleanHotkeyed("启动连续切石", false, "", ANY);
+    public static final ConfigBooleanHotkeyed StartMassCrafting = ofBooleanHotkeyed("启动连续喷射合成", false, "", ANY);
     public static final ConfigBooleanHotkeyed LoyalerTrident = ofBooleanHotkeyed("更忠诚的三叉戟", false, "", "发射的忠诚三叉戟能够回到副手");
     public static final ConfigBooleanHotkeyed PathNodesVisibility = ofBooleanHotkeyed("寻路节点可视化", false, "");
     public static final ConfigBooleanHotkeyed PathNodesOnlyNamed = ofBooleanHotkeyed("寻路节点仅限命名生物", false, "");
     public static final ConfigBooleanHotkeyed AutoThrow = ofBooleanHotkeyed("自动丢弃", false, "", "在GUI中不生效");
-    public static final ConfigBooleanHotkeyed WorldEditVisibility = ofBooleanHotkeyed("WorldEdit可视化", false, "", "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
     public static final ConfigBooleanHotkeyed AutoContainerTaker = ofBooleanHotkeyed("自动从容器取出", false, "", "若完全取出, 自动关闭GUI");
     public static final ConfigBooleanHotkeyed AutoContainerClassifier = ofBooleanHotkeyed("自动向容器归类", false, "", "例如: 若容器中有圆石, 则将物品栏的圆石移入");
     public static final ConfigBooleanHotkeyed AutoExtinguisher = ofBooleanHotkeyed("自动灭火", false, "", "不影响灵魂火");
@@ -207,6 +204,7 @@ public class DCCommonConfig implements IConfigHandler {
             builder.add(InventoryPreviewSupportComparator);
         }
         if (instance.isModLoaded(ModReference.WorldEdit) && instance.isModLoaded(ModReference.Litematica)) {
+            builder.add(WorldEditVisibility);
             builder.add(WorldEditOverlay);
         }
         if (instance.isModLoaded(ModReference.XRay)) {
@@ -235,7 +233,6 @@ public class DCCommonConfig implements IConfigHandler {
         );
         Compat = buildCompat();
         Lists = ImmutableList.of(
-                TradingTargets,
                 AutoRepeatBlackList,
                 AutoThrowWhiteList,
                 CullEntityList,
@@ -280,13 +277,10 @@ public class DCCommonConfig implements IConfigHandler {
                 MonitorThunderWeather,
                 StartStoneCutting,
                 StartMassCrafting,
-                AutoGuiQuitting,
-                OrientedAutoTrading,
                 LoyalerTrident,
                 PathNodesVisibility,
                 PathNodesOnlyNamed,
                 AutoThrow,
-                WorldEditVisibility,
                 AutoContainerTaker,
                 AutoContainerClassifier,
                 AutoExtinguisher,
