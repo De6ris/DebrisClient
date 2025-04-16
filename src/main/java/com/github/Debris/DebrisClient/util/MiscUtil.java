@@ -3,6 +3,7 @@ package com.github.Debris.DebrisClient.util;
 import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.feat.BlockInteractor;
+import com.github.Debris.DebrisClient.feat.EntityInteractor;
 import com.github.Debris.DebrisClient.feat.WorldState;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.unsafe.litematica.LitematicaAccessor;
@@ -33,7 +34,9 @@ import net.minecraft.util.math.Vec3d;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class MiscUtil {
     public static void onTradeInfoUpdate(MinecraftClient client) {
@@ -118,14 +121,38 @@ public class MiscUtil {
         }
         ClientWorld world = client.world;
         Collection<BlockPos> targets = new HashSet<>();
-        LitematicaAccessor.stream().forEach(pos -> {
+        LitematicaAccessor.streamBlockPos().forEach(pos -> {
             if (Predicates.isContainerBlock(world, pos)) targets.add(pos.toImmutable());// otherwise the same object
         });
         if (targets.isEmpty()) {
             InfoUtils.printActionbarMessage("打开选区内容器: 未找到容器");
             return true;
         }
+        InfoUtils.printActionbarMessage(String.format("打开选区内容器: 已找到%d处容器", targets.size()));
         BlockInteractor.addAll(targets);
+        return true;
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    public static boolean tryInteractSelectionEntities(MinecraftClient client) {
+        if (!Predicates.hasMod(ModReference.Litematica)) return false;
+        if (Predicates.notInGame(client)) return false;
+        if (EntityInteractor.running()) {
+            EntityInteractor.stop();
+            InfoUtils.printActionbarMessage("交互选区内实体: 已停止");
+            return true;
+        }
+        ClientWorld world = client.world;
+        Set<Entity> targets = LitematicaAccessor.streamBlockBox()
+                .map(Box::from)
+                .flatMap(x -> world.getOtherEntities(client.player, x).stream())
+                .collect(Collectors.toSet());
+        if (targets.isEmpty()) {
+            InfoUtils.printActionbarMessage("交互选区内实体: 未找到实体");
+            return true;
+        }
+        InfoUtils.printActionbarMessage(String.format("交互选区内实体: 已找到%d处实体", targets.size()));
+        EntityInteractor.addAll(targets);
         return true;
     }
 }

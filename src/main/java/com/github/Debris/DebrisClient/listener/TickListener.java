@@ -4,6 +4,7 @@ import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.feat.AutoRepeat;
 import com.github.Debris.DebrisClient.feat.BlockInteractor;
+import com.github.Debris.DebrisClient.feat.EntityInteractor;
 import com.github.Debris.DebrisClient.feat.LoyalTrident;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.MassCraftingApi;
@@ -51,6 +52,8 @@ public class TickListener implements IClientTickHandler {
         }
 
         BlockInteractor.onClientTick(client);
+
+        EntityInteractor.onClientTick(client);
     }
 
 

@@ -100,6 +100,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey TakeOff = ofHotkey("起飞", "", "使用鞘翅和烟花火箭起飞");
     public static final ConfigHotkey RecordContainerTemplate = ofHotkey("记录容器样板", "", ANY, "记录成功时, 启动自动样板填充模式\n再次按下将重置");
     public static final ConfigHotkey OpenSelectionContainers = ofHotkey("打开选区内容器", "", ANY, "记录列表, 之后逐个打开");
+    public static final ConfigHotkey InteractSelectionEntities = ofHotkey("交互选区内实体", "", ANY, "记录列表, 之后逐个交互");
 
 
     public static final ConfigHotkey TEST = ofHotkey("测试", "", KeybindSettings.GUI);
@@ -267,6 +268,7 @@ public class DCCommonConfig implements IConfigHandler {
                 TakeOff,
                 RecordContainerTemplate,
                 OpenSelectionContainers,
+                InteractSelectionEntities,
                 TEST
         );
         KeyToggle = ImmutableList.of(

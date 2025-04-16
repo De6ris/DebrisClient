@@ -65,7 +65,12 @@ public class InteractionUtil {
 
     @SuppressWarnings("DataFlowIssue")
     public static boolean withinReach(MinecraftClient client, BlockPos blockPos) {
-        return blockPos.isWithinDistance(client.player.getBlockPos(), 4);
+        return client.player.canInteractWithBlockAt(blockPos, 0);
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    public static boolean withinReach(MinecraftClient client, Entity entity) {
+        return client.player.canInteractWithEntity(entity, 0);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -111,6 +116,11 @@ public class InteractionUtil {
     @SuppressWarnings("ConstantConditions")
     public static void interactBlock(MinecraftClient client, BlockHitResult hitResult) {
         client.interactionManager.interactBlock(client.player, Hand.MAIN_HAND, hitResult);
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    public static void interactEntity(MinecraftClient client, Entity entity) {
+        client.interactionManager.interactEntity(client.player, entity, Hand.MAIN_HAND);
     }
 
     /**

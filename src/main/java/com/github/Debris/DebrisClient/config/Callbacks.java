@@ -76,6 +76,8 @@ public class Callbacks {
 
         DCCommonConfig.OpenSelectionContainers.getKeybind().setCallback(((action, key) -> MiscUtil.tryOpenSelectionContainers(client)));
 
+        DCCommonConfig.InteractSelectionEntities.getKeybind().setCallback(((action, key) -> MiscUtil.tryInteractSelectionEntities(client)));
+
         DCCommonConfig.TEST.getKeybind().setCallback((action, key) -> {
             return false;
         });
