@@ -1,6 +1,10 @@
 package com.github.Debris.DebrisClient.inventory.autoProcess;
 
+import com.github.Debris.DebrisClient.feat.BlockInteractor;
 import com.github.Debris.DebrisClient.feat.ContainerTemplate;
+import com.github.Debris.DebrisClient.feat.EntityInteractor;
+import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
+import com.github.Debris.DebrisClient.inventory.section.EnumSection;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.util.Predicates;
 import com.google.common.collect.ImmutableList;
@@ -36,9 +40,12 @@ public class AutoProcessManager {
 
         boolean closeGui = false;
 
+        ContainerSection containerSection = EnumSection.Container.get();
+        ContainerSection playerInventory = EnumSection.InventoryWhole.get();
+
         for (IAutoProcessor processor : PROCESSORS) {
             if (!processor.isActive()) continue;
-            ProcessResult result = processor.process();
+            ProcessResult result = processor.process(containerSection, playerInventory);
             closeGui |= result.closeGui();
             if (result.terminate()) break;
         }
@@ -46,6 +53,12 @@ public class AutoProcessManager {
         if (closeGui) {
             screen.close();
         }
+    }
+
+    @SuppressWarnings("RedundantIfStatement")
+    public static boolean allowMessage() {
+        if (BlockInteractor.running() || EntityInteractor.running()) return false;
+        return true;
     }
 
     private static boolean hasActiveProcessor() {

@@ -1,9 +1,12 @@
 package com.github.Debris.DebrisClient.feat;
 
+import com.github.Debris.DebrisClient.compat.ModReference;
+import com.github.Debris.DebrisClient.render.RenderQueue;
+import com.github.Debris.DebrisClient.render.RendererFactory;
 import com.github.Debris.DebrisClient.util.InteractionUtil;
 import com.github.Debris.DebrisClient.util.Predicates;
-import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.Collection;
@@ -15,6 +18,10 @@ public class BlockInteractor {
 
     public static boolean running() {
         return !TARGETS.isEmpty();
+    }
+
+    public static int size() {
+        return TARGETS.size();
     }
 
     public static void stop() {
@@ -36,8 +43,10 @@ public class BlockInteractor {
         if (optional.isPresent()) {
             BlockPos blockPos = optional.get();
             InteractionUtil.interactBlock(client, blockPos);
+            if (Predicates.hasMod(ModReference.MagicLibMCApi)) {
+                RenderQueue.add(RendererFactory.text(Text.literal("已交互"), blockPos), 100);
+            }
             TARGETS.remove(blockPos);
-            InfoUtils.printActionbarMessage("方块交互: 还剩" + TARGETS.size() + "处");
         }
     }
 }

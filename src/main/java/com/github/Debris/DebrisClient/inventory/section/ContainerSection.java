@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public record ContainerSection(List<Slot> slots) {
     public static final ContainerSection EMPTY = new ContainerSection(List.of());
@@ -162,19 +163,28 @@ public record ContainerSection(List<Slot> slots) {
         }
     }
 
-    public void predicateRun(Predicate<ItemStack> predicate, Consumer<Slot> runnable) {
-        for (Slot slot : this.slots) {
-            if (slot.hasStack() && predicate.test(slot.getStack())) {
-                runnable.accept(slot);
-            }
-        }
+    public Stream<Slot> stream() {
+        return this.slots.stream();
     }
 
-    public void notEmptyRun(Consumer<Slot> runnable) {
+    public Stream<Slot> streamEmpty() {
+        return this.stream().filter(x -> !x.hasStack());
+    }
+
+    public Stream<Slot> streamNotEmpty() {
+        return this.stream().filter(Slot::hasStack);
+    }
+
+    /**
+     * Note that the empty slots are skipped.
+     */
+    public Stream<Slot> predicate(Predicate<ItemStack> predicate) {
+        return this.streamNotEmpty().filter(slot -> predicate.test(slot.getStack()));
+    }
+
+    public void allRun(Consumer<Slot> runnable) {
         for (Slot slot : this.slots) {
-            if (slot.hasStack()) {
-                runnable.accept(slot);
-            }
+            runnable.accept(slot);
         }
     }
 
@@ -185,9 +195,18 @@ public record ContainerSection(List<Slot> slots) {
         }
     }
 
-    public void allRun(Consumer<Slot> runnable) {
+    public void notEmptyRun(Consumer<Slot> runnable) {
         for (Slot slot : this.slots) {
-            runnable.accept(slot);
+            if (slot.hasStack()) runnable.accept(slot);
+        }
+    }
+
+    /**
+     * Note that the empty slots are skipped.
+     */
+    public void predicateRun(Predicate<ItemStack> predicate, Consumer<Slot> runnable) {
+        for (Slot slot : this.slots) {
+            if (slot.hasStack() && predicate.test(slot.getStack())) runnable.accept(slot);
         }
     }
 

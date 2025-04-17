@@ -1,11 +1,8 @@
 package com.github.Debris.DebrisClient.inventory.section;
 
-import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 
-import java.util.List;
+import java.util.EnumSet;
 
 public enum EnumSection {
     Armor,
@@ -63,15 +60,19 @@ public enum EnumSection {
     Unidentified,// Generally, it is a simple section like chest or shulker box, or absent in special containers that already identified in SectionIdentifier.
 
     Container {// Those slots in current container that are not for player inventory.
+
         @Override
         public ContainerSection get() {
-            ScreenHandler container = InventoryUtil.getCurrentContainer();
-            PlayerInventory playerInventory = InventoryUtil.getPlayerInventory();
-            List<Slot> containerSlots = InventoryUtil.getSlots(container).stream().filter(x -> x.inventory != playerInventory).toList();
-            if (containerSlots.isEmpty()) {
-                return ContainerSection.EMPTY;
-            }
-            return new ContainerSection(containerSlots);
+            return SectionHandler.streamAllSections()
+                    .filter(section -> {
+                        if (section.isOf(EnumSection.InventoryHotBar)) return false;
+                        if (section.isOf(EnumSection.InventoryStorage)) return false;
+                        for (EnumSection action : ACTIONS) {
+                            if (section.isOf(action)) return false;
+                        }
+                        return true;
+                    })
+                    .reduce(ContainerSection::mergeWith).orElse(ContainerSection.EMPTY);
         }
     },
     ;
@@ -86,4 +87,8 @@ public enum EnumSection {
         return SectionHandler.getSection(this);
     }
 
+    public static final EnumSet<EnumSection> ACTIONS = EnumSet.of(
+            EnumSection.FakePlayerActions,
+            EnumSection.FakePlayerEnderChestActions
+    );
 }

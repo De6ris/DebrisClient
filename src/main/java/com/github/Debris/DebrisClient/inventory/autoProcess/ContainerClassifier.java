@@ -2,12 +2,13 @@ package com.github.Debris.DebrisClient.inventory.autoProcess;
 
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
-import com.github.Debris.DebrisClient.inventory.section.EnumSection;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
+import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,15 +19,18 @@ public class ContainerClassifier implements IAutoProcessor {
     }
 
     @Override
-    public ProcessResult process() {
-        ContainerSection section = EnumSection.Container.get();
-        Set<Item> samples = section.slots().stream().map(Slot::getStack).map(ItemStack::getItem).collect(Collectors.toSet());
+    public ProcessResult process(ContainerSection containerSection, ContainerSection playerInventory) {
+        Set<Item> samples = containerSection.slots().stream().map(Slot::getStack).map(ItemStack::getItem).collect(Collectors.toSet());
 
-        EnumSection.InventoryWhole.get().predicateRun(x -> samples.contains(x.getItem()), InventoryUtil::quickMove);
+        List<Slot> list = playerInventory.predicate(x -> samples.contains(x.getItem())).toList();
+        list.forEach(InventoryUtil::quickMove);
 
-        if (section.isFull()) {
+        if (containerSection.isFull()) {
             return ProcessResult.OPEN_TERMINATE;
         } else {
+            if (AutoProcessManager.allowMessage()) {
+                InfoUtils.printActionbarMessage("debris_client.auto_processor.container_classifier.message", InventoryUtil.getGuiContainer().getTitle(), list.size());
+            }
             return ProcessResult.CLOSE_TERMINATE;
         }
     }

@@ -3,7 +3,7 @@ package com.github.Debris.DebrisClient.util;
 import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.unsafe.litematica.LitematicaAccessor;
-import com.github.Debris.DebrisClient.unsafe.miniHud.MiniHudConfigAccessor;
+import com.github.Debris.DebrisClient.unsafe.miniHud.MiniHudAccessor;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.EntityType;
@@ -64,7 +64,7 @@ public class CullingUtil {
     public static boolean shouldCullWthit() {
         if (!DCCommonConfig.WthitMasaCompat.getBooleanValue()) return false;
         if (Predicates.hasMod(ModReference.Litematica) && LitematicaAccessor.isRenderingInfoOverlay()) return true;
-        if (Predicates.hasMod(ModReference.MiniHud) && MiniHudConfigAccessor.isPreviewingInventory()) return true;
+        if (Predicates.hasMod(ModReference.MiniHud) && MiniHudAccessor.isPreviewingInventory()) return true;
         return false;
     }
 }

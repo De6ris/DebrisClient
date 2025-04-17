@@ -14,7 +14,10 @@ import net.minecraft.item.BundleItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -31,16 +34,17 @@ public class InventoryTweaks {
         return after != before;// seen as sort success
     }
 
-    private static final EnumSet<EnumSection> SortBlackList = EnumSet.of(
-            EnumSection.FakePlayerActions,
-            EnumSection.FakePlayerEnderChestActions
-    );
-
+    @SuppressWarnings("RedundantIfStatement")
     private static boolean shouldSort(ContainerSection section) {
-        for (EnumSection enumSection : SortBlackList) {
-            if (section.isOf(enumSection)) return false;
-        }
+        if (isActionSection(section)) return false;
         return true;
+    }
+
+    public static boolean isActionSection(ContainerSection section) {
+        for (EnumSection enumSection : EnumSection.ACTIONS) {
+            if (section.isOf(enumSection)) return true;
+        }
+        return false;
     }
 
     // try to put held item to this section, if fail then drop
@@ -239,7 +243,7 @@ public class InventoryTweaks {
     private static void clearCursorBundle(Slot slot) {
         InventoryUtil.leftClick(slot);// take up
         ContainerSection section = SectionHandler.getSection(slot);
-        section.emptyRun(InventoryUtil::rightClick);
+        clearHeldBundle(section);
         if (slot.getStack().isEmpty()) InventoryUtil.leftClick(slot);// put down
     }
 

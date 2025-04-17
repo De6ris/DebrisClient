@@ -26,7 +26,7 @@ public class PathNodesRenderer {
     private final Queue<MobEntity> mobQueue = Queues.newConcurrentLinkedQueue();
 
     @SuppressWarnings("ConstantConditions")
-    public void onEntityRenderPost(Entity entity, RenderContext context) {
+    public void onEntityRenderPost(Entity entity, EntityRenderContext context) {
         if (!DCCommonConfig.PathNodesVisibility.getBooleanValue()) return;
 
         Vec3d camPos = EntityUtils.getCameraEntity().getPos();
@@ -39,7 +39,7 @@ public class PathNodesRenderer {
         }
     }
 
-    public void onRenderWorldPost(World world, RenderContext context) {
+    public void onRenderWorldPost(World world, WorldRenderContext context) {
         if (!DCCommonConfig.PathNodesVisibility.getBooleanValue()) return;
 
         float partialTicks = context.getTickDelta();

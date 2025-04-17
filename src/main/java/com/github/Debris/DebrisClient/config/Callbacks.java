@@ -1,13 +1,13 @@
 package com.github.Debris.DebrisClient.config;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
+import com.github.Debris.DebrisClient.feat.CarpetBot;
 import com.github.Debris.DebrisClient.feat.ContainerTemplate;
 import com.github.Debris.DebrisClient.feat.TakeOff;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterRecipeStorage;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
 import com.github.Debris.DebrisClient.inventory.util.InventoryTweaks;
 import com.github.Debris.DebrisClient.unsafe.mgButtons.MGButtonReloader;
-import com.github.Debris.DebrisClient.util.BotUtil;
 import com.github.Debris.DebrisClient.util.ChatUtil;
 import com.github.Debris.DebrisClient.util.MiscUtil;
 import com.github.Debris.DebrisClient.util.Predicates;
@@ -60,9 +60,9 @@ public class Callbacks {
             return InventoryTweaks.tryThrowSection();
         });
 
-        DCCommonConfig.RestoreKicking.getKeybind().setCallback((action, key) -> BotUtil.restoreKicking(client));
+        DCCommonConfig.RestoreKicking.getKeybind().setCallback((action, key) -> CarpetBot.restoreKicking(client));
 
-        DCCommonConfig.BotSpawnCommand.getKeybind().setCallback((action, key) -> BotUtil.suggestBotSpawnCommand(client));
+        DCCommonConfig.BotSpawnCommand.getKeybind().setCallback((action, key) -> CarpetBot.suggestBotSpawnCommand(client));
 
         DCCommonConfig.ResendLastChat.getKeybind().setCallback((action, key) -> ChatUtil.resendLast(client));
 

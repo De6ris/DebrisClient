@@ -2,8 +2,8 @@
   "config.enum.heart_type.absorbing.name": "吸收",
   "config.enum.heart_type.container.name": "描边",
   "config.enum.heart_type.frozen.name": "霜冻",
-  "config.enum.heart_type.normal.name": "正常",
   "config.enum.heart_type.none.name": "无",
+  "config.enum.heart_type.normal.name": "正常",
   "config.enum.heart_type.poisoned.name": "中毒",
   "config.enum.heart_type.withered.name": "凋零",
   "config.enum.mass_crafting_impl.manual.name": "手动",
@@ -12,5 +12,12 @@
   "config.enum.sort_category.pinyin.name": "拼音",
   "config.enum.sort_category.translation_key.name": "翻译键",
   "config.enum.sort_category.translation_result.name": "翻译结果",
+  "debris_client.auto_processor.container_classifier.message": "已将 %2$d 个槽位的物品归类到容器 %1$s",
+  "debris_client.auto_processor.container_taker.message": "已取出容器 %1$s 中 %2$d 个槽位的物品",
+  "debris_client.auto_processor.item_finder.found": "已找到%s",
+  "debris_client.auto_processor.item_finder.not_found": "未找到列表中物品",
+  "debris_client.auto_processor.template_filler.size_unmatch": "容器 %s 的尺寸与样板不匹配!",
+  "debris_client.auto_processor.template_filler.success": "成功按样板填充了容器 %s",
+  "debris_client.auto_processor.template_recorder.message": "已记录容器样板 %s",
   "debris_client.gui.title.configs": "%s 配置 - %s"
 }

@@ -148,7 +148,7 @@ public class DCCommonConfig implements IConfigHandler {
 
     // highlight
     public static final ConfigBooleanHotkeyed ForceRenderEndGatewayBeam = ofBooleanHotkeyed("强制渲染末地折跃门光柱", false, "");
-    public static final ConfigBooleanHotkeyed HighlightAll = new ConfigBooleanHotkeyed("高亮全部实体", false, "");
+    public static final ConfigBooleanHotkeyed HighlightAll = ofBooleanHotkeyed("高亮全部实体", false, "");
     public static final ConfigBooleanHotkeyed HighlightBlaze = ofBooleanHotkeyed("高亮烈焰人", false, "");
     public static final ConfigBooleanHotkeyed HighlightCreeper = ofBooleanHotkeyed("高亮苦力怕", false, "");
     public static final ConfigBooleanHotkeyed HighlightEnderman = ofBooleanHotkeyed("高亮末影人", false, "");

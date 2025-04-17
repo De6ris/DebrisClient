@@ -8,7 +8,10 @@ import fi.dy.masa.malilib.util.WorldUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
 
@@ -57,4 +60,21 @@ public class RayTraceUtil {
         return Optional.of(cameraEntity);
     }
 
+    public static Optional<BlockPos> getRayTraceBlock(MinecraftClient client) {
+        Optional<HitResult> optional = getPlayerRayTrace(client);
+        if (optional.isEmpty()) return Optional.empty();
+        HitResult hitResult = optional.get();
+
+        if (hitResult.getType() != HitResult.Type.BLOCK) return Optional.empty();
+        return Optional.of(((BlockHitResult) hitResult).getBlockPos());
+    }
+
+    public static Optional<Entity> getRayTraceEntity(MinecraftClient client) {
+        Optional<HitResult> optional = getPlayerRayTrace(client);
+        if (optional.isEmpty()) return Optional.empty();
+        HitResult hitResult = optional.get();
+
+        if (hitResult.getType() != HitResult.Type.ENTITY) return Optional.empty();
+        return Optional.of(((EntityHitResult) hitResult).getEntity());
+    }
 }

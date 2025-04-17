@@ -2,13 +2,10 @@ package com.github.Debris.DebrisClient.listener;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
-import com.github.Debris.DebrisClient.feat.AutoRepeat;
-import com.github.Debris.DebrisClient.feat.BlockInteractor;
-import com.github.Debris.DebrisClient.feat.EntityInteractor;
-import com.github.Debris.DebrisClient.feat.LoyalTrident;
+import com.github.Debris.DebrisClient.feat.*;
 import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
+import com.github.Debris.DebrisClient.render.RenderQueue;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.MassCraftingApi;
-import com.github.Debris.DebrisClient.util.BotUtil;
 import com.github.Debris.DebrisClient.util.MiscUtil;
 import com.github.Debris.DebrisClient.util.Predicates;
 import fi.dy.masa.malilib.interfaces.IClientTickHandler;
@@ -32,7 +29,7 @@ public class TickListener implements IClientTickHandler {
         }
 
         if (DCCommonConfig.KickBot.getKeybind().isKeybindHeld()) {
-            BotUtil.tryKickBot(client);
+            CarpetBot.tryKickBot(client);
         }
 
         if (DCCommonConfig.AutoThrow.getBooleanValue() && Predicates.inGameNoGui(client)) {
@@ -54,6 +51,8 @@ public class TickListener implements IClientTickHandler {
         BlockInteractor.onClientTick(client);
 
         EntityInteractor.onClientTick(client);
+
+        RenderQueue.onClientTick(client);
     }
 
 

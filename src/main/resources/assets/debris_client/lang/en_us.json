@@ -2,8 +2,8 @@
   "config.enum.heart_type.absorbing.name": "Absorbing",
   "config.enum.heart_type.container.name": "Container",
   "config.enum.heart_type.frozen.name": "Frozen",
-  "config.enum.heart_type.normal.name": "Normal",
   "config.enum.heart_type.none.name": "None",
+  "config.enum.heart_type.normal.name": "Normal",
   "config.enum.heart_type.poisoned.name": "Poisoned",
   "config.enum.heart_type.withered.name": "Withered",
   "config.enum.mass_crafting_impl.manual.name": "Manual",
@@ -12,5 +12,12 @@
   "config.enum.sort_category.pinyin.name": "PinYin",
   "config.enum.sort_category.translation_key.name": "Translation Key",
   "config.enum.sort_category.translation_result.name": "Translation Result",
+  "debris_client.auto_processor.container_classifier.message": "Has classified %2$d stacks into container %1$s",
+  "debris_client.auto_processor.container_taker.message": "Has taken %2$d stacks from container %1$s",
+  "debris_client.auto_processor.item_finder.found": "Found %s",
+  "debris_client.auto_processor.item_finder.not_found": "Found nothing in list",
+  "debris_client.auto_processor.template_filler.size_unmatch": "Container %s size not matching template!",
+  "debris_client.auto_processor.template_filler.success": "Filled container %s by template",
+  "debris_client.auto_processor.template_recorder.message": "Has recorded template for container %s",
   "debris_client.gui.title.configs": "%s Config - %s"
 }

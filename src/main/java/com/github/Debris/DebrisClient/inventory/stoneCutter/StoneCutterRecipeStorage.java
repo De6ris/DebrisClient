@@ -3,7 +3,10 @@ package com.github.Debris.DebrisClient.inventory.stoneCutter;
 import com.github.Debris.DebrisClient.DebrisClient;
 import com.mojang.logging.LogUtils;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtSizeTracker;
 import net.minecraft.registry.DynamicRegistryManager;
 import org.slf4j.Logger;
 

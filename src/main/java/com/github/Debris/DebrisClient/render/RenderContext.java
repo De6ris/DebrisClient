@@ -9,33 +9,24 @@ import org.joml.Matrix4f;
 public interface RenderContext {
     float getTickDelta();
 
-
-    static RenderContext ofEntity(float yaw, float tickDelta, MatrixStack matrices,
-                                  VertexConsumerProvider vertexConsumers,
-                                  int light) {
+    static EntityRenderContext ofEntity(float yaw,
+                                        float tickDelta,
+                                        MatrixStack matrices,
+                                        VertexConsumerProvider vertexConsumers,
+                                        int light) {
         return new EntityRenderContext(yaw, tickDelta, matrices, vertexConsumers, light);
     }
 
-    static RenderContext ofWorld(Framebuffer fb, Matrix4f posMatrix, Matrix4f projMatrix, Frustum frustum, Camera camera, Fog fog, BufferBuilderStorage buffers, Profiler profiler, float tickDelta) {
+    static WorldRenderContext ofWorld(Framebuffer fb,
+                                      Matrix4f posMatrix,
+                                      Matrix4f projMatrix,
+                                      Frustum frustum,
+                                      Camera camera,
+                                      Fog fog,
+                                      BufferBuilderStorage buffers,
+                                      Profiler profiler,
+                                      float tickDelta) {
         return new WorldRenderContext(fb, posMatrix, projMatrix, frustum, camera, fog, buffers, profiler, tickDelta);
     }
 
-
-    record EntityRenderContext(float yaw, float tickDelta, MatrixStack matrices,
-                               VertexConsumerProvider vertexConsumers,
-                               int light) implements RenderContext {
-        @Override
-        public float getTickDelta() {
-            return this.tickDelta;
-        }
-    }
-
-    record WorldRenderContext(Framebuffer fb, Matrix4f posMatrix, Matrix4f projMatrix, Frustum frustum, Camera camera,
-                              Fog fog, BufferBuilderStorage buffers, Profiler profiler,
-                              float tickDelta) implements RenderContext {
-        @Override
-        public float getTickDelta() {
-            return this.tickDelta;
-        }
-    }
 }

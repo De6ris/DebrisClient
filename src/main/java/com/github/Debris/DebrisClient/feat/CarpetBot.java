@@ -1,33 +1,29 @@
-package com.github.Debris.DebrisClient.util;
+package com.github.Debris.DebrisClient.feat;
 
+import com.github.Debris.DebrisClient.util.AccessorUtil;
+import com.github.Debris.DebrisClient.util.ChatUtil;
+import com.github.Debris.DebrisClient.util.Predicates;
+import com.github.Debris.DebrisClient.util.RayTraceUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class BotUtil {
-    @SuppressWarnings("ConstantConditions")
+public class CarpetBot {
+    @SuppressWarnings({"ConstantConditions", "UnnecessaryReturnStatement"})
     public static void tryKickBot(MinecraftClient client) {
         if (Predicates.notInGame(client)) return;
 
-        Optional<HitResult> optional = RayTraceUtil.getPlayerRayTrace(client);
+        Optional<Entity> optionalEntity = RayTraceUtil.getRayTraceEntity(client);
+        if (optionalEntity.isEmpty()) return;
+        Entity entity = optionalEntity.get();
 
-        if (optional.isEmpty()) return;
-
-        HitResult trace = optional.get();
-
-        if (trace.getType() != HitResult.Type.ENTITY) return;
-
-        Entity targetedEntity = ((EntityHitResult) trace).getEntity();
-
-        if (targetedEntity instanceof PlayerEntity bot) {
+        if (entity instanceof PlayerEntity bot) {
 
             if (bot.getUuid().equals(client.player.getUuid())) return;// wont kill oneself
 

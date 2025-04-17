@@ -1,5 +1,6 @@
 package com.github.Debris.DebrisClient.feat;
 
+import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
 import com.github.Debris.DebrisClient.inventory.section.EnumSection;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.util.AccessorUtil;
@@ -23,7 +24,9 @@ public class TakeOff {
         ClientPlayerEntity player = client.player;
         if (player.getAbilities().flying) return false;
 
-        if (!wearElytra()) return false;
+        ContainerSection section = EnumSection.OffHand.get().mergeWith(EnumSection.InventoryWhole.get());
+
+        if (!wearElytra(section)) return false;
 
         Runnable swapTask;
 
@@ -31,7 +34,7 @@ public class TakeOff {
             swapTask = () -> {
             };
         } else {
-            Optional<Slot> optional = findRocketSlot();
+            Optional<Slot> optional = section.findItem(Items.FIREWORK_ROCKET);
             if (optional.isEmpty()) return false;
             Slot slot = optional.get();
             int currentHotBar = InteractionUtil.getCurrentHotBar(client);
@@ -57,21 +60,16 @@ public class TakeOff {
         return true;
     }
 
-    private static boolean wearElytra() {
+    private static boolean wearElytra(ContainerSection section) {
         Item elytra = Items.ELYTRA;
         Slot chestSlot = EnumSection.Armor.get().getSlot(1);
         if (chestSlot.getStack().isOf(elytra)) return true;
-        Optional<Slot> optional = EnumSection.OffHand.get().mergeWith(EnumSection.InventoryWhole.get()).findItem(elytra);
+        Optional<Slot> optional = section.findItem(elytra);
         if (optional.isPresent()) {
             InventoryUtil.swapSlots(chestSlot, optional.get());
             return true;
         }
         return false;
-    }
-
-    private static Optional<Slot> findRocketSlot() {
-        Item rocket = Items.FIREWORK_ROCKET;
-        return InventoryUtil.getSlots().stream().filter(x -> x.getStack().isOf(rocket)).findFirst();
     }
 
     public static final class TakeOffTask implements Runnable {

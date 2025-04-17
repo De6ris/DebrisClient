@@ -7,6 +7,7 @@
     "client.gui.ScreenHandlerMixin",
     "compat.malilib.ConfigButtonOptionListMixin",
     "compat.malilib.WidgetConfigOptionMixin",
+    "compat.minihud.RenderHandlerMixin",
     "compat.tweakeroo.InventoryUtilsMixin",
     "compat.wthit.TooltipHandlerMixin",
     "component.ItemEnchantmentsComponentMixin",
