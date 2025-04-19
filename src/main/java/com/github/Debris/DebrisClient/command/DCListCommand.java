@@ -1,20 +1,28 @@
 package com.github.Debris.DebrisClient.command;
 
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
+import com.github.Debris.DebrisClient.util.RayTraceUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import fi.dy.masa.malilib.config.options.ConfigStringList;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.command.CommandSource;
+import net.minecraft.entity.EntityType;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
@@ -23,25 +31,22 @@ public class DCListCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(literal(Commands.PREFIX + "list")
                 .then(literal("help").executes(ctx -> help(ctx.getSource())))
-                .then(makeAutoRepeatCommand())
-                .then(build("auto_throw", Registries.ITEM, DCCommonConfig.AutoThrowWhiteList))
-                .then(build("cull_block_entity", Registries.BLOCK_ENTITY_TYPE, DCCommonConfig.CullBlockEntityList))
-                .then(build("cull_entity", Registries.ENTITY_TYPE, DCCommonConfig.CullEntityList))
+                .then(makeAutoRepeat())
+                .then(makeAutoThrow())
+                .then(makeCullBlockEntity())
+                .then(makeCullEntity())
                 .then(build("cull_particle", Registries.PARTICLE_TYPE, DCCommonConfig.CullParticleList))
                 .then(build("highlight", Registries.ENTITY_TYPE, DCCommonConfig.HighlightEntityList))
                 .then(build("mute_sound", Registries.SOUND_EVENT, DCCommonConfig.MuteSoundList))
         );
     }
 
-    private static LiteralArgumentBuilder<FabricClientCommandSource> makeAutoRepeatCommand() {
+    private static LiteralArgumentBuilder<FabricClientCommandSource> makeAutoRepeat() {
         List<String> list = DCCommonConfig.AutoRepeatPlayerList.getStrings();
-        String argument = "player";
         return of("auto_repeat", list)
-                .argumentName(argument)
+                .argumentName("player")
                 .addSuggest(CommandFactory.PLAYER_SUGGESTION)
-                .addExecute(ctx -> {
-                    FabricClientCommandSource source = ctx.getSource();
-                    String player = StringArgumentType.getString(ctx, argument);
+                .addExecute((source, player) -> {
                     String self = source.getPlayer().getGameProfile().getName();
                     if (player.equals(self)) {
                         source.sendFeedback(Text.literal("请勿添加你自己"));
@@ -58,6 +63,41 @@ public class DCListCommand {
                 .build();
     }
 
+    private static LiteralArgumentBuilder<FabricClientCommandSource> makeAutoThrow() {
+        List<String> list = DCCommonConfig.AutoThrowWhiteList.getStrings();
+        DefaultedRegistry<Item> registry = Registries.ITEM;
+        return of("auto_throw", registry, list)
+                .stringSupplier(source -> {
+                    ItemStack stack = source.getPlayer().getMainHandStack();
+                    if (stack.isEmpty()) {
+                        return Optional.empty();
+                    } else {
+                        Item item = stack.getItem();
+                        String key = registry.getId(item).toString();
+                        return Optional.of(key);
+                    }
+                })
+                .build();
+    }
+
+    private static LiteralArgumentBuilder<FabricClientCommandSource> makeCullBlockEntity() {
+        List<String> list = DCCommonConfig.CullBlockEntityList.getStrings();
+        return of("cull_block_entity", Registries.BLOCK_ENTITY_TYPE, list)
+                .stringSupplier(source -> RayTraceUtil.getRayTraceBlockEntity(source.getClient())
+                        .map(blockEntity -> BlockEntityType.getId(blockEntity.getType()))
+                        .map(Identifier::toString))
+                .build();
+    }
+
+    private static LiteralArgumentBuilder<FabricClientCommandSource> makeCullEntity() {
+        List<String> list = DCCommonConfig.CullEntityList.getStrings();
+        return of("cull_entity", Registries.ENTITY_TYPE, list)
+                .stringSupplier(source -> RayTraceUtil.getRayTraceEntity(source.getClient())
+                        .map(entity -> EntityType.getId(entity.getType()))
+                        .map(Identifier::toString))
+                .build();
+    }
+
     private static int help(FabricClientCommandSource source) {
         source.sendFeedback(Text.literal("此命令可对本模组配置的各个列表进行增删改查的操作."));
         source.sendFeedback(Text.literal("你也可以在配置GUI,或配置文件中进行这些操作."));
@@ -70,32 +110,41 @@ public class DCListCommand {
     }
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> build(String name, Registry<?> registry, List<String> list) {
-        return of(name, list)
-                .argumentName(registry.getKey().getValue().getPath())
-                .addSuggest((ctx, builder) -> CommandSource.suggestIdentifiers(registry.getIds(), builder))
-                .build();
+        return of(name, registry, list).build();
     }
 
     private static Builder of(String name, List<String> list) {
         return new Builder(name, list);
     }
 
+    private static Builder of(String name, Registry<?> registry, List<String> list) {
+        return of(name, list)
+                .argumentName(registry.getKey().getValue().getPath())
+                .addSuggest((ctx, builder) -> CommandSource.suggestIdentifiers(registry.getIds(), builder));
+    }
+
     private static class Builder {
         private final String name;
         private final List<String> list;
 
-        private Command<FabricClientCommandSource> addExecute;
+        /**
+         * For calling add and remove without params.
+         */
+        @Nullable
+        private StringSupplier stringSupplier;
+        @Nullable
+        private SuggestionProvider<FabricClientCommandSource> addSuggest;
 
         private String argumentName;
-        private SuggestionProvider<FabricClientCommandSource> addSuggest;
+        private StringExecutor addExecute;
+        private StringExecutor removeExecute;
 
         private Builder(String name, List<String> list) {
             this.name = name;
             this.list = list;
 
-            this.addExecute = ctx -> {
-                FabricClientCommandSource source = ctx.getSource();
-                String key = StringArgumentType.getString(ctx, argumentName);
+            this.argumentName = "dummy";
+            this.addExecute = (source, key) -> {
                 if (list.contains(key)) {
                     source.sendFeedback(Text.literal("条目已存在: " + key));
                 } else {
@@ -104,15 +153,18 @@ public class DCListCommand {
                 }
                 return Command.SINGLE_SUCCESS;
             };
+            this.removeExecute = (source, key) -> {
+                if (list.remove(key)) {
+                    source.sendFeedback(Text.literal("成功从列表删除: " + key));
+                } else {
+                    source.sendFeedback(Text.literal("该条目不存在: " + key));
+                }
+                return Command.SINGLE_SUCCESS;
+            };
         }
 
-        private Builder addExecute(Command<FabricClientCommandSource> execute) {
-            this.addExecute = execute;
-            return this;
-        }
-
-        private Builder argumentName(String name) {
-            this.argumentName = name;
+        public Builder stringSupplier(StringSupplier stringSupplier) {
+            this.stringSupplier = stringSupplier;
             return this;
         }
 
@@ -121,47 +173,79 @@ public class DCListCommand {
             return this;
         }
 
+
+        private Builder argumentName(String name) {
+            this.argumentName = name;
+            return this;
+        }
+
+        private Builder addExecute(StringExecutor execute) {
+            this.addExecute = execute;
+            return this;
+        }
+
+        private Builder removeExecute(StringExecutor execute) {
+            this.removeExecute = execute;
+            return this;
+        }
+
         private LiteralArgumentBuilder<FabricClientCommandSource> build() {
-            if (argumentName == null) throw new IllegalArgumentException();
-            if (addSuggest == null) throw new IllegalArgumentException();
             return literal(name)
-                    .then(literal("add")
-                            .then(makeAdd()))
-                    .then(literal("list")
-                            .executes(ctx -> {
-                                ctx.getSource().sendFeedback(Text.literal(list.toString()));
-                                return Command.SINGLE_SUCCESS;
-                            }))
-                    .then(literal("remove")
-                            .then(makeRemove()))
-                    .then(literal("remove_all")
+                    .then(makeAdd())
+                    .then(literal("clear")
                             .executes(ctx -> {
                                 ctx.getSource().sendFeedback(Text.literal("成功清空列表: " + list.toString()));
                                 list.clear();
                                 return Command.SINGLE_SUCCESS;
                             }))
+                    .then(literal("list")
+                            .executes(ctx -> {
+                                ctx.getSource().sendFeedback(Text.literal(list.toString()));
+                                return Command.SINGLE_SUCCESS;
+                            }))
+                    .then(makeRemove())
                     ;
         }
 
-        private RequiredArgumentBuilder<FabricClientCommandSource, ?> makeAdd() {
-            return argument(argumentName, StringArgumentType.greedyString())
-                    .suggests(addSuggest)
-                    .executes(addExecute);
+        private LiteralArgumentBuilder<FabricClientCommandSource> makeAdd() {
+            LiteralArgumentBuilder<FabricClientCommandSource> builder = literal("add")
+                    .then(argument(argumentName, StringArgumentType.greedyString())
+                            .suggests(addSuggest)
+                            .executes(ctx -> addExecute.run(ctx.getSource(), StringArgumentType.getString(ctx, argumentName)))
+                    );
+            if (stringSupplier != null) {
+                builder.executes(ctx -> {
+                    FabricClientCommandSource source = ctx.getSource();
+                    stringSupplier.supply(source).ifPresentOrElse(key -> addExecute.run(source, key), () -> source.sendFeedback(Text.literal("获取默认参数失败")));
+                    return Command.SINGLE_SUCCESS;
+                });
+            }
+            return builder;
         }
 
-        private RequiredArgumentBuilder<FabricClientCommandSource, String> makeRemove() {
-            return argument(argumentName, StringArgumentType.greedyString())
-                    .suggests((ctx, builder) -> CommandSource.suggestMatching(list, builder))
-                    .executes(ctx -> {
-                        FabricClientCommandSource source = ctx.getSource();
-                        String item = ctx.getArgument(argumentName, String.class);
-                        if (list.remove(item)) {
-                            source.sendFeedback(Text.literal("成功从列表删除: " + item));
-                        } else {
-                            source.sendFeedback(Text.literal("该条目不存在: " + item));
-                        }
-                        return Command.SINGLE_SUCCESS;
-                    });
+        private LiteralArgumentBuilder<FabricClientCommandSource> makeRemove() {
+            LiteralArgumentBuilder<FabricClientCommandSource> x = literal("remove")
+                    .then(argument(argumentName, StringArgumentType.greedyString())
+                            .suggests((ctx, builder) -> CommandSource.suggestMatching(list, builder))
+                            .executes(ctx -> removeExecute.run(ctx.getSource(), StringArgumentType.getString(ctx, argumentName))));
+            if (stringSupplier != null) {
+                x.executes(ctx -> {
+                    FabricClientCommandSource source = ctx.getSource();
+                    stringSupplier.supply(source).ifPresentOrElse(key -> removeExecute.run(source, key), () -> source.sendFeedback(Text.literal("获取默认参数失败")));
+                    return Command.SINGLE_SUCCESS;
+                });
+            }
+            return x;
         }
+    }
+
+    @FunctionalInterface
+    private interface StringExecutor {
+        int run(FabricClientCommandSource source, String string);
+    }
+
+    @FunctionalInterface
+    private interface StringSupplier {
+        Optional<String> supply(FabricClientCommandSource source);
     }
 }

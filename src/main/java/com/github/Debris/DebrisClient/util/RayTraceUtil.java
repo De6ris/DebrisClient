@@ -5,7 +5,9 @@ import com.github.Debris.DebrisClient.unsafe.tweakeroo.TweakerooAccessor;
 import com.mojang.logging.LogUtils;
 import fi.dy.masa.malilib.util.EntityUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.BlockHitResult;
@@ -61,20 +63,31 @@ public class RayTraceUtil {
     }
 
     public static Optional<BlockPos> getRayTraceBlock(MinecraftClient client) {
-        Optional<HitResult> optional = getPlayerRayTrace(client);
-        if (optional.isEmpty()) return Optional.empty();
-        HitResult hitResult = optional.get();
-
-        if (hitResult.getType() != HitResult.Type.BLOCK) return Optional.empty();
-        return Optional.of(((BlockHitResult) hitResult).getBlockPos());
+        return getPlayerRayTrace(client).map(hitResult -> {
+            if (hitResult.getType() == HitResult.Type.BLOCK) {
+                return ((BlockHitResult) hitResult).getBlockPos();
+            }
+            return null;
+        });
     }
 
     public static Optional<Entity> getRayTraceEntity(MinecraftClient client) {
-        Optional<HitResult> optional = getPlayerRayTrace(client);
-        if (optional.isEmpty()) return Optional.empty();
-        HitResult hitResult = optional.get();
+        return getPlayerRayTrace(client).map(hitResult -> {
+            if (hitResult.getType() == HitResult.Type.ENTITY) {
+                return ((EntityHitResult) hitResult).getEntity();
+            }
+            return null;
+        });
+    }
 
-        if (hitResult.getType() != HitResult.Type.ENTITY) return Optional.empty();
-        return Optional.of(((EntityHitResult) hitResult).getEntity());
+    @SuppressWarnings("DataFlowIssue")
+    public static Optional<BlockEntity> getRayTraceBlockEntity(MinecraftClient client) {
+        return getRayTraceBlock(client).map(pos -> {
+            ClientWorld world = client.world;
+            if (world.getBlockState(pos).hasBlockEntity()) {
+                return world.getChunk(pos).getBlockEntity(pos);
+            }
+            return null;
+        });
     }
 }
