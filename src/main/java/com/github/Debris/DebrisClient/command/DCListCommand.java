@@ -64,9 +64,8 @@ public class DCListCommand {
     }
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeAutoThrow() {
-        List<String> list = DCCommonConfig.AutoThrowWhiteList.getStrings();
         DefaultedRegistry<Item> registry = Registries.ITEM;
-        return of("auto_throw", registry, list)
+        return of("auto_throw", registry, DCCommonConfig.AutoThrowWhiteList)
                 .stringSupplier(source -> {
                     ItemStack stack = source.getPlayer().getMainHandStack();
                     if (stack.isEmpty()) {
@@ -81,8 +80,7 @@ public class DCListCommand {
     }
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeCullBlockEntity() {
-        List<String> list = DCCommonConfig.CullBlockEntityList.getStrings();
-        return of("cull_block_entity", Registries.BLOCK_ENTITY_TYPE, list)
+        return of("cull_block_entity", Registries.BLOCK_ENTITY_TYPE, DCCommonConfig.CullBlockEntityList)
                 .stringSupplier(source -> RayTraceUtil.getRayTraceBlockEntity(source.getClient())
                         .map(blockEntity -> BlockEntityType.getId(blockEntity.getType()))
                         .map(Identifier::toString))
@@ -90,8 +88,7 @@ public class DCListCommand {
     }
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeCullEntity() {
-        List<String> list = DCCommonConfig.CullEntityList.getStrings();
-        return of("cull_entity", Registries.ENTITY_TYPE, list)
+        return of("cull_entity", Registries.ENTITY_TYPE, DCCommonConfig.CullEntityList)
                 .stringSupplier(source -> RayTraceUtil.getRayTraceEntity(source.getClient())
                         .map(entity -> EntityType.getId(entity.getType()))
                         .map(Identifier::toString))
@@ -115,6 +112,10 @@ public class DCListCommand {
 
     private static Builder of(String name, List<String> list) {
         return new Builder(name, list);
+    }
+
+    private static Builder of(String name, Registry<?> registry, ConfigStringList config) {
+        return of(name, registry, config.getStrings());
     }
 
     private static Builder of(String name, Registry<?> registry, List<String> list) {
@@ -172,7 +173,6 @@ public class DCListCommand {
             this.addSuggest = suggest;
             return this;
         }
-
 
         private Builder argumentName(String name) {
             this.argumentName = name;

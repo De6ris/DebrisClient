@@ -4,8 +4,6 @@ import com.github.Debris.DebrisClient.util.ChatUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import dev.xpple.clientarguments.arguments.CResourceKeyArgument;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -16,20 +14,15 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.arg
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class DCHeadCommand {
-    private static final DynamicCommandExceptionType INVALID_TYPE_EXCEPTION = new DynamicCommandExceptionType(
-            element -> Text.stringifiedTranslatable("argument.resource.invalid_type", element, "", RegistryKeys.SOUND_EVENT)
-    );
-
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(literal(Commands.PREFIX + "head")
                 .then(literal("help").
                         executes(ctx -> help(ctx.getSource())))
                 .then(argument("name", StringArgumentType.word())
                         .suggests(CommandFactory.PLAYER_SUGGESTION)
-                        .then(argument("sound_type", CResourceKeyArgument.key(RegistryKeys.SOUND_EVENT))
-                                .executes(ctx ->
-                                        giveHead(ctx.getSource(), ctx.getArgument("name", String.class),
-                                                CResourceKeyArgument.getRegistryEntry(ctx, "sound_type", RegistryKeys.SOUND_EVENT, INVALID_TYPE_EXCEPTION))))));
+                        .then(CommandFactory.ofRegistryKey(RegistryKeys.SOUND_EVENT, (ctx, entry) ->
+                                giveHead(ctx.getSource(), ctx.getArgument("name", String.class), entry))))
+        );
     }
 
     private static int help(FabricClientCommandSource source) {

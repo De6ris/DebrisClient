@@ -39,7 +39,7 @@ public class CommandFactory {
                 .executes(ctx -> execution.apply(ctx,
                         CResourceKeyArgument.getRegistryEntry(ctx, argument, registryKey,
                                 new DynamicCommandExceptionType(
-                                        element -> Text.stringifiedTranslatable("argument.resource.invalid_type", element, "", registryKey)
+                                        element -> Text.stringifiedTranslatable("argument.resource.invalid_type", element, "unknown", registryKey)
                                 )))
                 );
     }
