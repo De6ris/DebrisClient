@@ -43,7 +43,7 @@ public class EntityInteractor {
         Optional<Entity> optional = TARGETS.stream().filter(entity -> InteractionUtil.withinReach(client, entity)).findFirst();
         if (optional.isPresent()) {
             Entity entity = optional.get();
-            InteractionUtil.interactEntity(client, entity);
+            InteractionUtil.useEntity(client, entity);
             if (Predicates.hasMod(ModReference.MagicLibMCApi)) {
                 RenderQueue.add(RendererFactory.text(Text.literal("已交互"), entity), 100);
             }

@@ -7,8 +7,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.c2s.play.SpectatorTeleportC2SPacket;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -118,9 +120,30 @@ public class InteractionUtil {
         client.interactionManager.interactBlock(client.player, Hand.MAIN_HAND, hitResult);
     }
 
+    /**
+     * See {@link MinecraftClient#doItemUse()}
+     */
     @SuppressWarnings("DataFlowIssue")
-    public static void interactEntity(MinecraftClient client, Entity entity) {
-        client.interactionManager.interactEntity(client.player, entity, Hand.MAIN_HAND);
+    public static void useEntity(MinecraftClient client, Entity entity) {
+        ActionResult actionResult = interactEntityAtLocation(client, entity, new EntityHitResult(entity));
+        if (!actionResult.isAccepted()) {
+            actionResult = interactEntity(client, entity);
+        }
+        if (actionResult instanceof ActionResult.Success success) {
+            if (success.swingSource() == ActionResult.SwingSource.CLIENT) {
+                client.player.swingHand(Hand.MAIN_HAND);
+            }
+        }
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    public static ActionResult interactEntity(MinecraftClient client, Entity entity) {
+        return client.interactionManager.interactEntity(client.player, entity, Hand.MAIN_HAND);
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    public static ActionResult interactEntityAtLocation(MinecraftClient client, Entity entity, EntityHitResult hitResult) {
+        return client.interactionManager.interactEntityAtLocation(client.player, entity, hitResult, Hand.MAIN_HAND);
     }
 
     /**
