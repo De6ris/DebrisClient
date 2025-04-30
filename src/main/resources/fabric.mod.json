@@ -17,7 +17,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.github.Debris.DebrisClient.DebrisClient"
+      "com.github.Debris.DebrisClient.fabric.ModImpl"
     ],
     "modmenu": [
       "com.github.Debris.DebrisClient.compat.ModMenu"
