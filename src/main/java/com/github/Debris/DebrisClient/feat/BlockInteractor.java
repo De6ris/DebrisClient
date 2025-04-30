@@ -9,44 +9,22 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
+public class BlockInteractor extends ObjectInteractor<BlockPos> {
+    public static final BlockInteractor INSTANCE = new BlockInteractor();
 
-public class BlockInteractor {
-    private static final Collection<BlockPos> TARGETS = new HashSet<>();
-
-    public static boolean running() {
-        return !TARGETS.isEmpty();
+    private BlockInteractor() {
     }
 
-    public static int size() {
-        return TARGETS.size();
+    @Override
+    protected boolean withinReach(MinecraftClient client, BlockPos object) {
+        return InteractionUtil.withinReach(client, object);
     }
 
-    public static void stop() {
-        TARGETS.clear();
-    }
-
-    public static void add(BlockPos pos) {
-        TARGETS.add(pos);
-    }
-
-    public static void addAll(Collection<BlockPos> list) {
-        TARGETS.addAll(list);
-    }
-
-    public static void onClientTick(MinecraftClient client) {
-        if (!Predicates.inGameNoGui(client)) return;
-        if (TARGETS.isEmpty()) return;
-        Optional<BlockPos> optional = TARGETS.stream().filter(pos -> InteractionUtil.withinReach(client, pos)).findFirst();
-        if (optional.isPresent()) {
-            BlockPos blockPos = optional.get();
-            InteractionUtil.interactBlock(client, blockPos);
-            if (Predicates.hasMod(ModReference.MagicLibMCApi)) {
-                RenderQueue.add(RendererFactory.text(Text.literal("已交互"), blockPos), 100);
-            }
-            TARGETS.remove(blockPos);
+    @Override
+    protected void interact(MinecraftClient client, BlockPos object) {
+        InteractionUtil.interactBlock(client, object);
+        if (Predicates.hasMod(ModReference.MagicLibMCApi)) {
+            RenderQueue.add(RendererFactory.text(Text.literal("已交互"), object), 100);
         }
     }
 }

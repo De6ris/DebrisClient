@@ -57,7 +57,7 @@ public class AutoProcessManager {
 
     @SuppressWarnings("RedundantIfStatement")
     public static boolean allowMessage() {
-        if (BlockInteractor.running() || EntityInteractor.running()) return false;
+        if (BlockInteractor.INSTANCE.hasPending() || EntityInteractor.INSTANCE.hasPending()) return false;
         return true;
     }
 

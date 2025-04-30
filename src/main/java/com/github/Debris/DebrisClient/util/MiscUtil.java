@@ -4,6 +4,7 @@ import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.feat.BlockInteractor;
 import com.github.Debris.DebrisClient.feat.EntityInteractor;
+import com.github.Debris.DebrisClient.feat.ObjectInteractor;
 import com.github.Debris.DebrisClient.feat.WorldState;
 import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.unsafe.litematica.LitematicaAccessor;
@@ -114,8 +115,9 @@ public class MiscUtil {
     public static boolean tryOpenSelectionContainers(MinecraftClient client) {
         if (!Predicates.hasMod(ModReference.Litematica)) return false;
         if (Predicates.notInGame(client)) return false;
-        if (BlockInteractor.running()) {
-            BlockInteractor.stop();
+        BlockInteractor instance = BlockInteractor.INSTANCE;
+        if (instance.hasPending()) {
+            instance.clear();
             InfoUtils.printActionbarMessage("打开选区内容器: 已停止");
             return true;
         }
@@ -129,7 +131,7 @@ public class MiscUtil {
             return true;
         }
         InfoUtils.printActionbarMessage(String.format("打开选区内容器: 已找到%d处容器", targets.size()));
-        BlockInteractor.addAll(targets);
+        instance.addAll(ObjectInteractor.Category.OPEN_GUI, targets);
         return true;
     }
 
@@ -137,8 +139,9 @@ public class MiscUtil {
     public static boolean tryInteractSelectionEntities(MinecraftClient client) {
         if (!Predicates.hasMod(ModReference.Litematica)) return false;
         if (Predicates.notInGame(client)) return false;
-        if (EntityInteractor.running()) {
-            EntityInteractor.stop();
+        EntityInteractor instance = EntityInteractor.INSTANCE;
+        if (instance.hasPending()) {
+            instance.clear();
             InfoUtils.printActionbarMessage("交互选区内实体: 已停止");
             return true;
         }
@@ -152,7 +155,7 @@ public class MiscUtil {
             return true;
         }
         InfoUtils.printActionbarMessage(String.format("交互选区内实体: 已找到%d处实体", targets.size()));
-        EntityInteractor.addAll(targets);
+        instance.addAll(ObjectInteractor.Category.OPEN_GUI, targets);// hard to predicate, so just open_gui
         return true;
     }
 }

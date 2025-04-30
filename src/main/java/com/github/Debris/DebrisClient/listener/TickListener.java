@@ -48,9 +48,9 @@ public class TickListener implements IClientTickHandler {
             MiscUtil.runAutoBulletCatcher(client);
         }
 
-        BlockInteractor.onClientTick(client);
+        BlockInteractor.INSTANCE.onClientTick(client);
 
-        EntityInteractor.onClientTick(client);
+        EntityInteractor.INSTANCE.onClientTick(client);
 
         RenderQueue.onClientTick(client);
     }

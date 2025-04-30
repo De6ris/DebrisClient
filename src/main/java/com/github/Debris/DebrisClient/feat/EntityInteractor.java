@@ -9,45 +9,27 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
+public class EntityInteractor extends ObjectInteractor<Entity> {
+    public static final EntityInteractor INSTANCE = new EntityInteractor();
 
-public class EntityInteractor {
-    private static final Collection<Entity> TARGETS = new HashSet<>();
-
-    public static boolean running() {
-        return !TARGETS.isEmpty();
+    private EntityInteractor() {
     }
 
-    public static int size() {
-        return TARGETS.size();
+    @Override
+    protected boolean shouldRemove(Entity object) {
+        return object.isRemoved();
     }
 
-    public static void stop() {
-        TARGETS.clear();
+    @Override
+    protected boolean withinReach(MinecraftClient client, Entity object) {
+        return InteractionUtil.withinReach(client, object);
     }
 
-    public static void add(Entity pos) {
-        TARGETS.add(pos);
-    }
-
-    public static void addAll(Collection<Entity> list) {
-        TARGETS.addAll(list);
-    }
-
-    public static void onClientTick(MinecraftClient client) {
-        if (!Predicates.inGameNoGui(client)) return;
-        if (TARGETS.isEmpty()) return;
-        TARGETS.removeIf(Entity::isRemoved);
-        Optional<Entity> optional = TARGETS.stream().filter(entity -> InteractionUtil.withinReach(client, entity)).findFirst();
-        if (optional.isPresent()) {
-            Entity entity = optional.get();
-            InteractionUtil.useEntity(client, entity);
-            if (Predicates.hasMod(ModReference.MagicLibMCApi)) {
-                RenderQueue.add(RendererFactory.text(Text.literal("已交互"), entity), 100);
-            }
-            TARGETS.remove(entity);
+    @Override
+    protected void interact(MinecraftClient client, Entity entity) {
+        InteractionUtil.useEntity(client, entity);
+        if (Predicates.hasMod(ModReference.MagicLibMCApi)) {
+            RenderQueue.add(RendererFactory.text(Text.literal("已交互"), entity), 100);
         }
     }
 }

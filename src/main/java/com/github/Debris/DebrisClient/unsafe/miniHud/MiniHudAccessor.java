@@ -12,11 +12,11 @@ public class MiniHudAccessor {
     }
 
     public static void onLinesUpdate(List<String> lines) {
-        if (BlockInteractor.running()) {
-            lines.add("方块交互: 还剩" + BlockInteractor.size() + "处");
+        if (BlockInteractor.INSTANCE.hasPending()) {
+            lines.add("方块交互: 还剩" + BlockInteractor.INSTANCE.size() + "处");
         }
-        if (EntityInteractor.running()) {
-            lines.add("实体交互: 还剩" + EntityInteractor.size() + "处");
+        if (EntityInteractor.INSTANCE.hasPending()) {
+            lines.add("实体交互: 还剩" + EntityInteractor.INSTANCE.size() + "处");
         }
     }
 }

@@ -43,7 +43,7 @@ public class ContainerTemplate {
         if (Predicates.notInGuiContainer(client)) {
             Optional<BlockPos> optional = RayTraceUtil.getRayTraceBlock(client);
             if (optional.isPresent() && Predicates.isContainerBlock(client.world, optional.get())) {
-                BlockInteractor.add(optional.get());
+                BlockInteractor.INSTANCE.add(ObjectInteractor.Category.OPEN_GUI, optional.get());
                 waitForInteractor = true;
             } else {
                 InfoUtils.printActionbarMessage("记录容器样板: 未看向容器");
