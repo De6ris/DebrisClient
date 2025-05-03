@@ -1,7 +1,7 @@
 package com.github.Debris.DebrisClient.inventory.section;
 
-import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.util.AccessorUtil;
+import com.github.Debris.DebrisClient.util.InventoryUtil;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -18,13 +18,17 @@ import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class SectionIdentifier {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private final SectionHandler sectionHandler;
+    private final BiConsumer<EnumSection, ContainerSection> sectionReceiver;
+    private final Consumer<ContainerSection> unidentifiedHandler;
 
-    public SectionIdentifier(SectionHandler sectionHandler) {
-        this.sectionHandler = sectionHandler;
+    public SectionIdentifier(BiConsumer<EnumSection, ContainerSection> sectionReceiver, Consumer<ContainerSection> unidentifiedHandler) {
+        this.sectionReceiver = sectionReceiver;
+        this.unidentifiedHandler = unidentifiedHandler;
     }
 
     public void identify(@Nullable HandledScreen<?> guiContainer, ScreenHandler container, Inventory iInventory, List<Slot> slotList) {
@@ -158,7 +162,7 @@ public class SectionIdentifier {
     }
 
     private void handleUnidentified(ContainerSection section) {
-        this.sectionHandler.handleUnidentified(section);
+        this.unidentifiedHandler.accept(section);
     }
 
     private ContainerSection createSection(List<Slot> slots) {
@@ -170,9 +174,8 @@ public class SectionIdentifier {
     }
 
     private void putSection(EnumSection key, ContainerSection section) {
-        this.sectionHandler.putSection(key, section);
+        this.sectionReceiver.accept(key, section);
     }
-
 
     private static List<Slot> createFakePlayerActions(List<Slot> total) {
         List<Slot> slots = new ArrayList<>(total.subList(8, 18));

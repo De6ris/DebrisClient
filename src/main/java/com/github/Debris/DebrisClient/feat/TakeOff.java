@@ -2,9 +2,9 @@ package com.github.Debris.DebrisClient.feat;
 
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
 import com.github.Debris.DebrisClient.inventory.section.EnumSection;
-import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
 import com.github.Debris.DebrisClient.util.AccessorUtil;
 import com.github.Debris.DebrisClient.util.InteractionUtil;
+import com.github.Debris.DebrisClient.util.InventoryUtil;
 import com.github.Debris.DebrisClient.util.Predicates;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;

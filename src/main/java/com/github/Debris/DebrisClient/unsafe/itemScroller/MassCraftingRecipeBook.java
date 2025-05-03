@@ -1,8 +1,8 @@
 package com.github.Debris.DebrisClient.unsafe.itemScroller;
 
-import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
-import com.github.Debris.DebrisClient.inventory.util.ItemUtil;
 import com.github.Debris.DebrisClient.util.AccessorUtil;
+import com.github.Debris.DebrisClient.util.InventoryUtil;
+import com.github.Debris.DebrisClient.util.ItemUtil;
 import com.mojang.logging.LogUtils;
 import fi.dy.masa.itemscroller.recipes.RecipePattern;
 import net.minecraft.client.MinecraftClient;

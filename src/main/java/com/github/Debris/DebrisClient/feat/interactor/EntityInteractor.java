@@ -1,4 +1,4 @@
-package com.github.Debris.DebrisClient.feat;
+package com.github.Debris.DebrisClient.feat.interactor;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.render.RenderQueue;
@@ -26,10 +26,11 @@ public class EntityInteractor extends ObjectInteractor<Entity> {
     }
 
     @Override
-    protected void interact(MinecraftClient client, Entity entity) {
+    protected boolean interact(MinecraftClient client, Entity entity) {
         InteractionUtil.useEntity(client, entity);
         if (Predicates.hasMod(ModReference.MagicLibMCApi)) {
             RenderQueue.add(RendererFactory.text(Text.literal("已交互"), entity), 100);
         }
+        return true;
     }
 }

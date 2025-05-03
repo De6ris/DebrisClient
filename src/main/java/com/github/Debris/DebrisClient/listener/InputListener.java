@@ -2,13 +2,14 @@ package com.github.Debris.DebrisClient.listener;
 
 import com.github.Debris.DebrisClient.DebrisClient;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
+import com.github.Debris.DebrisClient.inventory.InventoryTweaks;
+import com.github.Debris.DebrisClient.inventory.QuickBundle;
+import com.github.Debris.DebrisClient.inventory.cutstone.StoneCutterRecipeRenderer;
+import com.github.Debris.DebrisClient.inventory.cutstone.StoneCutterRecipeStorage;
+import com.github.Debris.DebrisClient.inventory.cutstone.StoneCutterUtil;
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
 import com.github.Debris.DebrisClient.inventory.section.SectionHandler;
-import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterRecipeRenderer;
-import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterRecipeStorage;
-import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
-import com.github.Debris.DebrisClient.inventory.util.InventoryTweaks;
-import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
+import com.github.Debris.DebrisClient.util.InventoryUtil;
 import com.github.Debris.DebrisClient.util.Predicates;
 import fi.dy.masa.malilib.hotkeys.*;
 import fi.dy.masa.malilib.util.KeyCodes;
@@ -107,7 +108,7 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
             }
 
             if (DCCommonConfig.ModifierClearBundle.getKeybind().isKeybindHeld()) {
-                if (InventoryTweaks.tryClearBundle()) {
+                if (QuickBundle.tryClearBundle()) {
                     this.cancelButtonUp(eventButton);
                     return true;// cancel this click
                 }

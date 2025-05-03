@@ -1,6 +1,6 @@
 package com.github.Debris.DebrisClient.mixin.client.gui;
 
-import com.github.Debris.DebrisClient.inventory.autoProcess.AutoProcessManager;
+import com.github.Debris.DebrisClient.inventory.autoprocess.AutoProcessManager;
 import com.github.Debris.DebrisClient.inventory.section.IContainer;
 import com.github.Debris.DebrisClient.inventory.section.SectionHandler;
 import net.minecraft.item.ItemStack;

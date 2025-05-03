@@ -1,6 +1,7 @@
-package com.github.Debris.DebrisClient.feat;
+package com.github.Debris.DebrisClient.feat.interactor;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
+import com.github.Debris.DebrisClient.feat.PlayerRotation;
 import com.github.Debris.DebrisClient.render.RenderQueue;
 import com.github.Debris.DebrisClient.render.RendererFactory;
 import com.github.Debris.DebrisClient.util.InteractionUtil;
@@ -21,10 +22,11 @@ public class BlockInteractor extends ObjectInteractor<BlockPos> {
     }
 
     @Override
-    protected void interact(MinecraftClient client, BlockPos object) {
-        InteractionUtil.interactBlock(client, object);
+    protected boolean interact(MinecraftClient client, BlockPos object) {
+        InteractionUtil.useBlock(client, object);
         if (Predicates.hasMod(ModReference.MagicLibMCApi)) {
             RenderQueue.add(RendererFactory.text(Text.literal("已交互"), object), 100);
         }
+        return true;
     }
 }

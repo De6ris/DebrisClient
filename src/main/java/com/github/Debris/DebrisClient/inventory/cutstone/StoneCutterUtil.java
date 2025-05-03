@@ -1,12 +1,12 @@
-package com.github.Debris.DebrisClient.inventory.stoneCutter;
+package com.github.Debris.DebrisClient.inventory.cutstone;
 
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
+import com.github.Debris.DebrisClient.inventory.InventoryTweaks;
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
 import com.github.Debris.DebrisClient.inventory.section.EnumSection;
 import com.github.Debris.DebrisClient.inventory.section.SectionHandler;
-import com.github.Debris.DebrisClient.inventory.util.InventoryTweaks;
-import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
-import com.github.Debris.DebrisClient.inventory.util.ItemUtil;
+import com.github.Debris.DebrisClient.util.InventoryUtil;
+import com.github.Debris.DebrisClient.util.ItemUtil;
 import com.mojang.logging.LogUtils;
 import fi.dy.masa.malilib.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;

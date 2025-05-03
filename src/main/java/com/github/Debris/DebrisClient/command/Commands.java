@@ -17,6 +17,7 @@ public class Commands {
         DCSpectateCommand.register(dispatcher);
         DCHeadCommand.register(dispatcher);
         DCListCommand.register(dispatcher);
+        DCInteractCommand.register(dispatcher);
 
         if (Predicates.hasMod(ModReference.ClientCommands)) {
             DCFindInFrameCommand.register(dispatcher, context);

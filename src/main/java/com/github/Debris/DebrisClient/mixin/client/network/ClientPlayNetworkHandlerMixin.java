@@ -1,7 +1,7 @@
 package com.github.Debris.DebrisClient.mixin.client.network;
 
-import com.github.Debris.DebrisClient.inventory.autoProcess.AutoProcessManager;
-import com.github.Debris.DebrisClient.util.MiscUtil;
+import com.github.Debris.DebrisClient.feat.Hooks;
+import com.github.Debris.DebrisClient.inventory.autoprocess.AutoProcessManager;
 import fi.dy.masa.malilib.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -31,7 +31,7 @@ public abstract class ClientPlayNetworkHandlerMixin extends ClientCommonNetworkH
             )
     )
     private void onTradeInfoUpdate(CallbackInfo ci) {
-        MiscUtil.onTradeInfoUpdate(this.client);
+        Hooks.onTradeInfoUpdate(this.client);
     }// This injection point from tweakemore
 
     @Inject(method = "onOpenScreen", at = @At("RETURN"))

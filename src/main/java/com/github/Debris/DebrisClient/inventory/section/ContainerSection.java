@@ -1,7 +1,7 @@
 package com.github.Debris.DebrisClient.inventory.section;
 
-import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
-import com.github.Debris.DebrisClient.inventory.util.ItemUtil;
+import com.github.Debris.DebrisClient.util.InventoryUtil;
+import com.github.Debris.DebrisClient.util.ItemUtil;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,6 +16,13 @@ import java.util.stream.Stream;
 
 public record ContainerSection(List<Slot> slots) {
     public static final ContainerSection EMPTY = new ContainerSection(List.of());
+
+    public static boolean isActionSection(ContainerSection section) {
+        for (EnumSection enumSection : EnumSection.ACTIONS) {
+            if (section.isOf(enumSection)) return true;
+        }
+        return false;
+    }
 
     public boolean hasSlot(Slot slot) {
         return this.slots.contains(slot);

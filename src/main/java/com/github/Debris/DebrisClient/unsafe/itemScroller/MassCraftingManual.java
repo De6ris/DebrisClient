@@ -1,8 +1,8 @@
 package com.github.Debris.DebrisClient.unsafe.itemScroller;
 
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
-import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
-import com.github.Debris.DebrisClient.inventory.util.ItemUtil;
+import com.github.Debris.DebrisClient.util.InventoryUtil;
+import com.github.Debris.DebrisClient.util.ItemUtil;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;

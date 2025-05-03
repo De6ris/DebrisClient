@@ -3,13 +3,15 @@ package com.github.Debris.DebrisClient.config;
 import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.feat.CarpetBot;
 import com.github.Debris.DebrisClient.feat.ContainerTemplate;
+import com.github.Debris.DebrisClient.feat.MiscFeat;
 import com.github.Debris.DebrisClient.feat.TakeOff;
-import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterRecipeStorage;
-import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
-import com.github.Debris.DebrisClient.inventory.util.InventoryTweaks;
+import com.github.Debris.DebrisClient.feat.interactor.InteractionFactory;
+import com.github.Debris.DebrisClient.inventory.InventoryTweaks;
+import com.github.Debris.DebrisClient.inventory.cutstone.StoneCutterRecipeStorage;
+import com.github.Debris.DebrisClient.inventory.cutstone.StoneCutterUtil;
+import com.github.Debris.DebrisClient.inventory.sort.SortInventory;
 import com.github.Debris.DebrisClient.unsafe.mgButtons.MGButtonReloader;
 import com.github.Debris.DebrisClient.util.ChatUtil;
-import com.github.Debris.DebrisClient.util.MiscUtil;
 import com.github.Debris.DebrisClient.util.Predicates;
 import fi.dy.masa.malilib.gui.Message;
 import fi.dy.masa.malilib.util.InfoUtils;
@@ -36,7 +38,7 @@ public class Callbacks {
         DCCommonConfig.SortItem.getKeybind().setCallback((action, key) -> {
             if (Predicates.notInGuiContainer(client)) return false;
             playClickSound(client);
-            return InventoryTweaks.trySort();// this will block other click consumers
+            return SortInventory.trySort();// this will block other click consumers
         });
 
         DCCommonConfig.StoreStoneCutterRecipe.getKeybind().setCallback((action, key) -> {
@@ -68,15 +70,15 @@ public class Callbacks {
 
         DCCommonConfig.RepeatNewestChat.getKeybind().setCallback((action, key) -> ChatUtil.repeatNewestChat(client));
 
-        DCCommonConfig.AlignWithEnderEye.getKeybind().setCallback((action, key) -> MiscUtil.alignWithEnderEye(client));
+        DCCommonConfig.AlignWithEnderEye.getKeybind().setCallback((action, key) -> MiscFeat.alignWithEnderEye(client));
 
         DCCommonConfig.TakeOff.getKeybind().setCallback((action, key) -> TakeOff.tryTakeOff(client));
 
         DCCommonConfig.RecordContainerTemplate.getKeybind().setCallback((action, key) -> ContainerTemplate.tryRecord(client));
 
-        DCCommonConfig.OpenSelectionContainers.getKeybind().setCallback(((action, key) -> MiscUtil.tryOpenSelectionContainers(client)));
+        DCCommonConfig.OpenSelectionContainers.getKeybind().setCallback(((action, key) -> InteractionFactory.addBlockTask(client, InteractionFactory.BlockPredicate.CONTAINER, true)));
 
-        DCCommonConfig.InteractSelectionEntities.getKeybind().setCallback(((action, key) -> MiscUtil.tryInteractSelectionEntities(client)));
+        DCCommonConfig.InteractSelectionEntities.getKeybind().setCallback(((action, key) -> InteractionFactory.addEntityTask(client, true)));
 
         DCCommonConfig.TEST.getKeybind().setCallback((action, key) -> {
             return false;

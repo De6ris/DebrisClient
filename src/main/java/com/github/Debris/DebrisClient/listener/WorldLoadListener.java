@@ -1,6 +1,6 @@
 package com.github.Debris.DebrisClient.listener;
 
-import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterRecipeStorage;
+import com.github.Debris.DebrisClient.inventory.cutstone.StoneCutterRecipeStorage;
 import fi.dy.masa.malilib.interfaces.IWorldLoadListener;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;

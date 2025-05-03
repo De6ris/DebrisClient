@@ -1,7 +1,7 @@
 package com.github.Debris.DebrisClient.feat;
 
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
-import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
+import com.github.Debris.DebrisClient.util.InventoryUtil;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

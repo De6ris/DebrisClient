@@ -2,11 +2,16 @@ package com.github.Debris.DebrisClient.listener;
 
 import com.github.Debris.DebrisClient.compat.ModReference;
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
-import com.github.Debris.DebrisClient.feat.*;
-import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
+import com.github.Debris.DebrisClient.feat.AutoRepeat;
+import com.github.Debris.DebrisClient.feat.CarpetBot;
+import com.github.Debris.DebrisClient.feat.LoyalTrident;
+import com.github.Debris.DebrisClient.feat.MiscFeat;
+import com.github.Debris.DebrisClient.feat.interactor.BlockInteractor;
+import com.github.Debris.DebrisClient.feat.interactor.EntityInteractor;
+import com.github.Debris.DebrisClient.inventory.AutoThrow;
+import com.github.Debris.DebrisClient.inventory.cutstone.StoneCutterUtil;
 import com.github.Debris.DebrisClient.render.RenderQueue;
 import com.github.Debris.DebrisClient.unsafe.itemScroller.MassCraftingApi;
-import com.github.Debris.DebrisClient.util.MiscUtil;
 import com.github.Debris.DebrisClient.util.Predicates;
 import fi.dy.masa.malilib.interfaces.IClientTickHandler;
 import net.minecraft.client.MinecraftClient;
@@ -33,7 +38,7 @@ public class TickListener implements IClientTickHandler {
         }
 
         if (DCCommonConfig.AutoThrow.getBooleanValue() && Predicates.inGameNoGui(client)) {
-            MiscUtil.runAutoThrow();
+            AutoThrow.runAutoThrow();
         }
 
         LoyalTrident.onClientTick(client);
@@ -41,11 +46,11 @@ public class TickListener implements IClientTickHandler {
         AutoRepeat.onClientTick(client);
 
         if (DCCommonConfig.AutoExtinguisher.getBooleanValue()) {
-            MiscUtil.runAutoExtinguisher(client);
+            MiscFeat.runAutoExtinguisher(client);
         }
 
         if (DCCommonConfig.AutoBulletCatching.getBooleanValue()) {
-            MiscUtil.runAutoBulletCatcher(client);
+            MiscFeat.runAutoBulletCatcher(client);
         }
 
         BlockInteractor.INSTANCE.onClientTick(client);

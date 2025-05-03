@@ -1,6 +1,6 @@
 package com.github.Debris.DebrisClient.inventory.section;
 
-import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
+import com.github.Debris.DebrisClient.util.InventoryUtil;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.inventory.Inventory;
@@ -31,7 +31,7 @@ public class SectionHandler {
     private void identifyContainer(@Nullable HandledScreen<?> guiContainer, ScreenHandler container) {
         List<Slot> slots = InventoryUtil.getSlots(container);
         Map<Inventory, List<Slot>> groupedByInventory = slots.stream().collect(Collectors.groupingBy(x -> x.inventory));
-        SectionIdentifier identifier = new SectionIdentifier(this);
+        SectionIdentifier identifier = new SectionIdentifier(this::putSection, this::handleUnidentified);
         for (Map.Entry<Inventory, List<Slot>> inventoryListEntry : groupedByInventory.entrySet()) {
             Inventory iInventory = inventoryListEntry.getKey();
             List<Slot> partSlots = inventoryListEntry.getValue();
@@ -39,17 +39,17 @@ public class SectionHandler {
         }
     }
 
-    void handleUnidentified(ContainerSection section) {
-        this.sectionMap.putIfAbsent(EnumSection.Unidentified, section);
-        this.unIdentifiedSections.add(section);
-    }
-
-    void putSection(EnumSection key, ContainerSection section) {
+    private void putSection(EnumSection key, ContainerSection section) {
         Map<EnumSection, ContainerSection> sectionMap = this.sectionMap;
         if (sectionMap.containsKey(key)) {
             LOGGER.warn("duplicate section for key {}: {} replacing {}", key, sectionMap.get(key), section);
         }
         sectionMap.put(key, section);
+    }
+
+    private void handleUnidentified(ContainerSection section) {
+        this.sectionMap.putIfAbsent(EnumSection.Unidentified, section);
+        this.unIdentifiedSections.add(section);
     }
 
     public static void onClientPlayerInit(PlayerScreenHandler playerContainer) {

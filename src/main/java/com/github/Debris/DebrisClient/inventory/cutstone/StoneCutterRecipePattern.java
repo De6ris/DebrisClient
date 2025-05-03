@@ -1,4 +1,4 @@
-package com.github.Debris.DebrisClient.inventory.stoneCutter;
+package com.github.Debris.DebrisClient.inventory.cutstone;
 
 import com.github.Debris.DebrisClient.inventory.section.EnumSection;
 import net.minecraft.item.ItemStack;

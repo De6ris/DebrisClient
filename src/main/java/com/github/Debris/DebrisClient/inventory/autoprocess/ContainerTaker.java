@@ -1,8 +1,8 @@
-package com.github.Debris.DebrisClient.inventory.autoProcess;
+package com.github.Debris.DebrisClient.inventory.autoprocess;
 
 import com.github.Debris.DebrisClient.config.DCCommonConfig;
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
-import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
+import com.github.Debris.DebrisClient.util.InventoryUtil;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.screen.slot.Slot;
 

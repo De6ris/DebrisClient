@@ -1,4 +1,4 @@
-package com.github.Debris.DebrisClient.inventory.autoProcess;
+package com.github.Debris.DebrisClient.inventory.autoprocess;
 
 public enum ProcessResult {
     SKIP(false, false),

@@ -2,8 +2,8 @@ package com.github.Debris.DebrisClient.unsafe.itemScroller;
 
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
 import com.github.Debris.DebrisClient.inventory.section.EnumSection;
-import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
-import com.github.Debris.DebrisClient.inventory.util.ItemUtil;
+import com.github.Debris.DebrisClient.util.InventoryUtil;
+import com.github.Debris.DebrisClient.util.ItemUtil;
 import fi.dy.masa.itemscroller.recipes.RecipePattern;
 import fi.dy.masa.itemscroller.recipes.RecipeStorage;
 import net.minecraft.client.gui.screen.ingame.RecipeBookScreen;

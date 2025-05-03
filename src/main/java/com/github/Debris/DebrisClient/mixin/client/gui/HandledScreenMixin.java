@@ -1,6 +1,6 @@
 package com.github.Debris.DebrisClient.mixin.client.gui;
 
-import com.github.Debris.DebrisClient.inventory.autoProcess.IAutoProcessScreen;
+import com.github.Debris.DebrisClient.inventory.autoprocess.IAutoProcessScreen;
 import com.github.Debris.DebrisClient.inventory.section.SectionHandler;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import org.spongepowered.asm.mixin.Mixin;

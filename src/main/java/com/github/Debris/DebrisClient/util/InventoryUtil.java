@@ -1,7 +1,6 @@
-package com.github.Debris.DebrisClient.inventory.util;
+package com.github.Debris.DebrisClient.util;
 
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
-import com.github.Debris.DebrisClient.util.AccessorUtil;
 import fi.dy.masa.malilib.util.GuiUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;

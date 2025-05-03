@@ -1,11 +1,11 @@
-package com.github.Debris.DebrisClient.inventory.autoProcess;
+package com.github.Debris.DebrisClient.inventory.autoprocess;
 
-import com.github.Debris.DebrisClient.feat.BlockInteractor;
 import com.github.Debris.DebrisClient.feat.ContainerTemplate;
-import com.github.Debris.DebrisClient.feat.EntityInteractor;
+import com.github.Debris.DebrisClient.feat.interactor.BlockInteractor;
+import com.github.Debris.DebrisClient.feat.interactor.EntityInteractor;
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
 import com.github.Debris.DebrisClient.inventory.section.EnumSection;
-import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
+import com.github.Debris.DebrisClient.util.InventoryUtil;
 import com.github.Debris.DebrisClient.util.Predicates;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.MinecraftClient;

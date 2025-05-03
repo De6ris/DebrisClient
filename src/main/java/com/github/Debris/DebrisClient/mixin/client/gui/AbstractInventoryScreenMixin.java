@@ -1,6 +1,6 @@
 package com.github.Debris.DebrisClient.mixin.client.gui;
 
-import com.github.Debris.DebrisClient.inventory.stoneCutter.StoneCutterUtil;
+import com.github.Debris.DebrisClient.inventory.cutstone.StoneCutterUtil;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.StatusEffectsDisplay;
 import org.spongepowered.asm.mixin.Mixin;

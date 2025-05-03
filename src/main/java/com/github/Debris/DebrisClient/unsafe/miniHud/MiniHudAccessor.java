@@ -1,7 +1,7 @@
 package com.github.Debris.DebrisClient.unsafe.miniHud;
 
-import com.github.Debris.DebrisClient.feat.BlockInteractor;
-import com.github.Debris.DebrisClient.feat.EntityInteractor;
+import com.github.Debris.DebrisClient.feat.interactor.BlockInteractor;
+import com.github.Debris.DebrisClient.feat.interactor.EntityInteractor;
 import fi.dy.masa.minihud.config.Configs;
 
 import java.util.List;

@@ -1,15 +1,14 @@
 package com.github.Debris.DebrisClient.feat;
 
-import com.github.Debris.DebrisClient.inventory.autoProcess.AutoProcessManager;
-import com.github.Debris.DebrisClient.inventory.autoProcess.IAutoProcessor;
-import com.github.Debris.DebrisClient.inventory.autoProcess.ProcessResult;
+import com.github.Debris.DebrisClient.feat.interactor.BlockInteractor;
+import com.github.Debris.DebrisClient.feat.interactor.ObjectInteractor;
+import com.github.Debris.DebrisClient.inventory.InventoryTweaks;
+import com.github.Debris.DebrisClient.inventory.autoprocess.AutoProcessManager;
+import com.github.Debris.DebrisClient.inventory.autoprocess.IAutoProcessor;
+import com.github.Debris.DebrisClient.inventory.autoprocess.ProcessResult;
 import com.github.Debris.DebrisClient.inventory.section.ContainerSection;
 import com.github.Debris.DebrisClient.inventory.section.EnumSection;
-import com.github.Debris.DebrisClient.inventory.util.InventoryTweaks;
-import com.github.Debris.DebrisClient.inventory.util.InventoryUtil;
-import com.github.Debris.DebrisClient.inventory.util.ItemUtil;
-import com.github.Debris.DebrisClient.util.Predicates;
-import com.github.Debris.DebrisClient.util.RayTraceUtil;
+import com.github.Debris.DebrisClient.util.*;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
@@ -42,7 +41,7 @@ public class ContainerTemplate {
 
         if (Predicates.notInGuiContainer(client)) {
             Optional<BlockPos> optional = RayTraceUtil.getRayTraceBlock(client);
-            if (optional.isPresent() && Predicates.isContainerBlock(client.world, optional.get())) {
+            if (optional.isPresent() && BlockUtil.isContainer(client.world, optional.get())) {
                 BlockInteractor.INSTANCE.add(ObjectInteractor.Category.OPEN_GUI, optional.get());
                 waitForInteractor = true;
             } else {

@@ -6,9 +6,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.screen.ScreenHandlerFactory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class Predicates {
     public static boolean notInGame(MinecraftClient client) {
@@ -38,7 +35,4 @@ public class Predicates {
         return FabricLoader.getInstance().isModLoaded(modid);
     }
 
-    public static boolean isContainerBlock(World world, BlockPos pos) {
-        return world.getBlockState(pos).hasBlockEntity() && world.getChunk(pos).getBlockEntity(pos) instanceof ScreenHandlerFactory;
-    }
 }
