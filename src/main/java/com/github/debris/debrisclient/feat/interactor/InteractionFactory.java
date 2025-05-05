@@ -1,0 +1,108 @@
+package com.github.debris.debrisclient.feat.interactor;
+
+import com.github.debris.debrisclient.compat.ModReference;
+import com.github.debris.debrisclient.unsafe.litematica.LitematicaAccessor;
+import com.github.debris.debrisclient.util.BlockUtil;
+import com.github.debris.debrisclient.util.Predicates;
+import fi.dy.masa.malilib.util.InfoUtils;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.world.World;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
+
+public class InteractionFactory {
+    public static boolean addBlockTask(MinecraftClient client, BlockPredicate predicate, boolean clearIfRunning) {
+        return addBlockTask(client, predicate.stateTester, predicate.category, clearIfRunning);
+    }
+
+    public static boolean addBlockTask(MinecraftClient client, BiPredicate<World, BlockPos> predicate, ObjectInteractor.Category category, boolean clearIfRunning) {
+        if (!Predicates.hasMod(ModReference.Litematica)) return false;
+        if (Predicates.notInGame(client)) return false;
+        BlockInteractor instance = BlockInteractor.INSTANCE;
+        if (clearIfRunning && instance.hasPending()) {
+            instance.clear();
+            InfoUtils.printActionbarMessage("交互选区内方块: 已停止");
+        } else {
+            addBlockTaskInternal(client, instance, predicate, category);
+        }
+        return true;
+    }
+
+    private static void addBlockTaskInternal(MinecraftClient client, BlockInteractor instance, BiPredicate<World, BlockPos> predicate, ObjectInteractor.Category category) {
+        ClientWorld world = client.world;
+        Collection<BlockPos> targets = new HashSet<>();
+        LitematicaAccessor.streamBlockPos().forEach(pos -> {
+            if (predicate.test(world, pos)) targets.add(pos.toImmutable());// otherwise the same object
+        });
+        if (targets.isEmpty()) {
+            InfoUtils.printActionbarMessage("交互选区内方块: 未找到匹配目标");
+        } else {
+            InfoUtils.printActionbarMessage(String.format("交互选区内方块: 已找到%d处方块", targets.size()));
+            instance.addAll(category, targets);
+        }
+    }
+
+    public static boolean addEntityTask(MinecraftClient client, boolean clearIfRunning) {
+        if (!Predicates.hasMod(ModReference.Litematica)) return false;
+        if (Predicates.notInGame(client)) return false;
+        EntityInteractor instance = EntityInteractor.INSTANCE;
+        if (clearIfRunning && instance.hasPending()) {
+            instance.clear();
+            InfoUtils.printActionbarMessage("交互选区内实体: 已停止");
+            return true;
+        } else {
+            addEntityTaskInternal(client, instance);
+        }
+        return true;
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    private static void addEntityTaskInternal(MinecraftClient client, EntityInteractor instance) {
+        ClientWorld world = client.world;
+        Set<Entity> targets = LitematicaAccessor.streamBlockBox()
+                .map(Box::from)
+                .flatMap(x -> world.getOtherEntities(client.player, x).stream())
+                .collect(Collectors.toSet());
+        if (targets.isEmpty()) {
+            InfoUtils.printActionbarMessage("交互选区内实体: 未找到实体");
+        } else {
+            InfoUtils.printActionbarMessage(String.format("交互选区内实体: 已找到%d处实体", targets.size()));
+            instance.addAll(ObjectInteractor.Category.OPEN_GUI, targets);// hard to predicate, so just open_gui
+        }
+    }
+
+    public enum BlockPredicate implements StringIdentifiable {
+        CONTAINER(BlockUtil::isContainer, ObjectInteractor.Category.OPEN_GUI),
+        NON_CONTAINER((world, pos) -> {
+            BlockState state = world.getBlockState(pos);
+            if (state.isAir()) return false;
+            //noinspection RedundantIfStatement
+            if (BlockUtil.isContainer(world, pos)) return false;
+            return true;
+        }, ObjectInteractor.Category.NORMAL),
+        ;
+
+        private final BiPredicate<World, BlockPos> stateTester;
+        private final ObjectInteractor.Category category;
+
+        BlockPredicate(BiPredicate<World, BlockPos> stateTester, ObjectInteractor.Category category) {
+            this.stateTester = stateTester;
+            this.category = category;
+        }
+
+        @Override
+        public String asString() {
+            return this.name().toLowerCase();
+        }
+    }
+}

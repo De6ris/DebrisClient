@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "debris_client",
+  "id": "debrisclient",
   "version": "${version}",
   "name": "DebrisClient",
   "description": "Some client tricks",
@@ -13,14 +13,14 @@
     "sources": "https://github.com/De6ris/DebrisClient"
   },
   "license": "MIT",
-  "icon": "assets/debris_client/icon.png",
+  "icon": "assets/debrisclient/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.github.Debris.DebrisClient.fabric.ModImpl"
+      "com.github.debris.debrisclient.fabric.ModImpl"
     ],
     "modmenu": [
-      "com.github.Debris.DebrisClient.compat.ModMenu"
+      "com.github.debris.debrisclient.compat.ModMenu"
     ]
   },
   "mixins": [
