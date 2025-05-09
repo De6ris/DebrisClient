@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(EntityRenderDispatcher.class)
 public class EntityRenderDispatcherMixin {
     @ModifyReturnValue(method = "shouldRender", at = @At("RETURN"))
-    private <E extends Entity> boolean preventFrameRendering(boolean original, @Local(argsOnly = true) E entity) {
+    private <E extends Entity> boolean cullEntity(boolean original, @Local(argsOnly = true) E entity) {
         return original && !CullingUtil.shouldCullEntity(entity.getType());
     }
 

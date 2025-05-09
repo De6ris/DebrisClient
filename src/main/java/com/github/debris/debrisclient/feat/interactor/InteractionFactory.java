@@ -26,7 +26,7 @@ public class InteractionFactory {
     }
 
     public static boolean addBlockTask(MinecraftClient client, BiPredicate<World, BlockPos> predicate, ObjectInteractor.Category category, boolean clearIfRunning) {
-        if (!Predicates.hasMod(ModReference.Litematica)) return false;
+        if (!ModReference.hasMod(ModReference.Litematica)) return false;
         if (Predicates.notInGame(client)) return false;
         BlockInteractor instance = BlockInteractor.INSTANCE;
         if (clearIfRunning && instance.hasPending()) {
@@ -53,7 +53,7 @@ public class InteractionFactory {
     }
 
     public static boolean addEntityTask(MinecraftClient client, boolean clearIfRunning) {
-        if (!Predicates.hasMod(ModReference.Litematica)) return false;
+        if (!ModReference.hasMod(ModReference.Litematica)) return false;
         if (Predicates.notInGame(client)) return false;
         EntityInteractor instance = EntityInteractor.INSTANCE;
         if (clearIfRunning && instance.hasPending()) {

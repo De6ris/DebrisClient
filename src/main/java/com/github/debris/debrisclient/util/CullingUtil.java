@@ -63,8 +63,8 @@ public class CullingUtil {
     @SuppressWarnings("RedundantIfStatement")
     public static boolean shouldCullWthit() {
         if (!DCCommonConfig.WthitMasaCompat.getBooleanValue()) return false;
-        if (Predicates.hasMod(ModReference.Litematica) && LitematicaAccessor.isRenderingInfoOverlay()) return true;
-        if (Predicates.hasMod(ModReference.MiniHud) && MiniHudAccessor.isPreviewingInventory()) return true;
+        if (ModReference.hasMod(ModReference.Litematica) && LitematicaAccessor.isRenderingInfoOverlay()) return true;
+        if (ModReference.hasMod(ModReference.MiniHud) && MiniHudAccessor.isPreviewingInventory()) return true;
         return false;
     }
 }

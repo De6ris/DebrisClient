@@ -1,7 +1,6 @@
 package com.github.debris.debrisclient.util;
 
 import fi.dy.masa.malilib.util.GuiUtils;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
@@ -29,10 +28,6 @@ public class Predicates {
     public static boolean inGameNoGui(MinecraftClient client) {
         if (notInGame(client)) return false;
         return client.currentScreen == null;
-    }
-
-    public static boolean hasMod(String modid) {
-        return FabricLoader.getInstance().isModLoaded(modid);
     }
 
 }

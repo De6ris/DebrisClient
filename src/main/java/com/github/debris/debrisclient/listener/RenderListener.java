@@ -39,12 +39,12 @@ public class RenderListener implements IRenderer {
     public void onRenderWorldLastAdvanced(Framebuffer fb, Matrix4f posMatrix, Matrix4f projMatrix, Frustum frustum, Camera camera, Fog fog, BufferBuilderStorage buffers, Profiler profiler) {
         if (Predicates.notInGame(this.client)) return;
 
-        if (DCCommonConfig.WorldEditVisibility.getBooleanValue() && Predicates.hasMod(ModReference.WorldEdit) && Predicates.hasMod(ModReference.Litematica)) {
+        if (DCCommonConfig.WorldEditVisibility.getBooleanValue() && ModReference.hasMod(ModReference.WorldEdit) && ModReference.hasMod(ModReference.Litematica)) {
             WorldEditRegionAccessor.getRegion(this.client.player.getNameForScoreboard())
                     .ifPresent(x -> LitematicaAccessor.renderWorldEditSelectionBox(x.getLeft(), x.getRight(), posMatrix));
         }
 
-        if (DCCommonConfig.InventoryPreviewSupportComparator.getBooleanValue() && Predicates.hasMod(ModReference.MiniHud) && MiniHudAccessor.isPreviewingInventory() && Predicates.hasMod(ModReference.MagicLibMCApi)) {
+        if (DCCommonConfig.InventoryPreviewSupportComparator.getBooleanValue() && ModReference.hasMod(ModReference.MiniHud) && MiniHudAccessor.isPreviewingInventory() && ModReference.hasMod(ModReference.MagicLibMCApi)) {
             RayTraceUtil.getRayTraceBlock(this.client).ifPresent(pos -> {
                 World world = WorldUtils.getBestWorld(this.client);// get it through chunk, since the server return you null if you call world.getBlockEntity directly on render thread
                 world.getWorldChunk(pos).getBlockEntity(pos, BlockEntityType.COMPARATOR).ifPresent(comparator -> MagicLibAccessor.renderText(comparator.getOutputSignal(), pos));

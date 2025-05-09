@@ -1,7 +1,6 @@
 package com.github.debris.debrisclient.command;
 
 import com.github.debris.debrisclient.compat.ModReference;
-import com.github.debris.debrisclient.util.Predicates;
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.command.CommandRegistryAccess;
@@ -19,7 +18,7 @@ public class Commands {
         DCListCommand.register(dispatcher);
         DCInteractCommand.register(dispatcher);
 
-        if (Predicates.hasMod(ModReference.ClientCommands)) {
+        if (ModReference.hasMod(ModReference.ClientCommands)) {
             DCFindInFrameCommand.register(dispatcher, context);
         }
     }

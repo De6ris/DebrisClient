@@ -1,5 +1,7 @@
 package com.github.debris.debrisclient.compat;
 
+import net.fabricmc.loader.api.FabricLoader;
+
 public class ModReference {
     public static final String CommandButton = "mgbuttons-1_21";
     public static final String Litematica = "litematica";
@@ -14,4 +16,8 @@ public class ModReference {
     public static final String LibGui = "libgui";
     public static final String XRay = "advanced-xray-fabric";
     public static final String Wthit = "wthit";
+
+    public static boolean hasMod(String modid) {
+        return FabricLoader.getInstance().isModLoaded(modid);
+    }
 }

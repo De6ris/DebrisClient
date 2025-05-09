@@ -23,7 +23,7 @@ public class RayTraceUtil {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static Optional<HitResult> getPlayerRayTrace(MinecraftClient client) {
-        if (!Predicates.hasMod(ModReference.Tweakeroo)) return Optional.empty();
+        if (!ModReference.hasMod(ModReference.Tweakeroo)) return Optional.empty();
 
         World world = WorldUtils.getBestWorld(client);
 

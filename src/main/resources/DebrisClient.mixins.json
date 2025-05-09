@@ -4,18 +4,6 @@
   "package": "com.github.debris.debrisclient.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "client.gui.ScreenHandlerMixin",
-    "compat.malilib.ConfigButtonOptionListMixin",
-    "compat.malilib.WidgetConfigOptionMixin",
-    "compat.minihud.RenderHandlerMixin",
-    "compat.tweakeroo.InventoryUtilsMixin",
-    "compat.wthit.TooltipHandlerMixin",
-    "component.ItemEnchantmentsComponentMixin",
-    "entity.PlayerEntityMixin",
-    "item.ItemStackMixin",
-    "item.TridentItemMixin",
-    "world.PortalForcerMixin",
-    "world.WorldMixin"
   ],
   "client": [
     "client.IMixinClientRecipeBook",
@@ -31,6 +19,7 @@
     "client.gui.IMixinGuiContainer",
     "client.gui.IMixinRecipeBookScreen",
     "client.gui.InGameHudMixin",
+    "client.gui.ScreenHandlerMixin",
     "client.gui.ScreenMixin",
     "client.input.KeyboardInputMixin",
     "client.network.ClientPlayerEntityMixin",
@@ -47,14 +36,25 @@
     "client.search.SearchProviderMixin",
     "client.sound.SoundSystemMixin",
     "compat.libgui.CottonClientScreenMixin",
+    "compat.malilib.ConfigButtonOptionListMixin",
     "compat.malilib.GuiConfigsBaseMixin",
     "compat.malilib.GuiListBaseMixin",
+    "compat.malilib.WidgetConfigOptionMixin",
     "compat.malilib.WidgetListBaseMixin",
     "compat.malilib.WidgetListConfigOptionsMixin",
+    "compat.minihud.RenderHandlerMixin",
     "compat.rei.ImportantWarningsWidgetMixin",
     "compat.tweakeroo.CameraEntityMixin",
     "compat.tweakeroo.DummyMovementInputMixin",
-    "compat.xray.GuiAddBlockMixin"
+    "compat.tweakeroo.InventoryUtilsMixin",
+    "compat.wthit.TooltipHandlerMixin",
+    "compat.xray.GuiAddBlockMixin",
+    "component.ItemEnchantmentsComponentMixin",
+    "entity.PlayerEntityMixin",
+    "item.ItemStackMixin",
+    "item.TridentItemMixin",
+    "world.PortalForcerMixin",
+    "world.WorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

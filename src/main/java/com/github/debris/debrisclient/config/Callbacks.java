@@ -28,7 +28,7 @@ public class Callbacks {
         });
 
         DCCommonConfig.ReloadCommandButton.getKeybind().setCallback((action, key) -> {
-            if (Predicates.hasMod(ModReference.CommandButton)) {
+            if (ModReference.hasMod(ModReference.CommandButton)) {
                 MGButtonReloader.reload();
                 InfoUtils.showInGameMessage(Message.MessageType.SUCCESS, "命令按钮: 重载成功");
                 return true;

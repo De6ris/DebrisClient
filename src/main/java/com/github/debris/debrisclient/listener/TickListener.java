@@ -26,7 +26,7 @@ public class TickListener implements IClientTickHandler {
         }
 
         if (DCCommonConfig.MyMassCrafting.getKeybind().isKeybindHeld() || DCCommonConfig.StartMassCrafting.getBooleanValue()) {
-            if (Predicates.hasMod(ModReference.ItemScroller)) {
+            if (ModReference.hasMod(ModReference.ItemScroller)) {
                 if (MassCraftingApi.isCraftingGui()) {
                     MassCraftingApi.tryMassCrafting();
                 }

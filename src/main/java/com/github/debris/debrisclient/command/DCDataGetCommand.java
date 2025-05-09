@@ -2,7 +2,6 @@ package com.github.debris.debrisclient.command;
 
 import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.util.ChatUtil;
-import com.github.debris.debrisclient.util.Predicates;
 import com.github.debris.debrisclient.util.RayTraceUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -32,7 +31,7 @@ public class DCDataGetCommand {
     }
 
     private static void dataGet(FabricClientCommandSource source) {
-        if (!Predicates.hasMod(ModReference.Tweakeroo)) {
+        if (!ModReference.hasMod(ModReference.Tweakeroo)) {
             source.sendFeedback(Text.literal("此功能需安装tweakeroo"));
             return;
         }

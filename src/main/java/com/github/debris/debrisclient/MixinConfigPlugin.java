@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MixinConfigPlugin extends RestrictiveMixinConfigPlugin {
-    public static final Logger LOGGER = LogUtils.getLogger();
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     @Override
     public String getRefMapperConfig() {
@@ -26,6 +26,6 @@ public class MixinConfigPlugin extends RestrictiveMixinConfigPlugin {
 
     @Override
     protected void onRestrictionCheckFailed(String mixinClassName, String reason) {
-        LOGGER.debug("[TweakerMore] Disabled mixin {} due to {}", mixinClassName, reason);
+        LOGGER.debug("[{}] Disabled mixin {} due to {}", DebrisClient.MOD_NAME, mixinClassName, reason);
     }
 }

@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 public class SectionHandler {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final List<ContainerSection> unIdentifiedSections = new ArrayList<>();
+    private final List<ContainerSection> unidentifiedSections = new ArrayList<>();
     private final Map<EnumSection, ContainerSection> sectionMap = new EnumMap<>(EnumSection.class);
 
     public SectionHandler(HandledScreen<?> guiContainer) {
@@ -49,7 +49,7 @@ public class SectionHandler {
 
     private void handleUnidentified(ContainerSection section) {
         this.sectionMap.putIfAbsent(EnumSection.Unidentified, section);
-        this.unIdentifiedSections.add(section);
+        this.unidentifiedSections.add(section);
     }
 
     public static void onClientPlayerInit(PlayerScreenHandler playerContainer) {
@@ -85,12 +85,15 @@ public class SectionHandler {
     }
 
     public static List<ContainerSection> getUnIdentifiedSections() {
-        return getSectionHandler().unIdentifiedSections;
+        return getSectionHandler().unidentifiedSections;
     }
 
+    /**
+     * The unidentified may appear both in the list and the map, so use distinct here.
+     */
     public static Stream<ContainerSection> streamAllSections() {
         SectionHandler sectionHandler = getSectionHandler();
-        return Stream.concat(sectionHandler.unIdentifiedSections.stream(), sectionHandler.sectionMap.values().stream()).distinct();
+        return Stream.concat(sectionHandler.unidentifiedSections.stream(), sectionHandler.sectionMap.values().stream()).distinct();
     }
 
     public static Optional<ContainerSection> getSectionMouseOver() {
