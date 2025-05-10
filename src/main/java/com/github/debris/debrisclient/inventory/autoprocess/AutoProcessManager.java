@@ -18,7 +18,6 @@ public class AutoProcessManager {
     private static final List<IAutoProcessor> PROCESSORS = ImmutableList.of(
             new ContainerTaker(),
             new ItemFinder(),
-            new ContainerClassifier(),
             new ContainerTemplate.Recorder(),
             new ContainerTemplate.Filler()
     );

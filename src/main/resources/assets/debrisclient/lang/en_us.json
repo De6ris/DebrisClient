@@ -12,7 +12,6 @@
   "config.enum.sort_category.pinyin.name": "PinYin",
   "config.enum.sort_category.translation_key.name": "Translation Key",
   "config.enum.sort_category.translation_result.name": "Translation Result",
-  "debris_client.auto_processor.container_classifier.message": "Has classified %2$d stacks into container %1$s",
   "debris_client.auto_processor.container_taker.message": "Has taken %2$d stacks from container %1$s",
   "debris_client.auto_processor.item_finder.found": "Found %s",
   "debris_client.auto_processor.item_finder.not_found": "Found nothing in list",
