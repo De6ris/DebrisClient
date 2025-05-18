@@ -1,7 +1,7 @@
 package com.github.debris.debrisclient.mixin.compat.malilib;
 
 import com.github.debris.debrisclient.config.api.IConfigEnum;
-import com.github.debris.debrisclient.util.StringUtil;
+import com.github.debris.debrisclient.feat.EnhanceConfig;
 import fi.dy.masa.malilib.config.IConfigOptionList;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.ConfigButtonOptionList;
@@ -24,8 +24,8 @@ public abstract class ConfigButtonOptionListMixin extends ButtonGeneric {
 
     @Inject(method = "updateDisplayString", at = @At("RETURN"))
     private void onDisplayStringUpdate(CallbackInfo ci) {
-        if (this.config instanceof IConfigEnum) {
-            this.setHoverStrings(StringUtil.createOptionListTooltip(this.config));
+        if (this.config instanceof IConfigEnum || EnhanceConfig.isActive()) {
+            this.setHoverStrings(EnhanceConfig.createOptionListTooltip(this.config));
         }
     }
 }

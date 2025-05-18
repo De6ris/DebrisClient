@@ -1,8 +1,9 @@
 package com.github.debris.debrisclient.mixin.compat.malilib;
 
-import com.github.debris.debrisclient.gui.button.ConfigButtonTrigger;
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import com.github.debris.debrisclient.config.api.IConfigTrigger;
+import com.github.debris.debrisclient.feat.EnhanceConfig;
+import com.github.debris.debrisclient.gui.button.ConfigButtonTrigger;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import fi.dy.masa.malilib.gui.widgets.WidgetConfigOption;
 import fi.dy.masa.malilib.gui.widgets.WidgetConfigOptionBase;
@@ -21,7 +22,7 @@ public abstract class WidgetConfigOptionMixin extends WidgetConfigOptionBase<Gui
 
     @Inject(method = "addHotkeyConfigElements", at = @At("RETURN"))
     private void addFeature(int x, int y, int configWidth, String configName, IHotkey hotkey, CallbackInfo ci) {
-        if (hotkey instanceof IConfigTrigger) {
+        if (hotkey instanceof IConfigTrigger || EnhanceConfig.isActive()) {
             IKeybind keybind = hotkey.getKeybind();
             IHotkeyCallback callback = ((KeybindMulti) keybind).getCallback();
             if (callback == null) return;

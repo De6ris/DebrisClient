@@ -60,6 +60,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean InventoryPreviewSupportComparator = ofBoolean("物品栏预览支持比较器", true);
     public static final ConfigBoolean PinYinSearch = ofBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组, 创造模式物品栏, 配方书");
     public static final ConfigBoolean CommentSearch = ofBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
+    public static final ConfigBoolean GlobalConfigEnhance = ofBoolean("全局配置加强", false, "将本模组的配置加强应用到所有masa模组,包含以下功能:\n为热键添加触发按钮\n为枚举列表提供预览");
     public static final ConfigBoolean XRayAutoColor = ofBoolean("XRay自动取色", false);
     public static final ConfigBoolean WthitMasaCompat = ofBoolean("Wthit与Masa兼容", true, "在合适的时机不渲染tooltip");
     public static final ConfigBoolean DisableREIWarning = ofBoolean("禁用REI警告", false, "至少在18.0.796版本仍然每次进服都在弹窗");
@@ -197,7 +198,7 @@ public class DCCommonConfig implements IConfigHandler {
     private static ImmutableList<IConfigBase> buildCompat() {
         ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();
         FabricLoader instance = FabricLoader.getInstance();
-        builder.add(ProgressResuming, PinYinSearch, CommentSearch);
+        builder.add(ProgressResuming, PinYinSearch, CommentSearch, GlobalConfigEnhance);
         if (instance.isModLoaded(ModReference.Tweakeroo)) {
             builder.add(FreeCamKeepAutoMoving, FreeCamSpectatorFix, ToolSwitchFix);
         }
