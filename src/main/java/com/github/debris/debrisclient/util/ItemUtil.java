@@ -30,8 +30,12 @@ public class ItemUtil {
         return x -> compareIDMeta(x, template);
     }
 
+    public static boolean isFullStack(ItemStack itemStack) {
+        return itemStack.getCount() >= itemStack.getMaxCount();
+    }
+
     public static boolean canMerge(ItemStack to, ItemStack from) {
-        if (to.getCount() >= to.getMaxCount()) return false;// full slot can not merge
+        if (isFullStack(to)) return false;
         return compareIDMeta(to, from);
     }
 

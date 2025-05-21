@@ -6,16 +6,13 @@ import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import com.github.debris.debrisclient.inventory.section.SectionHandler;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.ItemUtil;
-import com.github.debris.debrisclient.util.PermutationUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 public class SortInventory {
     public static boolean trySort() {
@@ -39,56 +36,35 @@ public class SortInventory {
     // assume no holding item, all slots are well merged, but still blanks between
     private static void sortInternal(ContainerSection section) {
         Comparator<ItemStack> itemStackSorter = SortCategory.getItemStackSorter();
-
         Comparator<Slot> slotSorter = (x, y) -> itemStackSorter.compare(x.getStack(), y.getStack());
-
         BiConsumer<Slot, Slot> swapAction = InventoryUtil::swapSlots;
 
         if (DCCommonConfig.SortingContainersLast.getBooleanValue()) {
             putContainersLast(section);
-
-            Map<Boolean, List<Slot>> grouped = section.slots().stream().filter(Slot::hasStack).collect(Collectors.partitioningBy(x -> ItemUtil.isContainer(x.getStack())));
-
-            Slot[] nonContainers = grouped.get(false).toArray(Slot[]::new);
-            Slot[] containers = grouped.get(true).toArray(Slot[]::new);
-
-            runSorting(nonContainers, slotSorter, swapAction);
-            runSorting(containers, slotSorter, swapAction);
+            splitByContainer(section).forEach(x -> process(x, slotSorter, swapAction));
         } else {
-            section.fillBlanks();
-            section.mergeSlots();
-            section.fillBlanks();
-            Slot[] nonEmptySlots = section.slots().stream().filter(Slot::hasStack).toArray(Slot[]::new);
-            runSorting(nonEmptySlots, slotSorter, swapAction);
+            process(section, slotSorter, swapAction);
         }
+    }
+
+    private static void process(ContainerSection section, Comparator<Slot> sorter, BiConsumer<Slot, Slot> swapAction) {
+        section.fillBlanks();
+        section.mergeSlots();
+        section.fillBlanks();
+        Slot[] nonEmptySlots = section.slots().stream().filter(Slot::hasStack).toArray(Slot[]::new);
+        runSorting(nonEmptySlots, sorter, swapAction);
     }
 
     private static void putContainersLast(ContainerSection section) {
         List<Slot> slots = section.slots();
-        int iterateStart = slots.size() - 1;
-        for (int i = iterateStart; i >= 0; i--) {// inverse order reduce operations
-            if (i == iterateStart) continue;// skip the first
-            Slot slot = slots.get(i);
+        for (int index = slots.size() - 2; index >= 0; index--) {// inverse order reduce operations; skip the last
+            Slot slot = slots.get(index);
             if (!ItemUtil.isContainer(slot.getStack())) continue;// skip those not container
-            moveToNextNonContainer(section, i, slot);
+            moveToNextNonContainer(slots, index, slot);
         }
-
-        // now fill in the blanks
-        int theIndexNonContainer = iterateStart;
-        for (int i = iterateStart; i >= 0; i--) {// inverse order reduce operations
-            Slot slot = slots.get(i);
-            if (ItemUtil.isContainer(slot.getStack())) continue;// skip those containers
-            theIndexNonContainer = i;
-            break;
-        }
-        ContainerSection theFormerPart = section.subSection(0, theIndexNonContainer + 1);
-        theFormerPart.fillBlanks();
-        theFormerPart.mergeSlots();
-        theFormerPart.fillBlanks();
     }
 
-    private static void moveToNextNonContainer(ContainerSection section, int index, Slot currentSlot) {
-        List<Slot> slots = section.slots();
+    private static void moveToNextNonContainer(List<Slot> slots, int index, Slot currentSlot) {
         for (int i = slots.size() - 1; i > index; i--) {// inverse order reduce operations
             Slot slot = slots.get(i);
             if (ItemUtil.isContainer(slot.getStack())) continue;// skip those containers
@@ -101,6 +77,22 @@ public class SortInventory {
         }
     }
 
+    private static List<ContainerSection> splitByContainer(ContainerSection section) {
+        List<Slot> slots = section.slots();
+        int size = section.size();
+        int indexNonContainer = -1;
+        for (int i = size - 1; i >= 0; i--) {// inverse order reduce operations
+            Slot slot = slots.get(i);
+            if (ItemUtil.isContainer(slot.getStack())) continue;// skip those containers
+            indexNonContainer = i;
+            break;
+        }
+        // -1 means all containers, size-1 means no containers
+        ContainerSection former = section.subSection(0, indexNonContainer + 1);
+        ContainerSection latter = section.subSection(indexNonContainer + 1, size);
+        return List.of(former, latter);
+    }
+
     /*
      * sorter: if j is bigger than j+1, I will swap them
      * */
@@ -109,8 +101,7 @@ public class SortInventory {
         if (length <= 1) return;
 
         if (DCCommonConfig.CachedSorting.getBooleanValue()) {
-            List<PermutationUtil.Transposition> optimal = PermutationUtil.getOptimalProcess(slots, sorter);
-            optimal.forEach(x -> x.operate(slots, swapAction));
+            Permutations.ofOptimal(slots, sorter).operate(slots, swapAction);
         } else {
             // direct sorting
             for (int i = 1; i < length; i++) {
