@@ -3,9 +3,9 @@ package com.github.debris.debrisclient.config;
 import com.github.debris.debrisclient.DebrisClient;
 import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.config.options.ConfigEnum;
+import com.github.debris.debrisclient.feat.HeartType;
 import com.github.debris.debrisclient.inventory.sort.SortCategory;
 import com.github.debris.debrisclient.unsafe.itemScroller.MassCraftingImpl;
-import com.github.debris.debrisclient.feat.HeartType;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -53,6 +53,7 @@ public class DCCommonConfig implements IConfigHandler {
     // compat
     public static final ConfigBoolean FreeCamKeepAutoMoving = ofBoolean("灵魂出窍时允许自动移动", true, "本模组的自动移动, 在灵魂出窍时会默认停止移动");
     public static final ConfigBoolean FreeCamSpectatorFix = ofBoolean("旁观模式灵魂出窍修复", true, "当你附身别的生物, 启动灵魂出窍时相机仍在附身地");
+    public static final ConfigBoolean RetroFreeCam = ofBoolean("怀旧灵魂出窍", false, "适用于tweakeroo0.24.1");
     public static final ConfigBoolean ToolSwitchFix = ofBoolean("工具切换修复", true, "无合适工具时, 不应切换到第一个快捷栏");
     public static final ConfigBoolean ProgressResuming = ofBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度\n对MaLiLib驱动的模组和CommandButton有效");
     public static final ConfigBoolean WorldEditVisibility = ofBoolean("WorldEdit可视化", false, "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
@@ -200,7 +201,7 @@ public class DCCommonConfig implements IConfigHandler {
         FabricLoader instance = FabricLoader.getInstance();
         builder.add(ProgressResuming, PinYinSearch, CommentSearch, GlobalConfigEnhance);
         if (instance.isModLoaded(ModReference.Tweakeroo)) {
-            builder.add(FreeCamKeepAutoMoving, FreeCamSpectatorFix, ToolSwitchFix);
+            builder.add(FreeCamKeepAutoMoving, FreeCamSpectatorFix, RetroFreeCam, ToolSwitchFix);
         }
         if (instance.isModLoaded(ModReference.MiniHud) && instance.isModLoaded(ModReference.MagicLibMCApi)) {
             builder.add(InventoryPreviewSupportComparator);
