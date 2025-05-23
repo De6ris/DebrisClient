@@ -35,7 +35,7 @@ public class DCConfigUi extends GuiConfigsBase {
     }
 
     private int createButton(int x, int y, int width, Tab tab) {
-        ButtonGeneric button = new ButtonGeneric(x, y, width, 20, tab.name);
+        ButtonGeneric button = new ButtonGeneric(x, y, width, 20, tab.getDisplayName());
         button.setEnabled(DCConfigUi.tab != tab);
         this.addButton(button, new ButtonListener(tab, this));
 
@@ -67,15 +67,8 @@ public class DCConfigUi extends GuiConfigsBase {
         DCEarlyConfig.getInstance().refresh();
     }
 
-    private static class ButtonListener implements IButtonActionListener {
-        private final DCConfigUi parent;
-        private final Tab tab;
-
-        public ButtonListener(Tab tab, DCConfigUi parent) {
-            this.tab = tab;
-            this.parent = parent;
-        }
-
+    private record ButtonListener(Tab tab, DCConfigUi parent) implements IButtonActionListener {
+        @SuppressWarnings("DataFlowIssue")
         @Override
         public void actionPerformedWithButton(ButtonBase button, int mouseButton) {
             DCConfigUi.tab = this.tab;
@@ -96,10 +89,14 @@ public class DCConfigUi extends GuiConfigsBase {
         HIGHLIGHTS("高亮"),
         ;
 
-        public final String name;
+        private final String name;
 
         Tab(String str) {
             name = str;
+        }
+
+        public String getDisplayName() {
+            return this.name;
         }
     }
 }

@@ -2,17 +2,17 @@ package com.github.debris.debrisclient.listener;
 
 import com.github.debris.debrisclient.DebrisClient;
 import com.github.debris.debrisclient.config.DCCommonConfig;
-import com.github.debris.debrisclient.inventory.feat.InventoryTweaks;
-import com.github.debris.debrisclient.inventory.feat.QuickBundle;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterRecipeRenderer;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterRecipeStorage;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterUtil;
+import com.github.debris.debrisclient.inventory.feat.InventoryTweaks;
+import com.github.debris.debrisclient.inventory.feat.QuickBundle;
 import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import com.github.debris.debrisclient.inventory.section.SectionHandler;
+import com.github.debris.debrisclient.util.InputUtil;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.Predicates;
 import fi.dy.masa.malilib.hotkeys.*;
-import fi.dy.masa.malilib.util.KeyCodes;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.client.MinecraftClient;
@@ -147,7 +147,7 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
         if (Predicates.notInGuiContainer(this.client))
             return;// the below assuming valid environment
 
-        if (KeybindMulti.isKeyDown(KeyCodes.MOUSE_BUTTON_1)) {// left click down
+        if (InputUtil.isLeftClicking()) {// left click down
 
             if (DCCommonConfig.ModifierMoveSimilar.getKeybind().isKeybindHeld()) {
                 InventoryTweaks.tryMoveSimilar();

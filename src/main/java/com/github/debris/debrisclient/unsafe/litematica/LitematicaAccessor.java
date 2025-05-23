@@ -3,6 +3,7 @@ package com.github.debris.debrisclient.unsafe.litematica;
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import fi.dy.masa.litematica.config.Hotkeys;
 import fi.dy.masa.litematica.data.DataManager;
+import fi.dy.masa.litematica.gui.GuiConfigs;
 import fi.dy.masa.litematica.selection.AreaSelection;
 import fi.dy.masa.malilib.render.RenderUtils;
 import net.minecraft.util.math.BlockBox;
@@ -50,5 +51,13 @@ public class LitematicaAccessor {
         RenderUtils.polygonOffset(false);
 
         RenderUtils.depthMask(true);
+    }
+
+    public static void resetTab() {
+        DataManager.setConfigGuiTab(GuiConfigs.ConfigGuiTab.GENERIC);
+    }
+
+    public static boolean isRenderLayerButton(String content) {
+        return content.equals(GuiConfigs.ConfigGuiTab.RENDER_LAYERS.getDisplayName());
     }
 }

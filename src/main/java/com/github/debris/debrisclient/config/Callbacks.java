@@ -2,14 +2,15 @@ package com.github.debris.debrisclient.config;
 
 import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.feat.CarpetBot;
-import com.github.debris.debrisclient.gui.DCConfigUi;
-import com.github.debris.debrisclient.inventory.feat.ContainerTemplate;
 import com.github.debris.debrisclient.feat.MiscFeat;
 import com.github.debris.debrisclient.feat.TakeOff;
 import com.github.debris.debrisclient.feat.interactor.InteractionFactory;
-import com.github.debris.debrisclient.inventory.feat.InventoryTweaks;
+import com.github.debris.debrisclient.gui.DCConfigUi;
+import com.github.debris.debrisclient.gui.UniversalSearchScreen;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterRecipeStorage;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterUtil;
+import com.github.debris.debrisclient.inventory.feat.ContainerTemplate;
+import com.github.debris.debrisclient.inventory.feat.InventoryTweaks;
 import com.github.debris.debrisclient.inventory.sort.SortInventory;
 import com.github.debris.debrisclient.unsafe.mgButtons.MGButtonReloader;
 import com.github.debris.debrisclient.util.ChatUtil;
@@ -24,6 +25,11 @@ public class Callbacks {
     public static void init(MinecraftClient client) {
         DCCommonConfig.OpenWindow.getKeybind().setCallback((action, key) -> {
             client.setScreen(new DCConfigUi());
+            return true;
+        });
+
+        DCCommonConfig.OpenUniversalSearch.getKeybind().setCallback((action, key) -> {
+            client.setScreen(new UniversalSearchScreen());
             return true;
         });
 

@@ -62,6 +62,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean PinYinSearch = ofBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组, 创造模式物品栏, 配方书");
     public static final ConfigBoolean CommentSearch = ofBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
     public static final ConfigBoolean GlobalConfigEnhance = ofBoolean("全局配置加强", false, "将本模组的配置加强应用到所有masa模组,包含以下功能:\n为热键添加触发按钮\n为枚举列表提供预览");
+    public static final ConfigBoolean ScrollerEnhance = ofBoolean("滑动条改进", true, "masa驱动\n允许点击白块之外拖动");
     public static final ConfigBoolean XRayAutoColor = ofBoolean("XRay自动取色", false);
     public static final ConfigBoolean WthitMasaCompat = ofBoolean("Wthit与Masa兼容", true, "在合适的时机不渲染tooltip");
     public static final ConfigBoolean DisableREIWarning = ofBoolean("禁用REI警告", false, "至少在18.0.796版本仍然每次进服都在弹窗");
@@ -80,6 +81,7 @@ public class DCCommonConfig implements IConfigHandler {
 
     // key
     public static final ConfigHotkey OpenWindow = ofHotkey("打开设置菜单", "D,C", "打开设置菜单");
+    public static final ConfigHotkey OpenUniversalSearch = ofHotkey("打开全局搜索", "", "masa驱动");
     public static final ConfigHotkey ReloadCommandButton = ofHotkey("重载CommandButton", "", "需要有CommandButton模组");
     public static final ConfigHotkey SortItem = ofHotkey("整理物品", "", KeybindSettings.GUI, "按区域进行\n兼容carpet假人不会乱点按钮\n兼容创造模式物品栏");
     public static final ConfigHotkey StoneCutterRecipeView = ofHotkey("展示切石机配方", "A", GUI_RELAXED);
@@ -199,7 +201,7 @@ public class DCCommonConfig implements IConfigHandler {
     private static ImmutableList<IConfigBase> buildCompat() {
         ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();
         FabricLoader instance = FabricLoader.getInstance();
-        builder.add(ProgressResuming, PinYinSearch, CommentSearch, GlobalConfigEnhance);
+        builder.add(ProgressResuming, PinYinSearch, CommentSearch, GlobalConfigEnhance, ScrollerEnhance);
         if (instance.isModLoaded(ModReference.Tweakeroo)) {
             builder.add(FreeCamKeepAutoMoving, FreeCamSpectatorFix, RetroFreeCam, ToolSwitchFix);
         }
@@ -247,6 +249,7 @@ public class DCCommonConfig implements IConfigHandler {
         );
         KeyPress = ImmutableList.of(
                 OpenWindow,
+                OpenUniversalSearch,
                 ReloadCommandButton,
                 SortItem,
                 StoneCutterRecipeView,

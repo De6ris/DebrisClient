@@ -4,6 +4,7 @@ import com.github.debris.debrisclient.DebrisClient;
 import com.github.debris.debrisclient.config.Callbacks;
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import com.github.debris.debrisclient.gui.DCConfigUi;
+import com.github.debris.debrisclient.gui.UniversalSearchScreen;
 import fi.dy.masa.malilib.config.ConfigManager;
 import fi.dy.masa.malilib.event.InputEventHandler;
 import fi.dy.masa.malilib.event.RenderEventHandler;
@@ -27,5 +28,6 @@ public class InitListener implements IInitializationHandler {
         WorldLoadHandler.getInstance().registerWorldLoadPostHandler(WorldLoadListener.getInstance());
         RenderEventHandler.getInstance().registerWorldLastRenderer(RenderListener.getInstance());
         Registry.CONFIG_SCREEN.registerConfigScreenFactory(new ModInfo(DebrisClient.MOD_ID, DebrisClient.MOD_NAME, DCConfigUi::new));
+        Registry.CONFIG_SCREEN.registerConfigScreenFactory(UniversalSearchScreen.Instance);
     }
 }
