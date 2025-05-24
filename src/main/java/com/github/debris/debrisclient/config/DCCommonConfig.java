@@ -147,6 +147,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed CullPoofParticle = ofBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
     public static final ConfigBooleanHotkeyed BlockBreakingCooldownOverride = ofBooleanHotkeyed("禁用方块挖掘冷却", false, "", "不影响创造模式");
     public static final ConfigBooleanHotkeyed MuteGLDebugInfo = ofBooleanHotkeyed("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
+    public static final ConfigBooleanHotkeyed CullFireAnimation = ofBooleanHotkeyed("剔除火焰动画", false, "");
 
 
     // highlight
@@ -310,7 +311,8 @@ public class DCCommonConfig implements IConfigHandler {
                 MuteDoor,
                 CullPoofParticle,
                 BlockBreakingCooldownOverride,
-                MuteGLDebugInfo
+                MuteGLDebugInfo,
+                CullFireAnimation
         );
         Highlights = ImmutableList.of(
                 ForceRenderEndGatewayBeam,

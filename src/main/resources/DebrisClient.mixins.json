@@ -19,6 +19,7 @@
     "client.gui.IMixinGuiContainer",
     "client.gui.IMixinRecipeBookScreen",
     "client.gui.InGameHudMixin",
+    "client.gui.InGameOverlayRendererMixin",
     "client.gui.ScreenHandlerMixin",
     "client.gui.ScreenMixin",
     "client.input.KeyboardInputMixin",
