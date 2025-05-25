@@ -59,10 +59,7 @@ public class PinYinSupport {
             Optional<Boolean> optionalB = ReiPinYinMatcher.matchesFilter(entryString, filterText);
             if (optionalB.isPresent()) return optionalB.get();
         }
-        return entryString.codePoints().anyMatch(codePoint -> {
-            if (isHanzi(codePoint)) return getPinYin(codePoint).startsWith(filterText);
-            return false;
-        });// this is my simple algorithm
+        return convertToPinYin(entryString).contains(filterText);// this is my simple algorithm
     }
 
     public static String convertToPinYin(String original) {
