@@ -1,6 +1,7 @@
 package com.github.debris.debrisclient.command;
 
 import com.github.debris.debrisclient.util.ColorUtil;
+import com.github.debris.debrisclient.util.TeleportUtil;
 import com.google.common.collect.Streams;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -49,11 +50,11 @@ public class DCCountEntityCommand {
                         Map.Entry::getKey,
                         entry -> distributeByPosition(entry.getValue())
                 ))
-                .forEach((entityType, distribution) -> source.sendFeedback(getFeedback(entityType, distribution)));
+                .forEach((entityType, distribution) -> source.sendFeedback(getFeedback(source, entityType, distribution)));
         return Command.SINGLE_SUCCESS;
     }
 
-    private static MutableText getFeedback(EntityType<?> entityType, List<Map.Entry<BlockPos, Long>> distribution) {
+    private static MutableText getFeedback(FabricClientCommandSource source, EntityType<?> entityType, List<Map.Entry<BlockPos, Long>> distribution) {
         MutableText feedback = Text.empty()
                 .append("- ")
                 .append(Text.empty().append(entityType.getName()).styled(style -> style.withColor(ColorUtil.getColor(entityType))))
@@ -77,7 +78,7 @@ public class DCCountEntityCommand {
                     style -> style.withColor(Formatting.AQUA)
                             .withHoverEvent(new HoverEvent.ShowText(Texts.bracketed(Text.translatable
                                     ("chat.coordinates", blockPos.getX(), blockPos.getY(), blockPos.getZ()))))
-                            .withClickEvent(new ClickEvent.SuggestCommand("/tp " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ()))
+                            .withClickEvent(new ClickEvent.SuggestCommand(TeleportUtil.suggestCommand(source.getClient(), blockPos)))
             ));
 
             if (i == printSize - 1) {

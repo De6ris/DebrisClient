@@ -21,20 +21,17 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.lit
 public class DCDataGetCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(literal(Commands.PREFIX + "data_get")
-                .executes(ctx -> processCommand(ctx.getSource()))
+                .requires(source -> ModReference.hasMod(ModReference.Tweakeroo))
+                .executes(ctx -> execute(ctx.getSource()))
         );
     }
 
-    private static int processCommand(FabricClientCommandSource source) {
+    private static int execute(FabricClientCommandSource source) {
         dataGet(source);
         return Command.SINGLE_SUCCESS;
     }
 
     private static void dataGet(FabricClientCommandSource source) {
-        if (!ModReference.hasMod(ModReference.Tweakeroo)) {
-            source.sendFeedback(Text.literal("此功能需安装tweakeroo"));
-            return;
-        }
         MinecraftClient client = source.getClient();
         Optional<HitResult> optional = RayTraceUtil.getPlayerRayTrace(client);
         if (optional.isEmpty()) {

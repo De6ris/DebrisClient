@@ -17,6 +17,7 @@ public class Commands {
         DCHeadCommand.register(dispatcher);
         DCListCommand.register(dispatcher);
         DCInteractCommand.register(dispatcher);
+        DCTeleportCommand.register(dispatcher);
 
         if (ModReference.hasMod(ModReference.ClientCommands)) {
             DCFindInFrameCommand.register(dispatcher, context);

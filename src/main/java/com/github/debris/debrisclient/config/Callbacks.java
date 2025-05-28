@@ -1,9 +1,7 @@
 package com.github.debris.debrisclient.config;
 
 import com.github.debris.debrisclient.compat.ModReference;
-import com.github.debris.debrisclient.feat.CarpetBot;
-import com.github.debris.debrisclient.feat.MiscFeat;
-import com.github.debris.debrisclient.feat.TakeOff;
+import com.github.debris.debrisclient.feat.*;
 import com.github.debris.debrisclient.feat.interactor.InteractionFactory;
 import com.github.debris.debrisclient.gui.DCConfigUi;
 import com.github.debris.debrisclient.gui.UniversalSearchScreen;
@@ -13,7 +11,6 @@ import com.github.debris.debrisclient.inventory.feat.ContainerTemplate;
 import com.github.debris.debrisclient.inventory.feat.InventoryTweaks;
 import com.github.debris.debrisclient.inventory.sort.SortInventory;
 import com.github.debris.debrisclient.unsafe.mgButtons.MGButtonReloader;
-import com.github.debris.debrisclient.util.ChatUtil;
 import com.github.debris.debrisclient.util.Predicates;
 import fi.dy.masa.malilib.gui.Message;
 import fi.dy.masa.malilib.util.InfoUtils;
@@ -73,9 +70,9 @@ public class Callbacks {
 
         DCCommonConfig.BotSpawnCommand.getKeybind().setCallback((action, key) -> CarpetBot.suggestBotSpawnCommand(client));
 
-        DCCommonConfig.ResendLastChat.getKeybind().setCallback((action, key) -> ChatUtil.resendLast(client));
+        DCCommonConfig.ResendLastChat.getKeybind().setCallback((action, key) -> ResendChat.resendLast(client));
 
-        DCCommonConfig.RepeatNewestChat.getKeybind().setCallback((action, key) -> ChatUtil.repeatNewestChat(client));
+        DCCommonConfig.RepeatNewestChat.getKeybind().setCallback((action, key) -> ResendChat.repeatNewestChat(client));
 
         DCCommonConfig.AlignWithEnderEye.getKeybind().setCallback((action, key) -> MiscFeat.alignWithEnderEye(client));
 
@@ -90,6 +87,8 @@ public class Callbacks {
         DCCommonConfig.TEST.getKeybind().setCallback((action, key) -> {
             return false;
         });
+
+        DCCommonConfig.AutoRepeatBlackList.setValueChangeCallback(config -> AutoRepeat.updateBlackList(config.getStrings()));
 
     }
 

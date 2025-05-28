@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AutoRepeat {
+    private static List<BlackListPattern> PATTERNS = compile(DCCommonConfig.AutoRepeatBlackList.getStrings());
     private static final Map<String, List<Long>> TIME_STAMP_MAP = new ConcurrentHashMap<>();
 
     public static void handleAutoRepeat(MinecraftClient client, Text message) {
@@ -16,8 +17,7 @@ public class AutoRepeat {
         if (playerNames.isEmpty()) return;
 
         String mutable = message.getString();
-        List<BlackListPattern> patterns = DCCommonConfig.AutoRepeatBlackList.getStrings().stream().map(BlackListPattern::compile).toList();
-        for (BlackListPattern pattern : patterns) {
+        for (BlackListPattern pattern : PATTERNS) {
             switch (pattern.getMode()) {
                 case CANCEL -> {
                     if (mutable.contains(((BlackListPattern.Cancel) pattern).string())) return;
@@ -32,8 +32,7 @@ public class AutoRepeat {
         final String finalString = mutable;
 
         playerNames.stream()
-                .map(ChatUtil::angleName)
-                .flatMap(x -> ChatUtil.filterMessageContent(x, finalString).stream())
+                .flatMap(name -> filterAndCut(name, finalString).stream())
                 .max(Comparator.comparing(String::length))
                 .ifPresent(x -> sendChatCheckDDos(client, x));
     }
@@ -43,6 +42,13 @@ public class AutoRepeat {
         long currentTime = System.currentTimeMillis();
         TIME_STAMP_MAP.values().forEach(x -> x.removeIf(y -> currentTime - y > 1000));
         TIME_STAMP_MAP.values().removeIf(List::isEmpty);
+    }
+
+    private static Optional<String> filterAndCut(String senderName, String original) {
+        String senderNameAngled = "<" + senderName + ">";
+        int index = original.indexOf(senderNameAngled);
+        if (index == -1) return Optional.empty();
+        return Optional.of(original.substring(index + senderNameAngled.length()));
     }
 
     private static void sendChatCheckDDos(MinecraftClient client, String message) {
@@ -68,6 +74,14 @@ public class AutoRepeat {
         if (canSend) {
             ChatUtil.sendChat(client, message);
         }
+    }
+
+    public static void updateBlackList(List<String> strings) {
+        PATTERNS = compile(strings);
+    }
+
+    private static List<BlackListPattern> compile(List<String> strings) {
+        return strings.stream().map(BlackListPattern::compile).toList();
     }
 
     public enum BlackListMode {
