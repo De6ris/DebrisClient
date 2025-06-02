@@ -5,7 +5,6 @@ import com.github.debris.debrisclient.feat.interactor.EntityInteractor;
 import com.github.debris.debrisclient.feat.interactor.InteractionFactory;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import dev.xpple.clientarguments.arguments.CEnumArgument;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -26,10 +25,7 @@ public class DCInteractCommand {
                                 }))
                         .then(argument("predicate", CEnumArgument.enumArg(InteractionFactory.BlockPredicate.class))
                                 .executes(ctx ->
-                                        addBlockTask(ctx.getSource(), CEnumArgument.getEnum(ctx, "predicate"), 1))
-                                .then(argument("times", IntegerArgumentType.integer(1))
-                                        .executes(ctx ->
-                                                addBlockTask(ctx.getSource(), CEnumArgument.getEnum(ctx, "predicate"), IntegerArgumentType.getInteger(ctx, "times"))))
+                                        addBlockTask(ctx.getSource(), CEnumArgument.getEnum(ctx, "predicate")))
                         )
                 )
                 .then(literal("entity")
@@ -39,24 +35,18 @@ public class DCInteractCommand {
                                     InfoUtils.printActionbarMessage("交互选区内实体: 已停止");
                                     return Command.SINGLE_SUCCESS;
                                 }))
-                        .executes(ctx -> addEntityTask(ctx.getSource(), 1))
-                        .then(argument("times", IntegerArgumentType.integer(1))
-                                .executes(ctx -> addEntityTask(ctx.getSource(), IntegerArgumentType.getInteger(ctx, "times"))))
+                        .executes(ctx -> addEntityTask(ctx.getSource()))
                 )
         );
     }
 
-    private static int addBlockTask(FabricClientCommandSource source, InteractionFactory.BlockPredicate predicate, int times) {
-        for (int i = 0; i < times; i++) {
-            InteractionFactory.addBlockTask(source.getClient(), predicate, false);
-        }
+    private static int addBlockTask(FabricClientCommandSource source, InteractionFactory.BlockPredicate predicate) {
+        InteractionFactory.addBlockTask(source.getClient(), predicate, false);
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int addEntityTask(FabricClientCommandSource source, int times) {
-        for (int i = 0; i < times; i++) {
-            InteractionFactory.addEntityTask(source.getClient(), false);
-        }
+    private static int addEntityTask(FabricClientCommandSource source) {
+        InteractionFactory.addEntityTask(source.getClient(), false);
         return Command.SINGLE_SUCCESS;
     }
 }

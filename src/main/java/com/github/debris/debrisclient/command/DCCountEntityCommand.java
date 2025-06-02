@@ -29,36 +29,37 @@ public class DCCountEntityCommand {
 
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(literal(Commands.PREFIX + "count_entity")
-                .executes(ctx -> countEntity(ctx.getSource()))
+                .executes(ctx -> execute(ctx.getSource()))
                 .then(argument("filter", entities())
-                        .executes(ctx -> countEntity(ctx.getSource(), ctx.getArgument("filter", CEntitySelector.class))))
+                        .executes(ctx -> execute(ctx.getSource(), ctx.getArgument("filter", CEntitySelector.class))))
         );
     }
 
-    private static int countEntity(FabricClientCommandSource source) {
-        return countEntity(source, Streams.stream(source.getWorld().getEntities()));
+    private static int execute(FabricClientCommandSource source) {
+        return execute(source, Streams.stream(source.getWorld().getEntities()));
     }
 
-    private static int countEntity(FabricClientCommandSource source, CEntitySelector entitySelector) throws CommandSyntaxException {
-        return countEntity(source, entitySelector.findEntities(source).stream());
+    private static int execute(FabricClientCommandSource source, CEntitySelector entitySelector) throws CommandSyntaxException {
+        return execute(source, entitySelector.findEntities(source).stream());
     }
 
-    private static int countEntity(FabricClientCommandSource source, Stream<? extends Entity> stream) {
-        stream.collect(Collectors.groupingBy(Entity::getType))
+    private static int execute(FabricClientCommandSource source, Stream<? extends Entity> stream) {
+        Map<? extends EntityType<?>, Distribution> map = stream.collect(Collectors.groupingBy(Entity::getType))
                 .entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         entry -> distributeByPosition(entry.getValue())
-                ))
-                .forEach((entityType, distribution) -> source.sendFeedback(getFeedback(source, entityType, distribution)));
+                ));
+        source.sendFeedback(Text.literal(String.format("已找到%d种实体, 共%d个", map.size(), map.values().stream().mapToInt(Distribution::getTotal).sum())));
+        map.forEach((entityType, distribution) -> source.sendFeedback(getFeedback(source, entityType, distribution)));
         return Command.SINGLE_SUCCESS;
     }
 
-    private static MutableText getFeedback(FabricClientCommandSource source, EntityType<?> entityType, List<Map.Entry<BlockPos, Long>> distribution) {
+    private static MutableText getFeedback(FabricClientCommandSource source, EntityType<?> entityType, Distribution distribution) {
         MutableText feedback = Text.empty()
                 .append("- ")
                 .append(Text.empty().append(entityType.getName()).styled(style -> style.withColor(ColorUtil.getColor(entityType))))
-                .append(String.format("(%d): ", distribution.stream().mapToLong(Map.Entry::getValue).sum()));
+                .append(String.format("(%d): ", distribution.getTotal()));
         int originalSize = distribution.size();
         int printSize;
         boolean reduced;
@@ -71,9 +72,10 @@ public class DCCountEntityCommand {
         }
 
         for (int i = 0; i < printSize; i++) {
-            Map.Entry<BlockPos, Long> entry = distribution.get(i);
-            BlockPos blockPos = entry.getKey();
-            Long count = entry.getValue();
+            DistributionEntry entry = distribution.get(i);
+            BlockPos blockPos = entry.pos;
+            int count = entry.count;
+
             feedback.append(Text.literal(String.valueOf(count)).styled(
                     style -> style.withColor(Formatting.AQUA)
                             .withHoverEvent(new HoverEvent.ShowText(Texts.bracketed(Text.translatable
@@ -98,9 +100,31 @@ public class DCCountEntityCommand {
         return feedback;
     }
 
-    private static List<Map.Entry<BlockPos, Long>> distributeByPosition(List<? extends Entity> entities) {
+    private static Distribution distributeByPosition(List<? extends Entity> entities) {
         Map<BlockPos, Long> distribution = entities.stream().collect(Collectors.groupingBy(Entity::getBlockPos, Collectors.counting()));
-        Comparator<Map.Entry<BlockPos, Long>> comparator = Comparator.comparingLong(Map.Entry::getValue);
-        return distribution.entrySet().stream().sorted(comparator.reversed()).toList();
+        Comparator<DistributionEntry> comparator = Comparator.comparingInt(DistributionEntry::count);
+        List<DistributionEntry> list = distribution.entrySet().stream()
+                .map(x -> new DistributionEntry(x.getKey(), x.getValue())).sorted(comparator.reversed()).toList();
+        return new Distribution(list);
+    }
+
+    private record Distribution(List<DistributionEntry> entries) {
+        private int getTotal() {
+            return entries.stream().mapToInt(DistributionEntry::count).sum();
+        }
+
+        private int size() {
+            return entries.size();
+        }
+
+        private DistributionEntry get(int index) {
+            return entries.get(index);
+        }
+    }
+
+    private record DistributionEntry(BlockPos pos, int count) {
+        private DistributionEntry(BlockPos pos, long count) {
+            this(pos, (int) count);
+        }
     }
 }

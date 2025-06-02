@@ -1,5 +1,6 @@
 package com.github.debris.debrisclient.unsafe.tweakeroo;
 
+import fi.dy.masa.malilib.config.IConfigBoolean;
 import fi.dy.masa.tweakeroo.config.FeatureToggle;
 import fi.dy.masa.tweakeroo.util.CameraEntity;
 import fi.dy.masa.tweakeroo.util.RayTraceUtils;
@@ -15,17 +16,8 @@ public class TweakerooAccessor {
         return RayTraceUtils.getRayTraceFromEntity(worldIn, entityIn, useLiquids);
     }
 
-    public static boolean getFreeCamState() {
-        return FeatureToggle.TWEAK_FREE_CAMERA.getBooleanValue();
-    }
-
-    public static void setFreeCamState(boolean state) {
-        FeatureToggle.TWEAK_FREE_CAMERA.setBooleanValue(state);
-    }
-
-    public static void tryActivateFreeCam() {
-        if (getFreeCamState()) return;
-        setFreeCamState(true);
+    public static IConfigBoolean getFreeCamConfig() {
+        return FeatureToggle.TWEAK_FREE_CAMERA;
     }
 
     public static ClientPlayerEntity getCamEntity() {

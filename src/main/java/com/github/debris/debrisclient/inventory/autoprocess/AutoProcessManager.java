@@ -1,8 +1,8 @@
 package com.github.debris.debrisclient.inventory.autoprocess;
 
-import com.github.debris.debrisclient.inventory.feat.ContainerTemplate;
 import com.github.debris.debrisclient.feat.interactor.BlockInteractor;
 import com.github.debris.debrisclient.feat.interactor.EntityInteractor;
+import com.github.debris.debrisclient.inventory.feat.ContainerTemplate;
 import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import com.github.debris.debrisclient.inventory.section.EnumSection;
 import com.github.debris.debrisclient.util.InventoryUtil;

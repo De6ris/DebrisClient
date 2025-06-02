@@ -1,7 +1,6 @@
 package com.github.debris.debrisclient.inventory.feat;
 
 import com.github.debris.debrisclient.feat.interactor.BlockInteractor;
-import com.github.debris.debrisclient.feat.interactor.ObjectInteractor;
 import com.github.debris.debrisclient.inventory.autoprocess.AutoProcessManager;
 import com.github.debris.debrisclient.inventory.autoprocess.IAutoProcessor;
 import com.github.debris.debrisclient.inventory.autoprocess.ProcessResult;
@@ -41,7 +40,7 @@ public class ContainerTemplate {
         if (Predicates.notInGuiContainer(client)) {
             Optional<BlockPos> optional = RayTraceUtil.getRayTraceBlock(client);
             if (optional.isPresent() && BlockUtil.isContainer(client.world, optional.get())) {
-                BlockInteractor.INSTANCE.add(ObjectInteractor.Category.OPEN_GUI, optional.get());
+                BlockInteractor.INSTANCE.add(optional.get());
                 waitForInteractor = true;
             } else {
                 InfoUtils.printActionbarMessage("记录容器样板: 未看向容器");

@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 
 public class InteractionFactory {
     public static boolean addBlockTask(MinecraftClient client, BlockPredicate predicate, boolean clearIfRunning) {
-        return addBlockTask(client, predicate.stateTester, predicate.category, clearIfRunning);
+        return addBlockTask(client, predicate.stateTester, clearIfRunning);
     }
 
-    public static boolean addBlockTask(MinecraftClient client, BiPredicate<World, BlockPos> predicate, ObjectInteractor.Category category, boolean clearIfRunning) {
+    public static boolean addBlockTask(MinecraftClient client, BiPredicate<World, BlockPos> predicate, boolean clearIfRunning) {
         if (!ModReference.hasMod(ModReference.Litematica)) return false;
         if (Predicates.notInGame(client)) return false;
         BlockInteractor instance = BlockInteractor.INSTANCE;
@@ -33,12 +33,12 @@ public class InteractionFactory {
             instance.clear();
             InfoUtils.printActionbarMessage("交互选区内方块: 已停止");
         } else {
-            addBlockTaskInternal(client, instance, predicate, category);
+            addBlockTaskInternal(client, instance, predicate);
         }
         return true;
     }
 
-    private static void addBlockTaskInternal(MinecraftClient client, BlockInteractor instance, BiPredicate<World, BlockPos> predicate, ObjectInteractor.Category category) {
+    private static void addBlockTaskInternal(MinecraftClient client, BlockInteractor instance, BiPredicate<World, BlockPos> predicate) {
         ClientWorld world = client.world;
         Collection<BlockPos> targets = new HashSet<>();
         LitematicaAccessor.streamBlockPos().forEach(pos -> {
@@ -48,7 +48,7 @@ public class InteractionFactory {
             InfoUtils.printActionbarMessage("交互选区内方块: 未找到匹配目标");
         } else {
             InfoUtils.printActionbarMessage(String.format("交互选区内方块: 已找到%d处方块", targets.size()));
-            instance.addAll(category, targets);
+            instance.addAll(targets);
         }
     }
 
@@ -77,27 +77,25 @@ public class InteractionFactory {
             InfoUtils.printActionbarMessage("交互选区内实体: 未找到实体");
         } else {
             InfoUtils.printActionbarMessage(String.format("交互选区内实体: 已找到%d处实体", targets.size()));
-            instance.addAll(ObjectInteractor.Category.OPEN_GUI, targets);// hard to predicate, so just open_gui
+            instance.addAll(targets);// hard to predicate, so just open_gui
         }
     }
 
     public enum BlockPredicate implements StringIdentifiable {
-        CONTAINER(BlockUtil::isContainer, ObjectInteractor.Category.OPEN_GUI),
+        CONTAINER(BlockUtil::isContainer),
         NON_CONTAINER((world, pos) -> {
             BlockState state = world.getBlockState(pos);
             if (state.isAir()) return false;
             //noinspection RedundantIfStatement
             if (BlockUtil.isContainer(world, pos)) return false;
             return true;
-        }, ObjectInteractor.Category.NORMAL),
+        }),
         ;
 
         private final BiPredicate<World, BlockPos> stateTester;
-        private final ObjectInteractor.Category category;
 
-        BlockPredicate(BiPredicate<World, BlockPos> stateTester, ObjectInteractor.Category category) {
+        BlockPredicate(BiPredicate<World, BlockPos> stateTester) {
             this.stateTester = stateTester;
-            this.category = category;
         }
 
         @Override

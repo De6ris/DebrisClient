@@ -8,6 +8,8 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.xpple.clientarguments.arguments.CCoordinates;
 import dev.xpple.clientarguments.arguments.CEntityArgument;
 import dev.xpple.clientarguments.arguments.CVec3Argument;
+import fi.dy.masa.malilib.config.IConfigBoolean;
+import fi.dy.masa.malilib.util.InfoUtils;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
@@ -51,7 +53,11 @@ public class DCTeleportCommand {
     }
 
     private static void teleport(FabricClientCommandSource source, Vec3d pos, float yaw, float pitch) {
-        TweakerooAccessor.tryActivateFreeCam();
+        IConfigBoolean config = TweakerooAccessor.getFreeCamConfig();
+        if (!config.getBooleanValue()) {
+            config.setBooleanValue(true);
+            InfoUtils.printBooleanConfigToggleMessage(config.getPrettyName(), true);
+        }
         ClientPlayerEntity entity = TweakerooAccessor.getCamEntity();
         entity.refreshPositionAndAngles(pos, yaw, pitch);
     }

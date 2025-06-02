@@ -4,9 +4,11 @@ import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.render.RenderQueue;
 import com.github.debris.debrisclient.render.RendererFactory;
 import com.github.debris.debrisclient.util.InteractionUtil;
+import com.github.debris.debrisclient.util.Predicates;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;
+import net.minecraft.village.Merchant;
 
 public class EntityInteractor extends ObjectInteractor<Entity> {
     public static final EntityInteractor INSTANCE = new EntityInteractor();
@@ -25,11 +27,13 @@ public class EntityInteractor extends ObjectInteractor<Entity> {
     }
 
     @Override
-    protected boolean interact(MinecraftClient client, Entity entity) {
+    protected InteractResult interact(MinecraftClient client, Entity entity) {
+        boolean isContainer = entity instanceof Merchant;
+        if (isContainer && !Predicates.inGameNoGui(client)) return InteractResult.FAIL;
         InteractionUtil.useEntity(client, entity);
         if (ModReference.hasMod(ModReference.MagicLibMCApi)) {
             RenderQueue.add(RendererFactory.text(Text.literal("已交互"), entity), 100);
         }
-        return true;
+        return isContainer ? InteractResult.WAITING : InteractResult.SUCCESS;
     }
 }
