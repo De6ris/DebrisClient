@@ -25,6 +25,18 @@ public abstract class ObjectInteractor<T> {
         targets.clear();
     }
 
+    public boolean clearAndInform() {
+        if (hasPending()) {
+            clear();
+            informClear();
+            return true;
+        }
+        return false;
+    }
+
+    protected void informClear() {
+    }
+
     public void add(T object) {
         targets.add(object);
     }

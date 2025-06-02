@@ -1,14 +1,22 @@
 package com.github.debris.debrisclient.inventory.feat;
 
 import com.github.debris.debrisclient.feat.interactor.BlockInteractor;
+import com.github.debris.debrisclient.feat.interactor.InteractionFactory;
 import com.github.debris.debrisclient.inventory.autoprocess.AutoProcessManager;
 import com.github.debris.debrisclient.inventory.autoprocess.IAutoProcessor;
 import com.github.debris.debrisclient.inventory.autoprocess.ProcessResult;
 import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import com.github.debris.debrisclient.inventory.section.EnumSection;
-import com.github.debris.debrisclient.util.*;
+import com.github.debris.debrisclient.util.BlockUtil;
+import com.github.debris.debrisclient.util.InventoryUtil;
+import com.github.debris.debrisclient.util.ItemUtil;
+import com.github.debris.debrisclient.util.RayTraceUtil;
+import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.InfoUtils;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.BlockPos;
@@ -17,63 +25,56 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class ContainerTemplate {
-    private static boolean RUNNING = false;
+public class SyncContainer {
+    private static boolean WAITING_TEMPLATE = false;
+    private static Block TYPE = Blocks.AIR;
     @Nullable
     private static List<ItemStack> TEMPLATE = null;
 
     @SuppressWarnings("DataFlowIssue")
-    public static boolean tryRecord(MinecraftClient client) {
-        if (RUNNING) {
-            InfoUtils.printActionbarMessage("记录容器样板: 等待容器打开中");
+    public static boolean trySync(MinecraftClient client) {
+        if (BlockInteractor.INSTANCE.clearAndInform()) return true;
+
+        if (WAITING_TEMPLATE) {
+            InfoUtils.printActionbarMessage("容器同步: 等待容器打开中");
             return false;
         }
 
-        if (TEMPLATE != null) {
-            TEMPLATE = null;
-            InfoUtils.printActionbarMessage("记录容器样板: 已重置");
-            return true;
-        }
+        Screen screen = GuiUtils.getCurrentScreen();
+        if (screen != null) screen.close();
 
-        boolean waitForInteractor = false;
-
-        if (Predicates.notInGuiContainer(client)) {
-            Optional<BlockPos> optional = RayTraceUtil.getRayTraceBlock(client);
-            if (optional.isPresent() && BlockUtil.isContainer(client.world, optional.get())) {
-                BlockInteractor.INSTANCE.add(optional.get());
-                waitForInteractor = true;
-            } else {
-                InfoUtils.printActionbarMessage("记录容器样板: 未看向容器");
-                return false;
-            }
-        }
-
-        if (waitForInteractor) {
-            RUNNING = true;
-            InfoUtils.printActionbarMessage("记录容器样板: 等待容器打开");
+        Optional<BlockPos> optional = RayTraceUtil.getRayTraceBlock(client);
+        if (optional.isPresent() && BlockUtil.isContainer(client.world, optional.get())) {
+            BlockPos blockPos = optional.get();
+            BlockInteractor.INSTANCE.add(blockPos);
+            TYPE = client.world.getBlockState(blockPos).getBlock();
         } else {
-            recordInternal();
-            InventoryUtil.getGuiContainer().close();
+            InfoUtils.printActionbarMessage("容器同步: 未看向容器");
+            return false;
         }
+
+        WAITING_TEMPLATE = true;
+        InfoUtils.printActionbarMessage("容器同步: 等待容器打开");
 
         return true;
     }
 
-    private static void recordInternal() {
+    private static void syncInternal() {
         TEMPLATE = EnumSection.Container.get().slots().stream().map(Slot::getStack).map(ItemStack::copy).toList();
         InfoUtils.printActionbarMessage("debris_client.auto_processor.template_recorder.message", InventoryUtil.getGuiContainer().getTitle());
+        InteractionFactory.addBlockTask(MinecraftClient.getInstance(), (world, pos) -> world.getBlockState(pos).isOf(TYPE), false);
     }
 
     public static class Recorder implements IAutoProcessor {
         @Override
         public boolean isActive() {
-            return RUNNING;
+            return WAITING_TEMPLATE;
         }
 
         @Override
         public ProcessResult process(ContainerSection containerSection, ContainerSection playerInventory) {
-            recordInternal();
-            RUNNING = false;
+            syncInternal();
+            WAITING_TEMPLATE = false;
             return ProcessResult.CLOSE_TERMINATE;
         }
     }
@@ -88,6 +89,9 @@ public class ContainerTemplate {
         @Override
         public ProcessResult process(ContainerSection containerSection, ContainerSection playerInventory) {
             List<ItemStack> template = TEMPLATE;
+
+            if (!BlockInteractor.INSTANCE.hasPending()) TEMPLATE = null;// disable the filler
+
             ContainerSection section = EnumSection.Container.get();
             if (section.size() != template.size()) {
                 InfoUtils.printActionbarMessage("debris_client.auto_processor.template_filler.size_unmatch", InventoryUtil.getGuiContainer().getTitle());

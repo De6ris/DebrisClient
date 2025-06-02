@@ -2,7 +2,7 @@ package com.github.debris.debrisclient.inventory.autoprocess;
 
 import com.github.debris.debrisclient.feat.interactor.BlockInteractor;
 import com.github.debris.debrisclient.feat.interactor.EntityInteractor;
-import com.github.debris.debrisclient.inventory.feat.ContainerTemplate;
+import com.github.debris.debrisclient.inventory.feat.SyncContainer;
 import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import com.github.debris.debrisclient.inventory.section.EnumSection;
 import com.github.debris.debrisclient.util.InventoryUtil;
@@ -18,8 +18,8 @@ public class AutoProcessManager {
     private static final List<IAutoProcessor> PROCESSORS = ImmutableList.of(
             new ContainerTaker(),
             new ItemFinder(),
-            new ContainerTemplate.Recorder(),
-            new ContainerTemplate.Filler()
+            new SyncContainer.Recorder(),
+            new SyncContainer.Filler()
     );
 
     public static void onGuiContainerOpen(HandledScreen<?> screen) {

@@ -6,7 +6,6 @@ import com.github.debris.debrisclient.feat.interactor.InteractionFactory;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import dev.xpple.clientarguments.arguments.CEnumArgument;
-import fi.dy.masa.malilib.util.InfoUtils;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
@@ -19,8 +18,7 @@ public class DCInteractCommand {
                 .then(literal("block")
                         .then(literal("clear")
                                 .executes(ctx -> {
-                                    BlockInteractor.INSTANCE.clear();
-                                    InfoUtils.printActionbarMessage("交互选区内方块: 已停止");
+                                    BlockInteractor.INSTANCE.clearAndInform();
                                     return Command.SINGLE_SUCCESS;
                                 }))
                         .then(argument("predicate", CEnumArgument.enumArg(InteractionFactory.BlockPredicate.class))
@@ -31,8 +29,7 @@ public class DCInteractCommand {
                 .then(literal("entity")
                         .then(literal("clear")
                                 .executes(ctx -> {
-                                    EntityInteractor.INSTANCE.clear();
-                                    InfoUtils.printActionbarMessage("交互选区内实体: 已停止");
+                                    EntityInteractor.INSTANCE.clearAndInform();
                                     return Command.SINGLE_SUCCESS;
                                 }))
                         .executes(ctx -> addEntityTask(ctx.getSource()))

@@ -6,6 +6,7 @@ import com.github.debris.debrisclient.render.RendererFactory;
 import com.github.debris.debrisclient.util.BlockUtil;
 import com.github.debris.debrisclient.util.InteractionUtil;
 import com.github.debris.debrisclient.util.Predicates;
+import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -14,6 +15,11 @@ public class BlockInteractor extends ObjectInteractor<BlockPos> {
     public static final BlockInteractor INSTANCE = new BlockInteractor();
 
     private BlockInteractor() {
+    }
+
+    @Override
+    protected void informClear() {
+        InfoUtils.printActionbarMessage("交互选区内方块: 已停止");
     }
 
     @Override

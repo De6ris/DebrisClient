@@ -5,6 +5,7 @@ import com.github.debris.debrisclient.render.RenderQueue;
 import com.github.debris.debrisclient.render.RendererFactory;
 import com.github.debris.debrisclient.util.InteractionUtil;
 import com.github.debris.debrisclient.util.Predicates;
+import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;
@@ -14,6 +15,11 @@ public class EntityInteractor extends ObjectInteractor<Entity> {
     public static final EntityInteractor INSTANCE = new EntityInteractor();
 
     private EntityInteractor() {
+    }
+
+    @Override
+    protected void informClear() {
+        InfoUtils.printActionbarMessage("交互选区内实体: 已停止");
     }
 
     @Override

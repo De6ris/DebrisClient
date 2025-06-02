@@ -29,9 +29,8 @@ public class InteractionFactory {
         if (!ModReference.hasMod(ModReference.Litematica)) return false;
         if (Predicates.notInGame(client)) return false;
         BlockInteractor instance = BlockInteractor.INSTANCE;
-        if (clearIfRunning && instance.hasPending()) {
-            instance.clear();
-            InfoUtils.printActionbarMessage("交互选区内方块: 已停止");
+        if (clearIfRunning) {
+            if (instance.clearAndInform()) return true;
         } else {
             addBlockTaskInternal(client, instance, predicate);
         }
@@ -56,10 +55,8 @@ public class InteractionFactory {
         if (!ModReference.hasMod(ModReference.Litematica)) return false;
         if (Predicates.notInGame(client)) return false;
         EntityInteractor instance = EntityInteractor.INSTANCE;
-        if (clearIfRunning && instance.hasPending()) {
-            instance.clear();
-            InfoUtils.printActionbarMessage("交互选区内实体: 已停止");
-            return true;
+        if (clearIfRunning) {
+            if (instance.clearAndInform()) return true;
         } else {
             addEntityTaskInternal(client, instance);
         }
@@ -77,7 +74,7 @@ public class InteractionFactory {
             InfoUtils.printActionbarMessage("交互选区内实体: 未找到实体");
         } else {
             InfoUtils.printActionbarMessage(String.format("交互选区内实体: 已找到%d处实体", targets.size()));
-            instance.addAll(targets);// hard to predicate, so just open_gui
+            instance.addAll(targets);
         }
     }
 

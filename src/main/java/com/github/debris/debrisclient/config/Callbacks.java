@@ -7,7 +7,7 @@ import com.github.debris.debrisclient.gui.DCConfigUi;
 import com.github.debris.debrisclient.gui.UniversalSearchScreen;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterRecipeStorage;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterUtil;
-import com.github.debris.debrisclient.inventory.feat.ContainerTemplate;
+import com.github.debris.debrisclient.inventory.feat.SyncContainer;
 import com.github.debris.debrisclient.inventory.feat.InventoryTweaks;
 import com.github.debris.debrisclient.inventory.sort.SortInventory;
 import com.github.debris.debrisclient.unsafe.mgButtons.MGButtonReloader;
@@ -78,7 +78,7 @@ public class Callbacks {
 
         DCCommonConfig.TakeOff.getKeybind().setCallback((action, key) -> TakeOff.tryTakeOff(client));
 
-        DCCommonConfig.RecordContainerTemplate.getKeybind().setCallback((action, key) -> ContainerTemplate.tryRecord(client));
+        DCCommonConfig.SyncContainer.getKeybind().setCallback((action, key) -> SyncContainer.trySync(client));
 
         DCCommonConfig.OpenSelectionContainers.getKeybind().setCallback(((action, key) -> InteractionFactory.addBlockTask(client, InteractionFactory.BlockPredicate.CONTAINER, true)));
 
