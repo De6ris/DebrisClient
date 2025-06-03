@@ -15,7 +15,8 @@ import net.minecraft.util.Identifier;
 
 public class CullingUtil {
     public static boolean shouldCullBlockEntity(BlockEntityType<?> type) {
-        if (type == BlockEntityType.SIGN && DCCommonConfig.CullSignRendering.getBooleanValue()) return true;
+        if (type == BlockEntityType.SIGN && DCCommonConfig.CullSign.getBooleanValue()) return true;
+        if (type == BlockEntityType.CHEST && DCCommonConfig.CullChest.getBooleanValue()) return true;
 
         Identifier id = BlockEntityType.getId(type);
         if (id == null) return false;

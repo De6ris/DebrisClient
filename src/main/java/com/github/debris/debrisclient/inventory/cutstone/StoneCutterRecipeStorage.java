@@ -99,7 +99,7 @@ public class StoneCutterRecipeStorage {
     }
 
     private File getSaveDir() {
-        return new File(DebrisClient.CONFIG_DIR + "stone_cutter_recipes");
+        return DebrisClient.CONFIG_DIR.resolve("stone_cutter_recipes").toFile();
     }
 
     private String getFileName() {

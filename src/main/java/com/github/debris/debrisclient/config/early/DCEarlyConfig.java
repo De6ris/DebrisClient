@@ -8,7 +8,7 @@ public class DCEarlyConfig extends ConfigBase {
     public boolean CarpetFix = true;
 
     public DCEarlyConfig() {
-        super(DebrisClient.CONFIG_DIR + "config_early" + ".prop");
+        super(DebrisClient.CONFIG_DIR.resolve("config_early.prop").toString());
     }
 
     private static DCEarlyConfig Instance;

@@ -20,6 +20,7 @@ import fi.dy.masa.malilib.util.JsonUtils;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
 import static com.github.debris.debrisclient.DebrisClient.MOD_NAME;
@@ -27,8 +28,7 @@ import static com.github.debris.debrisclient.config.ConfigFactory.*;
 
 public class DCCommonConfig implements IConfigHandler {
     private static final DCCommonConfig INSTANCE = new DCCommonConfig();
-    private static final String FILE_PATH = DebrisClient.CONFIG_DIR + "config_common.json";
-    private static final File CONFIG_DIR = new File(DebrisClient.CONFIG_DIR);
+    private static final Path FILE_PATH = DebrisClient.CONFIG_DIR.resolve("config_common.json");
 
 
     // value
@@ -64,7 +64,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean CommentSearch = ofBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
     public static final ConfigBoolean GlobalConfigEnhance = ofBoolean("全局配置加强", false, "将本模组的配置加强应用到所有masa模组,包含以下功能:\n为热键添加触发按钮\n为枚举列表提供预览");
     public static final ConfigBoolean ScrollerEnhance = ofBoolean("滑动条改进", true, "masa驱动\n允许点击白块之外拖动");
-    public static final ConfigBoolean XRayAutoColor = ofBoolean("XRay自动取色", false);
+    public static final ConfigBoolean XRayAutoColor = ofBoolean("XRay自动取色", true);
     public static final ConfigBoolean WthitMasaCompat = ofBoolean("Wthit与Masa兼容", true, "在合适的时机不渲染tooltip");
     public static final ConfigBoolean DisableREIWarning = ofBoolean("禁用REI警告", false, "至少在18.0.796版本仍然每次进服都在弹窗");
 
@@ -130,10 +130,11 @@ public class DCCommonConfig implements IConfigHandler {
 
 
     // yeet
-    public static final ConfigBooleanHotkeyed CullSignRendering = ofBooleanHotkeyed("剔除告示牌渲染", false, "");
-    public static final ConfigBooleanHotkeyed CullItemFrame = ofBooleanHotkeyed("剔除物品展示框渲染", false, "");
-    public static final ConfigBooleanHotkeyed CullItemEntity = ofBooleanHotkeyed("剔除物品实体渲染", false, "");
-    public static final ConfigBooleanHotkeyed CullExperienceOrb = ofBooleanHotkeyed("剔除经验球渲染", false, "");
+    public static final ConfigBooleanHotkeyed CullSign = ofBooleanHotkeyed("剔除告示牌", false, "");
+    public static final ConfigBooleanHotkeyed CullChest = ofBooleanHotkeyed("剔除箱子", false, "");
+    public static final ConfigBooleanHotkeyed CullItemFrame = ofBooleanHotkeyed("剔除物品展示框", false, "");
+    public static final ConfigBooleanHotkeyed CullItemEntity = ofBooleanHotkeyed("剔除物品实体", false, "");
+    public static final ConfigBooleanHotkeyed CullExperienceOrb = ofBooleanHotkeyed("剔除经验球", false, "");
     public static final ConfigBooleanHotkeyed DarknessOverride = ofBooleanHotkeyed("禁用失明和黑暗", false, "");
     public static final ConfigBooleanHotkeyed MuteExplosion = ofBooleanHotkeyed("爆炸静音", false, "", "不包括龙息爆炸");
     public static final ConfigBooleanHotkeyed MuteWither = ofBooleanHotkeyed("凋灵静音", false, "");
@@ -181,7 +182,7 @@ public class DCCommonConfig implements IConfigHandler {
 
     @Override
     public void load() {
-        File settingFile = new File(FILE_PATH);
+        File settingFile = FILE_PATH.toFile();
         if (settingFile.isFile() && settingFile.exists()) {
             JsonElement jsonElement = JsonUtils.parseJsonFile(settingFile);
             if (jsonElement != null && jsonElement.isJsonObject()) {
@@ -193,10 +194,11 @@ public class DCCommonConfig implements IConfigHandler {
 
     @Override
     public void save() {
-        if ((CONFIG_DIR.exists() && CONFIG_DIR.isDirectory()) || CONFIG_DIR.mkdirs()) {
+        File folder = DebrisClient.CONFIG_DIR.toFile();
+        if ((folder.exists() && folder.isDirectory()) || folder.mkdirs()) {
             JsonObject configRoot = new JsonObject();
             ConfigUtils.writeConfigBase(configRoot, MOD_NAME, ALL_CONFIGS);
-            JsonUtils.writeJsonToFile(configRoot, new File(FILE_PATH));
+            JsonUtils.writeJsonToFile(configRoot, FILE_PATH.toFile());
         }
     }
 
@@ -296,7 +298,8 @@ public class DCCommonConfig implements IConfigHandler {
                 AutoBulletCatching
         );
         Yeets = ImmutableList.of(
-                CullSignRendering,
+                CullSign,
+                CullChest,
                 CullItemFrame,
                 CullItemEntity,
                 CullExperienceOrb,
