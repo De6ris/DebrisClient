@@ -6,6 +6,7 @@
   "mixins": [
   ],
   "client": [
+    "client.DefaultSkinHelperMixin",
     "client.IMixinClientRecipeBook",
     "client.IMixinMinecraftClient",
     "client.MinecraftClientMixin",

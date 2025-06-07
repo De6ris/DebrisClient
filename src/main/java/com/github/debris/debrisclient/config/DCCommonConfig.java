@@ -42,6 +42,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigEnum<HeartType> HeartTypeOverride = ofEnum("生命值样式覆写", HeartType.NONE);
     public static final ConfigBoolean ExtraTooltip = ofBoolean("额外物品提示", false, "对于非满级附魔,标注其最高等级\n铁砧惩罚,在铁砧操作时所需等级\n附魔价值,将其全部魔咒转移时所需等级");
     public static final ConfigInteger InteractContainerPeriod = ofInteger("交互容器间隔", 3, 0, 100, true, "按刻计\n高延迟服务器内应调高此项");
+    public static final ConfigBoolean RetroDefaultSkin = ofBoolean("怀旧默认皮肤", false, "仅Steve, Alex");
 
 
     // key settings
@@ -239,7 +240,8 @@ public class DCCommonConfig implements IConfigHandler {
                 FullDebugInfo,
                 HeartTypeOverride,
                 ExtraTooltip,
-                InteractContainerPeriod
+                InteractContainerPeriod,
+                RetroDefaultSkin
         );
         Compat = buildCompat();
         Lists = ImmutableList.of(

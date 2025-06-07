@@ -51,9 +51,6 @@ public abstract class ObjectInteractor<T> {
 
     protected abstract boolean withinReach(MinecraftClient client, T object);
 
-    /**
-     * @return If true, task success and remove.
-     */
     protected abstract InteractResult interact(MinecraftClient client, T object);
 
     public void onClientTick(MinecraftClient client) {

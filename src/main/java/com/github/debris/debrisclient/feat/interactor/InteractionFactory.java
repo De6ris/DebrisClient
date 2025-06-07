@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class InteractionFactory {
@@ -29,8 +30,8 @@ public class InteractionFactory {
         if (!ModReference.hasMod(ModReference.Litematica)) return false;
         if (Predicates.notInGame(client)) return false;
         BlockInteractor instance = BlockInteractor.INSTANCE;
-        if (clearIfRunning) {
-            if (instance.clearAndInform()) return true;
+        if (clearIfRunning && instance.clearAndInform()) {
+            return true;
         } else {
             addBlockTaskInternal(client, instance, predicate);
         }
@@ -52,19 +53,23 @@ public class InteractionFactory {
     }
 
     public static boolean addEntityTask(MinecraftClient client, boolean clearIfRunning) {
+        return addEntityTask(client, entity -> true, clearIfRunning);
+    }
+
+    public static boolean addEntityTask(MinecraftClient client, Predicate<Entity> predicate, boolean clearIfRunning) {
         if (!ModReference.hasMod(ModReference.Litematica)) return false;
         if (Predicates.notInGame(client)) return false;
         EntityInteractor instance = EntityInteractor.INSTANCE;
-        if (clearIfRunning) {
-            if (instance.clearAndInform()) return true;
+        if (clearIfRunning && instance.clearAndInform()) {
+            return true;
         } else {
-            addEntityTaskInternal(client, instance);
+            addEntityTaskInternal(client, instance, predicate);
         }
         return true;
     }
 
     @SuppressWarnings("DataFlowIssue")
-    private static void addEntityTaskInternal(MinecraftClient client, EntityInteractor instance) {
+    private static void addEntityTaskInternal(MinecraftClient client, EntityInteractor instance, Predicate<Entity> predicate) {
         ClientWorld world = client.world;
         Set<Entity> targets = LitematicaAccessor.streamBlockBox()
                 .map(Box::from)
