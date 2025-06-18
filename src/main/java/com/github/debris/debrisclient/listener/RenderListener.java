@@ -19,7 +19,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.Fog;
 import net.minecraft.client.render.Frustum;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.world.World;
@@ -36,7 +35,7 @@ public class RenderListener implements IRenderer {
 
     @SuppressWarnings("DataFlowIssue")
     @Override
-    public void onRenderWorldLastAdvanced(Framebuffer fb, Matrix4f posMatrix, Matrix4f projMatrix, Frustum frustum, Camera camera, Fog fog, BufferBuilderStorage buffers, Profiler profiler) {
+    public void onRenderWorldLastAdvanced(Framebuffer fb, Matrix4f posMatrix, Matrix4f projMatrix, Frustum frustum, Camera camera, BufferBuilderStorage buffers, Profiler profiler) {
         if (Predicates.notInGame(this.client)) return;
 
         if (DCCommonConfig.WorldEditVisibility.getBooleanValue() && ModReference.hasMod(ModReference.WorldEdit) && ModReference.hasMod(ModReference.Litematica)) {
@@ -52,7 +51,7 @@ public class RenderListener implements IRenderer {
         }
 
         float tickDelta = this.client.getRenderTickCounter().getTickProgress(false);
-        WorldRenderContext context = RenderContext.ofWorld(fb, posMatrix, projMatrix, frustum, camera, fog, buffers, profiler, tickDelta);
+        WorldRenderContext context = RenderContext.ofWorld(fb, posMatrix, projMatrix, frustum, camera, buffers, profiler, tickDelta);
 
         PathNodesRenderer.getInstance().onRenderWorldPost(this.client.world, context);
 

@@ -3,8 +3,6 @@ accessible field net/minecraft/client/gui/screen/ingame/HandledScreen quickMovin
 
 accessible field net/minecraft/client/gui/screen/ingame/CreativeInventoryScreen$CreativeSlot slot Lnet/minecraft/screen/slot/Slot;
 
-accessible class net/minecraft/client/render/BackgroundRenderer$StatusEffectFogModifier
-
 accessible class net/minecraft/client/gui/screen/ingame/CreativeInventoryScreen$CreativeSlot
 
 accessible class net/minecraft/client/gui/hud/InGameHud$HeartType

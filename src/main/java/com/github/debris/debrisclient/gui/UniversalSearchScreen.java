@@ -7,7 +7,6 @@ import fi.dy.masa.malilib.gui.widgets.WidgetBase;
 import fi.dy.masa.malilib.gui.widgets.WidgetConfigOption;
 import fi.dy.masa.malilib.gui.widgets.WidgetListConfigOptions;
 import fi.dy.masa.malilib.gui.widgets.WidgetSearchBar;
-import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.data.ModInfo;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
@@ -53,7 +52,6 @@ public class UniversalSearchScreen extends GuiConfigsBase {
             ConfigOptionWrapper wrapper = AccessorUtil.getWrapper(widget);
             ConfigCollector.Source source = ConfigCollector.getSourceMap().get(wrapper);
             if (source != null) {
-                RenderUtils.forceDraw(drawContext);
                 MutableText text = Text.literal("来源").withColor(Colors.GREEN)
                         .append(Text.literal(": ").withColor(Colors.WHITE))
                         .append(Text.literal(source.modName()).withColor(Colors.CYAN))

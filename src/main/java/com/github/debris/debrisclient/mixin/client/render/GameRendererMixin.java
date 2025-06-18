@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Restriction(require = @Condition(ModReference.Tweakeroo))
-@Mixin(value = GameRenderer.class, priority = 1002)
+@Mixin(value = GameRenderer.class, priority = 1006)
 public class GameRendererMixin {
     @Redirect(method = "updateCrosshairTarget",
             at = @At(value = "INVOKE",

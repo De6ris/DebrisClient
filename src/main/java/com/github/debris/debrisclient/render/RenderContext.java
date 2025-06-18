@@ -1,7 +1,10 @@
 package com.github.debris.debrisclient.render;
 
 import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.render.*;
+import net.minecraft.client.render.BufferBuilderStorage;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.Frustum;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.profiler.Profiler;
 import org.joml.Matrix4f;
@@ -22,11 +25,10 @@ public interface RenderContext {
                                       Matrix4f projMatrix,
                                       Frustum frustum,
                                       Camera camera,
-                                      Fog fog,
                                       BufferBuilderStorage buffers,
                                       Profiler profiler,
                                       float tickDelta) {
-        return new WorldRenderContext(fb, posMatrix, projMatrix, frustum, camera, fog, buffers, profiler, tickDelta);
+        return new WorldRenderContext(fb, posMatrix, projMatrix, frustum, camera, buffers, profiler, tickDelta);
     }
 
 }

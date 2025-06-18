@@ -19,11 +19,11 @@ public abstract class GuiScrollBarMixin {
     public abstract void setValue(int value);
 
     @Inject(
-            method = "render(IIFIIIIILnet/minecraft/client/gui/DrawContext;Z)V",
+            method = "render",
             at = @At(value = "INVOKE", target = "Lfi/dy/masa/malilib/gui/GuiScrollBar;handleDrag(II)V", remap = false),
             remap = true
     )
-    private void enhance(int mouseX, int mouseY, float partialTicks, int xPosition, int yPosition, int width, int height, int totalHeight, DrawContext drawContext, boolean depthMask, CallbackInfo ci) {
+    private void enhance(DrawContext drawContext, int mouseX, int mouseY, float partialTicks, int xPosition, int yPosition, int width, int height, int totalHeight, CallbackInfo ci) {
         if (DCCommonConfig.ScrollerEnhance.getBooleanValue()) {// TODO unmatch when list too large
             boolean inRange = mouseX > xPosition && mouseX < xPosition + width && mouseY > yPosition && mouseY < yPosition + height;
             if (inRange && !this.dragging && InputUtil.isLeftClicking()) {

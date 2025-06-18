@@ -20,10 +20,7 @@ public class RenderUtil {
         pos1 = pos1.subtract(camPos);
         pos2 = pos2.subtract(camPos);
 
-        RenderUtils.color(1f, 1f, 1f, 1f);
-        RenderUtils.blend(true);
-
-        RenderContext ctx = new RenderContext(MaLiLibPipelines.DEBUG_LINES_MASA_SIMPLE_NO_DEPTH_NO_CULL);
+        RenderContext ctx = new RenderContext(() -> "debrisclient:connect_lines", MaLiLibPipelines.DEBUG_LINES_MASA_SIMPLE_NO_DEPTH_NO_CULL);
         BufferBuilder builder = ctx.getBuilder();
 
         RenderUtils.drawBoxAllEdgesBatchedLines(

@@ -1,10 +1,10 @@
 package com.github.debris.debrisclient.util;
 
 import com.github.debris.debrisclient.compat.ModReference;
-import com.github.debris.debrisclient.unsafe.tweakeroo.TweakerooAccessor;
 import com.mojang.logging.LogUtils;
 import fi.dy.masa.malilib.util.EntityUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
+import fi.dy.masa.malilib.util.game.RayTraceUtils;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
@@ -14,6 +14,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import org.slf4j.Logger;
 
@@ -37,8 +38,8 @@ public class RayTraceUtil {
         if (cameraEntity.isEmpty()) return Optional.empty();
 
         // why not use client.targetedEntity? for compatible with tweakeroo free cam
-        HitResult trace = TweakerooAccessor.getRayTraceFromEntity(world, cameraEntity.get(), false);
-        return Optional.of(trace);
+        HitResult trace = RayTraceUtils.getRayTraceFromEntity(world, cameraEntity.get(), RaycastContext.FluidHandling.NONE);
+        return Optional.ofNullable(trace);
     }
 
     public static Optional<Entity> getBestCameraEntity(MinecraftClient client, World world) {

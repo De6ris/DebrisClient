@@ -8,7 +8,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
@@ -41,20 +40,13 @@ public class StoneCutterRecipeRenderer {
 
             this.calculateRecipePositions(gui);
 
-            drawContext.getMatrices().push();
-            drawContext.getMatrices().translate(this.recipeListX, this.recipeListY, 0);
-            drawContext.getMatrices().scale((float) this.scale, (float) this.scale, 1);
-
-//            Matrix4fStack matrix4fStack = RenderSystem.getModelViewStack();
-//            matrix4fStack.pushMatrix();
-//            matrix4fStack.translate(this.recipeListX, this.recipeListY, 0);
-//            matrix4fStack.scale((float) this.scale, (float) this.scale, 1);
+            drawContext.getMatrices().pushMatrix();
+            drawContext.getMatrices().translate(this.recipeListX, this.recipeListY);
+            drawContext.getMatrices().scale((float) this.scale, (float) this.scale);
 
             String str = StringUtils.translate("itemscroller.gui.label.recipe_page", (first / countPerPage) + 1, recipeStorage.getTotalRecipeCount() / countPerPage);
 
             drawContext.drawText(this.mc.textRenderer, str, 16, -12, 0xC0C0C0C0, false);
-
-            RenderUtils.forceDraw(drawContext);
 
             for (int i = 0, recipeId = first; recipeId <= lastOnPage; ++i, ++recipeId) {
                 ItemStack stack = recipeStorage.getRecipe(recipeId).getResult();
@@ -70,10 +62,7 @@ public class StoneCutterRecipeRenderer {
 
             this.renderRecipeDetail(recipe, recipeStorage.getRecipeCountPerPage(), gui, drawContext);
 
-            drawContext.getMatrices().pop();
-//            matrix4fStack.popMatrix();
-//            RenderSystem.applyModelViewMatrix();
-//            RenderSystem.enableBlend(); // Fixes the crafting book icon rendering
+            drawContext.getMatrices().popMatrix();
         }
     }
 
@@ -82,7 +71,6 @@ public class StoneCutterRecipeRenderer {
         final int gapHorizontal = 2;
         final int gapVertical = 2;
         final int stackBaseHeight = 16;
-        final int guiLeft = AccessorUtil.getGuiLeft(gui);
 
         this.recipesPerColumn = 9;
         this.columns = (int) Math.ceil((double) recipes.getRecipeCountPerPage() / (double) this.recipesPerColumn);
@@ -90,7 +78,7 @@ public class StoneCutterRecipeRenderer {
         this.gapColumn = 4;
 
         int usableHeight = GuiUtils.getScaledWindowHeight();
-        int usableWidth = guiLeft;
+        int usableWidth = AccessorUtil.getGuiLeft(gui);
         // Scale the maximum stack size by taking into account the relative gap size
         double gapScaleVertical = (1D - (double) gapVertical / (double) (stackBaseHeight + gapVertical));
         // the +1.2 is for the gap and page text height on the top and bottom
@@ -102,7 +90,7 @@ public class StoneCutterRecipeRenderer {
 
         this.scale = (double) stackDimensions / (double) stackBaseHeight;
         this.entryHeight = stackBaseHeight + gapVertical;
-        this.recipeListX = guiLeft - (int) ((this.columns * (stackBaseHeight + this.numberTextWidth + this.gapColumn) + gapHorizontal) * this.scale);
+        this.recipeListX = usableWidth - (int) ((this.columns * (stackBaseHeight + this.numberTextWidth + this.gapColumn) + gapHorizontal) * this.scale);
         this.recipeListY = (int) (this.entryHeight * this.scale);
         this.columnWidth = stackBaseHeight + this.numberTextWidth + this.gapColumn;
     }
@@ -120,14 +108,13 @@ public class StoneCutterRecipeRenderer {
         x = x - (int) (font.getWidth(indexStr) * scale) - 2;
         y = row * this.entryHeight + this.entryHeight / 2 - font.fontHeight / 2;
 
-        drawContext.getMatrices().push();
-        drawContext.getMatrices().translate(x, y, 0);
-        drawContext.getMatrices().scale(scale, scale, 1);
+        drawContext.getMatrices().pushMatrix();
+        drawContext.getMatrices().translate(x, y);
+        drawContext.getMatrices().scale(scale, scale);
 
         drawContext.drawText(font, indexStr, 0, 0, 0xFFC0C0C0, false);
-        RenderUtils.forceDraw(drawContext);
 
-        drawContext.getMatrices().pop();
+        drawContext.getMatrices().popMatrix();
     }
 
     public int getHoveredRecipeId(int mouseX, int mouseY, HandledScreen<?> gui) {
@@ -159,35 +146,30 @@ public class StoneCutterRecipeRenderer {
         this.renderStackAt(recipe.getInput(), x, y, false, drawContext);
         this.renderStackAt(new ItemStack(Items.STONECUTTER), x + 17, y, false, drawContext);
         this.renderStackAt(recipe.getResult(), x + 34, y, false, drawContext);
-    }
+    }// TODO selection box position wrong
 
     private void renderStackAt(ItemStack stack, int x, int y, boolean border, DrawContext drawContext) {
         final int w = 16;
-        int xAdj = (int) ((x) * this.scale) + this.recipeListX;
-        int yAdj = (int) ((y) * this.scale) + this.recipeListY;
-        int wAdj = (int) ((w) * this.scale);
 
         if (border) {
             // Draw a light/white border around the stack
-            RenderUtils.drawOutline(xAdj - 1, yAdj - 1, wAdj + 2, wAdj + 2, 0xFFFFFFFF);
+            RenderUtils.drawOutline(drawContext, x - 1, y - 1, w + 2, w + 2, 0xFFFFFFFF);
         }
 
         // light background for the item
-        RenderUtils.drawRect(xAdj, yAdj, wAdj, wAdj, 0x20FFFFFF);
+        RenderUtils.drawRect(drawContext, x, y, w, w, 0x20FFFFFF);
 
         if (!stack.isEmpty()) {
-            DiffuseLighting.enableGuiDepthLighting();
-
             stack = stack.copy();
             stack.setCount(1);
 
-            drawContext.getMatrices().push();
-            drawContext.getMatrices().translate(0, 0, 100.f);
+            drawContext.getMatrices().pushMatrix();
+            drawContext.getMatrices().translate(0, 0);      // z = 100.f
 
+//            DiffuseLighting.enableGuiDepthLighting();
             drawContext.drawItem(stack, x, y);
-            RenderUtils.forceDraw(drawContext);
 
-            drawContext.getMatrices().pop();
+            drawContext.getMatrices().popMatrix();
         }
     }
 }

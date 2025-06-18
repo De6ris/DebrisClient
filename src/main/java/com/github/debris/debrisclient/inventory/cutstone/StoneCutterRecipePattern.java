@@ -1,8 +1,10 @@
 package com.github.debris.debrisclient.inventory.cutstone;
 
 import com.github.debris.debrisclient.inventory.section.EnumSection;
+import fi.dy.masa.malilib.util.InventoryUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.DynamicRegistryManager;
 
 public class StoneCutterRecipePattern {
@@ -37,16 +39,16 @@ public class StoneCutterRecipePattern {
 
     public void readFromNBT(NbtCompound nbt, DynamicRegistryManager registryManager) {
         if (nbt.contains("Result") && nbt.contains("Input")) {
-            this.input = ItemStack.fromNbt(registryManager, nbt.getCompoundOrEmpty("Input")).orElse(ItemStack.EMPTY);
-            this.result = ItemStack.fromNbt(registryManager, nbt.getCompoundOrEmpty("Result")).orElse(ItemStack.EMPTY);
+            this.input = InventoryUtils.fromNbtOrEmpty(registryManager, nbt.getCompoundOrEmpty("Input"));
+            this.result = InventoryUtils.fromNbtOrEmpty(registryManager, nbt.getCompoundOrEmpty("Result"));
         }
     }
 
     // Assuming Valid
     public NbtCompound writeToNBT(DynamicRegistryManager registryManager) {
         NbtCompound nbt = new NbtCompound();
-        NbtCompound inputNbt = (NbtCompound) this.input.toNbt(registryManager);
-        NbtCompound resultNbt = (NbtCompound) this.result.toNbt(registryManager);
+        NbtCompound inputNbt = (NbtCompound) ItemStack.CODEC.encodeStart(registryManager.getOps(NbtOps.INSTANCE), this.input).getPartialOrThrow();
+        NbtCompound resultNbt = (NbtCompound) ItemStack.CODEC.encodeStart(registryManager.getOps(NbtOps.INSTANCE), this.result).getPartialOrThrow();
         nbt.put("Input", inputNbt);
         nbt.put("Result", resultNbt);
         return nbt;
