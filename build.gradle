@@ -63,11 +63,7 @@ dependencies {
     modImplementation "com.terraformersmc:modmenu:${project.mod_menu}"
 
     modImplementation("dev.xpple:clientarguments:${project.clientarguments_version}")
-//    modImplementation "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
-//
-//    modImplementation("io.github.cottonmc:Jankson-Fabric:${project.jankson_version}")
-//    modImplementation("io.github.juuxel:libninepatch:${project.libninepatch_version}")
-//    modImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}")
+
 //    modImplementation("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")
 
 //    implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:0.2.0"))
@@ -78,7 +74,8 @@ dependencies {
 //
 //
     include(modImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
-//    include(annotationProcessor(implementation("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
+
+
     modCompileOnly(files("libs\\magiclib-minecraft-api-mc1.21.4-fabric-0.6.83-stable.jar"))
     modCompileOnly(files("libs\\LibGui-12.0.1+1.21.2.jar"))
     modCompileOnly(files("libs\\CommandGUIButtons-mc1.21-2.3.0+build.235+bb785b5.jar"))
