@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.compat;
 
-import net.fabricmc.loader.api.FabricLoader;
+import com.github.debris.debrisclient.util.Platform;
 
 public class ModReference {
     public static final String CommandButton = "mgbuttons-1_21";
@@ -18,6 +18,6 @@ public class ModReference {
     public static final String Wthit = "wthit";
 
     public static boolean hasMod(String modid) {
-        return FabricLoader.getInstance().isModLoaded(modid);
+        return Platform.hasMod(modid);
     }
 }

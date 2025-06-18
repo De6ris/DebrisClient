@@ -205,25 +205,24 @@ public class DCCommonConfig implements IConfigHandler {
 
     private static ImmutableList<IConfigBase> buildCompat() {
         ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();
-        FabricLoader instance = FabricLoader.getInstance();
         builder.add(ProgressResuming, PinYinSearch, CommentSearch, GlobalConfigEnhance, ScrollerEnhance);
-        if (instance.isModLoaded(ModReference.Tweakeroo)) {
+        if (ModReference.hasMod(ModReference.Tweakeroo)) {
             builder.add(FreeCamKeepAutoMoving, FreeCamSpectatorFix, RetroFreeCam, ToolSwitchFix);
         }
-        if (instance.isModLoaded(ModReference.MiniHud) && instance.isModLoaded(ModReference.MagicLibMCApi)) {
+        if (ModReference.hasMod(ModReference.MiniHud) && ModReference.hasMod(ModReference.MagicLibMCApi)) {
             builder.add(InventoryPreviewSupportComparator);
         }
-        if (instance.isModLoaded(ModReference.WorldEdit) && instance.isModLoaded(ModReference.Litematica)) {
+        if (ModReference.hasMod(ModReference.WorldEdit) && ModReference.hasMod(ModReference.Litematica)) {
             builder.add(WorldEditVisibility);
             builder.add(WorldEditOverlay);
         }
-        if (instance.isModLoaded(ModReference.XRay)) {
+        if (ModReference.hasMod(ModReference.XRay)) {
             builder.add(XRayAutoColor);
         }
-        if (instance.isModLoaded(ModReference.Wthit)) {
+        if (ModReference.hasMod(ModReference.Wthit)) {
             builder.add(WthitMasaCompat);
         }
-        if (instance.isModLoaded(ModReference.REI)) {
+        if (ModReference.hasMod(ModReference.REI)) {
             builder.add(DisableREIWarning);
         }
         return builder.build();

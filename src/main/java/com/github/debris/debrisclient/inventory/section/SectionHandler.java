@@ -32,11 +32,7 @@ public class SectionHandler {
         List<Slot> slots = InventoryUtil.getSlots(container);
         Map<Inventory, List<Slot>> groupedByInventory = slots.stream().collect(Collectors.groupingBy(x -> x.inventory));
         SectionIdentifier identifier = new SectionIdentifier(this::putSection, this::handleUnidentified);
-        for (Map.Entry<Inventory, List<Slot>> inventoryListEntry : groupedByInventory.entrySet()) {
-            Inventory iInventory = inventoryListEntry.getKey();
-            List<Slot> partSlots = inventoryListEntry.getValue();
-            identifier.identify(guiContainer, container, iInventory, partSlots);
-        }
+        groupedByInventory.forEach((iInventory, partSlots) -> identifier.identify(guiContainer, container, iInventory, partSlots));
     }
 
     private void putSection(EnumSection key, ContainerSection section) {

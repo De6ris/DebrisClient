@@ -2,12 +2,12 @@ package com.github.debris.debrisclient.feat;
 
 import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.unsafe.rei.ReiPinYinMatcher;
+import com.github.debris.debrisclient.util.Platform;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.fabricmc.loader.api.FabricLoader;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.slf4j.Logger;
@@ -82,7 +82,7 @@ public class PinYinSupport {
         return PINYIN_MAP.get(codePoint);
     }
 
-    private static final Path unihanPath = FabricLoader.getInstance().getConfigDir().resolve("roughlyenoughitems/unihan.zip");
+    private static final Path unihanPath = Platform.getConfigDir().resolve("roughlyenoughitems").resolve("unihan.zip");
 
     private static boolean available = false;
 
