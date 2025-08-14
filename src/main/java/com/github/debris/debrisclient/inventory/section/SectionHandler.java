@@ -98,7 +98,7 @@ public class SectionHandler {
     }
 
     public static ContainerSection getSection(Slot slot) {
-        return streamAllSections().filter(x -> x.hasSlot(slot)).findFirst().orElseThrow();
+        return streamAllSections().filter(x -> x.hasSlot(slot)).findFirst().orElse(ContainerSection.EMPTY);
     }
 
     public static ContainerSection getSection(int globalIndex) {
@@ -108,6 +108,6 @@ public class SectionHandler {
                         .anyMatch(y -> InventoryUtil.getSlotId(y) == globalIndex)
                 )
                 .findFirst()
-                .orElseThrow();
+                .orElse(ContainerSection.EMPTY);
     }
 }

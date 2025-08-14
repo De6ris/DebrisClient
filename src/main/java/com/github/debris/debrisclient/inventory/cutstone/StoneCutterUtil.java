@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class StoneCutterUtil {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -45,8 +46,7 @@ public class StoneCutterUtil {
 
     @SuppressWarnings("ConstantConditions")
     private static void chooseRecipe(ItemStack result) {
-        StonecutterScreen guiContainer = (StonecutterScreen) InventoryUtil.getGuiContainer();
-        StonecutterScreenHandler container = guiContainer.getScreenHandler();
+        StonecutterScreenHandler container = (StonecutterScreenHandler) InventoryUtil.getCurrentContainer();
         List<CuttingRecipeDisplay.GroupEntry<StonecuttingRecipe>> entries = container.getAvailableRecipes().entries();
         ContextParameterMap contextParameterMap = SlotDisplayContexts.createParameters(MinecraftClient.getInstance().world);
         for (int i = 0; i < entries.size(); i++) {
@@ -60,37 +60,18 @@ public class StoneCutterUtil {
     }
 
     public static void cutStone() {
-        StoneCutterRecipePattern selectedRecipe = StoneCutterRecipeStorage.getInstance().getSelectedRecipe();
-        if (!selectedRecipe.isValid()) return;
-        ItemStack input = selectedRecipe.getInput();
-        ItemStack result = selectedRecipe.getResult();
-
-        Slot stoneCutterInput = EnumSection.StoneCutterIn.get().getFirstSlot();
-        Slot stoneCutterOutput = EnumSection.CraftResult.get().getFirstSlot();
-
-        InventoryTweaks.makeSureNotHoldingItem(EnumSection.InventoryWhole.get());
-
-        if (stoneCutterInput.hasStack()) {// deal with slot occupied
-            InventoryUtil.quickMove(stoneCutterInput);// move to inventory
-        }
-
-        InventoryUtil.dropStackIfPossible(stoneCutterInput);// force clear
-
-        EnumSection.InventoryWhole.get().predicateRun(ItemUtil.predicateIDMeta(input), x -> {
-            InventoryUtil.quickMove(x);
-            chooseRecipe(result);
-            InventoryUtil.quickMove(stoneCutterOutput);
-        });
+        runInternal(InventoryUtil::quickMove);
     }
 
     public static void cutStoneThenDrop() {
+        runInternal(InventoryUtil::dropStack);
+    }
+
+    private static void runInternal(Consumer<Slot> outputAction) {
         StoneCutterRecipePattern selectedRecipe = StoneCutterRecipeStorage.getInstance().getSelectedRecipe();
         if (!selectedRecipe.isValid()) return;
         ItemStack input = selectedRecipe.getInput();
         ItemStack result = selectedRecipe.getResult();
-
-        Slot stoneCutterInput = EnumSection.StoneCutterIn.get().getFirstSlot();
-        Slot stoneCutterOutput = EnumSection.CraftResult.get().getFirstSlot();
 
         ContainerSection playerInventory = EnumSection.InventoryWhole.get();
 
@@ -98,21 +79,24 @@ public class StoneCutterUtil {
 
         InventoryUtil.dropAllMatching(ItemUtil.predicateIDMeta(result));// first throw those crafting result
 
-        if (stoneCutterInput.hasStack()) {// deal with slot occupied
-            InventoryUtil.quickMove(stoneCutterInput);
-        }
+        clearInputSlot();
 
-        InventoryUtil.dropStackIfPossible(stoneCutterInput);// force clear
+        Slot outputSlot = EnumSection.CraftResult.get().getFirstSlot();
 
-        for (Slot slot : playerInventory.slots()) {
-            if (ItemUtil.compareIDMeta(slot.getStack(), input)) {// can craft
-                InventoryUtil.quickMove(slot);
-                chooseRecipe(result);
-                InventoryUtil.quickMove(stoneCutterOutput);
-            }
-            if (ItemUtil.compareIDMeta(slot.getStack(), result)) {// should drop
-                InventoryUtil.dropStack(slot);
-            }
-        }
+        playerInventory.predicateRun(ItemUtil.predicateIDMeta(input), slot -> {
+            InventoryUtil.quickMove(slot);
+            chooseRecipe(result);
+            outputAction.accept(outputSlot);
+        });
     }
+
+    private static void clearInputSlot() {
+        Slot input = EnumSection.StoneCutterIn.get().getFirstSlot();
+        if (input.hasStack()) {
+            InventoryUtil.quickMove(input);
+        }
+
+        InventoryUtil.dropStackIfPossible(input);
+    }
+
 }

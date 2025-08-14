@@ -27,6 +27,7 @@
     "client.network.ClientPlayerEntityMixin",
     "client.network.ClientPlayerInteractionManagerMixin",
     "client.network.ClientPlayNetworkHandlerMixin",
+    "client.render.ArmorFeatureRendererMixin",
     "client.render.BlockEntityRenderDispatcherMixin",
     "client.render.EndGatewayBlockEntityRendererMixin",
     "client.render.EntityRenderDispatcherMixin",

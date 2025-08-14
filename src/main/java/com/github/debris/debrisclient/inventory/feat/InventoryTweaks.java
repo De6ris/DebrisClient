@@ -28,15 +28,16 @@ public class InventoryTweaks {
         return true;
     }
 
-    public static void tryMoveSimilar() {
-        InventoryUtil.getSlotMouseOver().ifPresent(slot -> {
-            if (slot.hasStack()) {
-                ItemStack template = slot.getStack().copy();
-                ContainerSection section = SectionHandler.getSection(slot);
-                section = expandSectionIfPossible(section);
-                section.predicateRun(ItemUtil.predicateIDMeta(template), InventoryUtil::quickMove);
-            }
-        });
+    public static boolean tryMoveSimilar() {
+        Optional<Slot> optional = InventoryUtil.getSlotMouseOver();
+        if (optional.isEmpty()) return false;
+        Slot slot = optional.get();
+        if (!slot.hasStack()) return false;
+        ItemStack template = slot.getStack().copy();
+        ContainerSection section = SectionHandler.getSection(slot);
+        section = expandSectionIfPossible(section);
+        section.predicateRun(ItemUtil.predicateIDMeta(template), InventoryUtil::quickMove);
+        return true;
     }
 
     private static ContainerSection expandSectionIfPossible(ContainerSection section) {

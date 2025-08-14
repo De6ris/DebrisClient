@@ -88,8 +88,9 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
             }
 
             if (DCCommonConfig.ModifierMoveSimilar.getKeybind().isKeybindHeld()) {
-                InventoryTweaks.tryMoveSimilar();
-                return true;// cancel this click
+                if (InventoryTweaks.tryMoveSimilar()) {
+                    return true;// cancel this click
+                }
             }
 
         }
