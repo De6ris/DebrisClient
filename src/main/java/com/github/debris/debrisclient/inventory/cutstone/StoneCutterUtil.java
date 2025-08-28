@@ -75,7 +75,7 @@ public class StoneCutterUtil {
 
         ContainerSection playerInventory = EnumSection.InventoryWhole.get();
 
-        InventoryTweaks.makeSureNotHoldingItem(playerInventory);
+        InventoryTweaks.clearCursor(playerInventory);
 
         InventoryUtil.dropAllMatching(ItemUtil.predicateIDMeta(result));// first throw those crafting result
 

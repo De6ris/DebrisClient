@@ -25,14 +25,14 @@ public enum SortCategory {
         this.order = order;
     }
 
+    private static final Comparator<Item> FALLBACK = TRANSLATION_KEY.order;
+
     /*
      * When using, if result > 0, I will swap.
      * Thus, if you want a comes before b, you should let a be smaller than b in the comparator.
      * */
     public static Comparator<ItemStack> getItemStackSorter() {
-        SortCategory category = DCCommonConfig.ItemSortingOrder.getEnumValue();
-        setup(category);
-        Comparator<Item> itemOrderByConfig = category.order;
+        Comparator<Item> itemOrderByConfig = DCCommonConfig.ItemSortingOrder.getEnumValue().order;
         Comparator<ItemStack> itemTypeComparator = (c1, c2) -> {
             if (ItemStack.areItemsEqual(c1, c2)) {
                 return 0;
@@ -50,50 +50,38 @@ public enum SortCategory {
                 ;
     }
 
-    private static void setup(SortCategory category) {
-        if (category == SortCategory.CREATIVE_INVENTORY) {
-            if (displayContext == null) {
-                displayContext = buildDisplayContext(MinecraftClient.getInstance());
-            }// this make the collection non-empty
-        }
-    }
-
     private static int compareByCreativeInventory(Item c1, Item c2) {
         ItemGroup searchGroup = ItemGroups.getSearchGroup();
         Collection<ItemStack> displayStacks = searchGroup.getDisplayStacks();
-        for (ItemStack displayStack : displayStacks) {
-            if (displayStack.isOf(c1)) {
-                return -1;
-            }
-            if (displayStack.isOf(c2)) {
-                return 1;
-            }
+        if (displayStacks.isEmpty()) {
+            buildDisplayContext(MinecraftClient.getInstance());
+            displayStacks = searchGroup.getDisplayStacks();
         }
-        return TRANSLATION_KEY.order.compare(c1, c2);
+        for (ItemStack displayStack : displayStacks) {
+            Item item = displayStack.getItem();
+            if (item == c1) return -1;
+            if (item == c2) return 1;
+        }
+        return FALLBACK.compare(c1, c2);
     }
 
     private static int compareByPinyin(Item c1, Item c2) {
         if (PinYinSupport.available()) {
             String translate1 = StringUtil.translateItem(c1);
             String translate2 = StringUtil.translateItem(c2);
-            return PinYinSupport.compareString(translate1, translate2, () -> TRANSLATION_KEY.order.compare(c1, c2));
+            return PinYinSupport.compareString(translate1, translate2, () -> FALLBACK.compare(c1, c2));
         }
 
-        return TRANSLATION_KEY.order.compare(c1, c2);
+        return FALLBACK.compare(c1, c2);
     }
 
-    private static ItemGroup.DisplayContext buildDisplayContext(MinecraftClient mc) {
+    private static void buildDisplayContext(MinecraftClient mc) {
         if (mc.world == null) {
-            return null;
+            return;
         }
 
         ItemGroup.DisplayContext ctx = new ItemGroup.DisplayContext(mc.world.getEnabledFeatures(), true, mc.world.getRegistryManager());
-
         Registries.ITEM_GROUP.stream().filter(group -> group.getType() == ItemGroup.Type.CATEGORY).forEach(group -> group.updateEntries(ctx));
-        Registries.ITEM_GROUP.stream().filter(group -> group.getType() == ItemGroup.Type.SEARCH).forEach(group -> group.updateEntries(ctx));
-
-        return ctx;
+        ItemGroups.getSearchGroup().updateEntries(ctx);
     }
-
-    private static ItemGroup.DisplayContext displayContext;
 }

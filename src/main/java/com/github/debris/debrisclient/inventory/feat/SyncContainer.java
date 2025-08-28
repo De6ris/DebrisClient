@@ -113,7 +113,7 @@ public class SyncContainer {
                 Slot slot = to.get(i);
                 if (slot.hasStack()) {
                     InventoryUtil.leftClick(slot);
-                    InventoryTweaks.makeSureNotHoldingItem(from);
+                    InventoryTweaks.clearCursor(from);
                 }// make it empty
                 ItemStack itemStack = template.get(i);
                 if (itemStack.isEmpty()) continue;// won't supply empty

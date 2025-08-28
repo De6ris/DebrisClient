@@ -25,7 +25,7 @@ public class MassCraftingApi {
 
         ContainerSection playerInventory = EnumSection.InventoryWhole.get();
 
-        InventoryTweaks.makeSureNotHoldingItem(playerInventory);
+        InventoryTweaks.clearCursor(playerInventory);
 
         InventoryUtil.dropAllMatching(ItemUtil.predicateIDMeta(selectedRecipe.getResult()));// first throw those crafting result
 

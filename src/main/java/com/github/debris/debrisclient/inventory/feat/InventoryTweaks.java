@@ -55,7 +55,7 @@ public class InventoryTweaks {
     }
 
     // try to put held item to this section, if fail then drop
-    public static void makeSureNotHoldingItem(ContainerSection section) {
+    public static void clearCursor(ContainerSection section) {
         ItemStack heldItem = InventoryUtil.getHeldStack();
         if (heldItem.isEmpty()) return;
         Optional<Slot> mergeSlot = section.absorbsOneScroll(heldItem);
