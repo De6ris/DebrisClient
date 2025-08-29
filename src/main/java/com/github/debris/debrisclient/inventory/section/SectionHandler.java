@@ -2,6 +2,8 @@ package com.github.debris.debrisclient.inventory.section;
 
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.mojang.logging.LogUtils;
+import fi.dy.masa.malilib.util.GuiUtils;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.PlayerScreenHandler;
@@ -29,6 +31,11 @@ public class SectionHandler {
     }
 
     private void identifyContainer(@Nullable HandledScreen<?> guiContainer, ScreenHandler container) {
+        if (container == null) {
+            LOGGER.warn("null container while identifying screen {} ", guiContainer);
+            return;
+        }
+
         List<Slot> slots = InventoryUtil.getSlots(container);
         Map<Inventory, List<Slot>> groupedByInventory = slots.stream().collect(Collectors.groupingBy(x -> x.inventory));
         SectionIdentifier identifier = new SectionIdentifier(this::putSection, this::handleUnidentified);
@@ -59,12 +66,19 @@ public class SectionHandler {
     }
 
     public static SectionHandler getSectionHandler() {
-        SectionHandler sectionHandler = ((IContainer) InventoryUtil.getCurrentContainer()).dc$getSectionHandler();
-        if (sectionHandler == null) {
-            LOGGER.warn("section handler not set for container {}", InventoryUtil.getCurrentContainer());
-            return ((IContainer) InventoryUtil.getInventoryContainer()).dc$getSectionHandler();
+        ScreenHandler container = InventoryUtil.getCurrentContainer();
+        SectionHandler sectionHandler = ((IContainer) container).dc$getSectionHandler();
+        if (sectionHandler != null) return sectionHandler;
+
+        Screen screen = GuiUtils.getCurrentScreen();
+        if (!(screen instanceof HandledScreen<?> guiContainer)) {
+            LOGGER.warn("weird that in a non container screen with non-default container, screen:\n{}", screen);
+            return ((IContainer) InventoryUtil.getCurrentContainer()).dc$getSectionHandler();
         }
-        return sectionHandler;
+
+        SectionHandler newHandler = new SectionHandler(guiContainer);
+        ((IContainer) container).dc$setSectionHandler(newHandler);
+        return newHandler;
     }
 
     public static ContainerSection getSection(EnumSection section) {
