@@ -256,7 +256,6 @@ public class DCCommonConfig implements IConfigHandler {
         KeyPress = ImmutableList.of(
                 OpenWindow,
                 OpenUniversalSearch,
-                ReloadCommandButton,
                 SortItem,
                 StoneCutterRecipeView,
                 StoreStoneCutterRecipe,

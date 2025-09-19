@@ -1,19 +1,15 @@
 package com.github.debris.debrisclient.config;
 
-import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.feat.*;
 import com.github.debris.debrisclient.feat.interactor.InteractionFactory;
 import com.github.debris.debrisclient.gui.DCConfigUi;
 import com.github.debris.debrisclient.gui.UniversalSearchScreen;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterRecipeStorage;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterUtil;
-import com.github.debris.debrisclient.inventory.feat.SyncContainer;
 import com.github.debris.debrisclient.inventory.feat.InventoryTweaks;
+import com.github.debris.debrisclient.inventory.feat.SyncContainer;
 import com.github.debris.debrisclient.inventory.sort.SortInventory;
-import com.github.debris.debrisclient.unsafe.mgButtons.MGButtonReloader;
 import com.github.debris.debrisclient.util.Predicates;
-import fi.dy.masa.malilib.gui.Message;
-import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
@@ -28,15 +24,6 @@ public class Callbacks {
         DCCommonConfig.OpenUniversalSearch.getKeybind().setCallback((action, key) -> {
             client.setScreen(new UniversalSearchScreen());
             return true;
-        });
-
-        DCCommonConfig.ReloadCommandButton.getKeybind().setCallback((action, key) -> {
-            if (ModReference.hasMod(ModReference.CommandButton)) {
-                MGButtonReloader.reload();
-                InfoUtils.showInGameMessage(Message.MessageType.SUCCESS, "命令按钮: 重载成功");
-                return true;
-            }
-            return false;
         });
 
         DCCommonConfig.SortItem.getKeybind().setCallback((action, key) -> {
