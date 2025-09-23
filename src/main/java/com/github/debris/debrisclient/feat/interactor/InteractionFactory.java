@@ -1,6 +1,7 @@
 package com.github.debris.debrisclient.feat.interactor;
 
 import com.github.debris.debrisclient.compat.ModReference;
+import com.github.debris.debrisclient.localization.InteractionText;
 import com.github.debris.debrisclient.unsafe.litematica.LitematicaAccessor;
 import com.github.debris.debrisclient.util.BlockUtil;
 import com.github.debris.debrisclient.util.Predicates;
@@ -45,9 +46,9 @@ public class InteractionFactory {
             if (predicate.test(world, pos)) targets.add(pos.toImmutable());// otherwise the same object
         });
         if (targets.isEmpty()) {
-            InfoUtils.printActionbarMessage("交互选区内方块: 未找到匹配目标");
+            InfoUtils.sendVanillaMessage(InteractionText.NO_MATCHING_BLOCKS.text());
         } else {
-            InfoUtils.printActionbarMessage(String.format("交互选区内方块: 已找到%d处方块", targets.size()));
+            InfoUtils.sendVanillaMessage(InteractionText.FOUND_BLOCKS.text(targets.size()));
             instance.addAll(targets);
         }
     }
@@ -76,9 +77,9 @@ public class InteractionFactory {
                 .flatMap(x -> world.getOtherEntities(client.player, x).stream())
                 .collect(Collectors.toSet());
         if (targets.isEmpty()) {
-            InfoUtils.printActionbarMessage("交互选区内实体: 未找到实体");
+            InfoUtils.sendVanillaMessage(InteractionText.NO_MATCHING_ENTITIES.text());
         } else {
-            InfoUtils.printActionbarMessage(String.format("交互选区内实体: 已找到%d处实体", targets.size()));
+            InfoUtils.sendVanillaMessage(InteractionText.FOUND_ENTITIES.text(targets.size()));
             instance.addAll(targets);
         }
     }

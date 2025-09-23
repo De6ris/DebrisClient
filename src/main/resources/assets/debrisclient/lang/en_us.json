@@ -18,5 +18,13 @@
   "debris_client.auto_processor.template_filler.size_unmatch": "Container %s size not matching template!",
   "debris_client.auto_processor.template_filler.success": "Filled container %s by template",
   "debris_client.auto_processor.template_recorder.message": "Has recorded template for container %s",
-  "debris_client.gui.title.configs": "%s Config - %s"
+  "debris_client.gui.title.configs": "%s Config - %s",
+  "debris_client.interaction.no_matching_blocks": "No matching blocks",
+  "debris_client.interaction.found_blocks": "Found %d blocks",
+  "debris_client.interaction.no_matching_entities": "No matching entities",
+  "debris_client.interaction.found_entities": "Found %d entities",
+  "debris_client.interaction.stop_blocks": "Block interaction: stopped",
+  "debris_client.interaction.stop_entities": "Entity interaction: stopped",
+  "debris_client.sync_container.wait_container_open": "Wait container open",
+  "debris_client.sync_container.no_container_present": "No container present"
 }

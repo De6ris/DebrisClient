@@ -83,7 +83,6 @@ public class DCCommonConfig implements IConfigHandler {
     // key
     public static final ConfigHotkey OpenWindow = ofHotkey("打开设置菜单", "D,C", "打开设置菜单");
     public static final ConfigHotkey OpenUniversalSearch = ofHotkey("打开全局搜索", "", "masa驱动");
-    public static final ConfigHotkey ReloadCommandButton = ofHotkey("重载CommandButton", "", "需要有CommandButton模组");
     public static final ConfigHotkey SortItem = ofHotkey("整理物品", "", KeybindSettings.GUI, "按区域进行\n兼容carpet假人不会乱点按钮\n兼容创造模式物品栏");
     public static final ConfigHotkey StoneCutterRecipeView = ofHotkey("展示切石机配方", "A", GUI_RELAXED);
     public static final ConfigHotkey StoreStoneCutterRecipe = ofHotkey("储存切石机配方", "BUTTON_3", GUI_RELAXED_CANCEL);
@@ -91,6 +90,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey CutStoneThenThrow = ofHotkey("切石并丢出", "LEFT_CONTROL,LEFT_ALT,C", GUI_NO_ORDER);
     public static final ConfigHotkey MyMassCrafting = ofHotkey("我的喷射合成", "", GUI_NO_ORDER, "作为ItemScroller的替代品\n虽然仍然需要安装它才能用(以便读取配方)\n而且需要较高版本");
     public static final ConfigHotkey ThrowSection = ofHotkey("清空区域", "", KeybindSettings.GUI, "全部丢出");
+    public static final ConfigHotkey ThrowSimilar = ofHotkey("丢出类似", "", KeybindSettings.GUI);
     public static final ConfigHotkey KickBot = ofHotkey("踢出假人", "", KeybindSettings.PRESS_ALLOWEXTRA, "按住时踢出准心所指假人\n支持灵魂出窍");
     public static final ConfigHotkey RestoreKicking = ofHotkey("假人复原", "", "召回误踢的假人");
     public static final ConfigHotkey BotSpawnCommand = ofHotkey("假人召唤指令", "", "在聊天栏中建议当前位置");
@@ -263,6 +263,7 @@ public class DCCommonConfig implements IConfigHandler {
                 CutStoneThenThrow,
                 MyMassCrafting,
                 ThrowSection,
+                ThrowSimilar,
                 KickBot,
                 RestoreKicking,
                 BotSpawnCommand,

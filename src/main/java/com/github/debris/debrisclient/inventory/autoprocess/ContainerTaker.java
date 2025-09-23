@@ -2,6 +2,7 @@ package com.github.debris.debrisclient.inventory.autoprocess;
 
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import com.github.debris.debrisclient.inventory.section.ContainerSection;
+import com.github.debris.debrisclient.localization.AutoProcessText;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.screen.slot.Slot;
@@ -21,7 +22,7 @@ public class ContainerTaker implements IAutoProcessor {
 
         if (containerSection.isEmpty()) {
             if (AutoProcessManager.allowMessage()) {
-                InfoUtils.printActionbarMessage("debris_client.auto_processor.container_taker.message", InventoryUtil.getGuiContainer().getTitle(), list.size());
+                InfoUtils.sendVanillaMessage(AutoProcessText.CONTAINER_TAKER_MESSAGE.text(InventoryUtil.getGuiContainer().getTitle(), list.size()));
             }
             return ProcessResult.CLOSE_TERMINATE;
         } else {

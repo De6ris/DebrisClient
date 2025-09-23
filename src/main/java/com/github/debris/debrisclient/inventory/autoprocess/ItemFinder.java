@@ -2,6 +2,7 @@ package com.github.debris.debrisclient.inventory.autoprocess;
 
 import com.github.debris.debrisclient.command.DCWhereIsItCommand;
 import com.github.debris.debrisclient.inventory.section.ContainerSection;
+import com.github.debris.debrisclient.localization.AutoProcessText;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.StringUtil;
 import fi.dy.masa.malilib.util.InfoUtils;
@@ -30,7 +31,7 @@ public class ItemFinder implements IAutoProcessor {
             dealFound(found);
         } else {
             if (AutoProcessManager.allowMessage()) {
-                InfoUtils.printActionbarMessage("debris_client.auto_processor.item_finder.not_found");
+                InfoUtils.sendVanillaMessage(AutoProcessText.ITEM_FINDER_NOT_FOUND.text());
             }
         }
 
@@ -43,6 +44,6 @@ public class ItemFinder implements IAutoProcessor {
 
     private static void dealFound(Collection<Item> found) {
         DCWhereIsItCommand.markFound(found);
-        InfoUtils.printActionbarMessage("debris_client.auto_processor.item_finder.found", StringUtil.translateItemCollection(found));
+        InfoUtils.sendVanillaMessage(AutoProcessText.ITEM_FINDER_FOUND.text(StringUtil.translateItemCollection(found)));
     }
 }

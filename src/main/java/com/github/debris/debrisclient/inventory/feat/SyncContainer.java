@@ -7,6 +7,8 @@ import com.github.debris.debrisclient.inventory.autoprocess.IAutoProcessor;
 import com.github.debris.debrisclient.inventory.autoprocess.ProcessResult;
 import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import com.github.debris.debrisclient.inventory.section.EnumSection;
+import com.github.debris.debrisclient.localization.AutoProcessText;
+import com.github.debris.debrisclient.localization.SyncContainerText;
 import com.github.debris.debrisclient.util.BlockUtil;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.ItemUtil;
@@ -36,7 +38,7 @@ public class SyncContainer {
         if (BlockInteractor.INSTANCE.clearAndInform()) return true;
 
         if (WAITING_TEMPLATE) {
-            InfoUtils.printActionbarMessage("容器同步: 等待容器打开中");
+            InfoUtils.sendVanillaMessage(SyncContainerText.WAIT_CONTAINER_OPEN.text());
             return false;
         }
 
@@ -49,19 +51,19 @@ public class SyncContainer {
             BlockInteractor.INSTANCE.add(blockPos);
             TYPE = client.world.getBlockState(blockPos).getBlock();
         } else {
-            InfoUtils.printActionbarMessage("容器同步: 未看向容器");
+            InfoUtils.sendVanillaMessage(SyncContainerText.NO_CONTAINER_PRESENT.text());
             return false;
         }
 
         WAITING_TEMPLATE = true;
-        InfoUtils.printActionbarMessage("容器同步: 等待容器打开");
+        InfoUtils.sendVanillaMessage(SyncContainerText.WAIT_CONTAINER_OPEN.text());
 
         return true;
     }
 
     private static void syncInternal() {
         TEMPLATE = EnumSection.Container.get().slots().stream().map(Slot::getStack).map(ItemStack::copy).toList();
-        InfoUtils.printActionbarMessage("debris_client.auto_processor.template_recorder.message", InventoryUtil.getGuiContainer().getTitle());
+        InfoUtils.sendVanillaMessage(AutoProcessText.TEMPLATE_RECORDER_MESSAGE.text(InventoryUtil.getGuiContainer().getTitle()));
         InteractionFactory.addBlockTask(MinecraftClient.getInstance(), (world, pos) -> world.getBlockState(pos).isOf(TYPE), false);
     }
 
@@ -94,12 +96,12 @@ public class SyncContainer {
 
             ContainerSection section = EnumSection.Container.get();
             if (section.size() != template.size()) {
-                InfoUtils.printActionbarMessage("debris_client.auto_processor.template_filler.size_unmatch", InventoryUtil.getGuiContainer().getTitle());
+                InfoUtils.sendVanillaMessage(AutoProcessText.TEMPLATE_FILLER_SIZE_UNMATCH.text(InventoryUtil.getGuiContainer().getTitle()));
                 return ProcessResult.SKIP;
             }
             if (templateFill(template, section.slots(), EnumSection.InventoryWhole.get())) {
                 if (AutoProcessManager.allowMessage()) {
-                    InfoUtils.printActionbarMessage("debris_client.auto_processor.template_filler.success", InventoryUtil.getGuiContainer().getTitle());
+                    InfoUtils.sendVanillaMessage(AutoProcessText.TEMPLATE_FILLER_SUCCESS.text(InventoryUtil.getGuiContainer().getTitle()));
                 }
                 return ProcessResult.CLOSE_TERMINATE;
             } else {

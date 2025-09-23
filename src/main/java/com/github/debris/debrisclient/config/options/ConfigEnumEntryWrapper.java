@@ -1,5 +1,6 @@
 package com.github.debris.debrisclient.config.options;
 
+import com.github.debris.debrisclient.localization.Translatable;
 import com.github.debris.debrisclient.util.GenericsUtil;
 import com.github.debris.debrisclient.util.StringUtil;
 import fi.dy.masa.malilib.config.IConfigOptionListEntry;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ConfigEnumEntryWrapper<T extends Enum<T>> implements IConfigOptionListEntry {
+public class ConfigEnumEntryWrapper<T extends Enum<T>> implements IConfigOptionListEntry, Translatable {
     private final T value;
 
     private static final Map<Class<?>, List<ConfigEnumEntryWrapper<?>>> InstanceMap = new HashMap<>();
@@ -30,9 +31,7 @@ public class ConfigEnumEntryWrapper<T extends Enum<T>> implements IConfigOptionL
 
     @Override
     public String getDisplayName() {
-        String name = this.getStringValue();
-        String key = String.format("config.enum.%s.%s.name", StringUtil.convertEnumClassName(this.value.getDeclaringClass()), name.toLowerCase());
-        return StringUtil.translateFallback(key, name);
+        return StringUtil.translateFallback(this.getTranslationKey(), this.getStringValue());
     }
 
     @Override
@@ -72,5 +71,11 @@ public class ConfigEnumEntryWrapper<T extends Enum<T>> implements IConfigOptionL
 
     public static <T extends Enum<T>> List<ConfigEnumEntryWrapper<T>> getWrappers(Class<T> clazz) {
         return GenericsUtil.cast(InstanceMap.get(clazz));
+    }
+
+    @Override
+    public String getTranslationKey() {
+        String name = this.getStringValue();
+        return String.format("config.enum.%s.%s.name", StringUtil.convertEnumClassName(this.value.getDeclaringClass()), name.toLowerCase());
     }
 }

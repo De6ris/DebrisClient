@@ -1,6 +1,7 @@
 package com.github.debris.debrisclient.feat.interactor;
 
 import com.github.debris.debrisclient.compat.ModReference;
+import com.github.debris.debrisclient.localization.InteractionText;
 import com.github.debris.debrisclient.render.RenderQueue;
 import com.github.debris.debrisclient.render.RendererFactory;
 import com.github.debris.debrisclient.util.InteractionUtil;
@@ -19,7 +20,7 @@ public class EntityInteractor extends ObjectInteractor<Entity> {
 
     @Override
     protected void informClear() {
-        InfoUtils.printActionbarMessage("交互选区内实体: 已停止");
+        InfoUtils.sendVanillaMessage(InteractionText.STOP_ENTITIES.text());
     }
 
     @Override

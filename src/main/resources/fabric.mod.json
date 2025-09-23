@@ -19,6 +19,9 @@
     "client": [
       "com.github.debris.debrisclient.fabric.ModImpl"
     ],
+    "fabric-datagen": [
+      "com.github.debris.debrisclient.datagen.DCDataGen"
+    ],
     "modmenu": [
       "com.github.debris.debrisclient.compat.ModMenu"
     ]

@@ -18,5 +18,13 @@
   "debris_client.auto_processor.template_filler.size_unmatch": "容器 %s 的尺寸与样板不匹配!",
   "debris_client.auto_processor.template_filler.success": "成功按样板填充了容器 %s",
   "debris_client.auto_processor.template_recorder.message": "已记录容器样板 %s",
-  "debris_client.gui.title.configs": "%s 配置 - %s"
+  "debris_client.gui.title.configs": "%s 配置 - %s",
+  "debris_client.interaction.no_matching_blocks": "未找到合适方块",
+  "debris_client.interaction.found_blocks": "找到%d处方块",
+  "debris_client.interaction.no_matching_entities": "未找到合适实体",
+  "debris_client.interaction.found_entities": "找到%d处实体",
+  "debris_client.interaction.stop_blocks": "方块交互: 已停止",
+  "debris_client.interaction.stop_entities": "实体交互: 已停止",
+  "debris_client.sync_container.wait_container_open": "容器同步: 等待容器打开",
+  "debris_client.sync_container.no_container_present": "容器同步: 未找到容器"
 }

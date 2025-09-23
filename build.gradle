@@ -44,12 +44,12 @@ dependencies {
     modImplementation "com.github.sakura-ryoko:malilib:${project.malilib_version}"
     modImplementation "com.github.sakura-ryoko:litematica:${project.litematica_version}"
     modImplementation "com.github.sakura-ryoko:itemscroller:${project.itemscroller_version}"
-    modImplementation "com.github.sakura-ryoko:tweakeroo:${project.tweakeroo_version}"
+//    modImplementation "com.github.sakura-ryoko:tweakeroo:${project.tweakeroo_version}"
     modImplementation "com.github.sakura-ryoko:minihud:${project.minihud_version}"
 //    modImplementation(files("libs\\malilib-fabric-1.21.4-0.23.1.jar"))
 //    modImplementation(files("libs\\litematica-fabric-1.21.4-0.21.1.jar"))
 //    modCompileOnly(files("libs\\itemscroller-fabric-1.21.4-0.26.0.jar"))
-//    modImplementation(files("libs\\tweakeroo-fabric-1.21.6-0.25.0.jar"))
+    modImplementation(files("libs\\tweakeroo-fabric-1.21.8-0.25.4.jar"))
 //    modImplementation(files("libs\\minihud-fabric-1.21.4-0.34.3.jar"))
 
 
@@ -128,6 +128,12 @@ jar {
 
 loom {
     accessWidenerPath = file("src/main/resources/DebrisClient.accesswidener")
+}
+
+fabricApi {
+    configureDataGeneration() {
+        client = true
+    }
 }
 
 // configure the maven publication

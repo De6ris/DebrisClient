@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 public class InventoryTweaks {
 
@@ -29,14 +30,27 @@ public class InventoryTweaks {
     }
 
     public static boolean tryMoveSimilar() {
+        return templateRun((section, template) -> {
+            section = expandSectionIfPossible(section);
+            section.predicateRun(ItemUtil.predicateIDMeta(template), InventoryUtil::quickMove);
+        });
+    }
+
+    public static boolean tryDropSimilar() {
+        return templateRun(
+                (section, template) ->
+                        section.predicateRun(ItemUtil.predicateIDMeta(template), InventoryUtil::dropStack)
+        );
+    }
+
+    private static boolean templateRun(BiConsumer<ContainerSection, ItemStack> action) {
         Optional<Slot> optional = InventoryUtil.getSlotMouseOver();
         if (optional.isEmpty()) return false;
         Slot slot = optional.get();
         if (!slot.hasStack()) return false;
         ItemStack template = slot.getStack().copy();
         ContainerSection section = SectionHandler.getSection(slot);
-        section = expandSectionIfPossible(section);
-        section.predicateRun(ItemUtil.predicateIDMeta(template), InventoryUtil::quickMove);
+        action.accept(section, template);
         return true;
     }
 
