@@ -10,7 +10,6 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.command.CommandSource;
 import net.minecraft.text.Text;
 
 import java.io.IOException;
@@ -31,15 +30,21 @@ public class DCCommandMacroCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(
                 literal(Commands.PREFIX + "command_macro")
-                        .then(literal("stop").executes(ctx -> stop(ctx.getSource())))
+                        .then(
+                                literal("stop")
+                                        .executes(ctx -> stop(ctx.getSource()))
+                        )
                         .then(
                                 literal("run")
                                         .then(
                                                 argument("file", StringArgumentType.string())
-                                                        .suggests(
-                                                                (ctx, builder) -> CommandSource.suggestMatching(suggestFiles(), builder)
+                                                        .suggests(CommandFactory.suggestMatching(() -> listFiles().stream()))
+                                                        .executes(ctx ->
+                                                                run(
+                                                                        ctx.getSource(),
+                                                                        StringArgumentType.getString(ctx, "file")
+                                                                )
                                                         )
-                                                        .executes(ctx -> run(ctx.getSource(), StringArgumentType.getString(ctx, "file")))
                                         )
                         )
         );
@@ -51,7 +56,10 @@ public class DCCommandMacroCommand {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static List<String> suggestFiles() {
+    /**
+     * Should consume this stream, otherwise the thread would lock.
+     */
+    private static List<String> listFiles() {
         try (Stream<Path> stream = Files.list(MACRO_DIR)) {
             return stream.filter(Files::isRegularFile).map(x -> x.getFileName().toString()).toList();
         } catch (IOException e) {

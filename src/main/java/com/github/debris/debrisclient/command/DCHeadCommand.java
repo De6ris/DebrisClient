@@ -15,13 +15,27 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.lit
 
 public class DCHeadCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(literal(Commands.PREFIX + "head")
-                .then(literal("help").
-                        executes(ctx -> help(ctx.getSource())))
-                .then(argument("name", StringArgumentType.word())
-                        .suggests(CommandFactory.PLAYER_SUGGESTION)
-                        .then(CommandFactory.ofRegistryKey(RegistryKeys.SOUND_EVENT, (ctx, entry) ->
-                                giveHead(ctx.getSource(), ctx.getArgument("name", String.class), entry))))
+        dispatcher.register(
+                literal(Commands.PREFIX + "head")
+                        .then(
+                                literal("help")
+                                        .executes(ctx -> help(ctx.getSource()))
+                        )
+                        .then(
+                                argument("name", StringArgumentType.word())
+                                        .suggests(CommandFactory.PLAYER_SUGGESTION)
+                                        .then(
+                                                CommandFactory.ofRegistryKey(
+                                                        RegistryKeys.SOUND_EVENT,
+                                                        (ctx, entry)
+                                                                -> giveHead(
+                                                                ctx.getSource(),
+                                                                StringArgumentType.getString(ctx, "name"),
+                                                                entry
+                                                        )
+                                                )
+                                        )
+                        )
         );
     }
 

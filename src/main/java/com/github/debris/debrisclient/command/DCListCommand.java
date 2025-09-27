@@ -1,6 +1,7 @@
 package com.github.debris.debrisclient.command;
 
 import com.github.debris.debrisclient.config.DCCommonConfig;
+import com.github.debris.debrisclient.localization.ListCommandText;
 import com.github.debris.debrisclient.util.RayTraceUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -66,7 +67,7 @@ public class DCListCommand {
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeAutoThrow() {
         DefaultedRegistry<Item> registry = Registries.ITEM;
         return of("auto_throw", registry, DCCommonConfig.AutoThrowWhiteList)
-                .stringSupplier(source -> {
+                .defaultArgumentProvider(source -> {
                     ItemStack stack = source.getPlayer().getMainHandStack();
                     if (stack.isEmpty()) {
                         return Optional.empty();
@@ -81,7 +82,7 @@ public class DCListCommand {
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeCullBlockEntity() {
         return of("cull_block_entity", Registries.BLOCK_ENTITY_TYPE, DCCommonConfig.CullBlockEntityList)
-                .stringSupplier(source -> RayTraceUtil.getRayTraceBlockEntity(source.getClient())
+                .defaultArgumentProvider(source -> RayTraceUtil.getRayTraceBlockEntity(source.getClient())
                         .map(blockEntity -> BlockEntityType.getId(blockEntity.getType()))
                         .map(Identifier::toString))
                 .build();
@@ -89,16 +90,14 @@ public class DCListCommand {
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeCullEntity() {
         return of("cull_entity", Registries.ENTITY_TYPE, DCCommonConfig.CullEntityList)
-                .stringSupplier(source -> RayTraceUtil.getRayTraceEntity(source.getClient())
+                .defaultArgumentProvider(source -> RayTraceUtil.getRayTraceEntity(source.getClient())
                         .map(entity -> EntityType.getId(entity.getType()))
                         .map(Identifier::toString))
                 .build();
     }
 
     private static int help(FabricClientCommandSource source) {
-        source.sendFeedback(Text.literal("此命令可对本模组配置的各个列表进行增删改查的操作."));
-        source.sendFeedback(Text.literal("你也可以在配置GUI,或配置文件中进行这些操作."));
-        source.sendFeedback(Text.literal("此命令方便之处在于能tab补全."));
+        source.sendFeedback(ListCommandText.HELP.text());
         return Command.SINGLE_SUCCESS;
     }
 
@@ -132,7 +131,7 @@ public class DCListCommand {
          * For calling add and remove without params.
          */
         @Nullable
-        private StringSupplier stringSupplier;
+        private DefaultArgumentProvider defaultArgumentProvider;
         @Nullable
         private SuggestionProvider<FabricClientCommandSource> addSuggest;
 
@@ -147,25 +146,25 @@ public class DCListCommand {
             this.argumentName = "dummy";
             this.addExecute = (source, key) -> {
                 if (list.contains(key)) {
-                    source.sendFeedback(Text.literal("条目已存在: " + key));
+                    source.sendFeedback(ListCommandText.ENTRY_EXISTS.text(key));
                 } else {
                     list.add(key);
-                    source.sendFeedback(Text.literal("成功添加到列表: " + key));
+                    source.sendFeedback(ListCommandText.ADD.text(key));
                 }
                 return Command.SINGLE_SUCCESS;
             };
             this.removeExecute = (source, key) -> {
                 if (list.remove(key)) {
-                    source.sendFeedback(Text.literal("成功从列表删除: " + key));
+                    source.sendFeedback(ListCommandText.DELETE.text(key));
                 } else {
-                    source.sendFeedback(Text.literal("该条目不存在: " + key));
+                    source.sendFeedback(ListCommandText.ENTRY_NOT_EXIST.text(key));
                 }
                 return Command.SINGLE_SUCCESS;
             };
         }
 
-        public Builder stringSupplier(StringSupplier stringSupplier) {
-            this.stringSupplier = stringSupplier;
+        public Builder defaultArgumentProvider(DefaultArgumentProvider defaultArgumentProvider) {
+            this.defaultArgumentProvider = defaultArgumentProvider;
             return this;
         }
 
@@ -194,7 +193,7 @@ public class DCListCommand {
                     .then(makeAdd())
                     .then(literal("clear")
                             .executes(ctx -> {
-                                ctx.getSource().sendFeedback(Text.literal("成功清空列表: " + list.toString()));
+                                ctx.getSource().sendFeedback(ListCommandText.CLEAR.text(list.toString()));
                                 list.clear();
                                 return Command.SINGLE_SUCCESS;
                             }))
@@ -213,10 +212,13 @@ public class DCListCommand {
                             .suggests(addSuggest)
                             .executes(ctx -> addExecute.run(ctx.getSource(), StringArgumentType.getString(ctx, argumentName)))
                     );
-            if (stringSupplier != null) {
+            if (defaultArgumentProvider != null) {
                 builder.executes(ctx -> {
                     FabricClientCommandSource source = ctx.getSource();
-                    stringSupplier.supply(source).ifPresentOrElse(key -> addExecute.run(source, key), () -> source.sendFeedback(Text.literal("获取默认参数失败")));
+                    defaultArgumentProvider.provide(source).ifPresentOrElse(
+                            key -> addExecute.run(source, key),
+                            () -> source.sendFeedback(ListCommandText.FAIL_DEFAULT_ARGUMENT.text())
+                    );
                     return Command.SINGLE_SUCCESS;
                 });
             }
@@ -225,13 +227,23 @@ public class DCListCommand {
 
         private LiteralArgumentBuilder<FabricClientCommandSource> makeRemove() {
             LiteralArgumentBuilder<FabricClientCommandSource> x = literal("remove")
-                    .then(argument(argumentName, StringArgumentType.greedyString())
-                            .suggests((ctx, builder) -> CommandSource.suggestMatching(list, builder))
-                            .executes(ctx -> removeExecute.run(ctx.getSource(), StringArgumentType.getString(ctx, argumentName))));
-            if (stringSupplier != null) {
+                    .then(
+                            argument(argumentName, StringArgumentType.greedyString())
+                                    .suggests(CommandFactory.suggestMatching(list::stream))
+                                    .executes(
+                                            ctx -> removeExecute.run(
+                                                    ctx.getSource(),
+                                                    StringArgumentType.getString(ctx, argumentName)
+                                            )
+                                    )
+                    );
+            if (defaultArgumentProvider != null) {
                 x.executes(ctx -> {
                     FabricClientCommandSource source = ctx.getSource();
-                    stringSupplier.supply(source).ifPresentOrElse(key -> removeExecute.run(source, key), () -> source.sendFeedback(Text.literal("获取默认参数失败")));
+                    defaultArgumentProvider.provide(source).ifPresentOrElse(
+                            key -> removeExecute.run(source, key),
+                            () -> source.sendFeedback(ListCommandText.FAIL_DEFAULT_ARGUMENT.text())
+                    );
                     return Command.SINGLE_SUCCESS;
                 });
             }
@@ -245,7 +257,7 @@ public class DCListCommand {
     }
 
     @FunctionalInterface
-    private interface StringSupplier {
-        Optional<String> supply(FabricClientCommandSource source);
+    private interface DefaultArgumentProvider {
+        Optional<String> provide(FabricClientCommandSource source);
     }
 }

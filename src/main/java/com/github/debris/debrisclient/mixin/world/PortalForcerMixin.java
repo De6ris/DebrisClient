@@ -1,10 +1,7 @@
 package com.github.debris.debrisclient.mixin.world;
 
-import com.github.debris.debrisclient.config.DCCommonConfig;
-import com.github.debris.debrisclient.util.ChatUtil;
+import com.github.debris.debrisclient.feat.log.GameLogs;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockLocating;
@@ -24,15 +21,9 @@ public class PortalForcerMixin {
     @Final
     private ServerWorld world;
 
-    @SuppressWarnings("all")
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Inject(method = "createPortal", at = @At(value = "RETURN", ordinal = 1))
     private void onPortalCreated(BlockPos pos, Direction.Axis axis, CallbackInfoReturnable<Optional<BlockLocating.Rectangle>> cir) {
-        if (DCCommonConfig.MonitorPortalGeneration.getBooleanValue()) {
-            BlockPos lowerLeft = cir.getReturnValue().get().lowerLeft;
-            ChatUtil.addLocalMessage(Text.empty()
-                    .append(Text.translatable("debug.prefix").formatted(Formatting.YELLOW, Formatting.BOLD))
-                    .append(String.format(" portal (%s) created in %s", lowerLeft.toShortString(), this.world.getRegistryKey().getValue()))
-            );
-        }
+        GameLogs.PORTAL.onPortalCreated(this.world, cir.getReturnValue().get().lowerLeft);
     }
 }

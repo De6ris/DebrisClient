@@ -17,6 +17,6 @@ public enum AutoProcessText implements Translatable {
 
     @Override
     public String getTranslationKey() {
-        return "debris_client.auto_processor." + this.key;
+        return Translatable.root().resolve("auto_processor").resolve(this.key).build();
     }
 }

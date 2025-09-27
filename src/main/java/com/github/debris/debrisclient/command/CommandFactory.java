@@ -17,11 +17,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 
 public class CommandFactory {
-    public static final SuggestionProvider<FabricClientCommandSource> PLAYER_SUGGESTION = (ctx, builder) -> CommandSource.suggestMatching(getPlayerSuggestions(ctx.getSource()), builder);
+    public static final SuggestionProvider<FabricClientCommandSource> PLAYER_SUGGESTION =
+            (ctx, builder) ->
+                    CommandSource.suggestMatching(getPlayerSuggestions(ctx.getSource()).stream(), builder);
 
     public static <T> RequiredArgumentBuilder<FabricClientCommandSource, ?> ofRegistryKey(
             RegistryKey<Registry<T>> registryKey,
@@ -49,4 +53,22 @@ public class CommandFactory {
         players.addAll(source.getPlayerNames());
         return players;
     }
+
+    /**
+     * Requires immutable
+     */
+    public static SuggestionProvider<FabricClientCommandSource> suggestMatching(Collection<String> candidates) {
+        return (
+                ctx,
+                builder
+        ) -> CommandSource.suggestMatching(candidates, builder);
+    }
+
+    public static SuggestionProvider<FabricClientCommandSource> suggestMatching(Supplier<Stream<String>> candidates) {
+        return (
+                ctx,
+                builder
+        ) -> CommandSource.suggestMatching(candidates.get(), builder);
+    }
+
 }

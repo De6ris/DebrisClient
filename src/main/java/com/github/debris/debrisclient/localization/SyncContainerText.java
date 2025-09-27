@@ -8,6 +8,6 @@ public enum SyncContainerText implements Translatable {
 
     @Override
     public String getTranslationKey() {
-        return "debris_client.sync_container." + this.name().toLowerCase();
+        return Translatable.root().resolve("sync_container").resolve(this).build();
     }
 }

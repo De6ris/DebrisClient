@@ -2,6 +2,7 @@ package com.github.debris.debrisclient.command;
 
 import com.github.debris.debrisclient.util.ColorUtil;
 import com.github.debris.debrisclient.util.TeleportUtil;
+import com.github.debris.debrisclient.util.TextFactory;
 import com.google.common.collect.Streams;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -56,10 +57,12 @@ public class DCCountEntityCommand {
     }
 
     private static MutableText getFeedback(FabricClientCommandSource source, EntityType<?> entityType, Distribution distribution) {
-        MutableText feedback = Text.empty()
-                .append("- ")
-                .append(Text.empty().append(entityType.getName()).styled(style -> style.withColor(ColorUtil.getColor(entityType))))
-                .append(String.format("(%d): ", distribution.getTotal()));
+        MutableText feedback = TextFactory.listEntry(
+                Text.empty()
+                        .append(entityType.getName())
+                        .styled(style -> style.withColor(ColorUtil.getColor(entityType)))
+                        .append(String.format("(%d)", distribution.getTotal()))
+        );
         int originalSize = distribution.size();
         int printSize;
         boolean reduced;

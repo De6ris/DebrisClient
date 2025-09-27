@@ -116,13 +116,9 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed AUTO_LEFT = ofBooleanHotkeyed("自动向左", false, "LEFT_ALT,LEFT", "可用于走路，划船");
     public static final ConfigBooleanHotkeyed AUTO_BACK = ofBooleanHotkeyed("自动后退", false, "LEFT_ALT,DOWN", "可用于走路，划船");
     public static final ConfigBooleanHotkeyed AUTO_RIGHT = ofBooleanHotkeyed("自动向右", false, "LEFT_ALT,RIGHT", "可用于走路，划船");
-    public static final ConfigBooleanHotkeyed MonitorPortalGeneration = ofBooleanHotkeyed("监听传送门生成", false, "", "限单机游戏");
-    public static final ConfigBooleanHotkeyed MonitorThunderWeather = ofBooleanHotkeyed("监听雷暴天气", false, "");
     public static final ConfigBooleanHotkeyed StartStoneCutting = ofBooleanHotkeyed("启动连续切石", false, "", ANY);
     public static final ConfigBooleanHotkeyed StartMassCrafting = ofBooleanHotkeyed("启动连续喷射合成", false, "", ANY);
     public static final ConfigBooleanHotkeyed LoyalerTrident = ofBooleanHotkeyed("更忠诚的三叉戟", false, "", "发射的忠诚三叉戟能够回到副手");
-    public static final ConfigBooleanHotkeyed PathNodesVisibility = ofBooleanHotkeyed("寻路节点可视化", false, "");
-    public static final ConfigBooleanHotkeyed PathNodesOnlyNamed = ofBooleanHotkeyed("寻路节点仅限命名生物", false, "");
     public static final ConfigBooleanHotkeyed AutoThrow = ofBooleanHotkeyed("自动丢弃", false, "", "在GUI中不生效");
     public static final ConfigBooleanHotkeyed AutoContainerTaker = ofBooleanHotkeyed("自动从容器取出", false, "", "若完全取出, 自动关闭GUI");
     public static final ConfigBooleanHotkeyed AutoExtinguisher = ofBooleanHotkeyed("自动灭火", false, "", "不影响灵魂火");
@@ -286,13 +282,9 @@ public class DCCommonConfig implements IConfigHandler {
                 AUTO_LEFT,
                 AUTO_RIGHT,
                 AUTO_BACK,
-                MonitorPortalGeneration,
-                MonitorThunderWeather,
                 StartStoneCutting,
                 StartMassCrafting,
                 LoyalerTrident,
-                PathNodesVisibility,
-                PathNodesOnlyNamed,
                 AutoThrow,
                 AutoContainerTaker,
                 AutoExtinguisher,

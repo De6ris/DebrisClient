@@ -1,6 +1,5 @@
 package com.github.debris.debrisclient.command;
 
-import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.util.ChatUtil;
 import com.github.debris.debrisclient.util.RayTraceUtil;
 import com.mojang.brigadier.Command;
@@ -20,9 +19,9 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.lit
 
 public class DCDataGetCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(literal(Commands.PREFIX + "data_get")
-                .requires(source -> ModReference.hasMod(ModReference.Tweakeroo))
-                .executes(ctx -> execute(ctx.getSource()))
+        dispatcher.register(
+                literal(Commands.PREFIX + "data_get")
+                        .executes(ctx -> execute(ctx.getSource()))
         );
     }
 

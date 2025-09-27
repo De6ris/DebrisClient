@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.render;
 
-import com.github.debris.debrisclient.config.DCCommonConfig;
+import com.github.debris.debrisclient.feat.log.GameLogs;
 import com.github.debris.debrisclient.util.RenderUtil;
 import com.github.debris.debrisclient.util.SyncUtil;
 import com.google.common.collect.Queues;
@@ -27,12 +27,12 @@ public class PathNodesRenderer {
 
     @SuppressWarnings("ConstantConditions")
     public void onEntityRenderPost(Entity entity, EntityRenderContext context) {
-        if (!DCCommonConfig.PathNodesVisibility.getBooleanValue()) return;
+        if (GameLogs.PATH_NODE.isInactive()) return;
 
         Vec3d camPos = EntityUtils.getCameraEntity().getPos();
         if (entity.getPos().distanceTo(camPos) > 64) return;// cull those far away
 
-        if (DCCommonConfig.PathNodesOnlyNamed.getBooleanValue() && !entity.hasCustomName()) return;
+        if (GameLogs.PATH_NODE.onlyNamed() && !entity.hasCustomName()) return;
 
         if (entity instanceof MobEntity mob) {
             this.mobQueue.add(mob);
@@ -40,7 +40,7 @@ public class PathNodesRenderer {
     }
 
     public void onRenderWorldPost(World world, WorldRenderContext context) {
-        if (!DCCommonConfig.PathNodesVisibility.getBooleanValue()) return;
+        if (GameLogs.PATH_NODE.isInactive()) return;
 
         float partialTicks = context.getTickDelta();
 

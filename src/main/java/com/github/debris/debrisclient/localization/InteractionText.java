@@ -11,6 +11,6 @@ public enum InteractionText implements Translatable {
 
     @Override
     public String getTranslationKey() {
-        return "debris_client.interaction." + this.name().toLowerCase();
+        return Translatable.root().resolve("interaction").resolve(this).build();
     }
 }

@@ -1,6 +1,5 @@
 package com.github.debris.debrisclient.util;
 
-import com.github.debris.debrisclient.compat.ModReference;
 import com.mojang.logging.LogUtils;
 import fi.dy.masa.malilib.util.EntityUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
@@ -24,8 +23,6 @@ public class RayTraceUtil {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static Optional<HitResult> getPlayerRayTrace(MinecraftClient client) {
-        if (!ModReference.hasMod(ModReference.Tweakeroo)) return Optional.empty();
-
         World world = WorldUtils.getBestWorld(client);
 
         if (world == null) {

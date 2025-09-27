@@ -20,6 +20,7 @@ public class Commands {
         DCTeleportCommand.register(dispatcher);
         DCCommandMacroCommand.register(dispatcher);
         DCReloadCommand.register(dispatcher);
+        DCLogCommand.register(dispatcher);
 
         if (ModReference.hasMod(ModReference.ClientCommands)) {
             DCFindInFrameCommand.register(dispatcher, context);

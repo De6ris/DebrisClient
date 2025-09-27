@@ -1,5 +1,6 @@
 package com.github.debris.debrisclient.listener;
 
+import com.github.debris.debrisclient.feat.log.GameLogs;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterRecipeStorage;
 import fi.dy.masa.malilib.interfaces.IWorldLoadListener;
 import net.minecraft.client.MinecraftClient;
@@ -17,6 +18,7 @@ public class WorldLoadListener implements IWorldLoadListener {
         // Quitting to main menu, save the settings before the integrated server gets shut down
         if (worldBefore != null && worldAfter == null) {
             StoneCutterRecipeStorage.getInstance().write(worldBefore.getRegistryManager());
+            GameLogs.save();
         }
     }
 
@@ -27,6 +29,7 @@ public class WorldLoadListener implements IWorldLoadListener {
         // Logging in to a world, load the data
         if (worldBefore == null && worldAfter != null) {
             StoneCutterRecipeStorage.getInstance().read(worldAfter.getRegistryManager());
+            GameLogs.loadOrCreate();
         }
 
         // Logging out
