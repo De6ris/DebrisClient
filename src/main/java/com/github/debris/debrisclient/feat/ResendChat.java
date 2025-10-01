@@ -47,7 +47,7 @@ public class ResendChat {
     private static Optional<String> checkSentByPlayer(MinecraftClient client, String original) {
         return client.player.networkHandler.getListedPlayerListEntries().stream()
                 .map(PlayerListEntry::getProfile)
-                .map(GameProfile::getName)
+                .map(GameProfile::name)
                 .flatMap(name -> filterAndCut(name, original).stream())
                 .max(Comparator.comparing(String::length));
     }

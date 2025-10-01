@@ -22,7 +22,7 @@ public class CameraEntityMixin {
     @ModifyReturnValue(method = "createCameraEntity", at = @At("RETURN"), remap = false)
     private static CameraEntity retroFreeCam(CameraEntity camera, @Local(argsOnly = true) MinecraftClient client) {
         if (DCCommonConfig.RetroFreeCam.getBooleanValue()) {
-            Entity view = client.cameraEntity;
+            Entity view = client.getCameraEntity();
             if (view == null) return camera;
             float yaw = view.getYaw();
             float pitch = view.getPitch();
@@ -37,14 +37,14 @@ public class CameraEntityMixin {
 
     @WrapOperation(method = "createCameraEntity",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/network/ClientPlayerEntity;getPos()Lnet/minecraft/util/math/Vec3d;",
+                    target = "Lnet/minecraft/client/network/ClientPlayerEntity;getEntityPos()Lnet/minecraft/util/math/Vec3d;",
                     remap = true),
             remap = false)
     private static Vec3d spectatorFix(ClientPlayerEntity instance, Operation<Vec3d> original) {
         if (DCCommonConfig.FreeCamSpectatorFix.getBooleanValue()) {
-            Entity cameraEntity = MinecraftClient.getInstance().cameraEntity;
+            Entity cameraEntity = MinecraftClient.getInstance().getCameraEntity();
             if (cameraEntity != null) {
-                return cameraEntity.getPos();
+                return cameraEntity.getEntityPos();
             }
         }
         return original.call(instance);
@@ -57,7 +57,7 @@ public class CameraEntityMixin {
             remap = false)
     private static float spectatorFix1(ClientPlayerEntity instance, Operation<Float> original) {
         if (DCCommonConfig.FreeCamSpectatorFix.getBooleanValue()) {
-            Entity cameraEntity = MinecraftClient.getInstance().cameraEntity;
+            Entity cameraEntity = MinecraftClient.getInstance().getCameraEntity();
             if (cameraEntity != null) {
                 return cameraEntity.getYaw();
             }
@@ -72,7 +72,7 @@ public class CameraEntityMixin {
             remap = false)
     private static float spectatorFix2(ClientPlayerEntity instance, Operation<Float> original) {
         if (DCCommonConfig.FreeCamSpectatorFix.getBooleanValue()) {
-            Entity cameraEntity = MinecraftClient.getInstance().cameraEntity;
+            Entity cameraEntity = MinecraftClient.getInstance().getCameraEntity();
             if (cameraEntity != null) {
                 return cameraEntity.getPitch();
             }

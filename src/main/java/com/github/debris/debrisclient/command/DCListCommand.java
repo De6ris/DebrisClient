@@ -48,7 +48,7 @@ public class DCListCommand {
                 .argumentName("player")
                 .addSuggest(CommandFactory.PLAYER_SUGGESTION)
                 .addExecute((source, player) -> {
-                    String self = source.getPlayer().getGameProfile().getName();
+                    String self = source.getPlayer().getGameProfile().name();
                     if (player.equals(self)) {
                         source.sendFeedback(Text.literal("请勿添加你自己"));
                         return Command.SINGLE_SUCCESS;

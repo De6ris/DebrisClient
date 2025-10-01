@@ -42,7 +42,7 @@ public class DCTeleportCommand {
     }
 
     private static int execute(FabricClientCommandSource source, Entity destination) {
-        teleport(source, destination.getPos(), destination.getYaw(), destination.getPitch());
+        teleport(source, destination.getEntityPos(), destination.getYaw(), destination.getPitch());
         return Command.SINGLE_SUCCESS;
     }
 

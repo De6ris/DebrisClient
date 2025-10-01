@@ -29,8 +29,8 @@ public class PathNodesRenderer {
     public void onEntityRenderPost(Entity entity, EntityRenderContext context) {
         if (GameLogs.PATH_NODE.isInactive()) return;
 
-        Vec3d camPos = EntityUtils.getCameraEntity().getPos();
-        if (entity.getPos().distanceTo(camPos) > 64) return;// cull those far away
+        Vec3d camPos = EntityUtils.getCameraEntity().getEntityPos();
+        if (entity.getEntityPos().distanceTo(camPos) > 64) return;// cull those far away
 
         if (GameLogs.PATH_NODE.onlyNamed() && !entity.hasCustomName()) return;
 

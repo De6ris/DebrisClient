@@ -37,7 +37,7 @@ public class DCSpectateCommand {
     private static int processCommand(FabricClientCommandSource source, CGameProfileArgument.Result filter) throws CommandSyntaxException {
         ClientPlayerEntity self = source.getPlayer();
         GameProfile targetGameProfile = filter.getNames(source).stream().findFirst().orElseThrow(CEntityArgument.PLAYER_NOT_FOUND_EXCEPTION::create);
-        if (self.getGameProfile().getName().equals(targetGameProfile.getName())) {
+        if (self.getGameProfile().name().equals(targetGameProfile.name())) {
             throw SPECTATE_SELF_EXCEPTION.create();
         }
 
@@ -46,9 +46,9 @@ public class DCSpectateCommand {
         }
 
         MinecraftClient client = source.getClient();
-        InteractionUtil.spectatorTeleport(client, targetGameProfile.getId());
+        InteractionUtil.spectatorTeleport(client, targetGameProfile.id());
 
-        PlayerEntity targetPlayerEntity = source.getWorld().getPlayerByUuid(targetGameProfile.getId());
+        PlayerEntity targetPlayerEntity = source.getWorld().getPlayerByUuid(targetGameProfile.id());
         if (targetPlayerEntity == null) {
             source.sendFeedback(Text.literal("未在附近找到该玩家实体, 已请求向该玩家传送, 请在传送完成后重试指令"));
         } else {

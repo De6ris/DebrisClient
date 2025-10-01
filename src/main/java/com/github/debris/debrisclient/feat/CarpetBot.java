@@ -54,7 +54,7 @@ public class CarpetBot {
 
         String command = SpawnContext.fromEntity(client.getCameraEntity()).getSpawnCommand("bot_");
 
-        ChatScreen chatScreen = new ChatScreen(command);
+        ChatScreen chatScreen = new ChatScreen(command, false);
         client.setScreen(chatScreen);
         TextFieldWidget chatField = AccessorUtil.getChatField(chatScreen);
         chatField.setText(command);
@@ -99,7 +99,7 @@ public class CarpetBot {
                     entity.getZ(),
                     entity.getYaw(),
                     entity.getPitch(),
-                    entity.getWorld().getRegistryKey().getValue().toString()
+                    entity.getEntityWorld().getRegistryKey().getValue().toString()
             );
         }
 

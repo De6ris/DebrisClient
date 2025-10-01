@@ -16,9 +16,9 @@ public class SyncUtil {
             return entity;
         }
 
-        ServerWorld serverWorld = server.getWorld(entity.getWorld().getRegistryKey());
+        ServerWorld serverWorld = server.getWorld(entity.getEntityWorld().getRegistryKey());
         if (serverWorld == null) {
-            LOGGER.warn("no world {} on server?", entity.getWorld().getRegistryKey());
+            LOGGER.warn("no world {} on server?", entity.getEntityWorld().getRegistryKey());
             return entity;
         }
 

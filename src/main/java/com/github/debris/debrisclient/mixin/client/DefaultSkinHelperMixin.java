@@ -2,7 +2,7 @@ package com.github.debris.debrisclient.mixin.client;
 
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import net.minecraft.client.util.DefaultSkinHelper;
-import net.minecraft.client.util.SkinTextures;
+import net.minecraft.entity.player.SkinTextures;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,7 +18,7 @@ public class DefaultSkinHelperMixin {
     @Final
     private static SkinTextures[] SKINS;
 
-    @Inject(method = "getSkinTextures(Ljava/util/UUID;)Lnet/minecraft/client/util/SkinTextures;", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getSkinTextures(Ljava/util/UUID;)Lnet/minecraft/entity/player/SkinTextures;", at = @At("HEAD"), cancellable = true)
     private static void onlyOldSkins(UUID uuid, CallbackInfoReturnable<SkinTextures> cir) {
         if (DCCommonConfig.RetroDefaultSkin.getBooleanValue()) {
             if ((uuid.hashCode() & 1) == 1) {

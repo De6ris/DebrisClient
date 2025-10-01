@@ -30,6 +30,6 @@ public class MagicLibAccessor {
         TextRenderer textRenderer = TextRenderer.create()
                 .text(text)
                 .seeThrough();
-        return context -> textRenderer.at(entity.getPos()).render();
+        return context -> textRenderer.at(entity.getEntityPos()).render();
     }
 }

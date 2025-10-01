@@ -13,9 +13,11 @@ import com.github.debris.debrisclient.util.InputUtil;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.Predicates;
 import fi.dy.masa.malilib.hotkeys.*;
+import fi.dy.masa.malilib.util.InputUtils;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 
 import java.util.Optional;
 
@@ -53,16 +55,19 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
     }
 
     @Override
-    public boolean onMouseClick(int mouseX, int mouseY, int eventButton, boolean eventButtonState) {
+    public boolean onMouseClick(Click click, boolean eventButtonState) {
+        int mouseX = InputUtils.getMouseX();
+        int mouseY = InputUtils.getMouseY();
         if (eventButtonState) {
-            return this.handleButtonDown(mouseX, mouseY, eventButton);
+            return this.handleButtonDown(mouseX, mouseY, click);
         } else {
-            return this.handleButtonUp(mouseX, mouseY, eventButton);
+            return this.handleButtonUp(mouseX, mouseY, click);
         }
     }
 
-    private boolean handleButtonDown(int mouseX, int mouseY, int eventButton) {
-        if (this.client.options.attackKey.matchesMouse(eventButton)) {
+    private boolean handleButtonDown(int mouseX, int mouseY, Click click) {
+        int eventButton = click.button();
+        if (this.client.options.attackKey.matchesMouse(click)) {
 
             if (StoneCutterUtil.isStoneCutterRecipeViewOpen()) {
                 StoneCutterRecipeStorage.getInstance().setCurrentSelected(StoneCutterRecipeRenderer.getInstance().getHoveredRecipeId(mouseX, mouseY, InventoryUtil.getGuiContainer()));
@@ -96,7 +101,7 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
         }
 
 
-        if (this.client.options.useKey.matchesMouse(eventButton)) {
+        if (this.client.options.useKey.matchesMouse(click)) {
 
             if (Predicates.notInGuiContainer(this.client))
                 return false;// the below assuming valid environment
@@ -120,9 +125,10 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
         return false;
     }
 
-    private boolean handleButtonUp(int mouseX, int mouseY, int eventButton) {
-        if (BUTTON_UP_CANCEL_SET.contains(eventButton)) {
-            BUTTON_UP_CANCEL_SET.remove(eventButton);
+    private boolean handleButtonUp(int mouseX, int mouseY, Click click) {
+        int button = click.button();
+        if (BUTTON_UP_CANCEL_SET.contains(button)) {
+            BUTTON_UP_CANCEL_SET.remove(button);
             return true;
         }
         return false;
@@ -133,7 +139,7 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
     }
 
     @Override
-    public boolean onMouseScroll(int mouseX, int mouseY, double amount) {
+    public boolean onMouseScroll(double mouseX, double mouseY, double amount) {
         if (StoneCutterUtil.isStoneCutterRecipeViewOpen()) {
             if (amount != 0) {
                 StoneCutterRecipeStorage.getInstance().scrollSelection(amount < 0);
@@ -144,7 +150,7 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
     }
 
     @Override
-    public void onMouseMove(int mouseX, int mouseY) {
+    public void onMouseMove(double mouseX, double mouseY) {
         if (Predicates.notInGuiContainer(this.client))
             return;// the below assuming valid environment
 

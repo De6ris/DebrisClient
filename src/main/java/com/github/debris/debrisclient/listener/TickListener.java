@@ -2,10 +2,7 @@ package com.github.debris.debrisclient.listener;
 
 import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.config.DCCommonConfig;
-import com.github.debris.debrisclient.feat.AutoRepeat;
-import com.github.debris.debrisclient.feat.CarpetBot;
-import com.github.debris.debrisclient.feat.CommandQueue;
-import com.github.debris.debrisclient.feat.MiscFeat;
+import com.github.debris.debrisclient.feat.*;
 import com.github.debris.debrisclient.feat.interactor.BlockInteractor;
 import com.github.debris.debrisclient.feat.interactor.EntityInteractor;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterUtil;
@@ -61,6 +58,8 @@ public class TickListener implements IClientTickHandler {
         RenderQueue.onClientTick(client);
 
         CommandQueue.onClientTick(client);
+
+        FutureTaskQueue.onClientTick(client);
     }
 
 
