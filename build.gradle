@@ -43,14 +43,9 @@ dependencies {
     //masa
     modImplementation "com.github.sakura-ryoko:malilib:${project.malilib_version}"
     modImplementation "com.github.sakura-ryoko:litematica:${project.litematica_version}"
-    modCompileOnly "com.github.sakura-ryoko:itemscroller:${project.itemscroller_version}"
+    modImplementation "com.github.sakura-ryoko:itemscroller:${project.itemscroller_version}"
     modImplementation "com.github.sakura-ryoko:tweakeroo:${project.tweakeroo_version}"
-    modCompileOnly "com.github.sakura-ryoko:minihud:${project.minihud_version}"
-//    modImplementation(files("libs\\malilib-fabric-1.21.4-0.23.1.jar"))
-//    modImplementation(files("libs\\litematica-fabric-1.21.4-0.21.1.jar"))
-//    modCompileOnly(files("libs\\itemscroller-fabric-1.21.4-0.26.0.jar"))
-//    modImplementation(files("libs\\tweakeroo-fabric-1.21.8-0.25.4.jar"))
-//    modImplementation(files("libs\\minihud-fabric-1.21.4-0.34.3.jar"))
+    modImplementation "com.github.sakura-ryoko:minihud:${project.minihud_version}"
 
 
     //misc
@@ -63,8 +58,6 @@ dependencies {
     modCompileOnly "com.terraformersmc:modmenu:${project.mod_menu}"
 
     modImplementation("dev.xpple:clientarguments:${project.clientarguments_version}")
-
-//    modImplementation("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")
 
 //    implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:0.2.0"))
 //    include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:0.2.0")))
@@ -79,6 +72,7 @@ dependencies {
     modCompileOnly(files("libs\\magiclib-minecraft-api-mc1.21.4-fabric-0.6.83-stable.jar"))
     modCompileOnly(files("libs\\LibGui-12.0.1+1.21.2.jar"))
     modCompileOnly(files("libs\\CommandGUIButtons-mc1.21-2.3.0+build.235+bb785b5.jar"))
+    modCompileOnly(files("libs\\Xaeros_Minimap_25.2.14_Fabric_1.21.9.jar"))
 }
 
 processResources {
@@ -122,7 +116,7 @@ jar {
     inputs.property "archivesName", project.base.archivesName
 
     from("LICENSE") {
-        rename { "${it}_${inputs.properties.archivesName}"}
+        rename { "${it}_${inputs.properties.archivesName}" }
     }
 }
 
@@ -134,6 +128,10 @@ fabricApi {
     configureDataGeneration() {
         client = true
     }
+}
+
+runClient {
+    args("--username", "De6ris")
 }
 
 // configure the maven publication
