@@ -1,4 +1,4 @@
-package com.github.debris.debrisclient.unsafe.rei;
+package com.github.debris.debrisclient.unsafe;
 
 import it.unimi.dsi.fastutil.ints.IntList;
 import me.shedaniel.rei.api.client.search.method.CharacterUnpackingInputMethod;
@@ -7,7 +7,7 @@ import me.shedaniel.rei.impl.client.search.argument.InputMethodMatcher;
 
 import java.util.Optional;
 
-public class ReiPinYinMatcher {
+public class ReiAccess {
     @SuppressWarnings("all")
     public static Optional<Boolean> matchesFilter(String entryString, String filterText) {
         InputMethod<?> active = InputMethod.active();

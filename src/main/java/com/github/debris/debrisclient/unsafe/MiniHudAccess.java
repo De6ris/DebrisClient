@@ -1,4 +1,4 @@
-package com.github.debris.debrisclient.unsafe.miniHud;
+package com.github.debris.debrisclient.unsafe;
 
 import com.github.debris.debrisclient.feat.interactor.BlockInteractor;
 import com.github.debris.debrisclient.feat.interactor.EntityInteractor;
@@ -7,7 +7,7 @@ import fi.dy.masa.minihud.gui.GuiConfigs;
 
 import java.util.List;
 
-public class MiniHudAccessor {
+public class MiniHudAccess {
     public static boolean isPreviewingInventory() {
         return Configs.Generic.INVENTORY_PREVIEW_ENABLED.getBooleanValue() && Configs.Generic.INVENTORY_PREVIEW.getKeybind().isKeybindHeld();
     }

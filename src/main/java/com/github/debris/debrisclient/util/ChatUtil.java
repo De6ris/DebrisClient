@@ -1,5 +1,6 @@
 package com.github.debris.debrisclient.util;
 
+import com.github.debris.debrisclient.feat.FutureTaskQueue;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.StringHelper;
@@ -21,4 +22,7 @@ public class ChatUtil {
         MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
     }
 
+    public static void addLocalMessageNextTick(Text message) {
+        FutureTaskQueue.addNextTick(() -> addLocalMessage(message));
+    }
 }

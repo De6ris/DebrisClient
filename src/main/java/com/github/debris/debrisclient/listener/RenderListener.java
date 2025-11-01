@@ -7,9 +7,9 @@ import com.github.debris.debrisclient.render.RenderContext;
 import com.github.debris.debrisclient.render.RenderQueue;
 import com.github.debris.debrisclient.render.WorldRenderContext;
 import com.github.debris.debrisclient.unsafe.litematica.LitematicaAccessor;
-import com.github.debris.debrisclient.unsafe.magicLib.MagicLibAccessor;
-import com.github.debris.debrisclient.unsafe.miniHud.MiniHudAccessor;
-import com.github.debris.debrisclient.unsafe.worldEdit.WorldEditRegionAccessor;
+import com.github.debris.debrisclient.unsafe.MagicLibAccess;
+import com.github.debris.debrisclient.unsafe.MiniHudAccess;
+import com.github.debris.debrisclient.unsafe.WorldEditAccess;
 import com.github.debris.debrisclient.util.Predicates;
 import com.github.debris.debrisclient.util.RayTraceUtil;
 import fi.dy.masa.malilib.interfaces.IRenderer;
@@ -39,14 +39,14 @@ public class RenderListener implements IRenderer {
         if (Predicates.notInGame(this.client)) return;
 
         if (DCCommonConfig.WorldEditVisibility.getBooleanValue() && ModReference.hasMod(ModReference.WorldEdit) && ModReference.hasMod(ModReference.Litematica)) {
-            WorldEditRegionAccessor.getRegion(this.client.player.getNameForScoreboard())
+            WorldEditAccess.getRegion(this.client.player.getNameForScoreboard())
                     .ifPresent(x -> LitematicaAccessor.renderWorldEditSelectionBox(x.getLeft(), x.getRight(), posMatrix));
         }
 
-        if (DCCommonConfig.InventoryPreviewSupportComparator.getBooleanValue() && ModReference.hasMod(ModReference.MiniHud) && MiniHudAccessor.isPreviewingInventory() && ModReference.hasMod(ModReference.MagicLibMCApi)) {
+        if (DCCommonConfig.InventoryPreviewSupportComparator.getBooleanValue() && ModReference.hasMod(ModReference.MiniHud) && MiniHudAccess.isPreviewingInventory() && ModReference.hasMod(ModReference.MagicLibMCApi)) {
             RayTraceUtil.getRayTraceBlock(this.client).ifPresent(pos -> {
                 World world = WorldUtils.getBestWorld(this.client);// get it through chunk, since the server return you null if you call world.getBlockEntity directly on render thread
-                world.getWorldChunk(pos).getBlockEntity(pos, BlockEntityType.COMPARATOR).ifPresent(comparator -> MagicLibAccessor.renderText(comparator.getOutputSignal(), pos));
+                world.getWorldChunk(pos).getBlockEntity(pos, BlockEntityType.COMPARATOR).ifPresent(comparator -> MagicLibAccess.renderText(comparator.getOutputSignal(), pos));
             });
         }
 

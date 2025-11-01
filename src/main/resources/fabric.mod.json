@@ -33,7 +33,8 @@
     "fabricloader": "*",
     "minecraft": ">=1.21.9",
     "malilib": ">=0.26.1",
-    "conditional-mixin": ">=0.6.4"
+    "conditional-mixin": ">=0.6.4",
+    "fabric-api": "*"
   },
   "accessWidener": "DebrisClient.accesswidener"
 }

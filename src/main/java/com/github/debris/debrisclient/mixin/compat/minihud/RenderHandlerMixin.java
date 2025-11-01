@@ -1,7 +1,7 @@
 package com.github.debris.debrisclient.mixin.compat.minihud;
 
 import com.github.debris.debrisclient.compat.ModReference;
-import com.github.debris.debrisclient.unsafe.miniHud.MiniHudAccessor;
+import com.github.debris.debrisclient.unsafe.MiniHudAccess;
 import fi.dy.masa.minihud.event.RenderHandler;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
@@ -23,6 +23,6 @@ public class RenderHandlerMixin {
 
     @Inject(method = "updateLines", at = @At("RETURN"))
     private void onLinesUpdate(CallbackInfo ci) {
-        MiniHudAccessor.onLinesUpdate(this.lines);
+        MiniHudAccess.onLinesUpdate(this.lines);
     }
 }

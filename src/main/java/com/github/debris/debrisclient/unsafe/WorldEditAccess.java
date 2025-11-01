@@ -1,4 +1,4 @@
-package com.github.debris.debrisclient.unsafe.worldEdit;
+package com.github.debris.debrisclient.unsafe;
 
 import com.mojang.logging.LogUtils;
 import com.sk89q.worldedit.IncompleteRegionException;
@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 
 import java.util.Optional;
 
-public class WorldEditRegionAccessor {
+public class WorldEditAccess {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static Optional<Pair<BlockPos, BlockPos>> getRegion(String playerName) {

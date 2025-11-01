@@ -18,7 +18,7 @@ public class DCConfigUi extends GuiConfigsBase {
     private static Tab tab = Tab.ALL;
 
     public DCConfigUi() {
-        super(10, 50, MOD_NAME, null, "debris_client.gui.title.configs", MOD_NAME, MOD_VERSION);
+        super(10, 50, MOD_NAME, null, "debrisclient.gui.title.configs", MOD_NAME, MOD_VERSION);
     }
 
     @Override

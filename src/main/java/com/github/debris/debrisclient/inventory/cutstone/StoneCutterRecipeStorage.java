@@ -47,7 +47,7 @@ public class StoneCutterRecipeStorage {
     public void setCurrentSelected(int index) {
         if (index >= 0 && index < this.recipes.length) {
             this.selected = index;
-            this.dirty = true;
+            this.markDirty();
         }
     }
 
@@ -72,10 +72,16 @@ public class StoneCutterRecipeStorage {
     }
 
     public void clearAll() {
+        boolean dirty = false;
         for (StoneCutterRecipePattern recipe : this.recipes) {
-            recipe.clear();
+            if (recipe.isValid()) {
+                recipe.clear();
+                dirty = true;
+            }
         }
-        this.markDirty();
+        if (dirty) {
+            this.markDirty();
+        }
     }
 
     public StoneCutterRecipePattern getRecipe(int index) {

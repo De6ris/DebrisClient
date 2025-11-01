@@ -3,6 +3,7 @@ package com.github.debris.debrisclient.listener;
 import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import com.github.debris.debrisclient.feat.*;
+import com.github.debris.debrisclient.feat.advancement.AdventuringTimeHelper;
 import com.github.debris.debrisclient.feat.interactor.BlockInteractor;
 import com.github.debris.debrisclient.feat.interactor.EntityInteractor;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterUtil;
@@ -60,6 +61,8 @@ public class TickListener implements IClientTickHandler {
         CommandQueue.onClientTick(client);
 
         FutureTaskQueue.onClientTick(client);
+
+        AdventuringTimeHelper.onClientTick(client);
     }
 
 

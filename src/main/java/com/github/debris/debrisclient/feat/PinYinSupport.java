@@ -1,7 +1,7 @@
 package com.github.debris.debrisclient.feat;
 
 import com.github.debris.debrisclient.compat.ModReference;
-import com.github.debris.debrisclient.unsafe.rei.ReiPinYinMatcher;
+import com.github.debris.debrisclient.unsafe.ReiAccess;
 import com.github.debris.debrisclient.util.Platform;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
@@ -56,7 +56,7 @@ public class PinYinSupport {
 
     public static boolean matchesFilter(String entryString, String filterText) {
         if (ModReference.hasMod(ModReference.REI)) {
-            Optional<Boolean> optionalB = ReiPinYinMatcher.matchesFilter(entryString, filterText);
+            Optional<Boolean> optionalB = ReiAccess.matchesFilter(entryString, filterText);
             if (optionalB.isPresent()) return optionalB.get();
         }
         return convertToPinYin(entryString).contains(filterText);// this is my simple algorithm

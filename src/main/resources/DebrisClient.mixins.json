@@ -24,6 +24,7 @@
     "client.gui.ScreenHandlerMixin",
     "client.gui.ScreenMixin",
     "client.input.KeyboardInputMixin",
+    "client.network.ClientAdvancementManagerMixin",
     "client.network.ClientPlayerEntityMixin",
     "client.network.ClientPlayerInteractionManagerMixin",
     "client.network.ClientPlayNetworkHandlerMixin",

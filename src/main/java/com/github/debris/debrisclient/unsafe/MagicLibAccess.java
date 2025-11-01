@@ -1,4 +1,4 @@
-package com.github.debris.debrisclient.unsafe.magicLib;
+package com.github.debris.debrisclient.unsafe;
 
 import com.github.debris.debrisclient.render.Renderer;
 import net.minecraft.entity.Entity;
@@ -8,7 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import top.hendrixshen.magiclib.impl.render.TextRenderer;
 import top.hendrixshen.magiclib.util.minecraft.ComponentUtil;
 
-public class MagicLibAccessor {
+public class MagicLibAccess {
     public static void renderText(Object o, BlockPos pos) {
         TextRenderer.create()
                 .text(ComponentUtil.simple(o)

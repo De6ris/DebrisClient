@@ -5,7 +5,7 @@ import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.gui.DCConfigUi;
 import com.github.debris.debrisclient.gui.UniversalSearchScreen;
 import com.github.debris.debrisclient.unsafe.litematica.LitematicaAccessor;
-import com.github.debris.debrisclient.unsafe.miniHud.MiniHudAccessor;
+import com.github.debris.debrisclient.unsafe.MiniHudAccess;
 import com.github.debris.debrisclient.util.AccessorUtil;
 import com.google.common.collect.ImmutableList;
 import fi.dy.masa.malilib.gui.GuiBase;
@@ -104,7 +104,7 @@ public class ConfigCollector {
         String modId = mod.getModId();
         switch (modId) {
             case ModReference.Litematica -> LitematicaAccessor.resetTab();
-            case ModReference.MiniHud -> MiniHudAccessor.resetTab();
+            case ModReference.MiniHud -> MiniHudAccess.resetTab();
         }
     }
 
@@ -120,7 +120,7 @@ public class ConfigCollector {
                 if (LitematicaAccessor.isRenderLayerButton(content)) return true;
             }
             case ModReference.MiniHud -> {
-                if (MiniHudAccessor.isShapeButton(content)) return true;
+                if (MiniHudAccess.isShapeButton(content)) return true;
             }
         }
         return false;

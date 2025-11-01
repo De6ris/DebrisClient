@@ -1,7 +1,7 @@
 package com.github.debris.debrisclient.command;
 
 import com.github.debris.debrisclient.compat.ModReference;
-import com.github.debris.debrisclient.unsafe.tweakeroo.TweakerooAccessor;
+import com.github.debris.debrisclient.unsafe.TweakerooAccess;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.LiteralCommandNode;
@@ -53,12 +53,12 @@ public class DCTeleportCommand {
     }
 
     private static void teleport(FabricClientCommandSource source, Vec3d pos, float yaw, float pitch) {
-        IConfigBoolean config = TweakerooAccessor.getFreeCamConfig();
+        IConfigBoolean config = TweakerooAccess.getFreeCamConfig();
         if (!config.getBooleanValue()) {
             config.setBooleanValue(true);
             InfoUtils.printBooleanConfigToggleMessage(config.getPrettyName(), true);
         }
-        ClientPlayerEntity entity = TweakerooAccessor.getCamEntity();
+        ClientPlayerEntity entity = TweakerooAccess.getCamEntity();
         entity.refreshPositionAndAngles(pos, yaw, pitch);
     }
 }

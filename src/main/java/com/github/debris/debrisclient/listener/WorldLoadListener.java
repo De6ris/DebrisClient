@@ -1,5 +1,6 @@
 package com.github.debris.debrisclient.listener;
 
+import com.github.debris.debrisclient.feat.advancement.AdventuringTimeHelper;
 import com.github.debris.debrisclient.feat.log.GameLogs;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterRecipeStorage;
 import fi.dy.masa.malilib.interfaces.IWorldLoadListener;
@@ -30,6 +31,7 @@ public class WorldLoadListener implements IWorldLoadListener {
         if (worldBefore == null && worldAfter != null) {
             StoneCutterRecipeStorage.getInstance().read(worldAfter.getRegistryManager());
             GameLogs.loadOrCreate();
+            AdventuringTimeHelper.onWorldLoad(mc);
         }
 
         // Logging out

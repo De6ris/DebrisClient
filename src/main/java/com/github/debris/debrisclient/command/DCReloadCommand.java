@@ -1,7 +1,7 @@
 package com.github.debris.debrisclient.command;
 
 import com.github.debris.debrisclient.compat.ModReference;
-import com.github.debris.debrisclient.unsafe.mgButtons.MGButtonReloader;
+import com.github.debris.debrisclient.unsafe.MGButtonAccess;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import fi.dy.masa.malilib.gui.Message;
@@ -22,7 +22,7 @@ public class DCReloadCommand {
 
     private static int reloadCommandButton(FabricClientCommandSource source) {
         if (ModReference.hasMod(ModReference.CommandButton)) {
-            MGButtonReloader.reload();
+            MGButtonAccess.reload();
             InfoUtils.showInGameMessage(Message.MessageType.SUCCESS, "命令按钮: 重载成功");
             return Command.SINGLE_SUCCESS;
         }

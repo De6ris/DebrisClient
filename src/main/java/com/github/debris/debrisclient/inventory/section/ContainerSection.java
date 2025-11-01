@@ -108,13 +108,19 @@ public record ContainerSection(List<Slot> slots) {
     }
 
     public Optional<Slot> findItem(ItemStack itemStack) {
-        return this.slots.stream().filter(x -> x.hasStack() && ItemUtil.compareIDMeta(x.getStack(), itemStack))
-                .max(Comparator.comparingInt(slot -> slot.getStack().getCount()));
+        return this.findItem(ItemUtil.predicateIDMeta(itemStack));
     }
 
     public Optional<Slot> findItem(Item item) {
-        return this.slots.stream().filter(x -> x.hasStack() && x.getStack().isOf(item))
-                .max(Comparator.comparingInt(slot -> slot.getStack().getCount()));
+        return this.findItem(x -> x.getItem() == item);
+    }
+
+    public Optional<Slot> findItem(Predicate<ItemStack> predicate) {
+        return this.findItem(predicate, Comparator.comparingInt(slot -> slot.getStack().getCount()));
+    }
+
+    public Optional<Slot> findItem(Predicate<ItemStack> predicate, Comparator<Slot> comparator) {
+        return this.slots.stream().filter(x -> x.hasStack() && predicate.test(x.getStack())).max(comparator);
     }
 
     public Optional<Slot> providesOneScroll(ItemStack itemStack) {
