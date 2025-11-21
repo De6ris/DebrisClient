@@ -1,8 +1,8 @@
 package com.github.debris.debrisclient.localization;
 
 import com.github.debris.debrisclient.DebrisClient;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public interface Translatable {
     static TranslationKeyResolver root() {
@@ -11,11 +11,11 @@ public interface Translatable {
 
     String getTranslationKey();
 
-    default MutableText text() {
-        return Text.translatable(getTranslationKey());
+    default MutableComponent text() {
+        return Component.translatable(getTranslationKey());
     }
 
-    default MutableText text(Object... args) {
-        return Text.translatable(getTranslationKey(), args);
+    default MutableComponent text(Object... args) {
+        return Component.translatable(getTranslationKey(), args);
     }
 }

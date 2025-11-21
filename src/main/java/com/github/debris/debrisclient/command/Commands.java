@@ -3,12 +3,12 @@ package com.github.debris.debrisclient.command;
 import com.github.debris.debrisclient.compat.ModReference;
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.command.CommandRegistryAccess;
+import net.minecraft.commands.CommandBuildContext;
 
 public class Commands {
     public static final String PREFIX = "dc";
 
-    public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess context) {
+    public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandBuildContext context) {
         DCWhereIsItCommand.register(dispatcher, context);
         DCCountEntityCommand.register(dispatcher);
         DCDataGetCommand.register(dispatcher);

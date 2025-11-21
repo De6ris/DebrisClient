@@ -3,9 +3,9 @@ package com.github.debris.debrisclient.inventory.section;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.ItemUtil;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -64,11 +64,11 @@ public record ContainerSection(List<Slot> slots) {
     }
 
     public boolean isEmpty() {
-        return this.slots.stream().noneMatch(Slot::hasStack);
+        return this.slots.stream().noneMatch(Slot::hasItem);
     }
 
     public boolean isFull() {
-        return this.slots.stream().allMatch(Slot::hasStack);
+        return this.slots.stream().allMatch(Slot::hasItem);
     }
 
     public int size() {
@@ -76,7 +76,7 @@ public record ContainerSection(List<Slot> slots) {
     }
 
     public Optional<Slot> getEmptySlot() {
-        return this.slots.stream().filter(x -> !x.hasStack()).findFirst();
+        return this.slots.stream().filter(x -> !x.hasItem()).findFirst();
     }
 
     public boolean moveToEmpty(Slot slot) {
@@ -104,7 +104,7 @@ public record ContainerSection(List<Slot> slots) {
     }
 
     public boolean hasItem(Item item) {
-        return this.slots.stream().anyMatch(x -> x.hasStack() && x.getStack().isOf(item));
+        return this.slots.stream().anyMatch(x -> x.hasItem() && x.getItem().is(item));
     }
 
     public Optional<Slot> findItem(ItemStack itemStack) {
@@ -116,40 +116,40 @@ public record ContainerSection(List<Slot> slots) {
     }
 
     public Optional<Slot> findItem(Predicate<ItemStack> predicate) {
-        return this.findItem(predicate, Comparator.comparingInt(slot -> slot.getStack().getCount()));
+        return this.findItem(predicate, Comparator.comparingInt(slot -> slot.getItem().getCount()));
     }
 
     public Optional<Slot> findItem(Predicate<ItemStack> predicate, Comparator<Slot> comparator) {
-        return this.slots.stream().filter(x -> x.hasStack() && predicate.test(x.getStack())).max(comparator);
+        return this.slots.stream().filter(x -> x.hasItem() && predicate.test(x.getItem())).max(comparator);
     }
 
     public Optional<Slot> providesOneScroll(ItemStack itemStack) {
-        return this.slots.stream().filter(x -> x.hasStack() && ItemUtil.canMerge(itemStack, x.getStack())).findFirst();
+        return this.slots.stream().filter(x -> x.hasItem() && ItemUtil.canMerge(itemStack, x.getItem())).findFirst();
     }
 
     public Optional<Slot> absorbsOneScroll(ItemStack itemStack) {
-        return this.slots.stream().filter(x -> x.hasStack() && ItemUtil.canMerge(x.getStack(), itemStack)).findFirst();
+        return this.slots.stream().filter(x -> x.hasItem() && ItemUtil.canMerge(x.getItem(), itemStack)).findFirst();
     }
 
     public boolean acceptsItem(ItemStack itemStack) {
-        return this.slots.stream().anyMatch(x -> !x.hasStack() || (x.hasStack() && ItemUtil.canMerge(x.getStack(), itemStack)));
+        return this.slots.stream().anyMatch(x -> !x.hasItem() || (x.hasItem() && ItemUtil.canMerge(x.getItem(), itemStack)));
     }
 
     public void mergeSlots() {
         for (int i = this.slots.size() - 1; i >= 1; i--) {// inverse order reduce operations; skip first slot
             Slot slot = getSlot(i);
-            if (!slot.hasStack()) continue;
-            if (ItemUtil.isFullStack(slot.getStack())) continue;
+            if (!slot.hasItem()) continue;
+            if (ItemUtil.isFullStack(slot.getItem())) continue;
             mergeSlotToPrevious(i, slot);
         }
     }
 
     private void mergeSlotToPrevious(int currentIndex, Slot currentSlot) {
-        ItemStack stack = currentSlot.getStack();
+        ItemStack stack = currentSlot.getItem();
         List<Slot> candidates = new ArrayList<>();
         for (int i = 0; i < currentIndex; i++) {
             Slot slot = getSlot(i);
-            if (slot.hasStack() && ItemUtil.canMerge(slot.getStack(), stack)) {
+            if (slot.hasItem() && ItemUtil.canMerge(slot.getItem(), stack)) {
                 candidates.add(slot);
             }
         }
@@ -166,7 +166,7 @@ public record ContainerSection(List<Slot> slots) {
         for (int i = this.slots.size() - 1; i >= 0; i--) {// inverse order reduce operations
             Slot slot = getSlot(i);
             if (i == 0) continue;// just skip the first slot
-            if (!slot.hasStack()) continue;// skip those empty
+            if (!slot.hasItem()) continue;// skip those empty
             this.moveToPreviousEmpty(i, slot);
         }
     }
@@ -174,7 +174,7 @@ public record ContainerSection(List<Slot> slots) {
     private void moveToPreviousEmpty(int currentIndex, Slot currentSlot) {
         for (int i = 0; i < currentIndex; i++) {
             Slot slot = getSlot(i);
-            if (!slot.hasStack()) {
+            if (!slot.hasItem()) {
                 InventoryUtil.moveToEmpty(currentSlot, slot);
                 return;
             }
@@ -186,18 +186,18 @@ public record ContainerSection(List<Slot> slots) {
     }
 
     public Stream<Slot> streamEmpty() {
-        return this.stream().filter(x -> !x.hasStack());
+        return this.stream().filter(x -> !x.hasItem());
     }
 
     public Stream<Slot> streamNotEmpty() {
-        return this.stream().filter(Slot::hasStack);
+        return this.stream().filter(Slot::hasItem);
     }
 
     /**
      * Note that the empty slots are skipped.
      */
     public Stream<Slot> predicate(Predicate<ItemStack> predicate) {
-        return this.streamNotEmpty().filter(slot -> predicate.test(slot.getStack()));
+        return this.streamNotEmpty().filter(slot -> predicate.test(slot.getItem()));
     }
 
     public void allRun(Consumer<Slot> runnable) {
@@ -208,14 +208,14 @@ public record ContainerSection(List<Slot> slots) {
 
     public void emptyRun(Consumer<Slot> runnable) {
         for (Slot slot : this.slots) {
-            if (slot.hasStack()) continue;
+            if (slot.hasItem()) continue;
             runnable.accept(slot);
         }
     }
 
     public void notEmptyRun(Consumer<Slot> runnable) {
         for (Slot slot : this.slots) {
-            if (slot.hasStack()) runnable.accept(slot);
+            if (slot.hasItem()) runnable.accept(slot);
         }
     }
 
@@ -224,7 +224,7 @@ public record ContainerSection(List<Slot> slots) {
      */
     public void predicateRun(Predicate<ItemStack> predicate, Consumer<Slot> runnable) {
         for (Slot slot : this.slots) {
-            if (slot.hasStack() && predicate.test(slot.getStack())) runnable.accept(slot);
+            if (slot.hasItem() && predicate.test(slot.getItem())) runnable.accept(slot);
         }
     }
 

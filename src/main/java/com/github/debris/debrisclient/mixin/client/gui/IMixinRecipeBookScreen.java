@@ -1,12 +1,12 @@
 package com.github.debris.debrisclient.mixin.client.gui;
 
-import net.minecraft.client.gui.screen.ingame.RecipeBookScreen;
-import net.minecraft.client.gui.screen.recipebook.RecipeBookWidget;
+import net.minecraft.client.gui.screens.inventory.AbstractRecipeBookScreen;
+import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(RecipeBookScreen.class)
+@Mixin(AbstractRecipeBookScreen.class)
 public interface IMixinRecipeBookScreen {
-    @Accessor("recipeBook")
-    RecipeBookWidget<?> getRecipeBook();
+    @Accessor("recipeBookComponent")
+    RecipeBookComponent<?> getRecipeBook();
 }

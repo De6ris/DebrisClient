@@ -10,16 +10,16 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import fi.dy.masa.malilib.config.options.ConfigStringList;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.DefaultedRegistry;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.core.DefaultedRegistry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -36,9 +36,9 @@ public class DCListCommand {
                 .then(makeAutoThrow())
                 .then(makeCullBlockEntity())
                 .then(makeCullEntity())
-                .then(build("cull_particle", Registries.PARTICLE_TYPE, DCCommonConfig.CullParticleList))
-                .then(build("highlight", Registries.ENTITY_TYPE, DCCommonConfig.HighlightEntityList))
-                .then(build("mute_sound", Registries.SOUND_EVENT, DCCommonConfig.MuteSoundList))
+                .then(build("cull_particle", BuiltInRegistries.PARTICLE_TYPE, DCCommonConfig.CullParticleList))
+                .then(build("highlight", BuiltInRegistries.ENTITY_TYPE, DCCommonConfig.HighlightEntityList))
+                .then(build("mute_sound", BuiltInRegistries.SOUND_EVENT, DCCommonConfig.MuteSoundList))
         );
     }
 
@@ -50,30 +50,30 @@ public class DCListCommand {
                 .addExecute((source, player) -> {
                     String self = source.getPlayer().getGameProfile().name();
                     if (player.equals(self)) {
-                        source.sendFeedback(Text.literal("请勿添加你自己"));
+                        source.sendFeedback(Component.literal("请勿添加你自己"));
                         return Command.SINGLE_SUCCESS;
                     }
                     if (list.contains(player)) {
-                        source.sendFeedback(Text.literal("此玩家已存在: " + player));
+                        source.sendFeedback(Component.literal("此玩家已存在: " + player));
                         return Command.SINGLE_SUCCESS;
                     }
                     list.add(player);
-                    source.sendFeedback(Text.literal("成功添加此玩家: " + player));
+                    source.sendFeedback(Component.literal("成功添加此玩家: " + player));
                     return Command.SINGLE_SUCCESS;
                 })
                 .build();
     }
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeAutoThrow() {
-        DefaultedRegistry<Item> registry = Registries.ITEM;
+        DefaultedRegistry<Item> registry = BuiltInRegistries.ITEM;
         return of("auto_throw", registry, DCCommonConfig.AutoThrowWhiteList)
                 .defaultArgumentProvider(source -> {
-                    ItemStack stack = source.getPlayer().getMainHandStack();
+                    ItemStack stack = source.getPlayer().getMainHandItem();
                     if (stack.isEmpty()) {
                         return Optional.empty();
                     } else {
                         Item item = stack.getItem();
-                        String key = registry.getId(item).toString();
+                        String key = registry.getKey(item).toString();
                         return Optional.of(key);
                     }
                 })
@@ -81,18 +81,18 @@ public class DCListCommand {
     }
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeCullBlockEntity() {
-        return of("cull_block_entity", Registries.BLOCK_ENTITY_TYPE, DCCommonConfig.CullBlockEntityList)
+        return of("cull_block_entity", BuiltInRegistries.BLOCK_ENTITY_TYPE, DCCommonConfig.CullBlockEntityList)
                 .defaultArgumentProvider(source -> RayTraceUtil.getRayTraceBlockEntity(source.getClient())
-                        .map(blockEntity -> BlockEntityType.getId(blockEntity.getType()))
-                        .map(Identifier::toString))
+                        .map(blockEntity -> BlockEntityType.getKey(blockEntity.getType()))
+                        .map(ResourceLocation::toString))
                 .build();
     }
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeCullEntity() {
-        return of("cull_entity", Registries.ENTITY_TYPE, DCCommonConfig.CullEntityList)
+        return of("cull_entity", BuiltInRegistries.ENTITY_TYPE, DCCommonConfig.CullEntityList)
                 .defaultArgumentProvider(source -> RayTraceUtil.getRayTraceEntity(source.getClient())
-                        .map(entity -> EntityType.getId(entity.getType()))
-                        .map(Identifier::toString))
+                        .map(entity -> EntityType.getKey(entity.getType()))
+                        .map(ResourceLocation::toString))
                 .build();
     }
 
@@ -119,8 +119,8 @@ public class DCListCommand {
 
     private static Builder of(String name, Registry<?> registry, List<String> list) {
         return of(name, list)
-                .argumentName(registry.getKey().getValue().getPath())
-                .addSuggest((ctx, builder) -> CommandSource.suggestIdentifiers(registry.getIds(), builder));
+                .argumentName(registry.key().location().getPath())
+                .addSuggest((ctx, builder) -> SharedSuggestionProvider.suggestResource(registry.keySet(), builder));
     }
 
     private static class Builder {
@@ -199,7 +199,7 @@ public class DCListCommand {
                             }))
                     .then(literal("list")
                             .executes(ctx -> {
-                                ctx.getSource().sendFeedback(Text.literal(list.toString()));
+                                ctx.getSource().sendFeedback(Component.literal(list.toString()));
                                 return Command.SINGLE_SUCCESS;
                             }))
                     .then(makeRemove())

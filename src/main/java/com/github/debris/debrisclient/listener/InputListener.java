@@ -16,14 +16,14 @@ import fi.dy.masa.malilib.hotkeys.*;
 import fi.dy.masa.malilib.util.InputUtils;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Click;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.MouseButtonEvent;
 
 import java.util.Optional;
 
 public class InputListener implements IKeybindProvider, IKeyboardInputHandler, IMouseInputHandler {
     private static final InputListener INSTANCE = new InputListener();
-    private final MinecraftClient client = MinecraftClient.getInstance();
+    private final Minecraft client = Minecraft.getInstance();
     private final IntSet BUTTON_UP_CANCEL_SET = new IntOpenHashSet();
 
     public static InputListener getInstance() {
@@ -55,7 +55,7 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
     }
 
     @Override
-    public boolean onMouseClick(Click click, boolean eventButtonState) {
+    public boolean onMouseClick(MouseButtonEvent click, boolean eventButtonState) {
         int mouseX = InputUtils.getMouseX();
         int mouseY = InputUtils.getMouseY();
         if (eventButtonState) {
@@ -65,9 +65,9 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
         }
     }
 
-    private boolean handleButtonDown(int mouseX, int mouseY, Click click) {
+    private boolean handleButtonDown(int mouseX, int mouseY, MouseButtonEvent click) {
         int eventButton = click.button();
-        if (this.client.options.attackKey.matchesMouse(click)) {
+        if (this.client.options.keyAttack.matchesMouse(click)) {
 
             if (StoneCutterUtil.isStoneCutterRecipeViewOpen()) {
                 StoneCutterRecipeStorage.getInstance().setCurrentSelected(StoneCutterRecipeRenderer.getInstance().getHoveredRecipeId(mouseX, mouseY, InventoryUtil.getGuiContainer()));
@@ -101,7 +101,7 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
         }
 
 
-        if (this.client.options.useKey.matchesMouse(click)) {
+        if (this.client.options.keyUse.matchesMouse(click)) {
 
             if (Predicates.notInGuiContainer(this.client))
                 return false;// the below assuming valid environment
@@ -125,7 +125,7 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
         return false;
     }
 
-    private boolean handleButtonUp(int mouseX, int mouseY, Click click) {
+    private boolean handleButtonUp(int mouseX, int mouseY, MouseButtonEvent click) {
         int button = click.button();
         if (BUTTON_UP_CANCEL_SET.contains(button)) {
             BUTTON_UP_CANCEL_SET.remove(button);

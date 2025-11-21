@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.feat;
 
-import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.gui.Gui;
 
 /**
  * A wrapper for vanilla class. Since my config enum uses the class name for translations,
@@ -12,21 +12,21 @@ import net.minecraft.client.gui.hud.InGameHud;
  */
 public enum HeartType {
     NONE(null),
-    NORMAL(InGameHud.HeartType.NORMAL),
-    ABSORBING(InGameHud.HeartType.ABSORBING),
-    CONTAINER(InGameHud.HeartType.CONTAINER),
-    POISONED(InGameHud.HeartType.POISONED),
-    WITHERED(InGameHud.HeartType.WITHERED),
-    FROZEN(InGameHud.HeartType.FROZEN),
+    NORMAL(Gui.HeartType.NORMAL),
+    ABSORBING(Gui.HeartType.ABSORBING),
+    CONTAINER(Gui.HeartType.CONTAINER),
+    POISONED(Gui.HeartType.POISIONED),
+    WITHERED(Gui.HeartType.WITHERED),
+    FROZEN(Gui.HeartType.FROZEN),
     ;
 
-    private final InGameHud.HeartType type;
+    private final Gui.HeartType type;
 
-    HeartType(InGameHud.HeartType type) {
+    HeartType(Gui.HeartType type) {
         this.type = type;
     }
 
-    public InGameHud.HeartType getVanilla() {
+    public Gui.HeartType getVanilla() {
         if (this == NONE) throw new IllegalArgumentException();
         return this.type;
     }

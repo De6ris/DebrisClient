@@ -4,8 +4,8 @@ import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import com.github.debris.debrisclient.inventory.section.SectionHandler;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.ItemUtil;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
 
@@ -17,7 +17,7 @@ public class QuickBundle {
             Optional<Slot> slotMouseOver = InventoryUtil.getSlotMouseOver();
             if (slotMouseOver.isPresent()) {
                 Slot slot = slotMouseOver.get();
-                if (ItemUtil.isBundle(slot.getStack())) {
+                if (ItemUtil.isBundle(slot.getItem())) {
                     clearCursorBundle(slot);
                     return true;
                 }
@@ -44,6 +44,6 @@ public class QuickBundle {
         InventoryUtil.leftClick(slot);// take up
         ContainerSection section = SectionHandler.getSection(slot);
         clearHeldBundle(section);
-        if (slot.getStack().isEmpty()) InventoryUtil.leftClick(slot);// put down
+        if (slot.getItem().isEmpty()) InventoryUtil.leftClick(slot);// put down
     }
 }

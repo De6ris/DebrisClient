@@ -1,14 +1,14 @@
 package com.github.debris.debrisclient.mixin.client.gui;
 
-import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.gui.hud.ChatHudLine;
+import net.minecraft.client.GuiMessage;
+import net.minecraft.client.gui.components.ChatComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
 
-@Mixin(ChatHud.class)
+@Mixin(ChatComponent.class)
 public interface IMixinChatHud {
     @Accessor
-    List<ChatHudLine.Visible> getVisibleMessages();
+    List<GuiMessage.Line> getTrimmedMessages();
 }

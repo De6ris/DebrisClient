@@ -7,7 +7,7 @@ import fi.dy.masa.tweakeroo.config.FeatureToggle;
 import fi.dy.masa.tweakeroo.util.DummyMovementInput;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import net.minecraft.client.input.Input;
+import net.minecraft.client.player.ClientInput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Restriction(require = @Condition(ModReference.Tweakeroo))
 @Mixin(value = DummyMovementInput.class, remap = false)
-public abstract class DummyMovementInputMixin extends Input {
+public abstract class DummyMovementInputMixin extends ClientInput {
     @Inject(method = "tick", at = @At("RETURN"), remap = true)
     private void autoMoving(CallbackInfo ci) {
         if (FeatureToggle.TWEAK_FREE_CAMERA.getBooleanValue() && DCCommonConfig.FreeCamKeepAutoMoving.getBooleanValue() && AutoMoving.isAutoMoving()) {

@@ -8,10 +8,10 @@ import fi.dy.masa.malilib.gui.widgets.WidgetConfigOption;
 import fi.dy.masa.malilib.gui.widgets.WidgetListConfigOptions;
 import fi.dy.masa.malilib.gui.widgets.WidgetSearchBar;
 import fi.dy.masa.malilib.util.data.ModInfo;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Colors;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.CommonColors;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class UniversalSearchScreen extends GuiConfigsBase {
     @Override
     public void initGui() {
         ConfigCollector.bootStrap();
-        if (this.mc.currentScreen != this) this.mc.setScreen(this);// may go to other screens while collecting configs
+        if (this.mc.screen != this) this.mc.setScreen(this);// may go to other screens while collecting configs
         super.initGui();
         WidgetListConfigOptions listWidget = this.getListWidget();
         AccessorUtil.setAllowKeyboardNavigation(listWidget, true);
@@ -40,24 +40,24 @@ public class UniversalSearchScreen extends GuiConfigsBase {
     }
 
     @Override
-    public void render(DrawContext drawContext, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics drawContext, int mouseX, int mouseY, float partialTicks) {
         super.render(drawContext, mouseX, mouseY, partialTicks);
         this.renderConfigSource(drawContext);
     }
 
-    private void renderConfigSource(DrawContext drawContext) {
+    private void renderConfigSource(GuiGraphics drawContext) {
         WidgetListConfigOptions listWidget = this.getListWidget();
         WidgetBase hoveredWidget = AccessorUtil.getHoveredWidget(listWidget);
         if (hoveredWidget instanceof WidgetConfigOption widget) {
             ConfigOptionWrapper wrapper = AccessorUtil.getWrapper(widget);
             ConfigCollector.Source source = ConfigCollector.getSourceMap().get(wrapper);
             if (source != null) {
-                MutableText text = Text.literal("来源").withColor(Colors.GREEN)
-                        .append(Text.literal(": ").withColor(Colors.WHITE))
-                        .append(Text.literal(source.modName()).withColor(Colors.CYAN))
-                        .append(Text.literal("-").withColor(Colors.WHITE))
-                        .append(Text.literal(source.tab()).withColor(Colors.YELLOW));
-                drawContext.drawText(this.textRenderer, text, 20, 35, Colors.WHITE, false);
+                MutableComponent text = Component.literal("来源").withColor(CommonColors.GREEN)
+                        .append(Component.literal(": ").withColor(CommonColors.WHITE))
+                        .append(Component.literal(source.modName()).withColor(CommonColors.HIGH_CONTRAST_DIAMOND))
+                        .append(Component.literal("-").withColor(CommonColors.WHITE))
+                        .append(Component.literal(source.tab()).withColor(CommonColors.YELLOW));
+                drawContext.drawString(this.font, text, 20, 35, CommonColors.WHITE, false);
             }
         }
     }

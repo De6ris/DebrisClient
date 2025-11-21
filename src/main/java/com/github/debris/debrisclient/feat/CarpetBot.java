@@ -4,11 +4,11 @@ import com.github.debris.debrisclient.util.AccessorUtil;
 import com.github.debris.debrisclient.util.ChatUtil;
 import com.github.debris.debrisclient.util.Predicates;
 import com.github.debris.debrisclient.util.RayTraceUtil;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,18 +16,18 @@ import java.util.Optional;
 
 public class CarpetBot {
     @SuppressWarnings({"ConstantConditions", "UnnecessaryReturnStatement"})
-    public static void tryKickBot(MinecraftClient client) {
+    public static void tryKickBot(Minecraft client) {
         if (Predicates.notInGame(client)) return;
 
         Optional<Entity> optionalEntity = RayTraceUtil.getRayTraceEntity(client);
         if (optionalEntity.isEmpty()) return;
         Entity entity = optionalEntity.get();
 
-        if (entity instanceof PlayerEntity bot) {
+        if (entity instanceof Player bot) {
 
-            if (bot.getUuid().equals(client.player.getUuid())) return;// wont kill oneself
+            if (bot.getUUID().equals(client.player.getUUID())) return;// wont kill oneself
 
-            String name = bot.getNameForScoreboard();
+            String name = bot.getScoreboardName();
             if (inKickQueue(name)) {
                 return;
             } else {
@@ -37,7 +37,7 @@ public class CarpetBot {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static boolean restoreKicking(MinecraftClient client) {
+    public static boolean restoreKicking(Minecraft client) {
         if (KICK_QUEUE.isEmpty()) {
             return false;
         }
@@ -49,16 +49,16 @@ public class CarpetBot {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static boolean suggestBotSpawnCommand(MinecraftClient client) {
+    public static boolean suggestBotSpawnCommand(Minecraft client) {
         if (Predicates.notInGame(client)) return false;
 
         String command = SpawnContext.fromEntity(client.getCameraEntity()).getSpawnCommand("bot_");
 
         ChatScreen chatScreen = new ChatScreen(command, false);
         client.setScreen(chatScreen);
-        TextFieldWidget chatField = AccessorUtil.getChatField(chatScreen);
-        chatField.setText(command);
-        chatField.setCursor("/player bot_".length(), false);
+        EditBox chatField = AccessorUtil.getChatField(chatScreen);
+        chatField.setValue(command);
+        chatField.moveCursorTo("/player bot_".length(), false);
 
         return true;
     }
@@ -79,12 +79,12 @@ public class CarpetBot {
         return true;
     }
 
-    private static void sendKickCommandAndAddToQueue(MinecraftClient client, String name, Entity bot) {
+    private static void sendKickCommandAndAddToQueue(Minecraft client, String name, Entity bot) {
         ChatUtil.sendChat(client, String.format("/player %s kill", name));
         KICK_QUEUE.add(new KickEntry(name, System.currentTimeMillis(), SpawnContext.fromEntity(bot)));
     }
 
-    private static void sendSpawnCommandAndRemoveFromQueue(MinecraftClient client, KickEntry entry) {
+    private static void sendSpawnCommandAndRemoveFromQueue(Minecraft client, KickEntry entry) {
         ChatUtil.sendChat(client, entry.context.getSpawnCommand(entry.name));
         KICK_QUEUE.remove(entry);
     }
@@ -97,9 +97,9 @@ public class CarpetBot {
             return new SpawnContext(entity.getX(),
                     entity.getY(),
                     entity.getZ(),
-                    entity.getYaw(),
-                    entity.getPitch(),
-                    entity.getEntityWorld().getRegistryKey().getValue().toString()
+                    entity.getYRot(),
+                    entity.getXRot(),
+                    entity.level().dimension().location().toString()
             );
         }
 

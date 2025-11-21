@@ -3,10 +3,10 @@ package com.github.debris.debrisclient.mixin.client.gui;
 import com.github.debris.debrisclient.inventory.autoprocess.AutoProcessManager;
 import com.github.debris.debrisclient.inventory.section.IContainer;
 import com.github.debris.debrisclient.inventory.section.SectionHandler;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,17 +18,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
-@Mixin(ScreenHandler.class)
+@Mixin(AbstractContainerMenu.class)
 public class ScreenHandlerMixin implements IContainer {
     @Shadow
     @Final
-    private @Nullable ScreenHandlerType<?> type;
+    private @Nullable MenuType<?> menuType;
     @Unique
     private SectionHandler sectionHandler;
 
-    @Inject(method = "updateSlotStacks", at = @At("RETURN"))
+    @Inject(method = "initializeContents", at = @At("RETURN"))
     private void onUpdate(int revision, List<ItemStack> stacks, ItemStack cursorStack, CallbackInfo ci) {
-        AutoProcessManager.onContainerUpdate((ScreenHandler) (Object) this);
+        AutoProcessManager.onContainerUpdate((AbstractContainerMenu) (Object) this);
     }
 
     @Override
@@ -44,6 +44,6 @@ public class ScreenHandlerMixin implements IContainer {
     @SuppressWarnings("DataFlowIssue")
     @Override
     public String dc$getTypeString() {
-        return this.type != null ? Registries.SCREEN_HANDLER.getId(this.type).toString() : "<no type>";
+        return this.menuType != null ? BuiltInRegistries.MENU.getKey(this.menuType).toString() : "<no type>";
     }
 }

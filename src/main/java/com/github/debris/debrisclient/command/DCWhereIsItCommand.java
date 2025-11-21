@@ -4,10 +4,10 @@ import com.github.debris.debrisclient.util.StringUtil;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.ItemStackArgument;
-import net.minecraft.item.Item;
-import net.minecraft.text.Text;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.arguments.item.ItemInput;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +20,7 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.arg
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class DCWhereIsItCommand {
-    public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess context) {
+    public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandBuildContext context) {
         dispatcher.register(literal(Commands.PREFIX + "where_is_it")
                 .then(
                         literal("add")
@@ -44,30 +44,30 @@ public class DCWhereIsItCommand {
         );
     }
 
-    private static int find(FabricClientCommandSource source, ItemStackArgument itemInput) {
+    private static int find(FabricClientCommandSource source, ItemInput itemInput) {
         Item item = itemInput.getItem();
         if (FIND_QUEUE.contains(item)) {
-            source.sendFeedback(Text.literal(String.format("已在寻找%s!", StringUtil.translateItem(item))));
+            source.sendFeedback(Component.literal(String.format("已在寻找%s!", StringUtil.translateItem(item))));
         } else {
             FIND_QUEUE.add(item);
-            source.sendFeedback(Text.literal(String.format("成功将%s加入寻找列表", StringUtil.translateItem(item))));
+            source.sendFeedback(Component.literal(String.format("成功将%s加入寻找列表", StringUtil.translateItem(item))));
         }
         return Command.SINGLE_SUCCESS;
     }
 
     private static int clear(FabricClientCommandSource source) {
         FIND_QUEUE.clear();
-        source.sendFeedback(Text.literal("成功清空寻找列表"));
+        source.sendFeedback(Component.literal("成功清空寻找列表"));
         return Command.SINGLE_SUCCESS;
     }
 
     private static int help(FabricClientCommandSource source) {
-        source.sendFeedback(Text.literal("添加目标后, 当你打开容器时, 会自动丢出目标物品并关闭GUI"));
+        source.sendFeedback(Component.literal("添加目标后, 当你打开容器时, 会自动丢出目标物品并关闭GUI"));
         return Command.SINGLE_SUCCESS;
     }
 
     private static int list(FabricClientCommandSource source) {
-        source.sendFeedback(Text.literal(String.format("正在寻找: %s", StringUtil.translateItemCollection(FIND_QUEUE))));
+        source.sendFeedback(Component.literal(String.format("正在寻找: %s", StringUtil.translateItemCollection(FIND_QUEUE))));
         return Command.SINGLE_SUCCESS;
     }
 

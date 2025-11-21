@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.feat;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ public class FutureTaskQueue {
 
     private static final List<Runnable> NEXT_TICK_TASKS = new ArrayList<>();
 
-    public static void onClientTick(MinecraftClient client) {
+    public static void onClientTick(Minecraft client) {
         NEXT_TICK_TASKS.forEach(Runnable::run);
         NEXT_TICK_TASKS.clear();
         ENTRIES.removeIf(entry -> {

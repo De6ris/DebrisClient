@@ -2,10 +2,10 @@ package com.github.debris.debrisclient.inventory.cutstone;
 
 import com.github.debris.debrisclient.inventory.section.EnumSection;
 import fi.dy.masa.malilib.util.InventoryUtils;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.world.item.ItemStack;
 
 public class StoneCutterRecipePattern {
     private ItemStack input = ItemStack.EMPTY;
@@ -25,8 +25,8 @@ public class StoneCutterRecipePattern {
     }
 
     public void storeRecipe() {
-        this.input = EnumSection.StoneCutterIn.get().getFirstSlot().getStack().copy();
-        this.result = EnumSection.CraftResult.get().getFirstSlot().getStack().copy();
+        this.input = EnumSection.StoneCutterIn.get().getFirstSlot().getItem().copy();
+        this.result = EnumSection.CraftResult.get().getFirstSlot().getItem().copy();
         this.searchVanillaRecipe();
     }
 
@@ -37,7 +37,7 @@ public class StoneCutterRecipePattern {
     private void searchVanillaRecipe() {
     }
 
-    public void readFromNBT(NbtCompound nbt, DynamicRegistryManager registryManager) {
+    public void readFromNBT(CompoundTag nbt, RegistryAccess registryManager) {
         if (nbt.contains("Result") && nbt.contains("Input")) {
             this.input = InventoryUtils.fromNbtOrEmpty(registryManager, nbt.getCompoundOrEmpty("Input"));
             this.result = InventoryUtils.fromNbtOrEmpty(registryManager, nbt.getCompoundOrEmpty("Result"));
@@ -45,10 +45,10 @@ public class StoneCutterRecipePattern {
     }
 
     // Assuming Valid
-    public NbtCompound writeToNBT(DynamicRegistryManager registryManager) {
-        NbtCompound nbt = new NbtCompound();
-        NbtCompound inputNbt = (NbtCompound) ItemStack.CODEC.encodeStart(registryManager.getOps(NbtOps.INSTANCE), this.input).getPartialOrThrow();
-        NbtCompound resultNbt = (NbtCompound) ItemStack.CODEC.encodeStart(registryManager.getOps(NbtOps.INSTANCE), this.result).getPartialOrThrow();
+    public CompoundTag writeToNBT(RegistryAccess registryManager) {
+        CompoundTag nbt = new CompoundTag();
+        CompoundTag inputNbt = (CompoundTag) ItemStack.CODEC.encodeStart(registryManager.createSerializationContext(NbtOps.INSTANCE), this.input).getPartialOrThrow();
+        CompoundTag resultNbt = (CompoundTag) ItemStack.CODEC.encodeStart(registryManager.createSerializationContext(NbtOps.INSTANCE), this.result).getPartialOrThrow();
         nbt.put("Input", inputNbt);
         nbt.put("Result", resultNbt);
         return nbt;

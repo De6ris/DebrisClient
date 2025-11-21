@@ -5,9 +5,9 @@ import com.github.debris.debrisclient.util.ChatUtil;
 import com.github.debris.debrisclient.util.CollectingCharacterVisitor;
 import com.github.debris.debrisclient.util.Predicates;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.ChatHudLine;
-import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.GuiMessage;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.PlayerInfo;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,9 +16,9 @@ import java.util.Optional;
 
 public class ResendChat {
     @SuppressWarnings("ConstantConditions")
-    public static boolean resendLast(MinecraftClient client) {
+    public static boolean resendLast(Minecraft client) {
         if (Predicates.notInGame(client)) return false;
-        String lastChat = client.inGameHud.getChatHud().getMessageHistory().peekLast();
+        String lastChat = client.gui.getChat().getRecentChat().peekLast();
         if (lastChat != null) {
             ChatUtil.sendChat(client, lastChat);
             return true;
@@ -26,14 +26,14 @@ public class ResendChat {
         return false;
     }
 
-    public static boolean repeatNewestChat(MinecraftClient client) {
+    public static boolean repeatNewestChat(Minecraft client) {
         if (Predicates.notInGame(client)) return false;
-        List<ChatHudLine.Visible> visibleMessages = AccessorUtil.getVisibleMessages(client.inGameHud.getChatHud());
+        List<GuiMessage.Line> visibleMessages = AccessorUtil.getVisibleMessages(client.gui.getChat());
         if (visibleMessages.isEmpty()) return false;
-        List<ChatHudLine.Visible> parts = new ArrayList<>();
+        List<GuiMessage.Line> parts = new ArrayList<>();
         parts.add(visibleMessages.getFirst());
         for (int i = 1; i < visibleMessages.size(); i++) {
-            ChatHudLine.Visible visible = visibleMessages.get(i);
+            GuiMessage.Line visible = visibleMessages.get(i);
             if (visible.endOfEntry()) break;
             parts.add(visible);// message may be broken into lines
         }
@@ -44,9 +44,9 @@ public class ResendChat {
     }
 
     @SuppressWarnings("ConstantConditions")
-    private static Optional<String> checkSentByPlayer(MinecraftClient client, String original) {
-        return client.player.networkHandler.getListedPlayerListEntries().stream()
-                .map(PlayerListEntry::getProfile)
+    private static Optional<String> checkSentByPlayer(Minecraft client, String original) {
+        return client.player.connection.getListedOnlinePlayers().stream()
+                .map(PlayerInfo::getProfile)
                 .map(GameProfile::name)
                 .flatMap(name -> filterAndCut(name, original).stream())
                 .max(Comparator.comparing(String::length));
@@ -59,9 +59,9 @@ public class ResendChat {
         return Optional.of(original.substring(index + senderNameAngled.length()));
     }
 
-    private static String convertString(List<ChatHudLine.Visible> lines) {
+    private static String convertString(List<GuiMessage.Line> lines) {
         CollectingCharacterVisitor visitor = new CollectingCharacterVisitor();
-        for (ChatHudLine.Visible line : lines) {
+        for (GuiMessage.Line line : lines) {
             line.content().accept(visitor);
         }
         return visitor.collect();

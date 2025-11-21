@@ -9,15 +9,15 @@ import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.ItemUtil;
 import com.mojang.logging.LogUtils;
 import fi.dy.masa.malilib.util.GuiUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.StonecutterScreen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.StonecuttingRecipe;
-import net.minecraft.recipe.display.CuttingRecipeDisplay;
-import net.minecraft.recipe.display.SlotDisplayContexts;
-import net.minecraft.screen.StonecutterScreenHandler;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.context.ContextParameterMap;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.StonecutterScreen;
+import net.minecraft.util.context.ContextMap;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.StonecutterMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.SelectableRecipe;
+import net.minecraft.world.item.crafting.StonecutterRecipe;
+import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -46,13 +46,13 @@ public class StoneCutterUtil {
 
     @SuppressWarnings("ConstantConditions")
     private static void chooseRecipe(ItemStack result) {
-        StonecutterScreenHandler container = (StonecutterScreenHandler) InventoryUtil.getCurrentContainer();
-        List<CuttingRecipeDisplay.GroupEntry<StonecuttingRecipe>> entries = container.getAvailableRecipes().entries();
-        ContextParameterMap contextParameterMap = SlotDisplayContexts.createParameters(MinecraftClient.getInstance().world);
+        StonecutterMenu container = (StonecutterMenu) InventoryUtil.getCurrentContainer();
+        List<SelectableRecipe.SingleInputEntry<StonecutterRecipe>> entries = container.getVisibleRecipes().entries();
+        ContextMap contextParameterMap = SlotDisplayContext.fromLevel(Minecraft.getInstance().level);
         for (int i = 0; i < entries.size(); i++) {
-            ItemStack recipeResult = entries.get(i).recipe().optionDisplay().getFirst(contextParameterMap);
+            ItemStack recipeResult = entries.get(i).recipe().optionDisplay().resolveForFirstStack(contextParameterMap);
             if (ItemUtil.compareIDMeta(result, recipeResult)) {
-                container.onButtonClick(MinecraftClient.getInstance().player, i);
+                container.clickMenuButton(Minecraft.getInstance().player, i);
                 InventoryUtil.clickButton(i);
                 return;// success
             }
@@ -92,7 +92,7 @@ public class StoneCutterUtil {
 
     private static void clearInputSlot() {
         Slot input = EnumSection.StoneCutterIn.get().getFirstSlot();
-        if (input.hasStack()) {
+        if (input.hasItem()) {
             InventoryUtil.quickMove(input);
         }
 

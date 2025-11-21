@@ -1,11 +1,11 @@
 package com.github.debris.debrisclient.mixin.client.gui;
 
 import com.github.debris.debrisclient.inventory.autoprocess.IAutoProcessScreen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-@Mixin(HandledScreen.class)
+@Mixin(AbstractContainerScreen.class)
 public abstract class HandledScreenMixin implements IAutoProcessScreen {
     @Unique
     private boolean processFlag;

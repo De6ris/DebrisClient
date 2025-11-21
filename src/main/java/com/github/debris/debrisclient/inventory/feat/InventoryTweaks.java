@@ -6,9 +6,9 @@ import com.github.debris.debrisclient.inventory.section.SectionHandler;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.ItemUtil;
 import fi.dy.masa.malilib.util.GuiUtils;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -47,8 +47,8 @@ public class InventoryTweaks {
         Optional<Slot> optional = InventoryUtil.getSlotMouseOver();
         if (optional.isEmpty()) return false;
         Slot slot = optional.get();
-        if (!slot.hasStack()) return false;
-        ItemStack template = slot.getStack().copy();
+        if (!slot.hasItem()) return false;
+        ItemStack template = slot.getItem().copy();
         ContainerSection section = SectionHandler.getSection(slot);
         action.accept(section, template);
         return true;

@@ -10,7 +10,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,7 +52,7 @@ public class DCCommandMacroCommand {
 
     private static int stop(FabricClientCommandSource source) {
         CommandQueue.stop();
-        source.sendFeedback(Text.literal("已停止"));
+        source.sendFeedback(Component.literal("已停止"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -71,7 +71,7 @@ public class DCCommandMacroCommand {
         Path filePath = MACRO_DIR.resolve(file);
 
         if (!Files.exists(filePath)) {
-            source.sendFeedback(Text.literal("文件不存在"));
+            source.sendFeedback(Component.literal("文件不存在"));
             return 0;
         }
 
@@ -83,10 +83,10 @@ public class DCCommandMacroCommand {
                 CommandMacro macro = CommandMacro.load(jsonObject);
                 CommandQueue.run(macro);
             } else {
-                source.sendFeedback(Text.literal("文件不符合Json对象格式"));
+                source.sendFeedback(Component.literal("文件不符合Json对象格式"));
             }
         } catch (Exception e) {
-            source.sendFeedback(Text.literal("读取文件失败"));
+            source.sendFeedback(Component.literal("读取文件失败"));
             return 0;
         }
 

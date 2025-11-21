@@ -8,24 +8,24 @@ import com.github.debris.debrisclient.util.StringUtil;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.fabricmc.fabric.impl.event.lifecycle.LoadedChunksCache;
-import net.minecraft.advancement.AdvancementEntry;
-import net.minecraft.advancement.AdvancementProgress;
-import net.minecraft.advancement.PlacedAdvancement;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientAdvancementManager;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.BiomeAccess;
-import net.minecraft.world.chunk.WorldChunk;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.AdvancementNode;
+import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientAdvancements;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.levelgen.Heightmap;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class AdventuringTimeHelper {
-    private static final Identifier ADVANCEMENT_ID = Identifier.of("adventure/adventuring_time");
+    private static final ResourceLocation ADVANCEMENT_ID = ResourceLocation.parse("adventure/adventuring_time");
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdventuringTimeHelper.class);
 
@@ -52,7 +52,7 @@ public class AdventuringTimeHelper {
         return DCCommonConfig.AdventuringTimeHelper.getBooleanValue() && (ModReference.hasMod(ModReference.XaeroMiniMap) || ModReference.hasMod(ModReference.BetterPvP));
     }
 
-    public static void onChunkLoad(ClientWorld world, WorldChunk chunk) {
+    public static void onChunkLoad(ClientLevel world, LevelChunk chunk) {
         if (!isActive()) return;
         if (!progressAware()) return;
         if (!isOverworld(world)) return;
@@ -61,7 +61,7 @@ public class AdventuringTimeHelper {
         addToQueue(chunkPos);
     }
 
-    public static void onChunkUnload(ClientWorld world, WorldChunk chunk) {
+    public static void onChunkUnload(ClientLevel world, LevelChunk chunk) {
         CHUNK_QUEUE.remove(chunk.getPos().toLong());
     }
 
@@ -69,8 +69,8 @@ public class AdventuringTimeHelper {
         CHUNK_QUEUE.push(chunkPos.toLong());
     }
 
-    private static boolean isOverworld(World world) {
-        return world.getDimension().natural();
+    private static boolean isOverworld(Level world) {
+        return world.dimensionType().natural();
     }
 
     private static boolean newChunk(ChunkPos chunkPos) {
@@ -86,30 +86,30 @@ public class AdventuringTimeHelper {
         GLOWING_BIOMES.add(biome);
         String name = StringUtil.translateBiome(biome);
         XaeroMiniMapAccess.addDestination(blockPos, name);
-        ChatUtil.addLocalMessageNextTick(Text.literal(name));
+        ChatUtil.addLocalMessageNextTick(Component.literal(name));
     }
 
     private static boolean glowing(Biome biome) {
         return GLOWING_BIOMES.contains(biome);
     }
 
-    public static void onProgressUpdate(MinecraftClient client, Map<Identifier, AdvancementProgress> map) {
+    public static void onProgressUpdate(Minecraft client, Map<ResourceLocation, AdvancementProgress> map) {
         if (!isActive()) return;
-        Identifier id = ADVANCEMENT_ID;
+        ResourceLocation id = ADVANCEMENT_ID;
         if (!map.containsKey(id)) return;
         AdvancementProgress progress = map.get(id);
         readProgress(client, progress);
     }
 
-    public static void onWorldLoad(MinecraftClient client) {
+    public static void onWorldLoad(Minecraft client) {
         clear();
     }
 
-    public static void onConfigChange(MinecraftClient client) {
+    public static void onConfigChange(Minecraft client) {
         if (isActive()) {
             updateProgress(client);
-            ClientWorld world = client.world;
-            for (WorldChunk chunk : ((LoadedChunksCache) world).fabric_getLoadedChunks()) {
+            ClientLevel world = client.level;
+            for (LevelChunk chunk : ((LoadedChunksCache) world).fabric_getLoadedChunks()) {
                 onChunkLoad(world, chunk);
             }
         }
@@ -119,19 +119,19 @@ public class AdventuringTimeHelper {
         return !PENDING_BIOMES.isEmpty();
     }
 
-    private static void updateProgress(MinecraftClient client) {
-        ClientAdvancementManager manager = client.getNetworkHandler().getAdvancementHandler();
+    private static void updateProgress(Minecraft client) {
+        ClientAdvancements manager = client.getConnection().getAdvancements();
         manager.setListener(new ProgressCollector());
         manager.setListener(null);
     }
 
-    private static void readProgress(MinecraftClient client, AdvancementProgress progress) {
-        Registry<Biome> registry = client.world.getRegistryManager().getOrThrow(RegistryKeys.BIOME);
+    private static void readProgress(Minecraft client, AdvancementProgress progress) {
+        Registry<Biome> registry = client.level.registryAccess().lookupOrThrow(Registries.BIOME);
         Set<Biome> set = PENDING_BIOMES;
         set.clear();
-        for (String s : progress.getUnobtainedCriteria()) {
-            Identifier identifier = Identifier.of(s);
-            Biome biome = registry.get(identifier);
+        for (String s : progress.getRemainingCriteria()) {
+            ResourceLocation identifier = ResourceLocation.parse(s);
+            Biome biome = registry.getValue(identifier);
             if (biome == null) {
                 LOGGER.warn("no biome for key {}", s);
                 continue;
@@ -140,9 +140,9 @@ public class AdventuringTimeHelper {
         }
     }
 
-    public static void onClientTick(MinecraftClient client) {
+    public static void onClientTick(Minecraft client) {
         if (!isActive()) return;
-        ClientWorld world = client.world;
+        ClientLevel world = client.level;
         if (world == null) return;
         if (!isOverworld(world)) return;
         Deque<Long> queue = CHUNK_QUEUE;
@@ -155,18 +155,18 @@ public class AdventuringTimeHelper {
         }
     }
 
-    private static void process(World world, ChunkPos chunkPos) {
-        int startX = chunkPos.getStartX();
-        int startZ = chunkPos.getStartZ();
-        BlockPos.Mutable blockPos = new BlockPos.Mutable();
-        BiomeAccess biomeAccess = world.getBiomeAccess();
+    private static void process(Level world, ChunkPos chunkPos) {
+        int startX = chunkPos.getMinBlockX();
+        int startZ = chunkPos.getMinBlockZ();
+        BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos();
+        BiomeManager biomeAccess = world.getBiomeManager();
         for (int dx = 0; dx < 16; dx++) {
             for (int dz = 0; dz < 16; dz++) {
                 int x = startX + dx;
                 int z = startZ + dz;
-                int topY = world.getTopY(Heightmap.Type.WORLD_SURFACE, x, z);
+                int topY = world.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
                 blockPos.set(x, topY, z);
-                RegistryEntry<Biome> registryEntry = biomeAccess.getBiome(blockPos);
+                Holder<Biome> registryEntry = biomeAccess.getBiome(blockPos);
                 Biome biome = registryEntry.value();
                 if (!pending(biome)) continue;
                 if (glowing(biome)) continue;
@@ -181,41 +181,41 @@ public class AdventuringTimeHelper {
         GLOWING_BIOMES.clear();
     }
 
-    private static class ProgressCollector implements ClientAdvancementManager.Listener {
+    private static class ProgressCollector implements ClientAdvancements.Listener {
         @Override
-        public void setProgress(PlacedAdvancement advancement, AdvancementProgress progress) {
-            if (advancement.getAdvancementEntry().id().equals(ADVANCEMENT_ID)) {
-                readProgress(MinecraftClient.getInstance(), progress);
+        public void onUpdateAdvancementProgress(AdvancementNode advancement, AdvancementProgress progress) {
+            if (advancement.holder().id().equals(ADVANCEMENT_ID)) {
+                readProgress(Minecraft.getInstance(), progress);
             }
         }
 
         @Override
-        public void selectTab(@Nullable AdvancementEntry advancement) {
+        public void onSelectedTabChanged(@Nullable AdvancementHolder advancement) {
 
         }
 
         @Override
-        public void onRootAdded(PlacedAdvancement root) {
+        public void onAddAdvancementRoot(AdvancementNode root) {
 
         }
 
         @Override
-        public void onRootRemoved(PlacedAdvancement root) {
+        public void onRemoveAdvancementRoot(AdvancementNode root) {
 
         }
 
         @Override
-        public void onDependentAdded(PlacedAdvancement dependent) {
+        public void onAddAdvancementTask(AdvancementNode dependent) {
 
         }
 
         @Override
-        public void onDependentRemoved(PlacedAdvancement dependent) {
+        public void onRemoveAdvancementTask(AdvancementNode dependent) {
 
         }
 
         @Override
-        public void onClear() {
+        public void onAdvancementsCleared() {
 
         }
     }

@@ -3,18 +3,18 @@ package com.github.debris.debrisclient.feat.log;
 import com.github.debris.debrisclient.localization.GameLogText;
 import com.github.debris.debrisclient.util.ChatUtil;
 import com.github.debris.debrisclient.util.TextFactory;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 
 public class PortalLog extends AbstractGameLog {
-    public void onPortalCreated(World world, BlockPos lowerLeft) {
+    public void onPortalCreated(Level world, BlockPos lowerLeft) {
         ChatUtil.addLocalMessageNextTick(
-                Text.empty()
+                Component.empty()
                         .append(TextFactory.DEBUG)
-                        .append(ScreenTexts.SPACE)
-                        .append(GameLogText.PORTAL_CREATED.text(lowerLeft.toShortString(), world.getRegistryKey().getValue()))
+                        .append(CommonComponents.SPACE)
+                        .append(GameLogText.PORTAL_CREATED.text(lowerLeft.toShortString(), world.dimension().location()))
 
         );
     }

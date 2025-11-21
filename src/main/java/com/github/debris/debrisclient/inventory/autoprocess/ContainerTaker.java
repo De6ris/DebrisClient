@@ -5,7 +5,7 @@ import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import com.github.debris.debrisclient.localization.AutoProcessText;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import fi.dy.masa.malilib.util.InfoUtils;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.inventory.Slot;
 
 import java.util.List;
 

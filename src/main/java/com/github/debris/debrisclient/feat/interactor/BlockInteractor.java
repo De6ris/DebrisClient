@@ -8,9 +8,9 @@ import com.github.debris.debrisclient.util.BlockUtil;
 import com.github.debris.debrisclient.util.InteractionUtil;
 import com.github.debris.debrisclient.util.Predicates;
 import fi.dy.masa.malilib.util.InfoUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 
 public class BlockInteractor extends ObjectInteractor<BlockPos> {
     public static final BlockInteractor INSTANCE = new BlockInteractor();
@@ -24,18 +24,18 @@ public class BlockInteractor extends ObjectInteractor<BlockPos> {
     }
 
     @Override
-    protected boolean withinReach(MinecraftClient client, BlockPos object) {
+    protected boolean withinReach(Minecraft client, BlockPos object) {
         return InteractionUtil.withinReach(client, object);
     }
 
     @SuppressWarnings("DataFlowIssue")
     @Override
-    protected InteractResult interact(MinecraftClient client, BlockPos object) {
-        boolean isContainer = BlockUtil.isContainer(client.world, object);
+    protected InteractResult interact(Minecraft client, BlockPos object) {
+        boolean isContainer = BlockUtil.isContainer(client.level, object);
         if (isContainer && !Predicates.inGameNoGui(client)) return InteractResult.FAIL;
         InteractionUtil.useBlock(client, object);
         if (ModReference.hasMod(ModReference.MagicLibMCApi)) {
-            RenderQueue.add(RendererFactory.text(Text.literal("已交互"), object), 100);
+            RenderQueue.add(RendererFactory.text(Component.literal("已交互"), object), 100);
         }
         return isContainer ? InteractResult.WAITING : InteractResult.SUCCESS;
     }

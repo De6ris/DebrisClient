@@ -1,28 +1,28 @@
 package com.github.debris.debrisclient.util;
 
 import com.github.debris.debrisclient.feat.FutureTaskQueue;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-import net.minecraft.util.StringHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 
 public class ChatUtil {
     @SuppressWarnings("ConstantConditions")
-    public static void sendChat(MinecraftClient client, String content) {
-        content = StringHelper.truncateChat(StringUtils.normalizeSpace(content.trim()));
+    public static void sendChat(Minecraft client, String content) {
+        content = StringUtil.trimChatMessage(StringUtils.normalizeSpace(content.trim()));
         if (content.isEmpty()) return;
         if (content.startsWith("/")) {
-            client.player.networkHandler.sendChatCommand(content.substring(1));
+            client.player.connection.sendCommand(content.substring(1));
         } else {
-            client.player.networkHandler.sendChatMessage(content);
+            client.player.connection.sendChat(content);
         }
     }
 
-    public static void addLocalMessage(Text message) {
-        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
+    public static void addLocalMessage(Component message) {
+        Minecraft.getInstance().gui.getChat().addMessage(message);
     }
 
-    public static void addLocalMessageNextTick(Text message) {
+    public static void addLocalMessageNextTick(Component message) {
         FutureTaskQueue.addNextTick(() -> addLocalMessage(message));
     }
 }

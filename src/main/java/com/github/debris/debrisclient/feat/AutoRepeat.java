@@ -2,8 +2,8 @@ package com.github.debris.debrisclient.feat;
 
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import com.github.debris.debrisclient.util.ChatUtil;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,7 +12,7 @@ public class AutoRepeat {
     private static List<BlackListPattern> PATTERNS = compile(DCCommonConfig.AutoRepeatBlackList.getStrings());
     private static final Map<String, List<Long>> TIME_STAMP_MAP = new ConcurrentHashMap<>();
 
-    public static void handleAutoRepeat(MinecraftClient client, Text message) {
+    public static void handleAutoRepeat(Minecraft client, Component message) {
         List<String> playerNames = DCCommonConfig.AutoRepeatPlayerList.getStrings();
         if (playerNames.isEmpty()) return;
 
@@ -37,7 +37,7 @@ public class AutoRepeat {
                 .ifPresent(x -> sendChatCheckDDos(client, x));
     }
 
-    public static void onClientTick(MinecraftClient client) {
+    public static void onClientTick(Minecraft client) {
         if (TIME_STAMP_MAP.isEmpty()) return;
         long currentTime = System.currentTimeMillis();
         TIME_STAMP_MAP.values().forEach(x -> x.removeIf(y -> currentTime - y > 1000));
@@ -51,7 +51,7 @@ public class AutoRepeat {
         return Optional.of(original.substring(index + senderNameAngled.length()));
     }
 
-    private static void sendChatCheckDDos(MinecraftClient client, String message) {
+    private static void sendChatCheckDDos(Minecraft client, String message) {
         boolean canSend = false;
         int threshold = DCCommonConfig.AutoRepeatAntiDDos.getIntegerValue();
         if (threshold == Integer.MAX_VALUE) {

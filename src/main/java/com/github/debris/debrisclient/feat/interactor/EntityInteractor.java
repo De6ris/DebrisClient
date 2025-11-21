@@ -7,10 +7,10 @@ import com.github.debris.debrisclient.render.RendererFactory;
 import com.github.debris.debrisclient.util.InteractionUtil;
 import com.github.debris.debrisclient.util.Predicates;
 import fi.dy.masa.malilib.util.InfoUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.text.Text;
-import net.minecraft.village.Merchant;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.trading.Merchant;
 
 public class EntityInteractor extends ObjectInteractor<Entity> {
     public static final EntityInteractor INSTANCE = new EntityInteractor();
@@ -29,17 +29,17 @@ public class EntityInteractor extends ObjectInteractor<Entity> {
     }
 
     @Override
-    protected boolean withinReach(MinecraftClient client, Entity object) {
+    protected boolean withinReach(Minecraft client, Entity object) {
         return InteractionUtil.withinReach(client, object);
     }
 
     @Override
-    protected InteractResult interact(MinecraftClient client, Entity entity) {
+    protected InteractResult interact(Minecraft client, Entity entity) {
         boolean isContainer = entity instanceof Merchant;
         if (isContainer && !Predicates.inGameNoGui(client)) return InteractResult.FAIL;
         InteractionUtil.useEntity(client, entity);
         if (ModReference.hasMod(ModReference.MagicLibMCApi)) {
-            RenderQueue.add(RendererFactory.text(Text.literal("已交互"), entity), 100);
+            RenderQueue.add(RendererFactory.text(Component.literal("已交互"), entity), 100);
         }
         return isContainer ? InteractResult.WAITING : InteractResult.SUCCESS;
     }

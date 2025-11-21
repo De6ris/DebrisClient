@@ -6,9 +6,9 @@ import fi.dy.masa.tweakeroo.config.Configs;
 import fi.dy.masa.tweakeroo.config.FeatureToggle;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -16,13 +16,13 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Restriction(require = @Condition(ModReference.Tweakeroo))
 @Mixin(value = GameRenderer.class, priority = 1006)
 public class GameRendererMixin {
-    @Redirect(method = "updateCrosshairTarget",
+    @Redirect(method = "pick(F)V",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/MinecraftClient;getCameraEntity()Lnet/minecraft/entity/Entity;"
+                    target = "Lnet/minecraft/client/Minecraft;getCameraEntity()Lnet/minecraft/world/entity/Entity;"
             )
             , order = 10001
     )
-    private Entity overrideCameraEntityForRayTrace(MinecraftClient mc) {
+    private Entity overrideCameraEntityForRayTrace(Minecraft mc) {
         // Return the real player for the hit target ray tracing if the
         // player inputs option is enabled in Free Camera mode.
         // Normally in Free Camera mode the Tweakeroo CameraEntity is set as the

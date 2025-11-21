@@ -3,11 +3,11 @@ package com.github.debris.debrisclient.util;
 import com.google.common.base.CaseFormat;
 import com.mojang.logging.LogUtils;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.item.Item;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 import org.slf4j.Logger;
 
 import java.util.Collection;
@@ -29,7 +29,7 @@ public class StringUtil {
     }
 
     public static String translateItem(Item item) {
-        return StringUtils.translate(item.getTranslationKey());
+        return StringUtils.translate(item.getDescriptionId());
     }
 
     public static String translateItemCollection(Collection<Item> items) {
@@ -37,7 +37,7 @@ public class StringUtil {
     }
 
     public static String translateBiome(Biome biome) {
-        Identifier id = MinecraftClient.getInstance().world.getRegistryManager().getOrThrow(RegistryKeys.BIOME).getId(biome);
+        ResourceLocation id = Minecraft.getInstance().level.registryAccess().lookupOrThrow(Registries.BIOME).getKey(biome);
         String translationKey = "biome." + id.toString().replace(":", ".");
         String biomeName = StringUtils.translate(translationKey);
         if (biomeName.equals(translationKey)) {

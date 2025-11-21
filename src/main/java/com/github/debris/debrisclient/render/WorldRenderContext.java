@@ -1,20 +1,20 @@
 package com.github.debris.debrisclient.render;
 
-import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.render.BufferBuilderStorage;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.Frustum;
-import net.minecraft.util.profiler.Profiler;
+import com.mojang.blaze3d.pipeline.RenderTarget;
+import net.minecraft.client.Camera;
+import net.minecraft.client.renderer.RenderBuffers;
+import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.util.profiling.ProfilerFiller;
 import org.joml.Matrix4f;
 
 public record WorldRenderContext(
-        Framebuffer fb,
+        RenderTarget fb,
         Matrix4f posMatrix,
         Matrix4f projMatrix,
         Frustum frustum,
         Camera camera,
-        BufferBuilderStorage buffers,
-        Profiler profiler,
+        RenderBuffers buffers,
+        ProfilerFiller profiler,
         float tickDelta
 ) implements RenderContext {
     @Override

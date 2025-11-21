@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.render;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class RenderQueue {
         ENTRIES.add(new RenderEntry(renderer, TICK_COUNTER + lifespan));
     }
 
-    public static void onClientTick(MinecraftClient client) {
+    public static void onClientTick(Minecraft client) {
         ENTRIES.removeIf(entry -> entry.removeTick == TICK_COUNTER);
         TICK_COUNTER++;
     }

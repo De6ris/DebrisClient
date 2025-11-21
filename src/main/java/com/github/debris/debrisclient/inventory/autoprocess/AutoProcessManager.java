@@ -8,9 +8,9 @@ import com.github.debris.debrisclient.inventory.section.EnumSection;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.Predicates;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import java.util.List;
 
@@ -22,16 +22,16 @@ public class AutoProcessManager {
             new SyncContainer.Filler()
     );
 
-    public static void onGuiContainerOpen(HandledScreen<?> screen) {
+    public static void onGuiContainerOpen(AbstractContainerScreen<?> screen) {
         ((IAutoProcessScreen) screen).dc$setShouldProcess(true);
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static void onContainerUpdate(ScreenHandler container) {
+    public static void onContainerUpdate(AbstractContainerMenu container) {
         if (!hasActiveProcessor()) return;
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
         if (Predicates.notInGuiContainer(client)) return;
-        HandledScreen<?> screen = InventoryUtil.getGuiContainer();
+        AbstractContainerScreen<?> screen = InventoryUtil.getGuiContainer();
         if (InventoryUtil.getContainer(screen) != container) return;
 
         if (!((IAutoProcessScreen) screen).dc$shouldProcess()) return;
@@ -50,7 +50,7 @@ public class AutoProcessManager {
         }
 
         if (closeGui) {
-            screen.close();
+            screen.onClose();
         }
     }
 

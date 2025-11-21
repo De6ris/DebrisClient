@@ -4,7 +4,7 @@ import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -29,10 +29,18 @@ public class GuiAddBlockMixin {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onInit(BlockState selectedBlock, Supplier<GuiBase> previousScreenCallback, CallbackInfo ci) {
-        this.mapColor = new Color(this.selectBlock.getMapColor(null, null).color);
+        this.mapColor = new Color(this.selectBlock.getMapColor(null, null).col);
     }
 
-    @ModifyArg(method = "init", at = @At(value = "INVOKE", target = "Lpro/mikey/fabric/xray/screens/forge/RatioSliderWidget;<init>(IIIILnet/minecraft/text/Text;D)V", ordinal = 0), index = 5)
+    @ModifyArg(
+            method = "init",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lpro/mikey/fabric/xray/screens/forge/RatioSliderWidget;<init>(IIIILnet/minecraft/network/chat/Component;D)V",
+                    ordinal = 0
+            ),
+            index = 5
+    )
     private double autoColorR(double value) {
         if (DCCommonConfig.XRayAutoColor.getBooleanValue()) {
             return this.mapColor.getRed() / 255.0D;
@@ -40,7 +48,15 @@ public class GuiAddBlockMixin {
         return value;
     }
 
-    @ModifyArg(method = "init", at = @At(value = "INVOKE", target = "Lpro/mikey/fabric/xray/screens/forge/RatioSliderWidget;<init>(IIIILnet/minecraft/text/Text;D)V", ordinal = 1), index = 5)
+    @ModifyArg(
+            method = "init",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lpro/mikey/fabric/xray/screens/forge/RatioSliderWidget;<init>(IIIILnet/minecraft/network/chat/Component;D)V",
+                    ordinal = 1
+            ),
+            index = 5
+    )
     private double autoColorG(double value) {
         if (DCCommonConfig.XRayAutoColor.getBooleanValue()) {
             return this.mapColor.getGreen() / 255.0D;
@@ -48,7 +64,15 @@ public class GuiAddBlockMixin {
         return value;
     }
 
-    @ModifyArg(method = "init", at = @At(value = "INVOKE", target = "Lpro/mikey/fabric/xray/screens/forge/RatioSliderWidget;<init>(IIIILnet/minecraft/text/Text;D)V", ordinal = 2), index = 5)
+    @ModifyArg(
+            method = "init",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lpro/mikey/fabric/xray/screens/forge/RatioSliderWidget;<init>(IIIILnet/minecraft/network/chat/Component;D)V",
+                    ordinal = 2
+            ),
+            index = 5
+    )
     private double autoColorB(double value) {
         if (DCCommonConfig.XRayAutoColor.getBooleanValue()) {
             return this.mapColor.getBlue() / 255.0D;

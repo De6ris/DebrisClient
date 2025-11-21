@@ -6,14 +6,14 @@ import com.github.debris.debrisclient.unsafe.litematica.LitematicaAccessor;
 import com.github.debris.debrisclient.util.BlockUtil;
 import com.github.debris.debrisclient.util.Predicates;
 import fi.dy.masa.malilib.util.InfoUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.World;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,11 +23,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class InteractionFactory {
-    public static boolean addBlockTask(MinecraftClient client, BlockPredicate predicate, boolean clearIfRunning) {
+    public static boolean addBlockTask(Minecraft client, BlockPredicate predicate, boolean clearIfRunning) {
         return addBlockTask(client, predicate.stateTester, clearIfRunning);
     }
 
-    public static boolean addBlockTask(MinecraftClient client, BiPredicate<World, BlockPos> predicate, boolean clearIfRunning) {
+    public static boolean addBlockTask(Minecraft client, BiPredicate<Level, BlockPos> predicate, boolean clearIfRunning) {
         if (!ModReference.hasMod(ModReference.Litematica)) return false;
         if (Predicates.notInGame(client)) return false;
         BlockInteractor instance = BlockInteractor.INSTANCE;
@@ -39,11 +39,11 @@ public class InteractionFactory {
         return true;
     }
 
-    private static void addBlockTaskInternal(MinecraftClient client, BlockInteractor instance, BiPredicate<World, BlockPos> predicate) {
-        ClientWorld world = client.world;
+    private static void addBlockTaskInternal(Minecraft client, BlockInteractor instance, BiPredicate<Level, BlockPos> predicate) {
+        ClientLevel world = client.level;
         Collection<BlockPos> targets = new HashSet<>();
         LitematicaAccessor.streamBlockPos().forEach(pos -> {
-            if (predicate.test(world, pos)) targets.add(pos.toImmutable());// otherwise the same object
+            if (predicate.test(world, pos)) targets.add(pos.immutable());// otherwise the same object
         });
         if (targets.isEmpty()) {
             InfoUtils.sendVanillaMessage(InteractionText.NO_MATCHING_BLOCKS.text());
@@ -53,11 +53,11 @@ public class InteractionFactory {
         }
     }
 
-    public static boolean addEntityTask(MinecraftClient client, boolean clearIfRunning) {
+    public static boolean addEntityTask(Minecraft client, boolean clearIfRunning) {
         return addEntityTask(client, entity -> true, clearIfRunning);
     }
 
-    public static boolean addEntityTask(MinecraftClient client, Predicate<Entity> predicate, boolean clearIfRunning) {
+    public static boolean addEntityTask(Minecraft client, Predicate<Entity> predicate, boolean clearIfRunning) {
         if (!ModReference.hasMod(ModReference.Litematica)) return false;
         if (Predicates.notInGame(client)) return false;
         EntityInteractor instance = EntityInteractor.INSTANCE;
@@ -70,11 +70,11 @@ public class InteractionFactory {
     }
 
     @SuppressWarnings("DataFlowIssue")
-    private static void addEntityTaskInternal(MinecraftClient client, EntityInteractor instance, Predicate<Entity> predicate) {
-        ClientWorld world = client.world;
+    private static void addEntityTaskInternal(Minecraft client, EntityInteractor instance, Predicate<Entity> predicate) {
+        ClientLevel world = client.level;
         Set<Entity> targets = LitematicaAccessor.streamBlockBox()
-                .map(Box::from)
-                .flatMap(x -> world.getOtherEntities(client.player, x).stream())
+                .map(AABB::of)
+                .flatMap(x -> world.getEntities(client.player, x).stream())
                 .collect(Collectors.toSet());
         if (targets.isEmpty()) {
             InfoUtils.sendVanillaMessage(InteractionText.NO_MATCHING_ENTITIES.text());
@@ -84,7 +84,7 @@ public class InteractionFactory {
         }
     }
 
-    public enum BlockPredicate implements StringIdentifiable {
+    public enum BlockPredicate implements StringRepresentable {
         CONTAINER(BlockUtil::isContainer),
         NON_CONTAINER((world, pos) -> {
             BlockState state = world.getBlockState(pos);
@@ -95,14 +95,14 @@ public class InteractionFactory {
         }),
         ;
 
-        private final BiPredicate<World, BlockPos> stateTester;
+        private final BiPredicate<Level, BlockPos> stateTester;
 
-        BlockPredicate(BiPredicate<World, BlockPos> stateTester) {
+        BlockPredicate(BiPredicate<Level, BlockPos> stateTester) {
             this.stateTester = stateTester;
         }
 
         @Override
-        public String asString() {
+        public String getSerializedName() {
             return this.name().toLowerCase();
         }
     }

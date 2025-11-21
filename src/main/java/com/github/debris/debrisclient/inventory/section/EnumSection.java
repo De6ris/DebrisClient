@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.inventory.section;
 
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.inventory.Slot;
 
 import java.util.EnumSet;
 

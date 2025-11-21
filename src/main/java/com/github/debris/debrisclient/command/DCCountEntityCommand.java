@@ -9,11 +9,11 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.xpple.clientarguments.arguments.CEntitySelector;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.text.*;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 
 import java.util.Comparator;
 import java.util.List;
@@ -37,7 +37,7 @@ public class DCCountEntityCommand {
     }
 
     private static int execute(FabricClientCommandSource source) {
-        return execute(source, Streams.stream(source.getWorld().getEntities()));
+        return execute(source, Streams.stream(source.getWorld().entitiesForRendering()));
     }
 
     private static int execute(FabricClientCommandSource source, CEntitySelector entitySelector) throws CommandSyntaxException {
@@ -51,16 +51,16 @@ public class DCCountEntityCommand {
                         Map.Entry::getKey,
                         entry -> distributeByPosition(entry.getValue())
                 ));
-        source.sendFeedback(Text.literal(String.format("已找到%d种实体, 共%d个", map.size(), map.values().stream().mapToInt(Distribution::getTotal).sum())));
+        source.sendFeedback(Component.literal(String.format("已找到%d种实体, 共%d个", map.size(), map.values().stream().mapToInt(Distribution::getTotal).sum())));
         map.forEach((entityType, distribution) -> source.sendFeedback(getFeedback(source, entityType, distribution)));
         return Command.SINGLE_SUCCESS;
     }
 
-    private static MutableText getFeedback(FabricClientCommandSource source, EntityType<?> entityType, Distribution distribution) {
-        MutableText feedback = TextFactory.listEntry(
-                Text.empty()
-                        .append(entityType.getName())
-                        .styled(style -> style.withColor(ColorUtil.getColor(entityType)))
+    private static MutableComponent getFeedback(FabricClientCommandSource source, EntityType<?> entityType, Distribution distribution) {
+        MutableComponent feedback = TextFactory.listEntry(
+                Component.empty()
+                        .append(entityType.getDescription())
+                        .withStyle(style -> style.withColor(ColorUtil.getColor(entityType)))
                         .append(String.format("(%d)", distribution.getTotal()))
         );
         int originalSize = distribution.size();
@@ -79,18 +79,18 @@ public class DCCountEntityCommand {
             BlockPos blockPos = entry.pos;
             int count = entry.count;
 
-            feedback.append(Text.literal(String.valueOf(count)).styled(
-                    style -> style.withColor(Formatting.AQUA)
-                            .withHoverEvent(new HoverEvent.ShowText(Texts.bracketed(Text.translatable
+            feedback.append(Component.literal(String.valueOf(count)).withStyle(
+                    style -> style.withColor(ChatFormatting.AQUA)
+                            .withHoverEvent(new HoverEvent.ShowText(ComponentUtils.wrapInSquareBrackets(Component.translatable
                                     ("chat.coordinates", blockPos.getX(), blockPos.getY(), blockPos.getZ()))))
                             .withClickEvent(new ClickEvent.SuggestCommand(TeleportUtil.suggestCommand(source.getClient(), blockPos)))
             ));
 
             if (i == printSize - 1) {
                 if (reduced) {
-                    feedback.append(Text.literal("...").styled(
-                            style -> style.withColor(Formatting.LIGHT_PURPLE)
-                                    .withHoverEvent(new HoverEvent.ShowText(Text.literal("省略了" + (originalSize - printSize) + "处结果")))
+                    feedback.append(Component.literal("...").withStyle(
+                            style -> style.withColor(ChatFormatting.LIGHT_PURPLE)
+                                    .withHoverEvent(new HoverEvent.ShowText(Component.literal("省略了" + (originalSize - printSize) + "处结果")))
                     ));
                 } else {
                     feedback.append(".");
@@ -104,7 +104,7 @@ public class DCCountEntityCommand {
     }
 
     private static Distribution distributeByPosition(List<? extends Entity> entities) {
-        Map<BlockPos, Long> distribution = entities.stream().collect(Collectors.groupingBy(Entity::getBlockPos, Collectors.counting()));
+        Map<BlockPos, Long> distribution = entities.stream().collect(Collectors.groupingBy(Entity::blockPosition, Collectors.counting()));
         Comparator<DistributionEntry> comparator = Comparator.comparingInt(DistributionEntry::count);
         List<DistributionEntry> list = distribution.entrySet().stream()
                 .map(x -> new DistributionEntry(x.getKey(), x.getValue())).sorted(comparator.reversed()).toList();

@@ -3,7 +3,7 @@ package com.github.debris.debrisclient.mixin.compat.malilib;
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import com.github.debris.debrisclient.util.InputUtil;
 import fi.dy.masa.malilib.gui.GuiScrollBar;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,7 +23,7 @@ public abstract class GuiScrollBarMixin {
             at = @At(value = "INVOKE", target = "Lfi/dy/masa/malilib/gui/GuiScrollBar;handleDrag(II)V", remap = false),
             remap = true
     )
-    private void enhance(DrawContext drawContext, int mouseX, int mouseY, float partialTicks, int xPosition, int yPosition, int width, int height, int totalHeight, CallbackInfo ci) {
+    private void enhance(GuiGraphics drawContext, int mouseX, int mouseY, float partialTicks, int xPosition, int yPosition, int width, int height, int totalHeight, CallbackInfo ci) {
         if (DCCommonConfig.ScrollerEnhance.getBooleanValue()) {// TODO unmatch when list too large
             boolean inRange = mouseX > xPosition && mouseX < xPosition + width && mouseY > yPosition && mouseY < yPosition + height;
             if (inRange && !this.dragging && InputUtil.isLeftClicking()) {

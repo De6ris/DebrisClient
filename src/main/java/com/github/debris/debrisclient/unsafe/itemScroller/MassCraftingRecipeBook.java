@@ -5,18 +5,18 @@ import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.ItemUtil;
 import com.mojang.logging.LogUtils;
 import fi.dy.masa.itemscroller.recipes.RecipePattern;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.recipebook.RecipeBookWidget;
-import net.minecraft.client.gui.screen.recipebook.RecipeResultCollection;
-import net.minecraft.client.recipebook.ClientRecipeBook;
-import net.minecraft.client.recipebook.RecipeBookType;
-import net.minecraft.recipe.NetworkRecipeId;
-import net.minecraft.recipe.RecipeDisplayEntry;
-import net.minecraft.recipe.RecipeFinder;
-import net.minecraft.recipe.book.RecipeBookCategory;
-import net.minecraft.recipe.display.SlotDisplayContexts;
-import net.minecraft.screen.AbstractCraftingScreenHandler;
-import net.minecraft.util.context.ContextParameterMap;
+import net.minecraft.client.ClientRecipeBook;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
+import net.minecraft.client.gui.screens.recipebook.RecipeCollection;
+import net.minecraft.client.gui.screens.recipebook.SearchRecipeBookCategory;
+import net.minecraft.util.context.ContextMap;
+import net.minecraft.world.entity.player.StackedItemContents;
+import net.minecraft.world.inventory.AbstractCraftingMenu;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
+import net.minecraft.world.item.crafting.display.RecipeDisplayEntry;
+import net.minecraft.world.item.crafting.display.RecipeDisplayId;
+import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import org.slf4j.Logger;
 
 import java.util.Optional;
@@ -24,28 +24,28 @@ import java.util.Optional;
 public class MassCraftingRecipeBook extends AbstractMassCrafting {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final ContextParameterMap recipeDisplayContext;
+    private final ContextMap recipeDisplayContext;
     private final ClientRecipeBook recipeBook;
-    private final AbstractCraftingScreenHandler craftingContainer;
-    private final RecipeBookWidget<?> recipeBookWidget;
+    private final AbstractCraftingMenu craftingContainer;
+    private final RecipeBookComponent<?> recipeBookWidget;
 
     @SuppressWarnings("ConstantConditions")
     public MassCraftingRecipeBook() {
         super();
-        MinecraftClient client = MinecraftClient.getInstance();
-        this.recipeDisplayContext = SlotDisplayContexts.createParameters(client.world);
+        Minecraft client = Minecraft.getInstance();
+        this.recipeDisplayContext = SlotDisplayContext.fromLevel(client.level);
         this.recipeBook = client.player.getRecipeBook();
-        this.craftingContainer = ((AbstractCraftingScreenHandler) InventoryUtil.getContainer(this.currentScreen));
+        this.craftingContainer = ((AbstractCraftingMenu) InventoryUtil.getContainer(this.currentScreen));
         this.recipeBookWidget = AccessorUtil.getRecipeBookWidget(this.currentScreen);
     }
 
     @Override
     public void run() {
-        Optional<NetworkRecipeId> optional = findVanillaRecipe(this.selectedRecipe);
+        Optional<RecipeDisplayId> optional = findVanillaRecipe(this.selectedRecipe);
 
         if (optional.isEmpty()) return;
 
-        NetworkRecipeId networkRecipeId = optional.get();
+        RecipeDisplayId networkRecipeId = optional.get();
 
         if (!checkResultSlot()) {// if no result, click once
             InventoryUtil.clickRecipe(networkRecipeId, true);// just send packet, slot moving is done by the server
@@ -59,37 +59,37 @@ public class MassCraftingRecipeBook extends AbstractMassCrafting {
 
     }
 
-    private Optional<NetworkRecipeId> findVanillaRecipe(RecipePattern recipe) {
-        if (this.recipeBookWidget.isOpen()) {
+    private Optional<RecipeDisplayId> findVanillaRecipe(RecipePattern recipe) {
+        if (this.recipeBookWidget.isVisible()) {
             return findVanillaRecipeByBook(recipe);
         }
         return findVanillaRecipeManual(recipe);
     }
 
-    private Optional<NetworkRecipeId> findVanillaRecipeByBook(RecipePattern recipe) {
-        return this.recipeBook.getResultsForCategory(RecipeBookType.CRAFTING)
+    private Optional<RecipeDisplayId> findVanillaRecipeByBook(RecipePattern recipe) {
+        return this.recipeBook.getCollection(SearchRecipeBookCategory.CRAFTING)
                 .stream()
-                .flatMap(x -> x.filter(RecipeResultCollection.RecipeFilterMode.CRAFTABLE).stream())
-                .filter(x -> x.getStacks(recipeDisplayContext).stream().anyMatch(ItemUtil.predicateID(recipe.getResult())))
+                .flatMap(x -> x.getSelectedRecipes(RecipeCollection.CraftableStatus.CRAFTABLE).stream())
+                .filter(x -> x.resultItems(recipeDisplayContext).stream().anyMatch(ItemUtil.predicateID(recipe.getResult())))
                 .findFirst()
                 .map(RecipeDisplayEntry::id);
     }
 
-    private Optional<NetworkRecipeId> findVanillaRecipeManual(RecipePattern recipe) {
-        RecipeFinder recipeFinder = new RecipeFinder();
-        InventoryUtil.getPlayerInventory().populateRecipeFinder(recipeFinder);
-        this.craftingContainer.populateRecipeFinder(recipeFinder);
+    private Optional<RecipeDisplayId> findVanillaRecipeManual(RecipePattern recipe) {
+        StackedItemContents recipeFinder = new StackedItemContents();
+        InventoryUtil.getPlayerInventory().fillStackedContents(recipeFinder);
+        this.craftingContainer.fillCraftSlotsStackedContents(recipeFinder);
         return AccessorUtil.getRecipes(this.recipeBook)
                 .values()
                 .stream()
                 .filter(x -> isCraftingCategory(x.category()))
-                .filter(x -> x.getStacks(recipeDisplayContext).stream().anyMatch(ItemUtil.predicateID(recipe.getResult())))
-                .filter(x -> x.isCraftable(recipeFinder))
+                .filter(x -> x.resultItems(recipeDisplayContext).stream().anyMatch(ItemUtil.predicateID(recipe.getResult())))
+                .filter(x -> x.canCraft(recipeFinder))
                 .findFirst()
                 .map(RecipeDisplayEntry::id);
     }
 
     private static boolean isCraftingCategory(RecipeBookCategory category) {
-        return RecipeBookType.CRAFTING.getCategories().contains(category);
+        return SearchRecipeBookCategory.CRAFTING.includedCategories().contains(category);
     }
 }

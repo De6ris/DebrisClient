@@ -1,7 +1,7 @@
 package com.github.debris.debrisclient.feat.interactor;
 
 import com.github.debris.debrisclient.config.DCCommonConfig;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -49,11 +49,11 @@ public abstract class ObjectInteractor<T> {
         return false;
     }
 
-    protected abstract boolean withinReach(MinecraftClient client, T object);
+    protected abstract boolean withinReach(Minecraft client, T object);
 
-    protected abstract InteractResult interact(MinecraftClient client, T object);
+    protected abstract InteractResult interact(Minecraft client, T object);
 
-    public void onClientTick(MinecraftClient client) {
+    public void onClientTick(Minecraft client) {
         if (ticksToWait > 0) {
             ticksToWait -= 1;
             return;

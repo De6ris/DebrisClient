@@ -1,14 +1,14 @@
 package com.github.debris.debrisclient.mixin.client;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(MinecraftClient.class)
+@Mixin(Minecraft.class)
 public interface IMixinMinecraftClient {
-    @Invoker("doItemUse")
+    @Invoker("startUseItem")
     void invokeDoItemUse();
 
-    @Invoker("doAttack")
+    @Invoker("startAttack")
     boolean invokeDoAttack();
 }

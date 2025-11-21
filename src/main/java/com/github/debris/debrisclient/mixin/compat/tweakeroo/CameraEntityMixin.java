@@ -9,10 +9,10 @@ import com.llamalad7.mixinextras.sugar.Local;
 import fi.dy.masa.tweakeroo.util.CameraEntity;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -20,31 +20,31 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(value = CameraEntity.class, remap = false)
 public class CameraEntityMixin {
     @ModifyReturnValue(method = "createCameraEntity", at = @At("RETURN"), remap = false)
-    private static CameraEntity retroFreeCam(CameraEntity camera, @Local(argsOnly = true) MinecraftClient client) {
+    private static CameraEntity retroFreeCam(CameraEntity camera, @Local(argsOnly = true) Minecraft client) {
         if (DCCommonConfig.RetroFreeCam.getBooleanValue()) {
             Entity view = client.getCameraEntity();
             if (view == null) return camera;
-            float yaw = view.getYaw();
-            float pitch = view.getPitch();
+            float yaw = view.getYRot();
+            float pitch = view.getXRot();
 
-            camera.refreshPositionAndAngles(view.getX(), view.getY(), view.getZ(), yaw, pitch);
+            camera.snapTo(view.getX(), view.getY(), view.getZ(), yaw, pitch);
 
-            camera.setYaw(yaw % 360.0F);
-            camera.setPitch(pitch % 360.0F);
+            camera.setYRot(yaw % 360.0F);
+            camera.setXRot(pitch % 360.0F);
         }
         return camera;
     }
 
     @WrapOperation(method = "createCameraEntity",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/network/ClientPlayerEntity;getEntityPos()Lnet/minecraft/util/math/Vec3d;",
+                    target = "Lnet/minecraft/client/player/LocalPlayer;position()Lnet/minecraft/world/phys/Vec3;",
                     remap = true),
             remap = false)
-    private static Vec3d spectatorFix(ClientPlayerEntity instance, Operation<Vec3d> original) {
+    private static Vec3 spectatorFix(LocalPlayer instance, Operation<Vec3> original) {
         if (DCCommonConfig.FreeCamSpectatorFix.getBooleanValue()) {
-            Entity cameraEntity = MinecraftClient.getInstance().getCameraEntity();
+            Entity cameraEntity = Minecraft.getInstance().getCameraEntity();
             if (cameraEntity != null) {
-                return cameraEntity.getEntityPos();
+                return cameraEntity.position();
             }
         }
         return original.call(instance);
@@ -52,14 +52,14 @@ public class CameraEntityMixin {
 
     @WrapOperation(method = "createCameraEntity",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/network/ClientPlayerEntity;getYaw()F",
+                    target = "Lnet/minecraft/client/player/LocalPlayer;getYRot()F",
                     remap = true),
             remap = false)
-    private static float spectatorFix1(ClientPlayerEntity instance, Operation<Float> original) {
+    private static float spectatorFix1(LocalPlayer instance, Operation<Float> original) {
         if (DCCommonConfig.FreeCamSpectatorFix.getBooleanValue()) {
-            Entity cameraEntity = MinecraftClient.getInstance().getCameraEntity();
+            Entity cameraEntity = Minecraft.getInstance().getCameraEntity();
             if (cameraEntity != null) {
-                return cameraEntity.getYaw();
+                return cameraEntity.getYRot();
             }
         }
         return original.call(instance);
@@ -67,14 +67,14 @@ public class CameraEntityMixin {
 
     @WrapOperation(method = "createCameraEntity",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/network/ClientPlayerEntity;getPitch()F",
+                    target = "Lnet/minecraft/client/player/LocalPlayer;getXRot()F",
                     remap = true),
             remap = false)
-    private static float spectatorFix2(ClientPlayerEntity instance, Operation<Float> original) {
+    private static float spectatorFix2(LocalPlayer instance, Operation<Float> original) {
         if (DCCommonConfig.FreeCamSpectatorFix.getBooleanValue()) {
-            Entity cameraEntity = MinecraftClient.getInstance().getCameraEntity();
+            Entity cameraEntity = Minecraft.getInstance().getCameraEntity();
             if (cameraEntity != null) {
-                return cameraEntity.getPitch();
+                return cameraEntity.getXRot();
             }
         }
         return original.call(instance);

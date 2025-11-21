@@ -23,6 +23,7 @@
     "client.gui.InGameOverlayRendererMixin",
     "client.gui.ScreenHandlerMixin",
     "client.gui.ScreenMixin",
+    "client.input.IClientInputMixin",
     "client.input.KeyboardInputMixin",
     "client.network.ClientAdvancementManagerMixin",
     "client.network.ClientPlayerEntityMixin",

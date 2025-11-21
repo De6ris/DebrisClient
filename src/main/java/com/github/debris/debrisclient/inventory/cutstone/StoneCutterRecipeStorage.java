@@ -3,11 +3,11 @@ package com.github.debris.debrisclient.inventory.cutstone;
 import com.github.debris.debrisclient.DebrisClient;
 import com.mojang.logging.LogUtils;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtSizeTracker;
-import net.minecraft.registry.DynamicRegistryManager;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -118,7 +118,7 @@ public class StoneCutterRecipeStorage {
         }
     }
 
-    public void read(DynamicRegistryManager registryManager) {
+    public void read(RegistryAccess registryManager) {
         try {
             File saveDir = this.getSaveDir();
 
@@ -129,7 +129,7 @@ public class StoneCutterRecipeStorage {
                     this.initArray();
 
                     FileInputStream is = new FileInputStream(file);
-                    this.readFromNBT(NbtIo.readCompressed(is, NbtSizeTracker.ofUnlimitedBytes()), registryManager);
+                    this.readFromNBT(NbtIo.readCompressed(is, NbtAccounter.unlimitedHeap()), registryManager);
                     is.close();
                 } else {
                     LOGGER.warn("readFromDisk(): Error reading recipes from file '{}'", file.getPath());
@@ -140,28 +140,28 @@ public class StoneCutterRecipeStorage {
         }
     }
 
-    private void readFromNBT(NbtCompound nbt, DynamicRegistryManager registryManager) {
+    private void readFromNBT(CompoundTag nbt, RegistryAccess registryManager) {
         if (nbt == null || nbt.contains("Recipes") == false) {
             return;
         }
 
-        NbtList tagList = nbt.getListOrEmpty("Recipes");
+        ListTag tagList = nbt.getListOrEmpty("Recipes");
         int count = tagList.size();
 
         for (int i = 0; i < count; i++) {
-            NbtCompound tag = tagList.getCompoundOrEmpty(i);
+            CompoundTag tag = tagList.getCompoundOrEmpty(i);
 
-            int index = tag.getByte("RecipeIndex", (byte) -1);
+            int index = tag.getByteOr("RecipeIndex", (byte) -1);
 
             if (index >= 0 && index < this.recipes.length) {
                 this.recipes[index].readFromNBT(tag, registryManager);
             }
         }
 
-        this.setCurrentSelected(nbt.getByte("Selected", (byte) 0));
+        this.setCurrentSelected(nbt.getByteOr("Selected", (byte) 0));
     }
 
-    public void write(DynamicRegistryManager registryManager) {
+    public void write(RegistryAccess registryManager) {
         if (this.dirty) {
             try {
                 File saveDir = this.getSaveDir();
@@ -195,14 +195,14 @@ public class StoneCutterRecipeStorage {
         }
     }
 
-    private NbtCompound writeToNBT(DynamicRegistryManager registryManager) {
-        NbtList tagRecipes = new NbtList();
-        NbtCompound nbt = new NbtCompound();
+    private CompoundTag writeToNBT(RegistryAccess registryManager) {
+        ListTag tagRecipes = new ListTag();
+        CompoundTag nbt = new CompoundTag();
 
         for (int i = 0; i < this.recipes.length; i++) {
             if (this.recipes[i].isValid()) {
                 StoneCutterRecipePattern entry = this.recipes[i];
-                NbtCompound tag = entry.writeToNBT(registryManager);
+                CompoundTag tag = entry.writeToNBT(registryManager);
                 tag.putByte("RecipeIndex", (byte) i);
                 tagRecipes.add(tag);
             }

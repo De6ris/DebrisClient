@@ -1,24 +1,24 @@
 package com.github.debris.debrisclient.util;
 
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public class TextFactory {
-    public static final Text ON = Text.empty().append(ScreenTexts.ON).styled(style -> style.withColor(Formatting.GREEN));
-    public static final Text OFF = Text.empty().append(ScreenTexts.OFF).styled(style -> style.withColor(Formatting.RED));
-    public static final Text DEBUG = Text.translatable("debug.prefix").formatted(Formatting.YELLOW, Formatting.BOLD);
+    public static final Component ON = Component.empty().append(CommonComponents.OPTION_ON).withStyle(style -> style.withColor(ChatFormatting.GREEN));
+    public static final Component OFF = Component.empty().append(CommonComponents.OPTION_OFF).withStyle(style -> style.withColor(ChatFormatting.RED));
+    public static final Component DEBUG = Component.translatable("debug.prefix").withStyle(ChatFormatting.YELLOW, ChatFormatting.BOLD);
 
-    public static Text onOrOff(boolean on) {
+    public static Component onOrOff(boolean on) {
         return on ? ON : OFF;
     }
 
-    public static MutableText listEntry(String entry) {
-        return listEntry(Text.literal(entry));
+    public static MutableComponent listEntry(String entry) {
+        return listEntry(Component.literal(entry));
     }
 
-    public static MutableText listEntry(Text entry) {
-        return Text.empty().append("- ").append(entry).append(Text.literal(": "));
+    public static MutableComponent listEntry(Component entry) {
+        return Component.empty().append("- ").append(entry).append(Component.literal(": "));
     }
 }

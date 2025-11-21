@@ -2,7 +2,6 @@ package com.github.debris.debrisclient.fabric;
 
 import com.github.debris.debrisclient.command.Commands;
 import com.github.debris.debrisclient.compat.ModReference;
-import com.github.debris.debrisclient.feat.advancement.AdventuringTimeHelper;
 import com.github.debris.debrisclient.listener.ChunkLoadListener;
 import com.github.debris.debrisclient.listener.InitListener;
 import fi.dy.masa.malilib.event.InitializationHandler;

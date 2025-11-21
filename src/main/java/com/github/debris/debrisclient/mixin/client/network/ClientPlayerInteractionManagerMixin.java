@@ -1,9 +1,9 @@
 package com.github.debris.debrisclient.mixin.client.network;
 
 import com.github.debris.debrisclient.config.DCCommonConfig;
-import net.minecraft.client.network.ClientPlayerInteractionManager;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.client.multiplayer.MultiPlayerGameMode;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -11,16 +11,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ClientPlayerInteractionManager.class)
+@Mixin(MultiPlayerGameMode.class)
 public class ClientPlayerInteractionManagerMixin {
     @Shadow
-    private int blockBreakingCooldown;
+    private int destroyDelay;
 
     @Inject(
-            method = "updateBlockBreakingProgress",
+            method = "continueDestroyBlock",
             at = @At(
                     value = "FIELD",
-                    target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;blockBreakingCooldown:I",
+                    target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;destroyDelay:I",
                     opcode = Opcodes.PUTFIELD,
                     ordinal = 2,
                     shift = At.Shift.AFTER
@@ -28,7 +28,7 @@ public class ClientPlayerInteractionManagerMixin {
     )
     private void cullCooldown(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
         if (DCCommonConfig.BlockBreakingCooldownOverride.getBooleanValue()) {
-            this.blockBreakingCooldown = 0;
+            this.destroyDelay = 0;
         }
     }
 }

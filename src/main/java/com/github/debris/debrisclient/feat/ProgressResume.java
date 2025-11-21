@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.feat;
 
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 
 import java.util.HashMap;
 import java.util.Map;

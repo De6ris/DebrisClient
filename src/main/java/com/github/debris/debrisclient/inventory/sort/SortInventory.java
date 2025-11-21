@@ -6,8 +6,8 @@ import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import com.github.debris.debrisclient.inventory.section.SectionHandler;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.ItemUtil;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Comparator;
 import java.util.List;
@@ -36,7 +36,7 @@ public class SortInventory {
     // assume no holding item, all slots are well merged, but still blanks between
     private static void sortInternal(ContainerSection section) {
         Comparator<ItemStack> itemStackSorter = SortCategory.getItemStackSorter();
-        Comparator<Slot> slotSorter = (x, y) -> itemStackSorter.compare(x.getStack(), y.getStack());
+        Comparator<Slot> slotSorter = (x, y) -> itemStackSorter.compare(x.getItem(), y.getItem());
         BiConsumer<Slot, Slot> swapAction = InventoryUtil::swapSlots;
 
         if (DCCommonConfig.SortingContainersLast.getBooleanValue()) {
@@ -51,7 +51,7 @@ public class SortInventory {
         section.fillBlanks();
         section.mergeSlots();
         section.fillBlanks();
-        Slot[] nonEmptySlots = section.slots().stream().filter(Slot::hasStack).toArray(Slot[]::new);
+        Slot[] nonEmptySlots = section.slots().stream().filter(Slot::hasItem).toArray(Slot[]::new);
         runSorting(nonEmptySlots, sorter, swapAction);
     }
 
@@ -59,7 +59,7 @@ public class SortInventory {
         List<Slot> slots = section.slots();
         for (int index = slots.size() - 2; index >= 0; index--) {// inverse order reduce operations; skip the last
             Slot slot = slots.get(index);
-            if (!ItemUtil.isContainer(slot.getStack())) continue;// skip those not container
+            if (!ItemUtil.isContainer(slot.getItem())) continue;// skip those not container
             moveToNextNonContainer(slots, index, slot);
         }
     }
@@ -67,8 +67,8 @@ public class SortInventory {
     private static void moveToNextNonContainer(List<Slot> slots, int index, Slot currentSlot) {
         for (int i = slots.size() - 1; i > index; i--) {// inverse order reduce operations
             Slot slot = slots.get(i);
-            if (ItemUtil.isContainer(slot.getStack())) continue;// skip those containers
-            if (slot.hasStack()) {
+            if (ItemUtil.isContainer(slot.getItem())) continue;// skip those containers
+            if (slot.hasItem()) {
                 InventoryUtil.swapSlots(slot, currentSlot);
             } else {
                 InventoryUtil.moveToEmpty(currentSlot, slot);
@@ -83,7 +83,7 @@ public class SortInventory {
         int indexNonContainer = -1;
         for (int i = size - 1; i >= 0; i--) {// inverse order reduce operations
             Slot slot = slots.get(i);
-            if (ItemUtil.isContainer(slot.getStack())) continue;// skip those containers
+            if (ItemUtil.isContainer(slot.getItem())) continue;// skip those containers
             indexNonContainer = i;
             break;
         }

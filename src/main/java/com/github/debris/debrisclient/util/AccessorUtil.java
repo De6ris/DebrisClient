@@ -7,6 +7,7 @@ import com.github.debris.debrisclient.mixin.client.gui.IMixinChatHud;
 import com.github.debris.debrisclient.mixin.client.gui.IMixinChatScreen;
 import com.github.debris.debrisclient.mixin.client.gui.IMixinGuiContainer;
 import com.github.debris.debrisclient.mixin.client.gui.IMixinRecipeBookScreen;
+import com.github.debris.debrisclient.mixin.client.input.IClientInputMixin;
 import com.github.debris.debrisclient.mixin.compat.malilib.IMixinButtonBase;
 import com.github.debris.debrisclient.mixin.compat.malilib.IMixinGuiBase;
 import com.github.debris.debrisclient.mixin.compat.malilib.IMixinWidgetConfigOption;
@@ -18,58 +19,60 @@ import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 import fi.dy.masa.malilib.gui.widgets.WidgetBase;
 import fi.dy.masa.malilib.gui.widgets.WidgetConfigOption;
 import fi.dy.masa.malilib.gui.widgets.WidgetListBase;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.gui.hud.ChatHudLine;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.screen.ingame.RecipeBookScreen;
-import net.minecraft.client.gui.screen.recipebook.RecipeBookWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.recipebook.ClientRecipeBook;
-import net.minecraft.recipe.NetworkRecipeId;
-import net.minecraft.recipe.RecipeDisplayEntry;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.client.ClientRecipeBook;
+import net.minecraft.client.GuiMessage;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.ChatComponent;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractRecipeBookScreen;
+import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
+import net.minecraft.client.player.ClientInput;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.crafting.display.RecipeDisplayEntry;
+import net.minecraft.world.item.crafting.display.RecipeDisplayId;
+import net.minecraft.world.phys.Vec2;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
 
 public class AccessorUtil {
-    public static Slot getHoveredSlot(HandledScreen<?> gui) {
+    public static Slot getHoveredSlot(AbstractContainerScreen<?> gui) {
         return ((IMixinGuiContainer) gui).dc$getHoveredSlot();
     }
 
-    public static int getGuiLeft(HandledScreen<?> gui) {
+    public static int getGuiLeft(AbstractContainerScreen<?> gui) {
         return ((IMixinGuiContainer) gui).dc$getGuiLeft();
     }
 
-    public static List<ChatHudLine.Visible> getVisibleMessages(ChatHud chatHud) {
-        return ((IMixinChatHud) chatHud).getVisibleMessages();
+    public static List<GuiMessage.Line> getVisibleMessages(ChatComponent chatHud) {
+        return ((IMixinChatHud) chatHud).getTrimmedMessages();
     }
 
-    public static void use(MinecraftClient client) {
+    public static void use(Minecraft client) {
         ((IMixinMinecraftClient) client).invokeDoItemUse();
     }
 
-    public static boolean attack(MinecraftClient client) {
+    public static boolean attack(Minecraft client) {
         return ((IMixinMinecraftClient) client).invokeDoAttack();
     }
 
-    public static Map<NetworkRecipeId, RecipeDisplayEntry> getRecipes(ClientRecipeBook recipeBook) {
+    public static Map<RecipeDisplayId, RecipeDisplayEntry> getRecipes(ClientRecipeBook recipeBook) {
         return ((IMixinClientRecipeBook) recipeBook).getRecipes();
     }
 
-    public static RecipeBookWidget<?> getRecipeBookWidget(RecipeBookScreen<?> screen) {
+    public static RecipeBookComponent<?> getRecipeBookWidget(AbstractRecipeBookScreen<?> screen) {
         return ((IMixinRecipeBookScreen) screen).getRecipeBook();
     }
 
-    public static TextFieldWidget getChatField(ChatScreen screen) {
+    public static EditBox getChatField(ChatScreen screen) {
         return ((IMixinChatScreen) screen).getChatField();
     }
 
-    public static String getTypeString(ScreenHandler container) {
+    public static String getTypeString(AbstractContainerMenu container) {
         return ((IContainer) container).dc$getTypeString();
     }
 
@@ -98,4 +101,7 @@ public class AccessorUtil {
         ((IMixinWidgetListBase) widget).setAllowKeyboardNavigation(true);
     }
 
+    public static void setMoveVector(ClientInput input, Vec2 vec2) {
+        ((IClientInputMixin) input).setMoveVector(vec2);
+    }
 }

@@ -5,14 +5,14 @@ import com.github.debris.debrisclient.util.InventoryUtil;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.slf4j.Logger;
 
 public class LoyalTrident {
@@ -21,15 +21,15 @@ public class LoyalTrident {
     private static boolean THROWN = false;
 
     @Environment(EnvType.CLIENT)
-    public static void onTridentThrown(PlayerEntity playerEntity, ItemStack stack) {
+    public static void onTridentThrown(Player playerEntity, ItemStack stack) {
         if (!DCCommonConfig.LoyalerTrident.getBooleanValue()) return;
-        PlayerInventory inventory = playerEntity.getInventory();
-        if (ItemStack.areEqual(inventory.getStack(40), stack)) {
+        Inventory inventory = playerEntity.getInventory();
+        if (ItemStack.matches(inventory.getItem(40), stack)) {
             CONTEXT = new ThrownContext(stack, 40);
             return;
         }
         for (int i = 0; i < 9; i++) {
-            if (ItemStack.areEqual(inventory.getStack(i), stack)) {
+            if (ItemStack.matches(inventory.getItem(i), stack)) {
                 CONTEXT = new ThrownContext(stack, i);
                 return;
             }
@@ -38,17 +38,17 @@ public class LoyalTrident {
         CONTEXT = ThrownContext.EMPTY;
     }
 
-    public static void onClientTick(MinecraftClient minecraftClient) {
+    public static void onClientTick(Minecraft minecraftClient) {
         if (!DCCommonConfig.LoyalerTrident.getBooleanValue()) return;
         if (CONTEXT.isEmpty()) return;
-        ClientPlayerEntity player = minecraftClient.player;
+        LocalPlayer player = minecraftClient.player;
         if (player == null) return;
         checkThrown(player);
         if (THROWN) {// should not search before thrown
-            ItemEnchantmentsComponent enchantments = CONTEXT.stack.getEnchantments();
+            ItemEnchantments enchantments = CONTEXT.stack.getEnchantments();
             for (Slot slot : InventoryUtil.getInventoryContainer().slots) {
-                ItemStack stack = slot.getStack();
-                if (stack.isOf(Items.TRIDENT) && stack.getEnchantments().equals(enchantments)) {
+                ItemStack stack = slot.getItem();
+                if (stack.is(Items.TRIDENT) && stack.getEnchantments().equals(enchantments)) {
                     onTridentFound(slot);
                     return;
                 }
@@ -57,9 +57,9 @@ public class LoyalTrident {
 
     }
 
-    private static void checkThrown(PlayerEntity playerEntity) {
-        PlayerInventory inventory = playerEntity.getInventory();
-        if (inventory.getStack(CONTEXT.index).isEmpty()) {
+    private static void checkThrown(Player playerEntity) {
+        Inventory inventory = playerEntity.getInventory();
+        if (inventory.getItem(CONTEXT.index).isEmpty()) {
             THROWN = true;
         }
     }

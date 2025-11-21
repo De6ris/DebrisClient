@@ -1,11 +1,11 @@
 package com.github.debris.debrisclient.inventory.sort;
 
 import com.github.debris.debrisclient.util.ItemUtil;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BundleContentsComponent;
-import net.minecraft.component.type.ContainerComponent;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BundleContents;
+import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 import java.util.Comparator;
 import java.util.List;
@@ -15,13 +15,13 @@ public class ItemStackComparators {
     public static final Comparator<ItemStack> COUNT = Comparator.comparing(ItemStack::getCount);
     public static final Comparator<ItemStack> SHULKER_BOX = ItemStackComparators::compareShulkerBox;
     public static final Comparator<ItemStack> BUNDLE = ItemStackComparators::compareBundle;
-    public static final Comparator<ItemStack> ENCHANTMENT = Comparator.comparing(x -> x.getOrDefault(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT).getEnchantmentEntries().size());
-    public static final Comparator<ItemStack> DAMAGE = Comparator.comparing(ItemStack::getDamage);
+    public static final Comparator<ItemStack> ENCHANTMENT = Comparator.comparing(x -> x.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY).entrySet().size());
+    public static final Comparator<ItemStack> DAMAGE = Comparator.comparing(ItemStack::getDamageValue);
 
     public static int compareShulkerBox(ItemStack c1, ItemStack c2) {
         if (ItemUtil.isShulkerBox(c1) && ItemUtil.isShulkerBox(c2)) {
-            List<ItemStack> list1 = c1.getOrDefault(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT).streamNonEmpty().toList();
-            List<ItemStack> list2 = c2.getOrDefault(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT).streamNonEmpty().toList();
+            List<ItemStack> list1 = c1.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyStream().toList();
+            List<ItemStack> list2 = c2.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyStream().toList();
             int compare = Integer.compare(list1.size(), list2.size());// comparing size
             if (compare != 0) return compare;
             if (list1.isEmpty()) return 0;
@@ -36,9 +36,9 @@ public class ItemStackComparators {
 
     public static int compareBundle(ItemStack c1, ItemStack c2) {
         if (ItemUtil.isBundle(c1) && ItemUtil.isBundle(c2)) {
-            BundleContentsComponent bundle1 = c1.getOrDefault(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT);
-            BundleContentsComponent bundle2 = c2.getOrDefault(DataComponentTypes.BUNDLE_CONTENTS, BundleContentsComponent.DEFAULT);
-            int compare = bundle1.getOccupancy().compareTo(bundle2.getOccupancy());// comparing occupancy fraction
+            BundleContents bundle1 = c1.getOrDefault(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY);
+            BundleContents bundle2 = c2.getOrDefault(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY);
+            int compare = bundle1.weight().compareTo(bundle2.weight());// comparing occupancy fraction
             if (compare != 0) return compare;
             return Integer.compare(bundle1.size(), bundle2.size());// comparing item list size
         }

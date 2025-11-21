@@ -1,7 +1,7 @@
 package com.github.debris.debrisclient.util;
 
 import com.github.debris.debrisclient.config.DCCommonConfig;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
 
 public class HighlightUtil {
     public static boolean shouldHighlightEntity(EntityType<?> type) {
@@ -17,6 +17,6 @@ public class HighlightUtil {
             return true;
         if (DCCommonConfig.HighlightWitherSkeleton.getBooleanValue() && type == EntityType.WITHER_SKELETON) return true;
 
-        return DCCommonConfig.HighlightEntityList.getStrings().contains(EntityType.getId(type).toString());
+        return DCCommonConfig.HighlightEntityList.getStrings().contains(EntityType.getKey(type).toString());
     }
 }

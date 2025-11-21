@@ -1,9 +1,9 @@
 package com.github.debris.debrisclient.mixin.client.network;
 
 import com.github.debris.debrisclient.feat.advancement.AdventuringTimeHelper;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientAdvancementManager;
-import net.minecraft.network.packet.s2c.play.AdvancementUpdateS2CPacket;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientAdvancements;
+import net.minecraft.network.protocol.game.ClientboundUpdateAdvancementsPacket;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -11,14 +11,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ClientAdvancementManager.class)
+@Mixin(ClientAdvancements.class)
 public class ClientAdvancementManagerMixin {
     @Shadow
     @Final
-    private MinecraftClient client;
+    private Minecraft minecraft;
 
-    @Inject(method = "onAdvancements", at = @At("RETURN"))
-    private void onAdvancements(AdvancementUpdateS2CPacket packet, CallbackInfo ci) {
-        AdventuringTimeHelper.onProgressUpdate(this.client, packet.getAdvancementsToProgress());
+    @Inject(method = "update", at = @At("RETURN"))
+    private void onAdvancements(ClientboundUpdateAdvancementsPacket packet, CallbackInfo ci) {
+        AdventuringTimeHelper.onProgressUpdate(this.minecraft, packet.getProgress());
     }
 }

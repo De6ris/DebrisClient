@@ -6,8 +6,8 @@ import fi.dy.masa.litematica.data.DataManager;
 import fi.dy.masa.litematica.gui.GuiConfigs;
 import fi.dy.masa.litematica.selection.AreaSelection;
 import fi.dy.masa.malilib.render.RenderUtils;
-import net.minecraft.util.math.BlockBox;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import org.joml.Matrix4f;
 
 import java.util.stream.Stream;
@@ -22,15 +22,15 @@ public class LitematicaAccessor {
         if (areaSelection == null) return Stream.of();
         return areaSelection.getAllSubRegionBoxes().stream()
                 .filter(box -> box.getPos1() != null && box.getPos2() != null)
-                .flatMap(box -> BlockPos.stream(box.getPos1(), box.getPos2()));
+                .flatMap(box -> BlockPos.betweenClosedStream(box.getPos1(), box.getPos2()));
     }
 
-    public static Stream<BlockBox> streamBlockBox() {
+    public static Stream<BoundingBox> streamBlockBox() {
         AreaSelection areaSelection = DataManager.getSelectionManager().getCurrentSelection();
         if (areaSelection == null) return Stream.of();
         return areaSelection.getAllSubRegionBoxes().stream()
                 .filter(box -> box.getPos1() != null && box.getPos2() != null)
-                .map(box -> BlockBox.create(box.getPos1(), box.getPos2()));
+                .map(box -> BoundingBox.fromCorners(box.getPos1(), box.getPos2()));
     }
 
     public static void renderWorldEditSelectionBox(BlockPos pos1, BlockPos pos2, Matrix4f matrix4f) {

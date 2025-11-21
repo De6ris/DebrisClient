@@ -6,8 +6,8 @@ import com.github.debris.debrisclient.localization.AutoProcessText;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.StringUtil;
 import fi.dy.masa.malilib.util.InfoUtils;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,7 +23,7 @@ public class ItemFinder implements IAutoProcessor {
     public ProcessResult process(ContainerSection containerSection, ContainerSection playerInventory) {
         Set<Item> found = new HashSet<>();
         containerSection.predicateRun(ItemFinder::isTarget, x -> {
-            found.add(x.getStack().getItem());
+            found.add(x.getItem().getItem());
             InventoryUtil.dropStack(x);
         });
 
@@ -39,7 +39,7 @@ public class ItemFinder implements IAutoProcessor {
     }
 
     private static boolean isTarget(ItemStack itemStack) {
-        return DCWhereIsItCommand.streamItems().anyMatch(itemStack::isOf);
+        return DCWhereIsItCommand.streamItems().anyMatch(itemStack::is);
     }
 
     private static void dealFound(Collection<Item> found) {

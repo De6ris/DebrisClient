@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.unsafe;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import xaero.common.HudMod;
 import xaero.common.minimap.waypoints.Waypoint;
 import xaero.hud.minimap.BuiltInHudModules;

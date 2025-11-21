@@ -4,17 +4,17 @@ import com.mojang.logging.LogUtils;
 import fi.dy.masa.malilib.util.EntityUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
 import fi.dy.masa.malilib.util.game.RayTraceUtils;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import org.slf4j.Logger;
 
 import java.util.Optional;
@@ -22,8 +22,8 @@ import java.util.Optional;
 public class RayTraceUtil {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static Optional<HitResult> getPlayerRayTrace(MinecraftClient client) {
-        World world = WorldUtils.getBestWorld(client);
+    public static Optional<HitResult> getPlayerRayTrace(Minecraft client) {
+        Level world = WorldUtils.getBestWorld(client);
 
         if (world == null) {
             LOGGER.warn("why world is null");
@@ -35,11 +35,11 @@ public class RayTraceUtil {
         if (cameraEntity.isEmpty()) return Optional.empty();
 
         // why not use client.targetedEntity? for compatible with tweakeroo free cam
-        HitResult trace = RayTraceUtils.getRayTraceFromEntity(world, cameraEntity.get(), RaycastContext.FluidHandling.NONE);
+        HitResult trace = RayTraceUtils.getRayTraceFromEntity(world, cameraEntity.get(), ClipContext.Fluid.NONE);
         return Optional.ofNullable(trace);
     }
 
-    public static Optional<Entity> getBestCameraEntity(MinecraftClient client, World world) {
+    public static Optional<Entity> getBestCameraEntity(Minecraft client, Level world) {
         Entity cameraEntity = EntityUtils.getCameraEntity();
 
         if (cameraEntity == null) {
@@ -47,10 +47,10 @@ public class RayTraceUtil {
             return Optional.empty();
         }
 
-        if (cameraEntity == client.player && world instanceof ServerWorld) {
+        if (cameraEntity == client.player && world instanceof ServerLevel) {
             // We need to get the player from the server world (if available, i.e. in single player),
             // so that the player itself won't be included in the ray trace
-            Entity serverPlayer = world.getPlayerByUuid(client.player.getUuid());
+            Entity serverPlayer = world.getPlayerByUUID(client.player.getUUID());
 
             if (serverPlayer != null) {
                 cameraEntity = serverPlayer;
@@ -60,7 +60,7 @@ public class RayTraceUtil {
         return Optional.of(cameraEntity);
     }
 
-    public static Optional<BlockPos> getRayTraceBlock(MinecraftClient client) {
+    public static Optional<BlockPos> getRayTraceBlock(Minecraft client) {
         return getPlayerRayTrace(client).map(hitResult -> {
             if (hitResult.getType() == HitResult.Type.BLOCK) {
                 return ((BlockHitResult) hitResult).getBlockPos();
@@ -69,7 +69,7 @@ public class RayTraceUtil {
         });
     }
 
-    public static Optional<Entity> getRayTraceEntity(MinecraftClient client) {
+    public static Optional<Entity> getRayTraceEntity(Minecraft client) {
         return getPlayerRayTrace(client).map(hitResult -> {
             if (hitResult.getType() == HitResult.Type.ENTITY) {
                 return ((EntityHitResult) hitResult).getEntity();
@@ -79,9 +79,9 @@ public class RayTraceUtil {
     }
 
     @SuppressWarnings("DataFlowIssue")
-    public static Optional<BlockEntity> getRayTraceBlockEntity(MinecraftClient client) {
+    public static Optional<BlockEntity> getRayTraceBlockEntity(Minecraft client) {
         return getRayTraceBlock(client).map(pos -> {
-            ClientWorld world = client.world;
+            ClientLevel world = client.level;
             if (world.getBlockState(pos).hasBlockEntity()) {
                 return world.getChunk(pos).getBlockEntity(pos);
             }

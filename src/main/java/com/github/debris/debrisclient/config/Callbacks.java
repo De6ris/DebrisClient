@@ -11,12 +11,12 @@ import com.github.debris.debrisclient.inventory.feat.InventoryTweaks;
 import com.github.debris.debrisclient.inventory.feat.SyncContainer;
 import com.github.debris.debrisclient.inventory.sort.SortInventory;
 import com.github.debris.debrisclient.util.Predicates;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.sounds.SoundEvents;
 
 public class Callbacks {
-    public static void init(MinecraftClient client) {
+    public static void init(Minecraft client) {
         DCCommonConfig.OpenWindow.getKeybind().setCallback((action, key) -> {
             client.setScreen(new DCConfigUi());
             return true;
@@ -87,7 +87,7 @@ public class Callbacks {
 
     }
 
-    private static void playClickSound(MinecraftClient client) {
-        client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+    private static void playClickSound(Minecraft client) {
+        client.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     }
 }

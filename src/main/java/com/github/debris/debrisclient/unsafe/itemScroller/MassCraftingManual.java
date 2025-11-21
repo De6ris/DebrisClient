@@ -5,9 +5,9 @@ import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.ItemUtil;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -32,8 +32,8 @@ public class MassCraftingManual extends AbstractMassCrafting {
 
         for (int i = 0; i < inputSlots.size(); i++) {// clear the crafting matrix
             Slot slot = inputSlots.get(i);
-            if (slot.hasStack()) {
-                if (ItemUtil.compareIDMeta(slot.getStack(), requiredArray[i]))
+            if (slot.hasItem()) {
+                if (ItemUtil.compareIDMeta(slot.getItem(), requiredArray[i]))
                     continue;// means this is ready for crafting
                 InventoryUtil.quickMove(slot);
                 InventoryUtil.dropStackIfPossible(slot);// if we can not move to inventory, just throw
@@ -54,7 +54,7 @@ public class MassCraftingManual extends AbstractMassCrafting {
                 ItemStack requiredItem = requiredArray[i];
                 if (requiredItem.isEmpty()) continue;// won't supply empty
                 Slot slot = inputSlots.get(i);
-                if (slot.hasStack()) continue;// means ready for crafting
+                if (slot.hasItem()) continue;// means ready for crafting
                 trySupplySlot(slot, requiredItem, playerInventory);
             }
 
@@ -71,13 +71,13 @@ public class MassCraftingManual extends AbstractMassCrafting {
     }
 
     private boolean canSupplyToResultByMoving() {
-        List<Slot> clone = new ArrayList<>(playerInventory.slots().stream().filter(Slot::hasStack).toList());
+        List<Slot> clone = new ArrayList<>(playerInventory.slots().stream().filter(Slot::hasItem).toList());
         for (int i = 0; i < requiredArray.length; i++) {
             ItemStack requiredItem = requiredArray[i];
             if (requiredItem.isEmpty()) continue;// won't supply empty
             Slot slot = inputSlots.get(i);
-            if (slot.hasStack()) continue;// means ready for crafting
-            Optional<Slot> optional = clone.stream().filter(x -> x.hasStack() && ItemUtil.compareIDMeta(x.getStack(), requiredItem)).findFirst();
+            if (slot.hasItem()) continue;// means ready for crafting
+            Optional<Slot> optional = clone.stream().filter(x -> x.hasItem() && ItemUtil.compareIDMeta(x.getItem(), requiredItem)).findFirst();
             if (optional.isPresent()) {
                 clone.remove(optional.get());// this slot is valid, then remove it from list
                 continue;

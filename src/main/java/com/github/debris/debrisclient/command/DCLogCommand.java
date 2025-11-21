@@ -10,8 +10,8 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.command.CommandSource;
-import net.minecraft.text.*;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.*;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -55,7 +55,7 @@ public class DCLogCommand {
         return argument("option", StringArgumentType.word())
                 .suggests(
                         (ctx, builder)
-                                -> CommandSource.suggestMatching(
+                                -> SharedSuggestionProvider.suggest(
                                 suggestOptionName(category(ctx)),
                                 builder
                         )
@@ -63,7 +63,7 @@ public class DCLogCommand {
                 .then(
                         argument("value", StringArgumentType.word())
                                 .suggests((ctx, builder)
-                                        -> CommandSource.suggestMatching(suggestOptionValue(category(ctx), option(ctx)), builder))
+                                        -> SharedSuggestionProvider.suggest(suggestOptionValue(category(ctx), option(ctx)), builder))
                                 .executes(
                                         ctx -> setOption(
                                                 ctx.getSource(),
@@ -88,12 +88,12 @@ public class DCLogCommand {
         return Command.SINGLE_SUCCESS;
     }
 
-    private static Text makeMessage(String category) {
+    private static Component makeMessage(String category) {
         GameLog log = GameLogs.getLog(category);
         assert log != null;
-        MutableText text = Text.empty()
+        MutableComponent text = Component.empty()
                 .append(TextFactory.onOrOff(log.isActive()))
-                .styled(style -> style
+                .withStyle(style -> style
                         .withHoverEvent(
                                 new HoverEvent.ShowText(LogCommandText.CLICK_TO_TOGGLE.text())
                         )
@@ -102,7 +102,7 @@ public class DCLogCommand {
                         )
                 );
         return TextFactory.listEntry(category)
-                .append(Texts.bracketed(text));
+                .append(ComponentUtils.wrapInSquareBrackets(text));
     }
 
     private static int clear(FabricClientCommandSource source, String category) {

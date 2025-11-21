@@ -2,18 +2,18 @@ package com.github.debris.debrisclient.util;
 
 import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import fi.dy.masa.malilib.util.GuiUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.network.ClientPlayerInteractionManager;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.NetworkRecipeId;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.client.multiplayer.MultiPlayerGameMode;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.display.RecipeDisplayId;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,22 +29,22 @@ public class InventoryUtil {
     }
 
     public static void dropStackIfPossible(Slot slot) {
-        if (slot.hasStack()) dropStack(slot);
+        if (slot.hasItem()) dropStack(slot);
     }
 
     // the second param is special
     public static void drop(Slot slot, boolean ctrl) {
-        clickSlot(slot, ctrl ? 1 : 0, SlotActionType.THROW);
+        clickSlot(slot, ctrl ? 1 : 0, ClickType.THROW);
     }
 
     // hotBar: 0-8 or 40
     public static void swapHotBar(Slot slot, int hotBar) {
-        clickSlot(slot, hotBar, SlotActionType.SWAP);
+        clickSlot(slot, hotBar, ClickType.SWAP);
     }
 
     public static void gatherItems(Slot slot) {
         if (isHoldingItem()) {
-            clickSlot(slot, 0, SlotActionType.PICKUP_ALL);
+            clickSlot(slot, 0, ClickType.PICKUP_ALL);
         }
     }
 
@@ -76,14 +76,14 @@ public class InventoryUtil {
     }
 
     public static boolean canMergeSlot(Slot to, Slot from) {
-        if (to.hasStack() && from.hasStack()) {
-            return ItemUtil.canMerge(to.getStack(), from.getStack());
+        if (to.hasItem() && from.hasItem()) {
+            return ItemUtil.canMerge(to.getItem(), from.getItem());
         }
         return true;// empty slots always merge
     }
 
     public static ItemStack getHeldStack() {
-        return getCurrentContainer().getCursorStack();
+        return getCurrentContainer().getCarried();
     }
 
     public static boolean isHoldingItem() {
@@ -98,67 +98,67 @@ public class InventoryUtil {
 
     public static void dropHeldItem() {
         if (isHoldingItem()) {
-            clickSlot(-999, 0, SlotActionType.PICKUP);
+            clickSlot(-999, 0, ClickType.PICKUP);
         }
     }
 
     public static void quickMove(Slot slot) {
-        click(slot, false, SlotActionType.QUICK_MOVE);
+        click(slot, false, ClickType.QUICK_MOVE);
     }
 
     public static void quickMove(int index) {
-        click(index, false, SlotActionType.QUICK_MOVE);
+        click(index, false, ClickType.QUICK_MOVE);
     }
 
     public static void startSpreading(boolean rightClick) {
-        clickSlot(-999, ScreenHandler.packQuickCraftData(0, rightClick ? 1 : 0), SlotActionType.QUICK_CRAFT);
+        clickSlot(-999, AbstractContainerMenu.getQuickcraftMask(0, rightClick ? 1 : 0), ClickType.QUICK_CRAFT);
     }
 
     public static void addToSpreading(Slot slot, boolean rightClick) {
-        clickSlot(slot, ScreenHandler.packQuickCraftData(1, rightClick ? 1 : 0), SlotActionType.QUICK_CRAFT);
+        clickSlot(slot, AbstractContainerMenu.getQuickcraftMask(1, rightClick ? 1 : 0), ClickType.QUICK_CRAFT);
     }
 
     public static void finishSpreading(boolean rightClick) {
-        clickSlot(-999, ScreenHandler.packQuickCraftData(2, rightClick ? 1 : 0), SlotActionType.QUICK_CRAFT);
+        clickSlot(-999, AbstractContainerMenu.getQuickcraftMask(2, rightClick ? 1 : 0), ClickType.QUICK_CRAFT);
     }
 
     public static void leftClick(Slot slot) {
-        click(slot, false, SlotActionType.PICKUP);
+        click(slot, false, ClickType.PICKUP);
     }
 
     public static void leftClick(int index) {
-        click(index, false, SlotActionType.PICKUP);
+        click(index, false, ClickType.PICKUP);
     }
 
     public static void rightClick(Slot slot) {
-        click(slot, true, SlotActionType.PICKUP);
+        click(slot, true, ClickType.PICKUP);
     }
 
     public static void rightClick(int index) {
-        click(index, true, SlotActionType.PICKUP);
+        click(index, true, ClickType.PICKUP);
     }
 
-    public static void click(Slot slot, boolean rightClick, SlotActionType type) {
+    public static void click(Slot slot, boolean rightClick, ClickType type) {
         click(getSlotId(slot), rightClick, type);
     }
 
-    public static void click(int index, boolean rightClick, SlotActionType type) {
+    public static void click(int index, boolean rightClick, ClickType type) {
         clickSlot(index, rightClick ? 1 : 0, type);
     }
 
     // the button also imply some other data
-    public static void clickSlot(Slot slot, int button, SlotActionType type) {
+    public static void clickSlot(Slot slot, int button, ClickType type) {
         clickSlot(getSlotId(slot), button, type);
     }
 
     // This is the final click slot, act as a valve
-    public static void clickSlot(int index, int button, SlotActionType type) {
-        if (GuiUtils.getCurrentScreen() instanceof CreativeInventoryScreen) {
-            ScreenHandler currentContainer = getCurrentContainer();
-            currentContainer.onSlotClick(index, button, type, getClientPlayer());
-            currentContainer.sendContentUpdates();
+    public static void clickSlot(int index, int button, ClickType type) {
+        if (GuiUtils.getCurrentScreen() instanceof CreativeModeInventoryScreen) {
+            AbstractContainerMenu currentContainer = getCurrentContainer();
+            currentContainer.clicked(index, button, type, getClientPlayer());
+            currentContainer.broadcastChanges();
         } else {
-            getController().clickSlot(getWindowID(), index, button, type, getClientPlayer());
+            getController().handleInventoryMouseClick(getWindowID(), index, button, type, getClientPlayer());
         }
         markDirty();
     }
@@ -174,15 +174,15 @@ public class InventoryUtil {
     }
 
     public static void clickButton(int buttonId) {
-        getController().clickButton(getWindowID(), buttonId);
+        getController().handleInventoryButtonClick(getWindowID(), buttonId);
     }
 
-    public static void clickRecipe(NetworkRecipeId recipe, boolean craftAll) {
-        getController().clickRecipe(getWindowID(), recipe, craftAll);
+    public static void clickRecipe(RecipeDisplayId recipe, boolean craftAll) {
+        getController().handlePlaceRecipe(getWindowID(), recipe, craftAll);
     }
 
     public static void dropAllMatching(Predicate<ItemStack> predicate) {
-        getSlots().stream().filter(x -> predicate.test(x.getStack())).forEach(InventoryUtil::dropStack);
+        getSlots().stream().filter(x -> predicate.test(x.getItem())).forEach(InventoryUtil::dropStack);
     }
 
     public static Optional<Slot> getSlotMouseOver() {
@@ -190,10 +190,10 @@ public class InventoryUtil {
     }
 
     public static int getSlotId(Slot slot) {
-        if (slot instanceof CreativeInventoryScreen.CreativeSlot creativeSlot) {
-            return creativeSlot.slot.id;
+        if (slot instanceof CreativeModeInventoryScreen.SlotWrapper creativeSlot) {
+            return creativeSlot.target.index;
         } else {
-            return slot.id;
+            return slot.index;
         }
     }
 
@@ -201,48 +201,48 @@ public class InventoryUtil {
         return getSlots(getCurrentContainer());
     }
 
-    public static List<Slot> getSlots(ScreenHandler container) {
+    public static List<Slot> getSlots(AbstractContainerMenu container) {
         return container.slots;
     }
 
-    public static HandledScreen<?> getGuiContainer() {
-        return (HandledScreen<?>) getClient().currentScreen;
+    public static AbstractContainerScreen<?> getGuiContainer() {
+        return (AbstractContainerScreen<?>) getClient().screen;
     }
 
     public static int getWindowID() {
-        return getCurrentContainer().syncId;
+        return getCurrentContainer().containerId;
     }
 
-    public static ClientPlayerInteractionManager getController() {
-        return getClient().interactionManager;
+    public static MultiPlayerGameMode getController() {
+        return getClient().gameMode;
     }
 
-    public static ScreenHandler getContainer(HandledScreen<?> guiContainer) {
-        return guiContainer.getScreenHandler();
+    public static AbstractContainerMenu getContainer(AbstractContainerScreen<?> guiContainer) {
+        return guiContainer.getMenu();
     }
 
-    public static ScreenHandler getInventoryContainer() {
-        return getClientPlayer().playerScreenHandler;
+    public static AbstractContainerMenu getInventoryContainer() {
+        return getClientPlayer().inventoryMenu;
     }
 
-    public static ScreenHandler getCurrentContainer() {
-        return getClientPlayer().currentScreenHandler;
+    public static AbstractContainerMenu getCurrentContainer() {
+        return getClientPlayer().containerMenu;
     }
 
-    public static ClientPlayerEntity getClientPlayer() {
+    public static LocalPlayer getClientPlayer() {
         return getClient().player;
     }
 
-    public static MinecraftClient getClient() {
-        return MinecraftClient.getInstance();
+    public static Minecraft getClient() {
+        return Minecraft.getInstance();
     }
 
-    public static PlayerInventory getPlayerInventory() {
+    public static Inventory getPlayerInventory() {
         return getClientPlayer().getInventory();
     }
 
-    public static boolean isPlayerInventory(Inventory inventory) {
-        return inventory instanceof PlayerInventory;
+    public static boolean isPlayerInventory(Container inventory) {
+        return inventory instanceof Inventory;
     }
 
 }

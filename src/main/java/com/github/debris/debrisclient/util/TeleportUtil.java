@@ -1,21 +1,21 @@
 package com.github.debris.debrisclient.util;
 
 import com.github.debris.debrisclient.command.Commands;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 
 public class TeleportUtil {
-    public static String suggestCommand(MinecraftClient client, BlockPos pos) {
+    public static String suggestCommand(Minecraft client, BlockPos pos) {
         String name = suggestCommand(client);
         return String.format("/%s %d %d %d", name, pos.getX(), pos.getY(), pos.getZ());
     }
 
-    private static String suggestCommand(MinecraftClient client) {
+    private static String suggestCommand(Minecraft client) {
         return canUseDefaultCommand(client) ? "tp" : Commands.PREFIX + "tp";
     }
 
     @SuppressWarnings("DataFlowIssue")
-    private static boolean canUseDefaultCommand(MinecraftClient client) {
-        return client.player.hasPermissionLevel(2);
+    private static boolean canUseDefaultCommand(Minecraft client) {
+        return client.player.hasPermissions(2);
     }
 }

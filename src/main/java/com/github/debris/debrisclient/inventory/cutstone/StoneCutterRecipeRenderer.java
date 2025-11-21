@@ -4,17 +4,17 @@ import com.github.debris.debrisclient.util.AccessorUtil;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class StoneCutterRecipeRenderer {
     private static final StoneCutterRecipeRenderer INSTANCE = new StoneCutterRecipeRenderer();
 
-    private final MinecraftClient mc = MinecraftClient.getInstance();
+    private final Minecraft mc = Minecraft.getInstance();
     private int recipeListX;
     private int recipeListY;
     private int recipesPerColumn;
@@ -29,24 +29,24 @@ public class StoneCutterRecipeRenderer {
         return INSTANCE;
     }
 
-    public void renderStoneCutterRecipe(DrawContext drawContext, int mouseX, int mouseY) {
+    public void renderStoneCutterRecipe(GuiGraphics drawContext, int mouseX, int mouseY) {
         if (StoneCutterUtil.isStoneCutterRecipeViewOpen()) {
             StoneCutterRecipeStorage recipeStorage = StoneCutterRecipeStorage.getInstance();
             final int first = recipeStorage.getFirstVisibleRecipeId();
             final int countPerPage = recipeStorage.getRecipeCountPerPage();
             final int lastOnPage = first + countPerPage - 1;
 
-            HandledScreen<?> gui = (HandledScreen<?>) GuiUtils.getCurrentScreen();
+            AbstractContainerScreen<?> gui = (AbstractContainerScreen<?>) GuiUtils.getCurrentScreen();
 
             this.calculateRecipePositions(gui);
 
-            drawContext.getMatrices().pushMatrix();
-            drawContext.getMatrices().translate(this.recipeListX, this.recipeListY);
-            drawContext.getMatrices().scale((float) this.scale, (float) this.scale);
+            drawContext.pose().pushMatrix();
+            drawContext.pose().translate(this.recipeListX, this.recipeListY);
+            drawContext.pose().scale((float) this.scale, (float) this.scale);
 
             String str = StringUtils.translate("itemscroller.gui.label.recipe_page", (first / countPerPage) + 1, recipeStorage.getTotalRecipeCount() / countPerPage);
 
-            drawContext.drawText(this.mc.textRenderer, str, 16, -12, 0xC0C0C0C0, false);
+            drawContext.drawString(this.mc.font, str, 16, -12, 0xC0C0C0C0, false);
 
             for (int i = 0, recipeId = first; recipeId <= lastOnPage; ++i, ++recipeId) {
                 ItemStack stack = recipeStorage.getRecipe(recipeId).getResult();
@@ -62,11 +62,11 @@ public class StoneCutterRecipeRenderer {
 
             this.renderRecipeDetail(recipe, recipeStorage.getRecipeCountPerPage(), gui, drawContext);
 
-            drawContext.getMatrices().popMatrix();
+            drawContext.pose().popMatrix();
         }
     }
 
-    private void calculateRecipePositions(HandledScreen<?> gui) {
+    private void calculateRecipePositions(AbstractContainerScreen<?> gui) {
         StoneCutterRecipeStorage recipes = StoneCutterRecipeStorage.getInstance();
         final int gapHorizontal = 2;
         final int gapVertical = 2;
@@ -95,9 +95,9 @@ public class StoneCutterRecipeRenderer {
         this.columnWidth = stackBaseHeight + this.numberTextWidth + this.gapColumn;
     }
 
-    private void renderStoredRecipeStack(ItemStack stack, int recipeId, int row, int column, HandledScreen<?> gui,
-                                         boolean selected, DrawContext drawContext) {
-        final TextRenderer font = this.mc.textRenderer;
+    private void renderStoredRecipeStack(ItemStack stack, int recipeId, int row, int column, AbstractContainerScreen<?> gui,
+                                         boolean selected, GuiGraphics drawContext) {
+        final Font font = this.mc.font;
         final String indexStr = String.valueOf(recipeId + 1);
 
         int x = column * this.columnWidth + this.gapColumn + this.numberTextWidth;
@@ -105,19 +105,19 @@ public class StoneCutterRecipeRenderer {
         this.renderStackAt(stack, x, y, selected, drawContext);
 
         float scale = 0.75F;
-        x = x - (int) (font.getWidth(indexStr) * scale) - 2;
-        y = row * this.entryHeight + this.entryHeight / 2 - font.fontHeight / 2;
+        x = x - (int) (font.width(indexStr) * scale) - 2;
+        y = row * this.entryHeight + this.entryHeight / 2 - font.lineHeight / 2;
 
-        drawContext.getMatrices().pushMatrix();
-        drawContext.getMatrices().translate(x, y);
-        drawContext.getMatrices().scale(scale, scale);
+        drawContext.pose().pushMatrix();
+        drawContext.pose().translate(x, y);
+        drawContext.pose().scale(scale, scale);
 
-        drawContext.drawText(font, indexStr, 0, 0, 0xFFC0C0C0, false);
+        drawContext.drawString(font, indexStr, 0, 0, 0xFFC0C0C0, false);
 
-        drawContext.getMatrices().popMatrix();
+        drawContext.pose().popMatrix();
     }
 
-    public int getHoveredRecipeId(int mouseX, int mouseY, HandledScreen<?> gui) {
+    public int getHoveredRecipeId(int mouseX, int mouseY, AbstractContainerScreen<?> gui) {
         if (StoneCutterUtil.isStoneCutterRecipeViewOpen()) {
             this.calculateRecipePositions(gui);
             final int stackDimensions = (int) (16 * this.scale);
@@ -140,7 +140,7 @@ public class StoneCutterRecipeRenderer {
         return -1;
     }
 
-    private void renderRecipeDetail(StoneCutterRecipePattern recipe, int recipeCountPerPage, HandledScreen<?> gui, DrawContext drawContext) {
+    private void renderRecipeDetail(StoneCutterRecipePattern recipe, int recipeCountPerPage, AbstractContainerScreen<?> gui, GuiGraphics drawContext) {
         int x = -3 * 17 + 2;
         int y = 3 * this.entryHeight;
         this.renderStackAt(recipe.getInput(), x, y, false, drawContext);
@@ -148,7 +148,7 @@ public class StoneCutterRecipeRenderer {
         this.renderStackAt(recipe.getResult(), x + 34, y, false, drawContext);
     }// TODO selection box position wrong
 
-    private void renderStackAt(ItemStack stack, int x, int y, boolean border, DrawContext drawContext) {
+    private void renderStackAt(ItemStack stack, int x, int y, boolean border, GuiGraphics drawContext) {
         final int w = 16;
 
         if (border) {
@@ -163,13 +163,13 @@ public class StoneCutterRecipeRenderer {
             stack = stack.copy();
             stack.setCount(1);
 
-            drawContext.getMatrices().pushMatrix();
-            drawContext.getMatrices().translate(0, 0);      // z = 100.f
+            drawContext.pose().pushMatrix();
+            drawContext.pose().translate(0, 0);      // z = 100.f
 
 //            DiffuseLighting.enableGuiDepthLighting();
-            drawContext.drawItem(stack, x, y);
+            drawContext.renderItem(stack, x, y);
 
-            drawContext.getMatrices().popMatrix();
+            drawContext.pose().popMatrix();
         }
     }
 }

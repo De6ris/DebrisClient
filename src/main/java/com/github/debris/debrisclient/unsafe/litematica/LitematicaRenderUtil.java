@@ -3,7 +3,7 @@ package com.github.debris.debrisclient.unsafe.litematica;
 import com.mojang.logging.LogUtils;
 import fi.dy.masa.litematica.render.OverlayRenderer;
 import fi.dy.masa.litematica.selection.Box;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import org.joml.Matrix4f;
 import org.slf4j.Logger;
 

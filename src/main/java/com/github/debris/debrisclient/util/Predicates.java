@@ -1,23 +1,23 @@
 package com.github.debris.debrisclient.util;
 
 import fi.dy.masa.malilib.util.GuiUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 
 public class Predicates {
-    public static boolean notInGame(MinecraftClient client) {
-        return client.world == null || client.player == null;
+    public static boolean notInGame(Minecraft client) {
+        return client.level == null || client.player == null;
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static boolean notInGuiContainer(MinecraftClient client) {
+    public static boolean notInGuiContainer(Minecraft client) {
         if (notInGame(client)) return true;
         if (client.player.isSpectator()) return true;
         Screen currentScreen = GuiUtils.getCurrentScreen();
-        if (currentScreen instanceof HandledScreen<?>) {// container screen
-            if (currentScreen instanceof CreativeInventoryScreen creativeInventoryScreen && !creativeInventoryScreen.isInventoryTabSelected()) {
+        if (currentScreen instanceof AbstractContainerScreen<?>) {// container screen
+            if (currentScreen instanceof CreativeModeInventoryScreen creativeInventoryScreen && !creativeInventoryScreen.isInventoryOpen()) {
                 return true;
             }
             return false;
@@ -25,9 +25,9 @@ public class Predicates {
         return true;
     }
 
-    public static boolean inGameNoGui(MinecraftClient client) {
+    public static boolean inGameNoGui(Minecraft client) {
         if (notInGame(client)) return false;
-        return client.currentScreen == null;
+        return client.screen == null;
     }
 
 }

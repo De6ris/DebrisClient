@@ -3,19 +3,19 @@ package com.github.debris.debrisclient.inventory.sort;
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import com.github.debris.debrisclient.feat.PinYinSupport;
 import com.github.debris.debrisclient.util.StringUtil;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Collection;
 import java.util.Comparator;
 
 public enum SortCategory {
     CREATIVE_INVENTORY(SortCategory::compareByCreativeInventory),
-    TRANSLATION_KEY(Comparator.comparing(Registries.ITEM::getId)),
+    TRANSLATION_KEY(Comparator.comparing(BuiltInRegistries.ITEM::getKey)),
     TRANSLATION_RESULT(Comparator.comparing(StringUtil::translateItem)),
     PINYIN(SortCategory::compareByPinyin);
 
@@ -34,7 +34,7 @@ public enum SortCategory {
     public static Comparator<ItemStack> getItemStackSorter() {
         Comparator<Item> itemOrderByConfig = DCCommonConfig.ItemSortingOrder.getEnumValue().order;
         Comparator<ItemStack> itemTypeComparator = (c1, c2) -> {
-            if (ItemStack.areItemsEqual(c1, c2)) {
+            if (ItemStack.isSameItem(c1, c2)) {
                 return 0;
             }
             return itemOrderByConfig.compare(c1.getItem(), c2.getItem());
@@ -46,16 +46,16 @@ public enum SortCategory {
                 .thenComparing(ItemStackComparators.BUNDLE)
                 .thenComparing(ItemStackComparators.ENCHANTMENT.reversed())// more enchantments come first
                 .thenComparing(ItemStackComparators.DAMAGE)// here damage is lost durability, so lossless items come first
-                .thenComparing(x -> x.getName().getString())
+                .thenComparing(x -> x.getHoverName().getString())
                 ;
     }
 
     private static int compareByCreativeInventory(Item c1, Item c2) {
-        ItemGroup searchGroup = ItemGroups.getSearchGroup();
-        Collection<ItemStack> displayStacks = searchGroup.getDisplayStacks();
+        CreativeModeTab searchGroup = CreativeModeTabs.searchTab();
+        Collection<ItemStack> displayStacks = searchGroup.getDisplayItems();
         if (displayStacks.isEmpty()) {
-            buildDisplayContext(MinecraftClient.getInstance());
-            displayStacks = searchGroup.getDisplayStacks();
+            buildDisplayContext(Minecraft.getInstance());
+            displayStacks = searchGroup.getDisplayItems();
         }
         for (ItemStack displayStack : displayStacks) {
             Item item = displayStack.getItem();
@@ -75,13 +75,13 @@ public enum SortCategory {
         return FALLBACK.compare(c1, c2);
     }
 
-    private static void buildDisplayContext(MinecraftClient mc) {
-        if (mc.world == null) {
+    private static void buildDisplayContext(Minecraft mc) {
+        if (mc.level == null) {
             return;
         }
 
-        ItemGroup.DisplayContext ctx = new ItemGroup.DisplayContext(mc.world.getEnabledFeatures(), true, mc.world.getRegistryManager());
-        Registries.ITEM_GROUP.stream().filter(group -> group.getType() == ItemGroup.Type.CATEGORY).forEach(group -> group.updateEntries(ctx));
-        ItemGroups.getSearchGroup().updateEntries(ctx);
+        CreativeModeTab.ItemDisplayParameters ctx = new CreativeModeTab.ItemDisplayParameters(mc.level.enabledFeatures(), true, mc.level.registryAccess());
+        BuiltInRegistries.CREATIVE_MODE_TAB.stream().filter(group -> group.getType() == CreativeModeTab.Type.CATEGORY).forEach(group -> group.buildContents(ctx));
+        CreativeModeTabs.searchTab().buildContents(ctx);
     }
 }

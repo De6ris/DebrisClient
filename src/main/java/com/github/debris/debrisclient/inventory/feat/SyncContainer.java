@@ -15,13 +15,13 @@ import com.github.debris.debrisclient.util.ItemUtil;
 import com.github.debris.debrisclient.util.RayTraceUtil;
 import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.InfoUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class SyncContainer {
     private static List<ItemStack> TEMPLATE = null;
 
     @SuppressWarnings("DataFlowIssue")
-    public static boolean trySync(MinecraftClient client) {
+    public static boolean trySync(Minecraft client) {
         if (BlockInteractor.INSTANCE.clearAndInform()) return true;
 
         if (WAITING_TEMPLATE) {
@@ -43,13 +43,13 @@ public class SyncContainer {
         }
 
         Screen screen = GuiUtils.getCurrentScreen();
-        if (screen != null) screen.close();
+        if (screen != null) screen.onClose();
 
         Optional<BlockPos> optional = RayTraceUtil.getRayTraceBlock(client);
-        if (optional.isPresent() && BlockUtil.isContainer(client.world, optional.get())) {
+        if (optional.isPresent() && BlockUtil.isContainer(client.level, optional.get())) {
             BlockPos blockPos = optional.get();
             BlockInteractor.INSTANCE.add(blockPos);
-            TYPE = client.world.getBlockState(blockPos).getBlock();
+            TYPE = client.level.getBlockState(blockPos).getBlock();
         } else {
             InfoUtils.sendVanillaMessage(SyncContainerText.NO_CONTAINER_PRESENT.text());
             return false;
@@ -62,9 +62,9 @@ public class SyncContainer {
     }
 
     private static void syncInternal() {
-        TEMPLATE = EnumSection.Container.get().slots().stream().map(Slot::getStack).map(ItemStack::copy).toList();
+        TEMPLATE = EnumSection.Container.get().slots().stream().map(Slot::getItem).map(ItemStack::copy).toList();
         InfoUtils.sendVanillaMessage(AutoProcessText.TEMPLATE_RECORDER_MESSAGE.text(InventoryUtil.getGuiContainer().getTitle()));
-        InteractionFactory.addBlockTask(MinecraftClient.getInstance(), (world, pos) -> world.getBlockState(pos).isOf(TYPE), false);
+        InteractionFactory.addBlockTask(Minecraft.getInstance(), (world, pos) -> world.getBlockState(pos).is(TYPE), false);
     }
 
     public static class Recorder implements IAutoProcessor {
@@ -113,7 +113,7 @@ public class SyncContainer {
             boolean success = true;
             for (int i = 0; i < template.size(); i++) {
                 Slot slot = to.get(i);
-                if (slot.hasStack()) {
+                if (slot.hasItem()) {
                     InventoryUtil.leftClick(slot);
                     InventoryTweaks.clearCursor(from);
                 }// make it empty
@@ -127,8 +127,8 @@ public class SyncContainer {
         private static boolean supplySlot(ItemStack template, Slot to, ContainerSection from) {
             int countToSupply = template.getCount();
             for (Slot slot : from.slots()) {
-                if (!slot.hasStack()) continue;
-                ItemStack stack = slot.getStack();
+                if (!slot.hasItem()) continue;
+                ItemStack stack = slot.getItem();
                 if (!ItemUtil.compareIDMeta(template, stack)) continue;
                 if (stack.getCount() < countToSupply) {// supply part
                     countToSupply -= stack.getCount();

@@ -3,12 +3,12 @@ package com.github.debris.debrisclient.inventory.section;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.mojang.logging.LogUtils;
 import fi.dy.masa.malilib.util.GuiUtils;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.screen.PlayerScreenHandler;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.inventory.Slot;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -22,22 +22,22 @@ public class SectionHandler {
     private final List<ContainerSection> unidentifiedSections = new ArrayList<>();
     private final Map<EnumSection, ContainerSection> sectionMap = new EnumMap<>(EnumSection.class);
 
-    public SectionHandler(HandledScreen<?> guiContainer) {
-        this.identifyContainer(guiContainer, guiContainer.getScreenHandler());
+    public SectionHandler(AbstractContainerScreen<?> guiContainer) {
+        this.identifyContainer(guiContainer, guiContainer.getMenu());
     }
 
-    public SectionHandler(ScreenHandler container) {
+    public SectionHandler(AbstractContainerMenu container) {
         this.identifyContainer(null, container);
     }
 
-    private void identifyContainer(@Nullable HandledScreen<?> guiContainer, ScreenHandler container) {
+    private void identifyContainer(@Nullable AbstractContainerScreen<?> guiContainer, AbstractContainerMenu container) {
         if (container == null) {
             LOGGER.warn("null container while identifying screen {} ", guiContainer);
             return;
         }
 
         List<Slot> slots = InventoryUtil.getSlots(container);
-        Map<Inventory, List<Slot>> groupedByInventory = slots.stream().collect(Collectors.groupingBy(x -> x.inventory));
+        Map<Container, List<Slot>> groupedByInventory = slots.stream().collect(Collectors.groupingBy(x -> x.container));
         SectionIdentifier identifier = new SectionIdentifier(this::putSection, this::handleUnidentified);
         groupedByInventory.forEach((iInventory, partSlots) -> identifier.identify(guiContainer, container, iInventory, partSlots));
     }
@@ -55,23 +55,23 @@ public class SectionHandler {
         this.unidentifiedSections.add(section);
     }
 
-    public static void onClientPlayerInit(PlayerScreenHandler playerContainer) {
+    public static void onClientPlayerInit(InventoryMenu playerContainer) {
         SectionHandler sectionHandler = new SectionHandler(playerContainer);
         ((IContainer) playerContainer).dc$setSectionHandler(sectionHandler);
     }
 
-    public static void updateSection(HandledScreen<?> guiContainer) {
-        ScreenHandler container = guiContainer.getScreenHandler();
+    public static void updateSection(AbstractContainerScreen<?> guiContainer) {
+        AbstractContainerMenu container = guiContainer.getMenu();
         ((IContainer) container).dc$setSectionHandler(new SectionHandler(guiContainer));
     }
 
     public static SectionHandler getSectionHandler() {
-        ScreenHandler container = InventoryUtil.getCurrentContainer();
+        AbstractContainerMenu container = InventoryUtil.getCurrentContainer();
         SectionHandler sectionHandler = ((IContainer) container).dc$getSectionHandler();
         if (sectionHandler != null) return sectionHandler;
 
         Screen screen = GuiUtils.getCurrentScreen();
-        if (!(screen instanceof HandledScreen<?> guiContainer)) {
+        if (!(screen instanceof AbstractContainerScreen<?> guiContainer)) {
             LOGGER.warn("weird that in a non container screen with non-default container, screen:\n{}", screen);
             return ((IContainer) InventoryUtil.getCurrentContainer()).dc$getSectionHandler();
         }

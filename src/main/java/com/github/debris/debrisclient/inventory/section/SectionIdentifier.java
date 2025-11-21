@@ -3,16 +3,12 @@ package com.github.debris.debrisclient.inventory.section;
 import com.github.debris.debrisclient.util.AccessorUtil;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.inventory.CraftingResultInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.screen.*;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
-import net.minecraft.village.MerchantInventory;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.*;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -31,7 +27,7 @@ public class SectionIdentifier {
         this.unidentifiedHandler = unidentifiedHandler;
     }
 
-    public void identify(@Nullable HandledScreen<?> guiContainer, ScreenHandler container, Inventory iInventory, List<Slot> slotList) {
+    public void identify(@Nullable AbstractContainerScreen<?> guiContainer, AbstractContainerMenu container, Container iInventory, List<Slot> slotList) {
         try {
             this.identifyInternal(guiContainer, container, iInventory, slotList);
         } catch (Exception e) {
@@ -40,7 +36,7 @@ public class SectionIdentifier {
         }
     }
 
-    private void identifyInternal(@Nullable HandledScreen<?> guiContainer, ScreenHandler container, Inventory iInventory, List<Slot> slotList) {
+    private void identifyInternal(@Nullable AbstractContainerScreen<?> guiContainer, AbstractContainerMenu container, Container iInventory, List<Slot> slotList) {
         ContainerSection theWholeSection = createSection(slotList);
 
         if (InventoryUtil.isPlayerInventory(iInventory)) {
@@ -75,73 +71,73 @@ public class SectionIdentifier {
             return;
         }
 
-        if (container instanceof AbstractFurnaceScreenHandler) {
+        if (container instanceof AbstractFurnaceMenu) {
             putSection(EnumSection.FurnaceIn, createSection(slotList.subList(0, 1)));
             putSection(EnumSection.FurnaceFuel, createSection(slotList.subList(1, 2)));
             putSection(EnumSection.FurnaceOut, createSection(slotList.subList(2, 3)));
             return;
         }
 
-        if (iInventory instanceof MerchantInventory) {
+        if (iInventory instanceof MerchantContainer) {
             putSection(EnumSection.MerchantIn, createSection(slotList.subList(0, 2)));
             putSection(EnumSection.MerchantOut, createSection(slotList.subList(2, 3)));
             return;
         }
 
-        if (container instanceof BrewingStandScreenHandler) {
+        if (container instanceof BrewingStandMenu) {
             putSection(EnumSection.BrewingBottles, createSection(slotList.subList(0, 3)));
             putSection(EnumSection.BrewingIngredient, createSection(slotList.subList(3, 4)));
             putSection(EnumSection.BrewingFuel, createSection(slotList.subList(4, 5)));
             return;
         }
 
-        if (iInventory instanceof RecipeInputInventory) {
+        if (iInventory instanceof CraftingContainer) {
             putSection(EnumSection.CraftMatrix, theWholeSection);
             return;
         }
 
-        if (iInventory instanceof CraftingResultInventory) {
+        if (iInventory instanceof ResultContainer) {
             putSection(EnumSection.CraftResult, theWholeSection);
             return;
         }
 
-        if (container instanceof StonecutterScreenHandler) {
+        if (container instanceof StonecutterMenu) {
             putSection(EnumSection.StoneCutterIn, theWholeSection);
             return;
         }
 
-        if (container instanceof CartographyTableScreenHandler) {
+        if (container instanceof CartographyTableMenu) {
             putSection(EnumSection.CartographyIn, createSection(slotList.subList(0, 1)));
             putSection(EnumSection.CartographyIn2, createSection(slotList.subList(1, 2)));
             return;
         }
 
-        if (container instanceof AnvilScreenHandler) {
+        if (container instanceof AnvilMenu) {
             putSection(EnumSection.AnvilIn1, createSection(slotList.subList(0, 1)));
             putSection(EnumSection.AnvilIn2, createSection(slotList.subList(1, 2)));
             return;
         }
 
-        if (container instanceof SmithingScreenHandler) {
+        if (container instanceof SmithingMenu) {
             putSection(EnumSection.SmithIn1, createSection(slotList.subList(0, 1)));
             putSection(EnumSection.SmithIn2, createSection(slotList.subList(1, 2)));
             putSection(EnumSection.SmithIn3, createSection(slotList.subList(2, 3)));
             return;
         }
 
-        if (container instanceof GrindstoneScreenHandler) {
+        if (container instanceof GrindstoneMenu) {
             putSection(EnumSection.GrindstoneIn, theWholeSection);
             return;
         }
 
-        if (container instanceof CreativeInventoryScreen.CreativeScreenHandler) {
+        if (container instanceof CreativeModeInventoryScreen.ItemPickerMenu) {
             putSection(EnumSection.CreativeTab, theWholeSection);
             return;
         }
 
         if (guiContainer != null) {
-            Text title = guiContainer.getTitle();
-            if (title.getContent() instanceof TranslatableTextContent translatable) {
+            Component title = guiContainer.getTitle();
+            if (title.getContents() instanceof TranslatableContents translatable) {
                 if (translatable.getKey().equals("gca.player.inventory")) {
                     putSection(EnumSection.FakePlayerActions, createSection(createFakePlayerActions(slotList)));
                     putSection(EnumSection.FakePlayerArmor, createSection(slotList.subList(1, 5)));

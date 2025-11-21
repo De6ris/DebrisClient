@@ -2,23 +2,23 @@ package com.github.debris.debrisclient.util;
 
 import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.config.DCCommonConfig;
-import com.github.debris.debrisclient.unsafe.litematica.LitematicaAccessor;
 import com.github.debris.debrisclient.unsafe.MiniHudAccess;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.client.sound.SoundInstance;
-import net.minecraft.entity.EntityType;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.Registries;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
+import com.github.debris.debrisclient.unsafe.litematica.LitematicaAccessor;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class CullingUtil {
     public static boolean shouldCullBlockEntity(BlockEntityType<?> type) {
         if (type == BlockEntityType.SIGN && DCCommonConfig.CullSign.getBooleanValue()) return true;
         if (type == BlockEntityType.CHEST && DCCommonConfig.CullChest.getBooleanValue()) return true;
 
-        Identifier id = BlockEntityType.getId(type);
+        ResourceLocation id = BlockEntityType.getKey(type);
         if (id == null) return false;
         return DCCommonConfig.CullBlockEntityList.getStrings().contains(id.toString());
     }
@@ -29,14 +29,14 @@ public class CullingUtil {
         if (DCCommonConfig.CullItemEntity.getBooleanValue() && type == EntityType.ITEM) return true;
         if (DCCommonConfig.CullExperienceOrb.getBooleanValue() && type == EntityType.EXPERIENCE_ORB) return true;
 
-        return DCCommonConfig.CullEntityList.getStrings().contains(EntityType.getId(type).toString());
+        return DCCommonConfig.CullEntityList.getStrings().contains(EntityType.getKey(type).toString());
     }
 
     public static boolean shouldMuteSound(SoundInstance soundInstance) {
-        Identifier id = soundInstance.getId();
-        if (DCCommonConfig.MuteExplosion.getBooleanValue() && SoundEvents.ENTITY_GENERIC_EXPLODE.matchesId(id))
+        ResourceLocation id = soundInstance.getLocation();
+        if (DCCommonConfig.MuteExplosion.getBooleanValue() && SoundEvents.GENERIC_EXPLODE.is(id))
             return true;
-        if (DCCommonConfig.MuteDispenser.getBooleanValue() && SoundEvents.BLOCK_DISPENSER_FAIL.id().equals(id))
+        if (DCCommonConfig.MuteDispenser.getBooleanValue() && SoundEvents.DISPENSER_FAIL.location().equals(id))
             return true;
 
         String path = id.getPath();
@@ -53,10 +53,10 @@ public class CullingUtil {
         return DCCommonConfig.MuteSoundList.getStrings().contains(id.toString());
     }
 
-    public static boolean shouldCullParticle(ParticleEffect particleEffect) {
+    public static boolean shouldCullParticle(ParticleOptions particleEffect) {
         if (particleEffect == ParticleTypes.POOF && DCCommonConfig.CullPoofParticle.getBooleanValue()) return true;
 
-        Identifier id = Registries.PARTICLE_TYPE.getId(particleEffect.getType());
+        ResourceLocation id = BuiltInRegistries.PARTICLE_TYPE.getKey(particleEffect.getType());
         if (id == null) return false;
         return DCCommonConfig.CullParticleList.getStrings().contains(id.toString());
     }

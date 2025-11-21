@@ -11,9 +11,9 @@ import dev.xpple.clientarguments.arguments.CVec3Argument;
 import fi.dy.masa.malilib.config.IConfigBoolean;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
@@ -42,23 +42,23 @@ public class DCTeleportCommand {
     }
 
     private static int execute(FabricClientCommandSource source, Entity destination) {
-        teleport(source, destination.getEntityPos(), destination.getYaw(), destination.getPitch());
+        teleport(source, destination.position(), destination.getYRot(), destination.getXRot());
         return Command.SINGLE_SUCCESS;
     }
 
     private static int execute(FabricClientCommandSource source, CCoordinates location) {
         Entity entity = source.getEntity();
-        teleport(source, location.getPosition(source), entity.getYaw(), entity.getPitch());
+        teleport(source, location.getPosition(source), entity.getYRot(), entity.getXRot());
         return Command.SINGLE_SUCCESS;
     }
 
-    private static void teleport(FabricClientCommandSource source, Vec3d pos, float yaw, float pitch) {
+    private static void teleport(FabricClientCommandSource source, Vec3 pos, float yaw, float pitch) {
         IConfigBoolean config = TweakerooAccess.getFreeCamConfig();
         if (!config.getBooleanValue()) {
             config.setBooleanValue(true);
             InfoUtils.printBooleanConfigToggleMessage(config.getPrettyName(), true);
         }
-        ClientPlayerEntity entity = TweakerooAccess.getCamEntity();
-        entity.refreshPositionAndAngles(pos, yaw, pitch);
+        LocalPlayer entity = TweakerooAccess.getCamEntity();
+        entity.snapTo(pos, yaw, pitch);
     }
 }

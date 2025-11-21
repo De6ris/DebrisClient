@@ -1,17 +1,17 @@
 package com.github.debris.debrisclient.util;
 
 
-import net.minecraft.block.ShulkerBoxBlock;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BundleItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BundleItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 
 import java.util.Objects;
 import java.util.function.Predicate;
 
 public class ItemUtil {
     public static boolean compareID(ItemStack itemStack, ItemStack other) {
-        return ItemStack.areItemsEqual(itemStack, other);
+        return ItemStack.isSameItem(itemStack, other);
     }
 
     public static boolean compareMeta(ItemStack itemStack, ItemStack other) {
@@ -31,7 +31,7 @@ public class ItemUtil {
     }
 
     public static boolean isFullStack(ItemStack itemStack) {
-        return itemStack.getCount() >= itemStack.getMaxCount();
+        return itemStack.getCount() >= itemStack.getMaxStackSize();
     }
 
     public static boolean canMerge(ItemStack to, ItemStack from) {

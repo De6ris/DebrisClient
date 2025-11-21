@@ -1,30 +1,30 @@
 package com.github.debris.debrisclient.util;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.server.integrated.IntegratedServer;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.server.IntegratedServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import org.slf4j.Logger;
 
 public class SyncUtil {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static Entity syncEntityDataFromIntegratedServer(Entity entity) {
-        IntegratedServer server = MinecraftClient.getInstance().getServer();
+        IntegratedServer server = Minecraft.getInstance().getSingleplayerServer();
         if (server == null) {
             return entity;
         }
 
-        ServerWorld serverWorld = server.getWorld(entity.getEntityWorld().getRegistryKey());
+        ServerLevel serverWorld = server.getLevel(entity.level().dimension());
         if (serverWorld == null) {
-            LOGGER.warn("no world {} on server?", entity.getEntityWorld().getRegistryKey());
+            LOGGER.warn("no world {} on server?", entity.level().dimension());
             return entity;
         }
 
-        Entity localEntity = serverWorld.getEntity(entity.getUuid());
+        Entity localEntity = serverWorld.getEntity(entity.getUUID());
         if (localEntity == null) {
-            LOGGER.warn("no entity with uuid {} on server?", entity.getUuid());
+            LOGGER.warn("no entity with uuid {} on server?", entity.getUUID());
             return entity;
         }
 

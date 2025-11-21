@@ -13,7 +13,7 @@ import fi.dy.masa.malilib.event.WorldLoadHandler;
 import fi.dy.masa.malilib.interfaces.IInitializationHandler;
 import fi.dy.masa.malilib.registry.Registry;
 import fi.dy.masa.malilib.util.data.ModInfo;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class InitListener implements IInitializationHandler {
     @Override
@@ -22,7 +22,7 @@ public class InitListener implements IInitializationHandler {
         InputEventHandler.getKeybindManager().registerKeybindProvider(InputListener.getInstance());
         InputEventHandler.getInputManager().registerKeyboardInputHandler(InputListener.getInstance());
         InputEventHandler.getInputManager().registerMouseInputHandler(InputListener.getInstance());
-        Callbacks.init(MinecraftClient.getInstance());
+        Callbacks.init(Minecraft.getInstance());
         TickHandler.getInstance().registerClientTickHandler(new TickListener());
         WorldLoadHandler.getInstance().registerWorldLoadPreHandler(WorldLoadListener.getInstance());
         WorldLoadHandler.getInstance().registerWorldLoadPostHandler(WorldLoadListener.getInstance());
