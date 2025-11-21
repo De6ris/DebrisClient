@@ -32,7 +32,7 @@ public abstract class CreativeInventoryScreenMixin extends AbstractContainerScre
     @Inject(method = "selectTab", at = @At("RETURN"))
     private void onReturn(CreativeModeTab group, CallbackInfo ci) {
         if (this.cache.getType() == CreativeModeTab.Type.INVENTORY || group.getType() == CreativeModeTab.Type.INVENTORY) {
-            SectionHandler.updateSection(this);
+            SectionHandler.markDirty(this);
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.github.debris.debrisclient.util;
 
-import com.github.debris.debrisclient.inventory.section.IContainer;
 import com.github.debris.debrisclient.mixin.client.IMixinClientRecipeBook;
 import com.github.debris.debrisclient.mixin.client.IMixinMinecraftClient;
 import com.github.debris.debrisclient.mixin.client.gui.IMixinChatHud;
@@ -12,6 +11,7 @@ import com.github.debris.debrisclient.mixin.compat.malilib.IMixinButtonBase;
 import com.github.debris.debrisclient.mixin.compat.malilib.IMixinGuiBase;
 import com.github.debris.debrisclient.mixin.compat.malilib.IMixinWidgetConfigOption;
 import com.github.debris.debrisclient.mixin.compat.malilib.IMixinWidgetListBase;
+import com.github.debris.debrisclient.mixin.world.inventory.IAbstractContainerMenuMixin;
 import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
@@ -30,6 +30,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractRecipeBookScreen;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.client.player.ClientInput;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.crafting.display.RecipeDisplayEntry;
 import net.minecraft.world.item.crafting.display.RecipeDisplayId;
@@ -72,8 +73,9 @@ public class AccessorUtil {
         return ((IMixinChatScreen) screen).getChatField();
     }
 
-    public static String getTypeString(AbstractContainerMenu container) {
-        return ((IContainer) container).dc$getTypeString();
+    @Nullable
+    public static MenuType<?> getMenuType(AbstractContainerMenu container) {
+        return ((IAbstractContainerMenuMixin) container).getMenuType();
     }
 
     public static List<ButtonBase> getButtons(GuiBase gui) {

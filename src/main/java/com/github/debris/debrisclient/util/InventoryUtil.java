@@ -7,10 +7,12 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.display.RecipeDisplayId;
@@ -243,6 +245,12 @@ public class InventoryUtil {
 
     public static boolean isPlayerInventory(Container inventory) {
         return inventory instanceof Inventory;
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    public static String getTypeString(AbstractContainerMenu container) {
+        MenuType<?> menuType = AccessorUtil.getMenuType(container);
+        return menuType != null ? BuiltInRegistries.MENU.getKey(menuType).toString() : "<no type>";
     }
 
 }

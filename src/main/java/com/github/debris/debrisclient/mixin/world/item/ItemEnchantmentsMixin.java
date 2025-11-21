@@ -1,4 +1,4 @@
-package com.github.debris.debrisclient.mixin.component;
+package com.github.debris.debrisclient.mixin.world.item;
 
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(ItemEnchantments.class)
-public class ItemEnchantmentsComponentMixin {
+public class ItemEnchantmentsMixin {
     @WrapOperation(method = "addToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/Enchantment;getFullname(Lnet/minecraft/core/Holder;I)Lnet/minecraft/network/chat/Component;"))
     private Component appendMaxLevel(Holder<Enchantment> enchantment, int level, Operation<Component> original) {
         Component call = original.call(enchantment, level);

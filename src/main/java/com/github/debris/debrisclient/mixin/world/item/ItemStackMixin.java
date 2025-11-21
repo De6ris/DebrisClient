@@ -1,4 +1,4 @@
-package com.github.debris.debrisclient.mixin.item;
+package com.github.debris.debrisclient.mixin.world.item;
 
 import com.github.debris.debrisclient.feat.ExtraTooltip;
 import net.minecraft.network.chat.Component;

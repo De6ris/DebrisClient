@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(AbstractContainerScreen.class)
-public abstract class HandledScreenMixin implements IAutoProcessScreen {
+public abstract class GuiContainerMixin implements IAutoProcessScreen {
     @Unique
     private boolean processFlag;
 

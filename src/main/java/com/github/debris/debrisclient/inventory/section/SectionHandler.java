@@ -60,9 +60,9 @@ public class SectionHandler {
         ((IContainer) playerContainer).dc$setSectionHandler(sectionHandler);
     }
 
-    public static void updateSection(AbstractContainerScreen<?> guiContainer) {
+    public static void markDirty(AbstractContainerScreen<?> guiContainer) {
         AbstractContainerMenu container = guiContainer.getMenu();
-        ((IContainer) container).dc$setSectionHandler(new SectionHandler(guiContainer));
+        ((IContainer) container).dc$setSectionHandler(null);
     }
 
     public static SectionHandler getSectionHandler() {
@@ -73,7 +73,7 @@ public class SectionHandler {
         Screen screen = GuiUtils.getCurrentScreen();
         if (!(screen instanceof AbstractContainerScreen<?> guiContainer)) {
             LOGGER.warn("weird that in a non container screen with non-default container, screen:\n{}", screen);
-            return ((IContainer) InventoryUtil.getCurrentContainer()).dc$getSectionHandler();
+            return ((IContainer) InventoryUtil.getInventoryContainer()).dc$getSectionHandler();
         }
 
         SectionHandler newHandler = new SectionHandler(guiContainer);

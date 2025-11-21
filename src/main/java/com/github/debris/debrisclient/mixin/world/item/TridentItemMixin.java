@@ -1,4 +1,4 @@
-package com.github.debris.debrisclient.mixin.item;
+package com.github.debris.debrisclient.mixin.world.item;
 
 import com.github.debris.debrisclient.inventory.feat.LoyalTrident;
 import net.minecraft.world.entity.LivingEntity;
