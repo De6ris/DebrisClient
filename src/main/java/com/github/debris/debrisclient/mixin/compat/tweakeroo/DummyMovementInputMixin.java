@@ -19,7 +19,7 @@ public abstract class DummyMovementInputMixin extends ClientInput {
     @Inject(method = "tick", at = @At("RETURN"), remap = true)
     private void autoMoving(CallbackInfo ci) {
         if (FeatureToggle.TWEAK_FREE_CAMERA.getBooleanValue() && DCCommonConfig.FreeCamKeepAutoMoving.getBooleanValue() && AutoMoving.isAutoMoving()) {
-            AutoMoving.handleMovement(this);
+            AutoMoving.tickInput(this);
         } else {
             AutoMoving.clearMovement(this);
         }

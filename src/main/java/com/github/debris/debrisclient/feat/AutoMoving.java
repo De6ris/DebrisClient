@@ -7,6 +7,8 @@ import net.minecraft.world.entity.player.Input;
 import net.minecraft.world.phys.Vec2;
 
 public class AutoMoving {
+    private static boolean squatFlag = false;
+
     public static boolean isAutoMoving() {
         return DCCommonConfig.AUTO_WALK.getBooleanValue() ||
                 DCCommonConfig.AUTO_LEFT.getBooleanValue() ||
@@ -14,7 +16,7 @@ public class AutoMoving {
                 DCCommonConfig.AUTO_RIGHT.getBooleanValue();
     }
 
-    public static void handleMovement(ClientInput input) {
+    public static void tickInput(ClientInput input) {
         Input oldInput = input.keyPresses;
         input.keyPresses = new Input(
                 oldInput.forward() || DCCommonConfig.AUTO_WALK.getBooleanValue(),
@@ -22,11 +24,11 @@ public class AutoMoving {
                 oldInput.left() || DCCommonConfig.AUTO_LEFT.getBooleanValue(),
                 oldInput.right() || DCCommonConfig.AUTO_RIGHT.getBooleanValue(),
                 oldInput.jump(),
-                oldInput.shift(),
+                DCCommonConfig.AUTO_SQUAT.getBooleanValue() ? tickSquat() : oldInput.shift(),
                 oldInput.sprint()
         );
-        float f = getMovementMultiplier(input.keyPresses.forward(), input.keyPresses.backward());
-        float g = getMovementMultiplier(input.keyPresses.left(), input.keyPresses.right());
+        float f = calculateImpulse(input.keyPresses.forward(), input.keyPresses.backward());
+        float g = calculateImpulse(input.keyPresses.left(), input.keyPresses.right());
         AccessorUtil.setMoveVector(input, new Vec2(g, f).normalized());
     }
 
@@ -35,11 +37,16 @@ public class AutoMoving {
         AccessorUtil.setMoveVector(input, Vec2.ZERO);
     }
 
-    private static float getMovementMultiplier(boolean positive, boolean negative) {
+    private static float calculateImpulse(boolean positive, boolean negative) {
         if (positive == negative) {
             return 0.0F;
         } else {
             return positive ? 1.0F : -1.0F;
         }
+    }
+
+    private static boolean tickSquat() {
+        squatFlag = !squatFlag;
+        return squatFlag;
     }
 }

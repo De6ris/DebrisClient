@@ -117,6 +117,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed AUTO_LEFT = ofBooleanHotkeyed("自动向左", false, "LEFT_ALT,LEFT", "可用于走路，划船");
     public static final ConfigBooleanHotkeyed AUTO_BACK = ofBooleanHotkeyed("自动后退", false, "LEFT_ALT,DOWN", "可用于走路，划船");
     public static final ConfigBooleanHotkeyed AUTO_RIGHT = ofBooleanHotkeyed("自动向右", false, "LEFT_ALT,RIGHT", "可用于走路，划船");
+    public static final ConfigBooleanHotkeyed AUTO_SQUAT = ofBooleanHotkeyed("自动蹲起", false, "LEFT_ALT,RIGHT_SHIFT");
     public static final ConfigBooleanHotkeyed StartStoneCutting = ofBooleanHotkeyed("启动连续切石", false, "", ANY);
     public static final ConfigBooleanHotkeyed StartMassCrafting = ofBooleanHotkeyed("启动连续喷射合成", false, "", ANY);
     public static final ConfigBooleanHotkeyed LoyalerTrident = ofBooleanHotkeyed("更忠诚的三叉戟", false, "", "发射的忠诚三叉戟能够回到副手");
@@ -284,6 +285,7 @@ public class DCCommonConfig implements IConfigHandler {
                 AUTO_LEFT,
                 AUTO_RIGHT,
                 AUTO_BACK,
+                AUTO_SQUAT,
                 StartStoneCutting,
                 StartMassCrafting,
                 LoyalerTrident,
