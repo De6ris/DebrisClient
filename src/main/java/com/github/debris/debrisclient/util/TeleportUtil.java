@@ -3,6 +3,7 @@ package com.github.debris.debrisclient.util;
 import com.github.debris.debrisclient.command.Commands;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.permissions.Permissions;
 
 public class TeleportUtil {
     public static String suggestCommand(Minecraft client, BlockPos pos) {
@@ -16,6 +17,6 @@ public class TeleportUtil {
 
     @SuppressWarnings("DataFlowIssue")
     private static boolean canUseDefaultCommand(Minecraft client) {
-        return client.player.hasPermissions(2);
+        return client.player.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER);
     }
 }

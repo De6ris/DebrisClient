@@ -5,7 +5,7 @@ import com.mojang.logging.LogUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import org.slf4j.Logger;
@@ -37,7 +37,7 @@ public class StringUtil {
     }
 
     public static String translateBiome(Biome biome) {
-        ResourceLocation id = Minecraft.getInstance().level.registryAccess().lookupOrThrow(Registries.BIOME).getKey(biome);
+        Identifier id = Minecraft.getInstance().level.registryAccess().lookupOrThrow(Registries.BIOME).getKey(biome);
         String translationKey = "biome." + id.toString().replace(":", ".");
         String biomeName = StringUtils.translate(translationKey);
         if (biomeName.equals(translationKey)) {

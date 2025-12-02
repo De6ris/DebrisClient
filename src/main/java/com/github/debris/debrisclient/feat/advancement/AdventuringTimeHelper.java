@@ -19,7 +19,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -34,7 +34,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class AdventuringTimeHelper {
-    private static final ResourceLocation ADVANCEMENT_ID = ResourceLocation.parse("adventure/adventuring_time");
+    private static final Identifier ADVANCEMENT_ID = Identifier.parse("adventure/adventuring_time");
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdventuringTimeHelper.class);
 
@@ -70,7 +70,7 @@ public class AdventuringTimeHelper {
     }
 
     private static boolean isOverworld(Level world) {
-        return world.dimensionType().natural();
+        return world.dimension() == Level.OVERWORLD;
     }
 
     private static boolean newChunk(ChunkPos chunkPos) {
@@ -93,9 +93,9 @@ public class AdventuringTimeHelper {
         return GLOWING_BIOMES.contains(biome);
     }
 
-    public static void onProgressUpdate(Minecraft client, Map<ResourceLocation, AdvancementProgress> map) {
+    public static void onProgressUpdate(Minecraft client, Map<Identifier, AdvancementProgress> map) {
         if (!isActive()) return;
-        ResourceLocation id = ADVANCEMENT_ID;
+        Identifier id = ADVANCEMENT_ID;
         if (!map.containsKey(id)) return;
         AdvancementProgress progress = map.get(id);
         readProgress(client, progress);
@@ -130,7 +130,7 @@ public class AdventuringTimeHelper {
         Set<Biome> set = PENDING_BIOMES;
         set.clear();
         for (String s : progress.getRemainingCriteria()) {
-            ResourceLocation identifier = ResourceLocation.parse(s);
+            Identifier identifier = Identifier.parse(s);
             Biome biome = registry.getValue(identifier);
             if (biome == null) {
                 LOGGER.warn("no biome for key {}", s);

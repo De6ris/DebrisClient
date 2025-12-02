@@ -13,7 +13,13 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(FogRenderer.class)
 public class FogRendererMixin {
-    @WrapOperation(method = {"computeFogColor", "setupFog(Lnet/minecraft/client/Camera;IZLnet/minecraft/client/DeltaTracker;FLnet/minecraft/client/multiplayer/ClientLevel;)Lorg/joml/Vector4f;"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/fog/environment/FogEnvironment;isApplicable(Lnet/minecraft/world/level/material/FogType;Lnet/minecraft/world/entity/Entity;)Z"))
+    @WrapOperation(
+            method = {"computeFogColor", "setupFog"},
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/fog/environment/FogEnvironment;isApplicable(Lnet/minecraft/world/level/material/FogType;Lnet/minecraft/world/entity/Entity;)Z"
+            )
+    )
     private boolean darknessOverride(FogEnvironment instance, FogType cameraSubmersionType, Entity entity, Operation<Boolean> original) {
         if ((instance instanceof DarknessFogEnvironment) && DCCommonConfig.DarknessOverride.getBooleanValue())
             return false;

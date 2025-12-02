@@ -54,7 +54,7 @@ public class PathNodesRenderer {
 
                     Vec3 start = new Vec3(current.getX() + 0.5, current.getY() + 0.5, current.getZ() + 0.5);
                     Vec3 end = new Vec3(next.getX() + 0.5, next.getY() + 0.5, next.getZ() + 0.5);
-                    RenderUtil.drawConnectLine(start, end, 0.05, new Color4f(1, 1, 1), new Color4f(0, 0, 1), new Color4f(0, 0, 1));
+                    this.drawConnectLine(start, end);
                 }
             }
 
@@ -62,10 +62,14 @@ public class PathNodesRenderer {
             if (moveControl.getWantedX() != 0 && moveControl.getWantedY() != 0 && moveControl.getWantedZ() != 0) {
                 Vec3 start = clientEntity.getEyePosition(partialTicks);
                 Vec3 end = new Vec3(moveControl.getWantedX(), moveControl.getWantedY(), moveControl.getWantedZ());
-                RenderUtil.drawConnectLine(start, end, 0.05, new Color4f(1, 1, 1), new Color4f(0, 0, 1), new Color4f(0, 0, 1));
+                this.drawConnectLine(start, end);
             }
         }
 
         this.mobQueue.clear();
+    }
+
+    private void drawConnectLine(Vec3 start, Vec3 end) {
+        RenderUtil.drawConnectLine(start, end, 0.05, new Color4f(1, 1, 1), new Color4f(0, 0, 1), new Color4f(0, 0, 1), 0.01f);
     }
 }

@@ -56,7 +56,7 @@ public class ConfigCollector {
         for (ModInfo mod : mods) {
             if (shouldSkipMod(mod)) continue;
 
-            Supplier<GuiBase> supplier = mod.getConfigScreenSupplier();
+            Supplier<GuiBase> supplier = mod.configScreenSupplier();
             if (supplier == null) continue;
             GuiBase guiBase = supplier.get();
             if (!(guiBase instanceof GuiConfigsBase guiConfigsBase)) continue;
@@ -80,8 +80,8 @@ public class ConfigCollector {
      * The buttons' actions may lead to other screens.
      */
     private static void collect(ModInfo mod, GuiConfigsBase gui, BiConsumer<Source, List<GuiConfigsBase.ConfigOptionWrapper>> collector) {
-        String modId = mod.getModId();
-        String modName = mod.getModName();
+        String modId = mod.modId();
+        String modName = mod.modName();
 
         processGui(mod, gui);
         gui.initGui();//add buttons
@@ -101,7 +101,7 @@ public class ConfigCollector {
     }
 
     private static void processGui(ModInfo mod, GuiConfigsBase gui) {
-        String modId = mod.getModId();
+        String modId = mod.modId();
         switch (modId) {
             case ModReference.Litematica -> LitematicaAccessor.resetTab();
             case ModReference.MiniHud -> MiniHudAccess.resetTab();
@@ -110,7 +110,7 @@ public class ConfigCollector {
 
     private static boolean shouldSkipButton(ModInfo mod, GuiConfigsBase gui, ButtonBase button) {
         String content = AccessorUtil.getDisplayString(button);
-        String modId = mod.getModId();
+        String modId = mod.modId();
         switch (modId) {
             case DebrisClient.MOD_ID -> {
                 if (content.equals(DCConfigUi.Tab.ALL.getDisplayName())) return true;

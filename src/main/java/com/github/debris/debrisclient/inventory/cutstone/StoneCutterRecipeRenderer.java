@@ -1,6 +1,7 @@
 package com.github.debris.debrisclient.inventory.cutstone;
 
 import com.github.debris.debrisclient.util.AccessorUtil;
+import fi.dy.masa.malilib.render.GuiContext;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.StringUtils;
@@ -29,7 +30,7 @@ public class StoneCutterRecipeRenderer {
         return INSTANCE;
     }
 
-    public void renderStoneCutterRecipe(GuiGraphics drawContext, int mouseX, int mouseY) {
+    public void renderStoneCutterRecipe(GuiGraphics graphics, int mouseX, int mouseY) {
         if (StoneCutterUtil.isStoneCutterRecipeViewOpen()) {
             StoneCutterRecipeStorage recipeStorage = StoneCutterRecipeStorage.getInstance();
             final int first = recipeStorage.getFirstVisibleRecipeId();
@@ -39,6 +40,8 @@ public class StoneCutterRecipeRenderer {
             AbstractContainerScreen<?> gui = (AbstractContainerScreen<?>) GuiUtils.getCurrentScreen();
 
             this.calculateRecipePositions(gui);
+
+            GuiContext drawContext = GuiContext.fromGuiGraphics(graphics);
 
             drawContext.pose().pushMatrix();
             drawContext.pose().translate(this.recipeListX, this.recipeListY);
@@ -95,8 +98,13 @@ public class StoneCutterRecipeRenderer {
         this.columnWidth = stackBaseHeight + this.numberTextWidth + this.gapColumn;
     }
 
-    private void renderStoredRecipeStack(ItemStack stack, int recipeId, int row, int column, AbstractContainerScreen<?> gui,
-                                         boolean selected, GuiGraphics drawContext) {
+    private void renderStoredRecipeStack(ItemStack stack,
+                                         int recipeId,
+                                         int row,
+                                         int column,
+                                         AbstractContainerScreen<?> gui,
+                                         boolean selected,
+                                         GuiContext drawContext) {
         final Font font = this.mc.font;
         final String indexStr = String.valueOf(recipeId + 1);
 
@@ -140,15 +148,18 @@ public class StoneCutterRecipeRenderer {
         return -1;
     }
 
-    private void renderRecipeDetail(StoneCutterRecipePattern recipe, int recipeCountPerPage, AbstractContainerScreen<?> gui, GuiGraphics drawContext) {
+    private void renderRecipeDetail(StoneCutterRecipePattern recipe,
+                                    int recipeCountPerPage,
+                                    AbstractContainerScreen<?> gui,
+                                    GuiContext drawContext) {
         int x = -3 * 17 + 2;
         int y = 3 * this.entryHeight;
         this.renderStackAt(recipe.getInput(), x, y, false, drawContext);
         this.renderStackAt(new ItemStack(Items.STONECUTTER), x + 17, y, false, drawContext);
         this.renderStackAt(recipe.getResult(), x + 34, y, false, drawContext);
-    }// TODO selection box position wrong
+    }
 
-    private void renderStackAt(ItemStack stack, int x, int y, boolean border, GuiGraphics drawContext) {
+    private void renderStackAt(ItemStack stack, int x, int y, boolean border, GuiContext drawContext) {
         final int w = 16;
 
         if (border) {

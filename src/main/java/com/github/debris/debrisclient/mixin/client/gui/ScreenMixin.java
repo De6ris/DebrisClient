@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Screen.class)
 public abstract class ScreenMixin {
     @Inject(method = "renderWithTooltipAndSubtitles", at = @At(value = "RETURN"))
-    private void onDrawScreenPost(GuiGraphics context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        StoneCutterRecipeRenderer.getInstance().renderStoneCutterRecipe(context, mouseX, mouseY);
+    private void onDrawScreenPost(GuiGraphics graphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        StoneCutterRecipeRenderer.getInstance().renderStoneCutterRecipe(graphics, mouseX, mouseY);
     }
 }

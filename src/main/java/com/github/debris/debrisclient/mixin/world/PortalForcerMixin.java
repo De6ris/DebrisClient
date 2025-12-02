@@ -1,10 +1,10 @@
 package com.github.debris.debrisclient.mixin.world;
 
 import com.github.debris.debrisclient.feat.log.GameLogs;
-import net.minecraft.BlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.BlockUtil;
 import net.minecraft.world.level.portal.PortalForcer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

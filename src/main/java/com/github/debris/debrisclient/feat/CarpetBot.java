@@ -99,7 +99,7 @@ public class CarpetBot {
                     entity.getZ(),
                     entity.getYRot(),
                     entity.getXRot(),
-                    entity.level().dimension().location().toString()
+                    entity.level().dimension().identifier().toString()
             );
         }
 

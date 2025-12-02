@@ -15,7 +15,7 @@ import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -84,7 +84,7 @@ public class DCListCommand {
         return of("cull_block_entity", BuiltInRegistries.BLOCK_ENTITY_TYPE, DCCommonConfig.CullBlockEntityList)
                 .defaultArgumentProvider(source -> RayTraceUtil.getRayTraceBlockEntity(source.getClient())
                         .map(blockEntity -> BlockEntityType.getKey(blockEntity.getType()))
-                        .map(ResourceLocation::toString))
+                        .map(Identifier::toString))
                 .build();
     }
 
@@ -92,7 +92,7 @@ public class DCListCommand {
         return of("cull_entity", BuiltInRegistries.ENTITY_TYPE, DCCommonConfig.CullEntityList)
                 .defaultArgumentProvider(source -> RayTraceUtil.getRayTraceEntity(source.getClient())
                         .map(entity -> EntityType.getKey(entity.getType()))
-                        .map(ResourceLocation::toString))
+                        .map(Identifier::toString))
                 .build();
     }
 
@@ -119,7 +119,7 @@ public class DCListCommand {
 
     private static Builder of(String name, Registry<?> registry, List<String> list) {
         return of(name, list)
-                .argumentName(registry.key().location().getPath())
+                .argumentName(registry.key().identifier().getPath())
                 .addSuggest((ctx, builder) -> SharedSuggestionProvider.suggestResource(registry.keySet(), builder));
     }
 

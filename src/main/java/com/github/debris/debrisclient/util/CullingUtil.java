@@ -8,7 +8,7 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -18,7 +18,7 @@ public class CullingUtil {
         if (type == BlockEntityType.SIGN && DCCommonConfig.CullSign.getBooleanValue()) return true;
         if (type == BlockEntityType.CHEST && DCCommonConfig.CullChest.getBooleanValue()) return true;
 
-        ResourceLocation id = BlockEntityType.getKey(type);
+        Identifier id = BlockEntityType.getKey(type);
         if (id == null) return false;
         return DCCommonConfig.CullBlockEntityList.getStrings().contains(id.toString());
     }
@@ -33,7 +33,7 @@ public class CullingUtil {
     }
 
     public static boolean shouldMuteSound(SoundInstance soundInstance) {
-        ResourceLocation id = soundInstance.getLocation();
+        Identifier id = soundInstance.getIdentifier();
         if (DCCommonConfig.MuteExplosion.getBooleanValue() && SoundEvents.GENERIC_EXPLODE.is(id))
             return true;
         if (DCCommonConfig.MuteDispenser.getBooleanValue() && SoundEvents.DISPENSER_FAIL.location().equals(id))
@@ -56,7 +56,7 @@ public class CullingUtil {
     public static boolean shouldCullParticle(ParticleOptions particleEffect) {
         if (particleEffect == ParticleTypes.POOF && DCCommonConfig.CullPoofParticle.getBooleanValue()) return true;
 
-        ResourceLocation id = BuiltInRegistries.PARTICLE_TYPE.getKey(particleEffect.getType());
+        Identifier id = BuiltInRegistries.PARTICLE_TYPE.getKey(particleEffect.getType());
         if (id == null) return false;
         return DCCommonConfig.CullParticleList.getStrings().contains(id.toString());
     }

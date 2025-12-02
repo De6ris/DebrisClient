@@ -7,14 +7,19 @@ import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.data.Color4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
 
 public class RenderUtil {
     @SuppressWarnings("ConstantConditions")
-    public static void drawConnectLine(Vec3 pos1, Vec3 pos2, double boxLength, Color4f pos1Color, Color4f pos2Color, @NotNull Color4f lineColor) {
+    public static void drawConnectLine(Vec3 pos1,
+                                       Vec3 pos2,
+                                       double boxLength,
+                                       Color4f pos1Color,
+                                       Color4f pos2Color,
+                                       Color4f lineColor,
+                                       float lineWidth) {
         RenderUtils.depthTest(false);
 
-        Vec3 camPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+        Vec3 camPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
         // do not use EntityUtils.getCameraEntity().getPos(), that is not real camera position
 
         pos1 = pos1.subtract(camPos);
@@ -31,6 +36,7 @@ public class RenderUtil {
                 (float) (pos1.y() + boxLength),
                 (float) (pos1.z() + boxLength),
                 pos1Color,
+                lineWidth,
                 builder
         );
 
@@ -42,6 +48,7 @@ public class RenderUtil {
                 (float) (pos2.y() + boxLength),
                 (float) (pos2.z() + boxLength),
                 pos2Color,
+                lineWidth,
                 builder
         );
 

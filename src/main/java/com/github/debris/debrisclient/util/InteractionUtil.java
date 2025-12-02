@@ -18,12 +18,12 @@ import java.util.UUID;
 public class InteractionUtil {
     @SuppressWarnings("DataFlowIssue")
     public static boolean withinReach(Minecraft client, BlockPos blockPos) {
-        return client.player.canInteractWithBlock(blockPos, 0);
+        return client.player.isWithinBlockInteractionRange(blockPos, 0);
     }
 
     @SuppressWarnings("DataFlowIssue")
     public static boolean withinReach(Minecraft client, Entity entity) {
-        return client.player.canInteractWithEntity(entity, 0);
+        return client.player.isWithinEntityInteractionRange(entity, 0);
     }
 
     @SuppressWarnings("ConstantConditions")

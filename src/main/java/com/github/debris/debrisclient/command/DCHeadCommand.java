@@ -45,7 +45,7 @@ public class DCHeadCommand {
     }
 
     private static int giveHead(FabricClientCommandSource source, String name, Holder.Reference<SoundEvent> sound) {
-        String soundKey = sound.key().location().toString();
+        String soundKey = sound.key().identifier().toString();
         String command = String.format("/give @s minecraft:player_head[minecraft:profile=\"%s\", minecraft:note_block_sound=\"%s\"]", name, soundKey);
         ChatUtil.sendChat(source.getClient(), command);
         return Command.SINGLE_SUCCESS;

@@ -31,7 +31,7 @@ public class CommandFactory {
             ResourceKey<Registry<T>> registryKey,
             BiFunction<CommandContext<FabricClientCommandSource>, Holder.Reference<T>, Integer> execution
     ) {
-        return ofRegistryKey(registryKey.location().getPath(), registryKey, execution);
+        return ofRegistryKey(registryKey.identifier().getPath(), registryKey, execution);
     }
 
     public static <T> RequiredArgumentBuilder<FabricClientCommandSource, ?> ofRegistryKey(
