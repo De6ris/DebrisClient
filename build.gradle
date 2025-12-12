@@ -56,27 +56,23 @@ dependencies {
     modCompileOnly "com.github.sakura-ryoko:minihud:${project.minihud_version}"
 
 
-    //misc
+    //curse
     modCompileOnly "curse.maven:roughly-enough-items-${project.rei_projectid}:${project.rei_fileid}"
     modCompileOnly "curse.maven:worldedit-${project.worldedit_projectid}:${project.worldedit_fileid}"
     modCompileOnly "curse.maven:advanced-xray-fabric-edition-${project.xray_projectid}:${project.xray_fileid}"
     modCompileOnly "curse.maven:wthit-${project.wthit_projectid}:${project.wthit_fileid}"
     modCompileOnly "curse.maven:carpet-${project.carpet_projectid}:${project.carpet_fileid}"
 
+
+    //misc
     modCompileOnly "com.terraformersmc:modmenu:${project.mod_menu}"
 
     modImplementation("dev.xpple:clientarguments:${project.clientarguments_version}")
 
-//    implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:0.2.0"))
-//    include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:0.2.0")))
-//    include "io.github.cottonmc:Jankson-Fabric:${project.jankson_version}"
-//
-//    include api("io.github.juuxel:libninepatch:${project.libninepatch_version}")
-//
-//
     include(modImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
 
 
+    //local
     modCompileOnly(files("libs\\magiclib-minecraft-api-mc1.21.4-fabric-0.6.83-stable.jar"))
     modCompileOnly(files("libs\\LibGui-12.0.1+1.21.2.jar"))
     modCompileOnly(files("libs\\CommandGUIButtons-mc1.21-2.3.0+build.235+bb785b5.jar"))
