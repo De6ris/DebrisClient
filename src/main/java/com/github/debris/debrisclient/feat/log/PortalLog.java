@@ -14,7 +14,7 @@ public class PortalLog extends AbstractGameLog {
                 Component.empty()
                         .append(TextFactory.DEBUG)
                         .append(CommonComponents.SPACE)
-                        .append(GameLogText.PORTAL_CREATED.text(lowerLeft.toShortString(), world.dimension().identifier()))
+                        .append(GameLogText.PORTAL_CREATED.translate(lowerLeft.toShortString(), world.dimension().identifier()))
 
         );
     }

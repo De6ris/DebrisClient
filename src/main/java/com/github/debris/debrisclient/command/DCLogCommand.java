@@ -95,7 +95,7 @@ public class DCLogCommand {
                 .append(TextFactory.onOrOff(log.isActive()))
                 .withStyle(style -> style
                         .withHoverEvent(
-                                new HoverEvent.ShowText(LogCommandText.CLICK_TO_TOGGLE.text())
+                                new HoverEvent.ShowText(LogCommandText.CLICK_TO_TOGGLE.translate())
                         )
                         .withClickEvent(
                                 new ClickEvent.SuggestCommand(String.format("/%slog %s", Commands.PREFIX, category))
@@ -108,10 +108,10 @@ public class DCLogCommand {
     private static int clear(FabricClientCommandSource source, String category) {
         GameLog log = GameLogs.getLog(category);
         if (log == null) {
-            source.sendFeedback(LogCommandText.CATEGORY_NOT_EXIST.text(category));
+            source.sendFeedback(LogCommandText.CATEGORY_NOT_EXIST.translate(category));
         } else {
             log.setActive(false);
-            source.sendFeedback(LogCommandText.UNSUBSCRIBE.text(category));
+            source.sendFeedback(LogCommandText.UNSUBSCRIBE.translate(category));
         }
         return 0;
     }
@@ -119,11 +119,11 @@ public class DCLogCommand {
     private static int toggle(FabricClientCommandSource source, String category) {
         GameLog log = GameLogs.getLog(category);
         if (log == null) {
-            source.sendFeedback(LogCommandText.CATEGORY_NOT_EXIST.text(category));
+            source.sendFeedback(LogCommandText.CATEGORY_NOT_EXIST.translate(category));
         } else {
             log.toggle();
             LogCommandText message = log.isActive() ? LogCommandText.SUBSCRIBE : LogCommandText.UNSUBSCRIBE;
-            source.sendFeedback(message.text(category));
+            source.sendFeedback(message.translate(category));
         }
         return Command.SINGLE_SUCCESS;
     }
@@ -136,7 +136,7 @@ public class DCLogCommand {
                 success += 1;
             }
         }
-        source.sendFeedback(LogCommandText.UNSUBSCRIBE_ALL.text(success));
+        source.sendFeedback(LogCommandText.UNSUBSCRIBE_ALL.translate(success));
         return success;
     }
 
@@ -155,11 +155,11 @@ public class DCLogCommand {
     private static int setOption(FabricClientCommandSource source, String category, String option, String value) {
         GameLog log = GameLogs.getLog(category);
         if (log == null) {
-            source.sendFeedback(LogCommandText.CATEGORY_NOT_EXIST.text(category));
+            source.sendFeedback(LogCommandText.CATEGORY_NOT_EXIST.translate(category));
             return 0;
         }
         log.setOption(option, value);
-        source.sendFeedback(LogCommandText.SET_OPTION.text(category, option, value));
+        source.sendFeedback(LogCommandText.SET_OPTION.translate(category, option, value));
         return Command.SINGLE_SUCCESS;
     }
 

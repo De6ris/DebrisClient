@@ -9,7 +9,7 @@ public class ThunderLog extends AbstractGameLog {
     public void onThunderSync(boolean thunder) {
         if (this.isInactive()) return;
         if (this.thunder != thunder) {
-            ChatUtil.addLocalMessage(thunder ? GameLogText.THUNDER_START.text() : GameLogText.THUNDER_END.text());
+            ChatUtil.addLocalMessage(thunder ? GameLogText.THUNDER_START.translate() : GameLogText.THUNDER_END.translate());
         }
         this.thunder = thunder;
     }

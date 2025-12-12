@@ -20,7 +20,7 @@ public class EntityInteractor extends ObjectInteractor<Entity> {
 
     @Override
     protected void informClear() {
-        InfoUtils.sendVanillaMessage(InteractionText.STOP_ENTITIES.text());
+        InfoUtils.sendVanillaMessage(InteractionText.STOP_ENTITIES.translate());
     }
 
     @Override

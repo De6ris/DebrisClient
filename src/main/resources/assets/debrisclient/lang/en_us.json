@@ -42,5 +42,10 @@
   "debrisclient.list_command.entry_exists": "Entry exists: %s",
   "debrisclient.list_command.entry_not_exist": "Entry not exist: %s",
   "debrisclient.list_command.fail_default_argument": "Failed to get default argument",
-  "debrisclient.list_command.help": "This command can modify this mod's list configs\nOperations can also be done in config gui or files\nThe convenience here is tab auto-complete"
+  "debrisclient.list_command.help": "This command can modify this mod\u0027s list configs\nOperations can also be done in config gui or files\nThe convenience here is tab auto-complete",
+  "debrisclient.adventure_command.help": "Add waypoints to map mods when new biomes found",
+  "debrisclient.adventure_command.not_available": "Found no map mods",
+  "debrisclient.adventure_command.supported_mods": "Mods currently supported: xaero",
+  "debrisclient.adventure_command.status_on": "Adventuring time helper is on",
+  "debrisclient.adventure_command.status_off": "Adventuring time helper is off"
 }

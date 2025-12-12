@@ -20,7 +20,7 @@ public class BlockInteractor extends ObjectInteractor<BlockPos> {
 
     @Override
     protected void informClear() {
-        InfoUtils.sendVanillaMessage(InteractionText.STOP_BLOCKS.text());
+        InfoUtils.sendVanillaMessage(InteractionText.STOP_BLOCKS.translate());
     }
 
     @Override

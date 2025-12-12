@@ -31,7 +31,7 @@ public class ItemFinder implements IAutoProcessor {
             dealFound(found);
         } else {
             if (AutoProcessManager.allowMessage()) {
-                InfoUtils.sendVanillaMessage(AutoProcessText.ITEM_FINDER_NOT_FOUND.text());
+                InfoUtils.sendVanillaMessage(AutoProcessText.ITEM_FINDER_NOT_FOUND.translate());
             }
         }
 
@@ -44,6 +44,6 @@ public class ItemFinder implements IAutoProcessor {
 
     private static void dealFound(Collection<Item> found) {
         DCWhereIsItCommand.markFound(found);
-        InfoUtils.sendVanillaMessage(AutoProcessText.ITEM_FINDER_FOUND.text(StringUtil.translateItemCollection(found)));
+        InfoUtils.sendVanillaMessage(AutoProcessText.ITEM_FINDER_FOUND.translate(StringUtil.translateItemCollection(found)));
     }
 }

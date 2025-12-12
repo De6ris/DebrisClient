@@ -11,11 +11,11 @@ public interface Translatable {
 
     String getTranslationKey();
 
-    default MutableComponent text() {
+    default MutableComponent translate() {
         return Component.translatable(getTranslationKey());
     }
 
-    default MutableComponent text(Object... args) {
+    default MutableComponent translate(Object... args) {
         return Component.translatable(getTranslationKey(), args);
     }
 }

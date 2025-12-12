@@ -42,5 +42,10 @@
   "debrisclient.list_command.entry_exists": "条目已存在: ",
   "debrisclient.list_command.entry_not_exist": "该条目不存在: %s",
   "debrisclient.list_command.fail_default_argument": "获取默认参数失败",
-  "debrisclient.list_command.help": "此命令可对本模组配置的各个列表进行增删改查的操作\n你也可以在配置GUI,或配置文件中进行这些操作\n此命令方便之处在于能tab补全"
+  "debrisclient.list_command.help": "此命令可对本模组配置的各个列表进行增删改查的操作\n你也可以在配置GUI,或配置文件中进行这些操作\n此命令方便之处在于能tab补全",
+  "debrisclient.adventure_command.help": "检测到新群系时, 在地图模组中标记路径点",
+  "debrisclient.adventure_command.not_available": "未检测到地图模组",
+  "debrisclient.adventure_command.supported_mods": "目前支持的模组: xaero",
+  "debrisclient.adventure_command.status_on": "探索的时光助手已开启",
+  "debrisclient.adventure_command.status_off": "探索的时光助手已关闭"
 }

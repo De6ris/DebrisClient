@@ -1,7 +1,6 @@
 package com.github.debris.debrisclient.config;
 
 import com.github.debris.debrisclient.feat.*;
-import com.github.debris.debrisclient.feat.advancement.AdventuringTimeHelper;
 import com.github.debris.debrisclient.feat.interactor.InteractionFactory;
 import com.github.debris.debrisclient.gui.DCConfigUi;
 import com.github.debris.debrisclient.gui.UniversalSearchScreen;
@@ -82,8 +81,6 @@ public class Callbacks {
         });
 
         DCCommonConfig.AutoRepeatBlackList.setValueChangeCallback(config -> AutoRepeat.updateBlackList(config.getStrings()));
-
-        DCCommonConfig.AdventuringTimeHelper.setValueChangeCallback(config -> AdventuringTimeHelper.onConfigChange(client));
 
     }
 

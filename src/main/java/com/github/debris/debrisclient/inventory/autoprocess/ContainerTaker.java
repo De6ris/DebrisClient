@@ -22,7 +22,7 @@ public class ContainerTaker implements IAutoProcessor {
 
         if (containerSection.isEmpty()) {
             if (AutoProcessManager.allowMessage()) {
-                InfoUtils.sendVanillaMessage(AutoProcessText.CONTAINER_TAKER_MESSAGE.text(InventoryUtil.getGuiContainer().getTitle(), list.size()));
+                InfoUtils.sendVanillaMessage(AutoProcessText.CONTAINER_TAKER_MESSAGE.translate(InventoryUtil.getGuiContainer().getTitle(), list.size()));
             }
             return ProcessResult.CLOSE_TERMINATE;
         } else {

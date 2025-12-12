@@ -97,7 +97,7 @@ public class DCListCommand {
     }
 
     private static int help(FabricClientCommandSource source) {
-        source.sendFeedback(ListCommandText.HELP.text());
+        source.sendFeedback(ListCommandText.HELP.translate());
         return Command.SINGLE_SUCCESS;
     }
 
@@ -146,18 +146,18 @@ public class DCListCommand {
             this.argumentName = "dummy";
             this.addExecute = (source, key) -> {
                 if (list.contains(key)) {
-                    source.sendFeedback(ListCommandText.ENTRY_EXISTS.text(key));
+                    source.sendFeedback(ListCommandText.ENTRY_EXISTS.translate(key));
                 } else {
                     list.add(key);
-                    source.sendFeedback(ListCommandText.ADD.text(key));
+                    source.sendFeedback(ListCommandText.ADD.translate(key));
                 }
                 return Command.SINGLE_SUCCESS;
             };
             this.removeExecute = (source, key) -> {
                 if (list.remove(key)) {
-                    source.sendFeedback(ListCommandText.DELETE.text(key));
+                    source.sendFeedback(ListCommandText.DELETE.translate(key));
                 } else {
-                    source.sendFeedback(ListCommandText.ENTRY_NOT_EXIST.text(key));
+                    source.sendFeedback(ListCommandText.ENTRY_NOT_EXIST.translate(key));
                 }
                 return Command.SINGLE_SUCCESS;
             };
@@ -193,7 +193,7 @@ public class DCListCommand {
                     .then(makeAdd())
                     .then(literal("clear")
                             .executes(ctx -> {
-                                ctx.getSource().sendFeedback(ListCommandText.CLEAR.text(list.toString()));
+                                ctx.getSource().sendFeedback(ListCommandText.CLEAR.translate(list.toString()));
                                 list.clear();
                                 return Command.SINGLE_SUCCESS;
                             }))
@@ -217,7 +217,7 @@ public class DCListCommand {
                     FabricClientCommandSource source = ctx.getSource();
                     defaultArgumentProvider.provide(source).ifPresentOrElse(
                             key -> addExecute.run(source, key),
-                            () -> source.sendFeedback(ListCommandText.FAIL_DEFAULT_ARGUMENT.text())
+                            () -> source.sendFeedback(ListCommandText.FAIL_DEFAULT_ARGUMENT.translate())
                     );
                     return Command.SINGLE_SUCCESS;
                 });
@@ -242,7 +242,7 @@ public class DCListCommand {
                     FabricClientCommandSource source = ctx.getSource();
                     defaultArgumentProvider.provide(source).ifPresentOrElse(
                             key -> removeExecute.run(source, key),
-                            () -> source.sendFeedback(ListCommandText.FAIL_DEFAULT_ARGUMENT.text())
+                            () -> source.sendFeedback(ListCommandText.FAIL_DEFAULT_ARGUMENT.translate())
                     );
                     return Command.SINGLE_SUCCESS;
                 });

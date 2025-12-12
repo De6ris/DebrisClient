@@ -38,7 +38,7 @@ public class SyncContainer {
         if (BlockInteractor.INSTANCE.clearAndInform()) return true;
 
         if (WAITING_TEMPLATE) {
-            InfoUtils.sendVanillaMessage(SyncContainerText.WAIT_CONTAINER_OPEN.text());
+            InfoUtils.sendVanillaMessage(SyncContainerText.WAIT_CONTAINER_OPEN.translate());
             return false;
         }
 
@@ -51,19 +51,19 @@ public class SyncContainer {
             BlockInteractor.INSTANCE.add(blockPos);
             TYPE = client.level.getBlockState(blockPos).getBlock();
         } else {
-            InfoUtils.sendVanillaMessage(SyncContainerText.NO_CONTAINER_PRESENT.text());
+            InfoUtils.sendVanillaMessage(SyncContainerText.NO_CONTAINER_PRESENT.translate());
             return false;
         }
 
         WAITING_TEMPLATE = true;
-        InfoUtils.sendVanillaMessage(SyncContainerText.WAIT_CONTAINER_OPEN.text());
+        InfoUtils.sendVanillaMessage(SyncContainerText.WAIT_CONTAINER_OPEN.translate());
 
         return true;
     }
 
     private static void syncInternal() {
         TEMPLATE = EnumSection.Container.get().slots().stream().map(Slot::getItem).map(ItemStack::copy).toList();
-        InfoUtils.sendVanillaMessage(AutoProcessText.TEMPLATE_RECORDER_MESSAGE.text(InventoryUtil.getGuiContainer().getTitle()));
+        InfoUtils.sendVanillaMessage(AutoProcessText.TEMPLATE_RECORDER_MESSAGE.translate(InventoryUtil.getGuiContainer().getTitle()));
         InteractionFactory.addBlockTask(Minecraft.getInstance(), (world, pos) -> world.getBlockState(pos).is(TYPE), false);
     }
 
@@ -96,12 +96,12 @@ public class SyncContainer {
 
             ContainerSection section = EnumSection.Container.get();
             if (section.size() != template.size()) {
-                InfoUtils.sendVanillaMessage(AutoProcessText.TEMPLATE_FILLER_SIZE_UNMATCH.text(InventoryUtil.getGuiContainer().getTitle()));
+                InfoUtils.sendVanillaMessage(AutoProcessText.TEMPLATE_FILLER_SIZE_UNMATCH.translate(InventoryUtil.getGuiContainer().getTitle()));
                 return ProcessResult.SKIP;
             }
             if (templateFill(template, section.slots(), EnumSection.InventoryWhole.get())) {
                 if (AutoProcessManager.allowMessage()) {
-                    InfoUtils.sendVanillaMessage(AutoProcessText.TEMPLATE_FILLER_SUCCESS.text(InventoryUtil.getGuiContainer().getTitle()));
+                    InfoUtils.sendVanillaMessage(AutoProcessText.TEMPLATE_FILLER_SUCCESS.translate(InventoryUtil.getGuiContainer().getTitle()));
                 }
                 return ProcessResult.CLOSE_TERMINATE;
             } else {

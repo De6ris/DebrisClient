@@ -46,9 +46,9 @@ public class InteractionFactory {
             if (predicate.test(world, pos)) targets.add(pos.immutable());// otherwise the same object
         });
         if (targets.isEmpty()) {
-            InfoUtils.sendVanillaMessage(InteractionText.NO_MATCHING_BLOCKS.text());
+            InfoUtils.sendVanillaMessage(InteractionText.NO_MATCHING_BLOCKS.translate());
         } else {
-            InfoUtils.sendVanillaMessage(InteractionText.FOUND_BLOCKS.text(targets.size()));
+            InfoUtils.sendVanillaMessage(InteractionText.FOUND_BLOCKS.translate(targets.size()));
             instance.addAll(targets);
         }
     }
@@ -77,9 +77,9 @@ public class InteractionFactory {
                 .flatMap(x -> world.getEntities(client.player, x).stream())
                 .collect(Collectors.toSet());
         if (targets.isEmpty()) {
-            InfoUtils.sendVanillaMessage(InteractionText.NO_MATCHING_ENTITIES.text());
+            InfoUtils.sendVanillaMessage(InteractionText.NO_MATCHING_ENTITIES.translate());
         } else {
-            InfoUtils.sendVanillaMessage(InteractionText.FOUND_ENTITIES.text(targets.size()));
+            InfoUtils.sendVanillaMessage(InteractionText.FOUND_ENTITIES.translate(targets.size()));
             instance.addAll(targets);
         }
     }

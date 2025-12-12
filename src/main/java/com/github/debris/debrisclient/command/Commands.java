@@ -21,6 +21,7 @@ public class Commands {
         DCCommandMacroCommand.register(dispatcher);
         DCReloadCommand.register(dispatcher);
         DCLogCommand.register(dispatcher);
+        DCAdventureCommand.register(dispatcher);
 
         if (ModReference.hasMod(ModReference.ClientCommands)) {
             DCFindInFrameCommand.register(dispatcher, context);

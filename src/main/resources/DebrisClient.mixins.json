@@ -30,6 +30,7 @@
     "client.network.ClientPlayNetworkHandlerMixin",
     "client.render.ArmorFeatureRendererMixin",
     "client.render.BlockEntityRenderDispatcherMixin",
+    "client.render.ChunkBorderRendererMixin",
     "client.render.EndGatewayBlockEntityRendererMixin",
     "client.render.EntityRenderDispatcherMixin",
     "client.render.FogRendererMixin",

@@ -1,7 +1,6 @@
 package com.github.debris.debrisclient.feat.advancement;
 
 import com.github.debris.debrisclient.compat.ModReference;
-import com.github.debris.debrisclient.config.DCCommonConfig;
 import com.github.debris.debrisclient.unsafe.XaeroMiniMapAccess;
 import com.github.debris.debrisclient.util.ChatUtil;
 import com.github.debris.debrisclient.util.StringUtil;
@@ -34,6 +33,8 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class AdventuringTimeHelper {
+    private static boolean active = false;
+
     private static final Identifier ADVANCEMENT_ID = Identifier.parse("adventure/adventuring_time");
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdventuringTimeHelper.class);
@@ -49,7 +50,15 @@ public class AdventuringTimeHelper {
     private static final Set<Biome> GLOWING_BIOMES = Collections.synchronizedSet(new HashSet<>());
 
     public static boolean isActive() {
-        return DCCommonConfig.AdventuringTimeHelper.getBooleanValue() && (ModReference.hasMod(ModReference.XaeroMiniMap) || ModReference.hasMod(ModReference.BetterPvP));
+        return active && available();
+    }
+
+    public static boolean available() {
+        return hasXaero();
+    }
+
+    public static boolean hasXaero() {
+        return (ModReference.hasMod(ModReference.XaeroMiniMap) || ModReference.hasMod(ModReference.BetterPvP));
     }
 
     public static void onChunkLoad(ClientLevel world, LevelChunk chunk) {
@@ -105,7 +114,8 @@ public class AdventuringTimeHelper {
         clear();
     }
 
-    public static void onConfigChange(Minecraft client) {
+    public static void toggle(Minecraft client) {
+        active = !active;
         if (isActive()) {
             updateProgress(client);
             ClientLevel world = client.level;

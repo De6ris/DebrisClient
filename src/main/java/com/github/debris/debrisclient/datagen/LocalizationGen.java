@@ -30,12 +30,19 @@ public class LocalizationGen {
     }
 
     public static void addMissingKeys(List<String> keys) {
+        Path lang = Path.of("")
+                .toAbsolutePath()//datagen
+                .getParent()//build
+                .getParent()//root
+                .resolve("src")
+                .resolve("main")
+                .resolve("resources")
+                .resolve("assets")
+                .resolve(DebrisClient.MOD_ID)
+                .resolve("lang");
         for (String langFile : LANG_FILES) {
             String json = langFile + ".json";
-            Path path = Path.of("src/main/resources/assets/")
-                    .resolve(DebrisClient.MOD_ID)
-                    .resolve("lang")
-                    .resolve(json);
+            Path path = lang.resolve(json);
             addMissingKeys(path, keys);
         }
     }
@@ -53,6 +60,7 @@ public class LocalizationGen {
             if (base.has(key)) continue;
             base.add(key, new JsonPrimitive(""));
         }
+        path.toFile().mkdirs();
         JsonUtils.writeJsonToFileAsPath(base, path);
     }
 }
