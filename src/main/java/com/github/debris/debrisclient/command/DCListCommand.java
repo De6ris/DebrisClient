@@ -11,13 +11,11 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import fi.dy.masa.malilib.config.options.ConfigStringList;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jetbrains.annotations.Nullable;
@@ -46,7 +44,7 @@ public class DCListCommand {
         List<String> list = DCCommonConfig.AutoRepeatPlayerList.getStrings();
         return of("auto_repeat", list)
                 .argumentName("player")
-                .addSuggest(CommandFactory.PLAYER_SUGGESTION)
+                .addSuggestion(CommandFactory.PLAYER_SUGGESTION)
                 .addExecute((source, player) -> {
                     String self = source.getPlayer().getGameProfile().name();
                     if (player.equals(self)) {
@@ -65,24 +63,17 @@ public class DCListCommand {
     }
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeAutoThrow() {
-        DefaultedRegistry<Item> registry = BuiltInRegistries.ITEM;
-        return of("auto_throw", registry, DCCommonConfig.AutoThrowWhiteList)
-                .defaultArgumentProvider(source -> {
+        return of("auto_throw", BuiltInRegistries.ITEM, DCCommonConfig.AutoThrowWhiteList)
+                .fastSuggestion(source -> {
                     ItemStack stack = source.getPlayer().getMainHandItem();
-                    if (stack.isEmpty()) {
-                        return Optional.empty();
-                    } else {
-                        Item item = stack.getItem();
-                        String key = registry.getKey(item).toString();
-                        return Optional.of(key);
-                    }
+                    return stack.isEmpty() ? Optional.empty() : Optional.of(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());
                 })
                 .build();
     }
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeCullBlockEntity() {
         return of("cull_block_entity", BuiltInRegistries.BLOCK_ENTITY_TYPE, DCCommonConfig.CullBlockEntityList)
-                .defaultArgumentProvider(source -> RayTraceUtil.getRayTraceBlockEntity(source.getClient())
+                .fastSuggestion(source -> RayTraceUtil.getRayTraceBlockEntity(source.getClient())
                         .map(blockEntity -> BlockEntityType.getKey(blockEntity.getType()))
                         .map(Identifier::toString))
                 .build();
@@ -90,7 +81,7 @@ public class DCListCommand {
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeCullEntity() {
         return of("cull_entity", BuiltInRegistries.ENTITY_TYPE, DCCommonConfig.CullEntityList)
-                .defaultArgumentProvider(source -> RayTraceUtil.getRayTraceEntity(source.getClient())
+                .fastSuggestion(source -> RayTraceUtil.getRayTraceEntity(source.getClient())
                         .map(entity -> EntityType.getKey(entity.getType()))
                         .map(Identifier::toString))
                 .build();
@@ -120,22 +111,18 @@ public class DCListCommand {
     private static Builder of(String name, Registry<?> registry, List<String> list) {
         return of(name, list)
                 .argumentName(registry.key().identifier().getPath())
-                .addSuggest((ctx, builder) -> SharedSuggestionProvider.suggestResource(registry.keySet(), builder));
+                .addSuggestion((ctx, builder) ->
+                        SharedSuggestionProvider.suggestResource(registry.keySet(), builder));
     }
 
     private static class Builder {
         private final String name;
         private final List<String> list;
-
-        /**
-         * For calling add and remove without params.
-         */
-        @Nullable
-        private DefaultArgumentProvider defaultArgumentProvider;
-        @Nullable
-        private SuggestionProvider<FabricClientCommandSource> addSuggest;
-
         private String argumentName;
+
+        @Nullable
+        private FastSuggestion fastSuggestion;
+        private SuggestionProvider<FabricClientCommandSource> addSuggestion;
         private StringExecutor addExecute;
         private StringExecutor removeExecute;
 
@@ -163,13 +150,13 @@ public class DCListCommand {
             };
         }
 
-        public Builder defaultArgumentProvider(DefaultArgumentProvider defaultArgumentProvider) {
-            this.defaultArgumentProvider = defaultArgumentProvider;
+        private Builder addSuggestion(SuggestionProvider<FabricClientCommandSource> suggestion) {
+            this.addSuggestion = suggestion;
             return this;
         }
 
-        private Builder addSuggest(SuggestionProvider<FabricClientCommandSource> suggest) {
-            this.addSuggest = suggest;
+        private Builder fastSuggestion(FastSuggestion suggestion) {
+            this.fastSuggestion = suggestion;
             return this;
         }
 
@@ -189,7 +176,7 @@ public class DCListCommand {
         }
 
         private LiteralArgumentBuilder<FabricClientCommandSource> build() {
-            return literal(name)
+            LiteralArgumentBuilder<FabricClientCommandSource> builder = literal(name)
                     .then(makeAdd())
                     .then(literal("clear")
                             .executes(ctx -> {
@@ -202,53 +189,63 @@ public class DCListCommand {
                                 ctx.getSource().sendFeedback(Component.literal(list.toString()));
                                 return Command.SINGLE_SUCCESS;
                             }))
-                    .then(makeRemove())
-                    ;
-        }
-
-        private LiteralArgumentBuilder<FabricClientCommandSource> makeAdd() {
-            LiteralArgumentBuilder<FabricClientCommandSource> builder = literal("add")
-                    .then(argument(argumentName, StringArgumentType.greedyString())
-                            .suggests(addSuggest)
-                            .executes(ctx -> addExecute.run(ctx.getSource(), StringArgumentType.getString(ctx, argumentName)))
-                    );
-            if (defaultArgumentProvider != null) {
-                builder.executes(ctx -> {
-                    FabricClientCommandSource source = ctx.getSource();
-                    defaultArgumentProvider.provide(source).ifPresentOrElse(
-                            key -> addExecute.run(source, key),
-                            () -> source.sendFeedback(ListCommandText.FAIL_DEFAULT_ARGUMENT.translate())
-                    );
-                    return Command.SINGLE_SUCCESS;
-                });
+                    .then(makeRemove());
+            if (this.fastSuggestion != null) {
+                builder.then(makeAddThis()).then(makeRemoveThis());
             }
             return builder;
         }
 
+        private LiteralArgumentBuilder<FabricClientCommandSource> makeAdd() {
+            return literal("add")
+                    .then(
+                            argument(argumentName, StringArgumentType.greedyString())
+                                    .suggests(this.addSuggestion)
+                                    .executes(ctx ->
+                                            addExecute.run(ctx.getSource(), StringArgumentType.getString(ctx, argumentName))
+                                    )
+                    );
+        }
+
+        @SuppressWarnings("DataFlowIssue")
+        private LiteralArgumentBuilder<FabricClientCommandSource> makeAddThis() {
+            return literal("add_this")
+                    .executes(ctx -> {
+                        FabricClientCommandSource source = ctx.getSource();
+                        Optional<String> optional = fastSuggestion.provide(source);
+                        if (optional.isEmpty()) {
+                            source.sendFeedback(ListCommandText.FAIL_DEFAULT_ARGUMENT.translate());
+                            return 0;
+                        }
+                        return addExecute.run(source, optional.get());
+                    });
+        }
+
         private LiteralArgumentBuilder<FabricClientCommandSource> makeRemove() {
-            LiteralArgumentBuilder<FabricClientCommandSource> x = literal("remove")
+            return literal("remove")
                     .then(
                             argument(argumentName, StringArgumentType.greedyString())
                                     .suggests(CommandFactory.suggestMatching(list::stream))
-                                    .executes(
-                                            ctx -> removeExecute.run(
-                                                    ctx.getSource(),
-                                                    StringArgumentType.getString(ctx, argumentName)
-                                            )
+                                    .executes(ctx ->
+                                            removeExecute.run(ctx.getSource(), StringArgumentType.getString(ctx, argumentName))
                                     )
                     );
-            if (defaultArgumentProvider != null) {
-                x.executes(ctx -> {
-                    FabricClientCommandSource source = ctx.getSource();
-                    defaultArgumentProvider.provide(source).ifPresentOrElse(
-                            key -> removeExecute.run(source, key),
-                            () -> source.sendFeedback(ListCommandText.FAIL_DEFAULT_ARGUMENT.translate())
-                    );
-                    return Command.SINGLE_SUCCESS;
-                });
-            }
-            return x;
         }
+
+        @SuppressWarnings("DataFlowIssue")
+        private LiteralArgumentBuilder<FabricClientCommandSource> makeRemoveThis() {
+            return literal("remove_this")
+                    .executes(ctx -> {
+                        FabricClientCommandSource source = ctx.getSource();
+                        Optional<String> optional = fastSuggestion.provide(source);
+                        if (optional.isEmpty()) {
+                            source.sendFeedback(ListCommandText.FAIL_DEFAULT_ARGUMENT.translate());
+                            return 0;
+                        }
+                        return removeExecute.run(source, optional.get());
+                    });
+        }
+
     }
 
     @FunctionalInterface
@@ -257,7 +254,7 @@ public class DCListCommand {
     }
 
     @FunctionalInterface
-    private interface DefaultArgumentProvider {
+    private interface FastSuggestion {
         Optional<String> provide(FabricClientCommandSource source);
     }
 }

@@ -103,7 +103,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey RepeatNewestChat = ofHotkey("消息复读", "", "复读聊天栏中最新消息");
     public static final ConfigHotkey AlignWithEnderEye = ofHotkey("对齐末影之眼", "");
     public static final ConfigHotkey ModifierFreeCamInput = ofHotkey("灵魂出窍输入:修饰键", "", "按住时输入将对实际画面生效\n仍需开启tweakeroo中的灵魂出窍用户输入");
-    public static final ConfigHotkey TakeOff = ofHotkey("起飞", "", "使用鞘翅和烟花火箭起飞");
+    public static final ConfigHotkey TakeOff = ofHotkey("起飞", "", KeybindSettings.PRESS_ALLOWEXTRA, "使用鞘翅和烟花火箭起飞");
     public static final ConfigHotkey SyncContainer = ofHotkey("容器同步", "", ANY, "以当前容器为模板, 将选区内同类容器按模板修改\n再次按下将重置\n思路来自宅咸鱼, 代码独立实现");
     public static final ConfigHotkey OpenSelectionContainers = ofHotkey("打开选区内容器", "", ANY, "记录列表, 之后逐个打开");
     public static final ConfigHotkey InteractSelectionEntities = ofHotkey("交互选区内实体", "", ANY, "记录列表, 之后逐个交互");

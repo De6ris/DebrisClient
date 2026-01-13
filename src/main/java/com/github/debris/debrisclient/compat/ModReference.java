@@ -18,6 +18,7 @@ public class ModReference {
     public static final String Wthit = "wthit";
     public static final String BetterPvP = "xaerobetterpvp";
     public static final String XaeroMiniMap = "xaerominimap";
+    public static final String JourneyMap = "journeymap";
 
     public static boolean hasMod(String modid) {
         return Platform.hasMod(modid);

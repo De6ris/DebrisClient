@@ -11,8 +11,6 @@ import com.github.debris.debrisclient.inventory.feat.SyncContainer;
 import com.github.debris.debrisclient.inventory.sort.SortInventory;
 import com.github.debris.debrisclient.util.Predicates;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.sounds.SoundEvents;
 
 public class Callbacks {
     public static void init(Minecraft client) {
@@ -26,11 +24,7 @@ public class Callbacks {
             return true;
         });
 
-        DCCommonConfig.SortItem.getKeybind().setCallback((action, key) -> {
-            if (Predicates.notInGuiContainer(client)) return false;
-            playClickSound(client);
-            return SortInventory.trySort();// this will block other click consumers
-        });
+        DCCommonConfig.SortItem.getKeybind().setCallback((action, key) -> SortInventory.onKey(client));
 
         DCCommonConfig.StoreStoneCutterRecipe.getKeybind().setCallback((action, key) -> {
             if (StoneCutterUtil.isStoneCutterRecipeViewOpen() && StoneCutterUtil.isOverStoneCutterResult()) {
@@ -84,7 +78,4 @@ public class Callbacks {
 
     }
 
-    private static void playClickSound(Minecraft client) {
-        client.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-    }
 }

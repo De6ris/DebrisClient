@@ -6,6 +6,9 @@ import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import com.github.debris.debrisclient.inventory.section.SectionHandler;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.ItemUtil;
+import com.github.debris.debrisclient.util.Predicates;
+import com.github.debris.debrisclient.util.SoundUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
@@ -15,11 +18,20 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class SortInventory {
-    public static boolean trySort() {
+    public static boolean onKey(Minecraft client) {
+        if (Predicates.notInGuiContainer(client)) return false;
+
         Optional<ContainerSection> optional = SectionHandler.getSectionMouseOver();
         if (optional.isEmpty()) return false;
+
         ContainerSection section = optional.get();
         if (!shouldSort(section)) return false;
+
+        SoundUtil.playClickSound(client);
+        return SortInventory.sortSection(section);// this will block other click consumers
+    }
+
+    public static boolean sortSection(ContainerSection section) {
         int before = InventoryUtil.getChangeCount();
         InventoryTweaks.clearCursor(section);
         sortInternal(section);
