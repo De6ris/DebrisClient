@@ -96,7 +96,7 @@ public class SyncContainer {
 
             ContainerSection section = EnumSection.Container.get();
             if (section.size() != template.size()) {
-                InfoUtils.sendVanillaMessage(AutoProcessText.TEMPLATE_FILLER_SIZE_UNMATCH.translate(InventoryUtil.getGuiContainer().getTitle()));
+                InfoUtils.sendVanillaMessage(AutoProcessText.TEMPLATE_FILLER_SIZE_UNMATCHED.translate(InventoryUtil.getGuiContainer().getTitle()));
                 return ProcessResult.SKIP;
             }
             if (templateFill(template, section.slots(), EnumSection.InventoryWhole.get())) {

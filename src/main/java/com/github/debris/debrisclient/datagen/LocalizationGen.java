@@ -29,17 +29,7 @@ public class LocalizationGen {
                 .toList();
     }
 
-    public static void addMissingKeys(List<String> keys) {
-        Path lang = Path.of("")
-                .toAbsolutePath()//datagen
-                .getParent()//build
-                .getParent()//root
-                .resolve("src")
-                .resolve("main")
-                .resolve("resources")
-                .resolve("assets")
-                .resolve(DebrisClient.MOD_ID)
-                .resolve("lang");
+    public static void addMissingKeys(List<String> keys, Path lang) {
         for (String langFile : LANG_FILES) {
             String json = langFile + ".json";
             Path path = lang.resolve(json);

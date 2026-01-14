@@ -15,7 +15,7 @@
   "debrisclient.auto_processor.container_taker.message": "Has taken %2$d stacks from container %1$s",
   "debrisclient.auto_processor.item_finder.found": "Found %s",
   "debrisclient.auto_processor.item_finder.not_found": "Found nothing in list",
-  "debrisclient.auto_processor.template_filler.size_unmatch": "Container %s size not matching template!",
+  "debrisclient.auto_processor.template_filler.size_unmatched": "Container %s size not matching template!",
   "debrisclient.auto_processor.template_filler.success": "Filled container %s by template",
   "debrisclient.auto_processor.template_recorder.message": "Has recorded template for container %s",
   "debrisclient.gui.title.configs": "%s Config - %s",
@@ -47,5 +47,16 @@
   "debrisclient.adventure_command.not_available": "Found no map mods",
   "debrisclient.adventure_command.supported_mods": "Mods currently supported: xaero",
   "debrisclient.adventure_command.status_on": "Adventuring time helper is on",
-  "debrisclient.adventure_command.status_off": "Adventuring time helper is off"
+  "debrisclient.adventure_command.status_off": "Adventuring time helper is off",
+  "debrisclient.command_macro_command.example_created": "Example file created at %1$s",
+  "debrisclient.command_macro_command.file_not_found": "File not found",
+  "debrisclient.command_macro_command.help": "This allows you to execute a command queue periodically.\nData is saved in json format at %1$s.\nUse %2$s to create the example, %3$s to execute the example",
+  "debrisclient.command_macro_command.illegal_period": "Illegal period",
+  "debrisclient.command_macro_command.not_json": "Not json format",
+  "debrisclient.command_macro_command.read_file_error": "Error reading file",
+  "debrisclient.command_macro_command.stopped": "Stopped the command macro",
+  "debrisclient.click_here": "Click here",
+  "debrisclient.click_to_open": "Click to open",
+  "debrisclient.click_to_execute": "Click to execute",
+  "debrisclient.here": "here"
 }

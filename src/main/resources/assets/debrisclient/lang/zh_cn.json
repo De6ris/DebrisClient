@@ -15,7 +15,7 @@
   "debrisclient.auto_processor.container_taker.message": "已取出容器 %1$s 中 %2$d 个槽位的物品",
   "debrisclient.auto_processor.item_finder.found": "已找到%s",
   "debrisclient.auto_processor.item_finder.not_found": "未找到列表中物品",
-  "debrisclient.auto_processor.template_filler.size_unmatch": "容器 %s 的尺寸与样板不匹配!",
+  "debrisclient.auto_processor.template_filler.size_unmatched": "容器 %s 的尺寸与样板不匹配!",
   "debrisclient.auto_processor.template_filler.success": "成功按样板填充了容器 %s",
   "debrisclient.auto_processor.template_recorder.message": "已记录容器样板 %s",
   "debrisclient.gui.title.configs": "%s 配置 - %s",
@@ -47,5 +47,16 @@
   "debrisclient.adventure_command.not_available": "未检测到地图模组",
   "debrisclient.adventure_command.supported_mods": "目前支持的模组: xaero",
   "debrisclient.adventure_command.status_on": "探索的时光助手已开启",
-  "debrisclient.adventure_command.status_off": "探索的时光助手已关闭"
+  "debrisclient.adventure_command.status_off": "探索的时光助手已关闭",
+  "debrisclient.command_macro_command.example_created": "示例文件已创建于%1$s",
+  "debrisclient.command_macro_command.file_not_found": "未找到文件",
+  "debrisclient.command_macro_command.help": "这允许你按间隔执行一串指令.\n数据以json格式保存在%1$s.\n使用 %2$s 创建示例, %3$s 执行示例",
+  "debrisclient.command_macro_command.illegal_period": "间隔无效",
+  "debrisclient.command_macro_command.not_json": "不符Json格式",
+  "debrisclient.command_macro_command.read_file_error": "读取文件错误",
+  "debrisclient.command_macro_command.stopped": "指令宏已停止",
+  "debrisclient.click_here": "点此",
+  "debrisclient.click_to_open": "点击打开",
+  "debrisclient.click_to_execute": "点击执行",
+  "debrisclient.here": "此处"
 }
