@@ -4,6 +4,7 @@ public enum GeneralText implements Translatable {
     CLICK_HERE,
     CLICK_TO_OPEN,
     CLICK_TO_EXECUTE,
+    FEATURE_REQUIRES_MOD,
     HERE,
     ;
 

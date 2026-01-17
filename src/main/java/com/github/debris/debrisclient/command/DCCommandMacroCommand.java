@@ -1,14 +1,12 @@
 package com.github.debris.debrisclient.command;
 
-import com.github.debris.debrisclient.DebrisClient;
-import com.github.debris.debrisclient.feat.CommandMacro;
 import com.github.debris.debrisclient.feat.CommandQueue;
-import com.github.debris.debrisclient.localization.CommandMacroCommandText;
+import com.github.debris.debrisclient.feat.commandmacro.CMGenerator;
+import com.github.debris.debrisclient.feat.commandmacro.CommandMacro;
+import com.github.debris.debrisclient.localization.CommandMacroText;
 import com.github.debris.debrisclient.localization.GeneralText;
 import com.github.debris.debrisclient.util.TextFactory;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -20,8 +18,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -31,9 +27,6 @@ import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.arg
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class DCCommandMacroCommand {
-    private static final String FOLDER_NAME = "command_macros";
-    private static final Path MACRO_DIR = DebrisClient.CONFIG_DIR.resolve(FOLDER_NAME);
-
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         dispatcher.register(
                 literal(Commands.PREFIX + "command_macro")
@@ -44,6 +37,10 @@ public class DCCommandMacroCommand {
                         .then(
                                 literal("example")
                                         .executes(ctx -> example(ctx.getSource()))
+                        )
+                        .then(
+                                literal("gui")
+                                        .executes(ctx -> gui(ctx.getSource()))
                         )
                         .then(
                                 literal("stop")
@@ -67,11 +64,11 @@ public class DCCommandMacroCommand {
 
     private static int help(FabricClientCommandSource source) {
         source.sendFeedback(
-                CommandMacroCommandText.HELP.translate(
+                CommandMacroText.HELP.translate(
                         TextFactory.here()
                                 .withStyle(
-                                        style -> style.withClickEvent(new ClickEvent.OpenUrl(MACRO_DIR.toUri()))
-                                                .withHoverEvent(new HoverEvent.ShowText(Component.literal(MACRO_DIR.toAbsolutePath().toString())))
+                                        style -> style.withClickEvent(new ClickEvent.OpenUrl(CommandMacro.MACRO_DIR.toUri()))
+                                                .withHoverEvent(new HoverEvent.ShowText(Component.literal(CommandMacro.MACRO_DIR.toAbsolutePath().toString())))
                                 ),
                         Component.literal("example")
                                 .withStyle(
@@ -94,10 +91,10 @@ public class DCCommandMacroCommand {
 
     private static int example(FabricClientCommandSource source) {
         JsonObject jsonObject = new CommandMacro(5, List.of("hello world", "/say 1")).save();
-        Path path = MACRO_DIR.resolve("example.json");
+        Path path = CommandMacro.MACRO_DIR.resolve("example.json");
         JsonUtils.writeJsonToFileAsPath(jsonObject, path);
         source.sendFeedback(
-                CommandMacroCommandText.EXAMPLE_CREATED.translate(
+                CommandMacroText.EXAMPLE_CREATED.translate(
                         TextFactory.here().withStyle(
                                 style -> style.withClickEvent(new ClickEvent.OpenUrl(path.toUri()))
                                         .withHoverEvent(new HoverEvent.ShowText(Component.literal(path.toAbsolutePath().toString())))
@@ -107,9 +104,15 @@ public class DCCommandMacroCommand {
         return Command.SINGLE_SUCCESS;
     }
 
+    private static int gui(FabricClientCommandSource source) {
+        Component component = CMGenerator.openGui(source.getClient());
+        if (component != null) source.sendFeedback(component);
+        return Command.SINGLE_SUCCESS;
+    }
+
     private static int stop(FabricClientCommandSource source) {
         CommandQueue.stop();
-        source.sendFeedback(CommandMacroCommandText.STOPPED.translate());
+        source.sendFeedback(CommandMacroText.STOPPED.translate());
         return Command.SINGLE_SUCCESS;
     }
 
@@ -117,7 +120,7 @@ public class DCCommandMacroCommand {
      * Should consume this stream, otherwise the thread would lock.
      */
     private static List<String> listFiles() {
-        try (Stream<Path> stream = Files.list(MACRO_DIR)) {
+        try (Stream<Path> stream = Files.list(CommandMacro.MACRO_DIR)) {
             return stream.filter(Files::isRegularFile).map(x -> x.getFileName().toString()).toList();
         } catch (IOException e) {
             return List.of();
@@ -125,32 +128,10 @@ public class DCCommandMacroCommand {
     }
 
     private static int run(FabricClientCommandSource source, String file) {
-        Path filePath = MACRO_DIR.resolve(file);
-
-        if (!Files.exists(filePath)) {
-            source.sendFeedback(CommandMacroCommandText.FILE_NOT_FOUND.translate());
-            return 0;
+        Component component = CommandMacro.run(file);
+        if (component != null) {
+            source.sendFeedback(component);
         }
-
-        try (InputStream inputStream = Files.newInputStream(filePath)) {
-            InputStreamReader reader = new InputStreamReader(inputStream);
-            JsonElement jsonElement = JsonParser.parseReader(reader);
-            if (!jsonElement.isJsonObject()) {
-                source.sendFeedback(CommandMacroCommandText.NOT_JSON.translate());
-                return 0;
-            }
-            JsonObject jsonObject = jsonElement.getAsJsonObject();
-            CommandMacro macro = CommandMacro.load(jsonObject);
-            if (macro.period() < 0) {
-                source.sendFeedback(CommandMacroCommandText.ILLEGAL_PERIOD.translate());
-                return 0;
-            }
-            CommandQueue.run(macro);
-        } catch (Exception e) {
-            source.sendFeedback(CommandMacroCommandText.READ_FILE_ERROR.translate());
-            return 0;
-        }
-
         return Command.SINGLE_SUCCESS;
     }
 

@@ -58,5 +58,6 @@
   "debrisclient.click_here": "Click here",
   "debrisclient.click_to_open": "Click to open",
   "debrisclient.click_to_execute": "Click to execute",
+  "debrisclient.feature_requires_mod": "Feature requires mod: %s",
   "debrisclient.here": "here"
 }

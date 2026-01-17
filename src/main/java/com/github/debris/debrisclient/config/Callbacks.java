@@ -1,6 +1,7 @@
 package com.github.debris.debrisclient.config;
 
 import com.github.debris.debrisclient.feat.*;
+import com.github.debris.debrisclient.feat.commandmacro.CMGenerator;
 import com.github.debris.debrisclient.feat.interactor.InteractionFactory;
 import com.github.debris.debrisclient.gui.DCConfigUi;
 import com.github.debris.debrisclient.gui.UniversalSearchScreen;
@@ -9,8 +10,10 @@ import com.github.debris.debrisclient.inventory.cutstone.StoneCutterUtil;
 import com.github.debris.debrisclient.inventory.feat.InventoryTweaks;
 import com.github.debris.debrisclient.inventory.feat.SyncContainer;
 import com.github.debris.debrisclient.inventory.sort.SortInventory;
+import com.github.debris.debrisclient.util.ChatUtil;
 import com.github.debris.debrisclient.util.Predicates;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
 public class Callbacks {
     public static void init(Minecraft client) {
@@ -21,6 +24,12 @@ public class Callbacks {
 
         DCCommonConfig.OpenUniversalSearch.getKeybind().setCallback((action, key) -> {
             client.setScreen(new UniversalSearchScreen());
+            return true;
+        });
+
+        DCCommonConfig.OpenCommandMacroGenerator.getKeybind().setCallback((action, key) -> {
+            Component component = CMGenerator.openGui(client);
+            ChatUtil.addLocalMessage(component);
             return true;
         });
 

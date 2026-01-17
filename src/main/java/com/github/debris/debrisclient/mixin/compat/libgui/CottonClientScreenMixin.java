@@ -1,9 +1,9 @@
 package com.github.debris.debrisclient.mixin.compat.libgui;
 
-import com.github.debris.debrisclient.DebrisClient;
 import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import com.github.debris.debrisclient.feat.ProgressResume;
+import com.github.debris.debrisclient.unsafe.MGButtonAccess;
 import io.github.cottonmc.cotton.gui.GuiDescription;
 import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 import io.github.cottonmc.cotton.gui.widget.WScrollBar;
@@ -17,10 +17,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import work.msdnicrosoft.commandbuttons.gui.CommandGUI;
-import work.msdnicrosoft.commandbuttons.gui.CommandListPanel;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 @Restriction(require = @Condition(ModReference.LibGui))
@@ -49,17 +46,8 @@ public abstract class CottonClientScreenMixin extends Screen {
 
     @Unique
     private void findScrollBarAndRun(Consumer<WScrollBar> scrollBarAction) {
-        GuiDescription description = this.getDescription();
-        if (description instanceof CommandGUI commandGUI) {
-            List<? extends CommandListPanel<?, ?>> listPanels = commandGUI.getRootPanel().streamChildren()
-                    .filter(x -> x instanceof CommandListPanel<?, ?>)
-                    .map(x -> (CommandListPanel<?, ?>) x)
-                    .toList();
-            if (listPanels.size() != 1) {
-                DebrisClient.logger.warn("Mixin CottonClientScreen: Why CommandGUI contains 0 or >1 list panel");
-            } else {
-                scrollBarAction.accept(listPanels.getFirst().getScrollBar());
-            }
+        if (ModReference.hasMod(ModReference.CommandButton)) {
+            MGButtonAccess.findScrollBarAndRun(this.getDescription(), scrollBarAction);
         }
     }
 }

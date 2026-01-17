@@ -2,7 +2,7 @@ package com.github.debris.debrisclient.feat.interactor;
 
 import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.localization.InteractionText;
-import com.github.debris.debrisclient.unsafe.litematica.LitematicaAccessor;
+import com.github.debris.debrisclient.unsafe.LitematicaAccess;
 import com.github.debris.debrisclient.util.BlockUtil;
 import com.github.debris.debrisclient.util.Predicates;
 import fi.dy.masa.malilib.util.InfoUtils;
@@ -42,7 +42,7 @@ public class InteractionFactory {
     private static void addBlockTaskInternal(Minecraft client, BlockInteractor instance, BiPredicate<Level, BlockPos> predicate) {
         ClientLevel world = client.level;
         Collection<BlockPos> targets = new HashSet<>();
-        LitematicaAccessor.streamBlockPos().forEach(pos -> {
+        LitematicaAccess.streamBlockPos().forEach(pos -> {
             if (predicate.test(world, pos)) targets.add(pos.immutable());// otherwise the same object
         });
         if (targets.isEmpty()) {
@@ -72,7 +72,7 @@ public class InteractionFactory {
     @SuppressWarnings("DataFlowIssue")
     private static void addEntityTaskInternal(Minecraft client, EntityInteractor instance, Predicate<Entity> predicate) {
         ClientLevel world = client.level;
-        Set<Entity> targets = LitematicaAccessor.streamBlockBox()
+        Set<Entity> targets = LitematicaAccess.streamBlockBox()
                 .map(AABB::of)
                 .flatMap(x -> world.getEntities(client.player, x).stream())
                 .collect(Collectors.toSet());

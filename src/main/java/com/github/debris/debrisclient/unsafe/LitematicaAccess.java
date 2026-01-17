@@ -1,6 +1,7 @@
-package com.github.debris.debrisclient.unsafe.litematica;
+package com.github.debris.debrisclient.unsafe;
 
 import com.github.debris.debrisclient.config.DCCommonConfig;
+import com.github.debris.debrisclient.unsafe.litematica.LitematicaRenderUtil;
 import fi.dy.masa.litematica.config.Hotkeys;
 import fi.dy.masa.litematica.data.DataManager;
 import fi.dy.masa.litematica.gui.GuiConfigs;
@@ -12,7 +13,7 @@ import org.joml.Matrix4f;
 
 import java.util.stream.Stream;
 
-public class LitematicaAccessor {
+public class LitematicaAccess {
     public static boolean isRenderingInfoOverlay() {
         return Hotkeys.RENDER_INFO_OVERLAY.getKeybind().isKeybindHeld();
     }

@@ -6,10 +6,10 @@ import com.github.debris.debrisclient.render.PathNodesRenderer;
 import com.github.debris.debrisclient.render.RenderContext;
 import com.github.debris.debrisclient.render.RenderQueue;
 import com.github.debris.debrisclient.render.WorldRenderContext;
+import com.github.debris.debrisclient.unsafe.LitematicaAccess;
 import com.github.debris.debrisclient.unsafe.MagicLibAccess;
 import com.github.debris.debrisclient.unsafe.MiniHudAccess;
 import com.github.debris.debrisclient.unsafe.WorldEditAccess;
-import com.github.debris.debrisclient.unsafe.litematica.LitematicaAccessor;
 import com.github.debris.debrisclient.util.Predicates;
 import com.github.debris.debrisclient.util.RayTraceUtil;
 import com.mojang.blaze3d.pipeline.RenderTarget;
@@ -40,7 +40,7 @@ public class RenderListener implements IRenderer {
 
         if (DCCommonConfig.WorldEditVisibility.getBooleanValue() && ModReference.hasMod(ModReference.WorldEdit) && ModReference.hasMod(ModReference.Litematica)) {
             WorldEditAccess.getRegion(this.client.player.getScoreboardName())
-                    .ifPresent(x -> LitematicaAccessor.renderWorldEditSelectionBox(x.getA(), x.getB(), posMatrix));
+                    .ifPresent(x -> LitematicaAccess.renderWorldEditSelectionBox(x.getA(), x.getB(), posMatrix));
         }
 
         if (DCCommonConfig.InventoryPreviewSupportComparator.getBooleanValue() && ModReference.hasMod(ModReference.MiniHud) && MiniHudAccess.isPreviewingInventory() && ModReference.hasMod(ModReference.MagicLibMCApi)) {

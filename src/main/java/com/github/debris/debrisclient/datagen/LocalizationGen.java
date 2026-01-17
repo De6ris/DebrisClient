@@ -1,6 +1,5 @@
 package com.github.debris.debrisclient.datagen;
 
-import com.github.debris.debrisclient.DebrisClient;
 import com.github.debris.debrisclient.config.options.ConfigEnum;
 import com.github.debris.debrisclient.config.options.ConfigEnumEntryWrapper;
 import com.github.debris.debrisclient.localization.Translatable;

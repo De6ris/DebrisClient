@@ -58,5 +58,6 @@
   "debrisclient.click_here": "点此",
   "debrisclient.click_to_open": "点击打开",
   "debrisclient.click_to_execute": "点击执行",
+  "debrisclient.feature_requires_mod": "功能需要模组: %s",
   "debrisclient.here": "此处"
 }

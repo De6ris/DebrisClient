@@ -84,6 +84,7 @@ public class DCCommonConfig implements IConfigHandler {
     // key
     public static final ConfigHotkey OpenWindow = ofHotkey("打开设置菜单", "D,C", "打开设置菜单");
     public static final ConfigHotkey OpenUniversalSearch = ofHotkey("打开全局搜索", "", "masa驱动");
+    public static final ConfigHotkey OpenCommandMacroGenerator = ofHotkey("打开指令宏生成器", "", "详见/dccommand_macro help");
     public static final ConfigHotkey SortItem = ofHotkey("整理物品", "", KeybindSettings.GUI, "按区域进行\n兼容carpet假人不会乱点按钮\n兼容创造模式物品栏");
     public static final ConfigHotkey StoneCutterRecipeView = ofHotkey("展示切石机配方", "A", GUI_RELAXED);
     public static final ConfigHotkey StoreStoneCutterRecipe = ofHotkey("储存切石机配方", "BUTTON_3", GUI_RELAXED_CANCEL);
@@ -255,6 +256,7 @@ public class DCCommonConfig implements IConfigHandler {
         KeyPress = ImmutableList.of(
                 OpenWindow,
                 OpenUniversalSearch,
+                OpenCommandMacroGenerator,
                 SortItem,
                 StoneCutterRecipeView,
                 StoreStoneCutterRecipe,

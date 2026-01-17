@@ -1,5 +1,6 @@
 package com.github.debris.debrisclient.feat;
 
+import com.github.debris.debrisclient.feat.commandmacro.CommandMacro;
 import com.github.debris.debrisclient.util.ChatUtil;
 import net.minecraft.client.Minecraft;
 
