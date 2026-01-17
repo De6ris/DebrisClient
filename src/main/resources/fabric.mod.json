@@ -23,7 +23,7 @@
       "com.github.debris.debrisclient.datagen.DCDataGen"
     ],
     "modmenu": [
-      "com.github.debris.debrisclient.compat.ModMenu"
+      "com.github.debris.debrisclient.compat.ModMenuImpl"
     ]
   },
   "mixins": [
