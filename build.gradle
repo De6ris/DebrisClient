@@ -2,6 +2,7 @@ import java.text.SimpleDateFormat
 
 plugins {
     id 'fabric-loom' version "${loom_version}"
+//    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
     id 'maven-publish'
 }
 
@@ -34,19 +35,21 @@ repositories {
         name = 'ParchmentMC'
         url = 'https://maven.parchmentmc.org'
     }
+    maven {
+        url = "https://server.bbkr.space/artifactory/libs-release"
+    }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-//    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     mappings loom.layered() {
         officialMojangMappings()
-//        parchment("org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchment_version}@zip")
+        parchment("org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchment_version}@zip")
     }
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
     //masa
     modImplementation "com.github.sakura-ryoko:malilib:${project.malilib_version}"
@@ -71,10 +74,11 @@ dependencies {
 
     include(modImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
 
+    modCompileOnly("io.github.cottonmc:LibGui:${project.libgui_version}")
+
 
     //local
     modCompileOnly(files("libs\\magiclib-minecraft-api-mc1.21.4-fabric-0.6.83-stable.jar"))
-    modCompileOnly(files("libs\\LibGui-12.0.1+1.21.2.jar"))
     modCompileOnly(files("libs\\CommandGUIButtons-mc1.21-2.3.0+build.235+bb785b5.jar"))
     modCompileOnly(files("libs\\Xaeros_Minimap_25.2.14_Fabric_1.21.9.jar"))
     modCompileOnly(files("libs\\journeymap-fabric-1.21.11-6.0.0-beta.54.jar"))
