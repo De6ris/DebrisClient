@@ -31,12 +31,7 @@ public class CMGuiDescription extends LightweightGuiDescription {
 
     private final IntegerField period = new IntegerField().setText(CMLogic.DEFAULT_PERIOD);
 
-    private final WTextField command = new WTextField(Component.literal(CMLogic.DEFAULT_COMMAND)) {
-        {
-            this.setMaxLength(256);
-            this.setText(CMLogic.DEFAULT_COMMAND);
-        }
-    };
+    private final CommandTextField command = new CommandTextField();
     private final TooltipButton suggestButton = new TooltipButton(Component.literal("预设"));
     private BuiltInCM commandSuggestion = BuiltInCM.SPAWN;
 
@@ -54,10 +49,8 @@ public class CMGuiDescription extends LightweightGuiDescription {
 
     private final WTextField file = new WTextField(Component.literal(CMLogic.DEFAULT_FILE)) {
         {
-            {
-                this.setMaxLength(128);
-                this.setText(CMLogic.DEFAULT_FILE);
-            }
+            this.setMaxLength(128);
+            this.setText(CMLogic.DEFAULT_FILE);
         }
     };
 
@@ -75,89 +68,70 @@ public class CMGuiDescription extends LightweightGuiDescription {
         root.setSize(324, 192);
         root.setInsets(Insets.ROOT_PANEL);
 
-        int x = 0;
-        int y = 0;
+        PosHelper helper = new PosHelper(root);
 
-        y += LINE_HEIGHT;
-        root.add(createText(Component.literal("时间间隔")).setTooltips(
+        helper.newline(LINE_HEIGHT);
+        helper.putText(createText(Component.literal("时间间隔")).setTooltips(
                         Component.literal("单位为tick")
                 ),
-                0,
-                y + DESCRIPTION_Y_SHIFT,
-                DESCRIPTION_WIDTH,
-                1);
-        root.add(this.period, DESCRIPTION_WIDTH, y, TEXT_FIELD_WIDTH, 1);
+                DESCRIPTION_Y_SHIFT,
+                DESCRIPTION_WIDTH
+        );
+        helper.putWidget(this.period, TEXT_FIELD_WIDTH, 1);
 
-        y += LINE_HEIGHT;
-        x = 0;
-        root.add(createText(Component.literal("指令内容")).setTooltips(
+        helper.newline(LINE_HEIGHT);
+        helper.putText(createText(Component.literal("指令内容")).setTooltips(
                         Component.literal("以下占位符允许你动态填充内容:"),
                         Component.literal("${code}: bot编号"),
                         Component.literal("${pos}: bot坐标")
                 ),
-                0,
-                y + DESCRIPTION_Y_SHIFT,
-                DESCRIPTION_WIDTH,
-                1);
-        x += DESCRIPTION_WIDTH;
-        root.add(this.command, x, y, TEXT_FIELD_WIDTH * 5, 1);
-        x += TEXT_FIELD_WIDTH * 5 + 1;
+                DESCRIPTION_Y_SHIFT,
+                DESCRIPTION_WIDTH);
+        this.command.setFinishCallback(this::onCommandFinish);
+        helper.putWidget(this.command, TEXT_FIELD_WIDTH * 5, 1, 1);
         this.suggestButton.setOnClick(this::suggest);
-        root.add(this.suggestButton, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        helper.putWidget(this.suggestButton, BUTTON_WIDTH, BUTTON_HEIGHT);
 
-        y += LINE_HEIGHT;
-        root.add(createText(Component.literal("bot编号")).setTooltips(
-                        Component.literal("指令中出现坐标时, 会自动填充")
+        helper.newline(LINE_HEIGHT);
+        helper.putText(createText(Component.literal("bot编号")).setTooltips(
+                        Component.literal("指令中出现坐标时, 此选项无效")
                 ),
-                0,
-                y + DESCRIPTION_Y_SHIFT,
-                DESCRIPTION_WIDTH,
-                1);
-        root.add(this.code1, DESCRIPTION_WIDTH, y, TEXT_FIELD_WIDTH, 1);
-        root.add(this.code2, DESCRIPTION_WIDTH + TEXT_FIELD_WIDTH + 1, y, TEXT_FIELD_WIDTH, 1);
+                DESCRIPTION_Y_SHIFT,
+                DESCRIPTION_WIDTH);
+        helper.putWidget(this.code1, TEXT_FIELD_WIDTH, 1, 1);
+        helper.putWidget(this.code2, TEXT_FIELD_WIDTH, 1);
 
-        y += LINE_HEIGHT;
-        x = 0;
-        root.add(createText(Component.literal("botXZ坐标范围")).setTooltips(
+        helper.newline(LINE_HEIGHT);
+        helper.putText(createText(Component.literal("botXZ坐标范围")).setTooltips(
                         Component.literal("可通过litematica选区信息填充")
                 ),
-                x,
-                y + DESCRIPTION_Y_SHIFT,
-                DESCRIPTION_WIDTH,
-                1);
-        x += DESCRIPTION_WIDTH;
+                DESCRIPTION_Y_SHIFT,
+                DESCRIPTION_WIDTH);
         this.fillButton.setOnClick(this::fill);
-        root.add(this.fillButton, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
-        x += BUTTON_WIDTH + 1;
-        root.add(this.startX, x, y, TEXT_FIELD_WIDTH, 1);
-        x += TEXT_FIELD_WIDTH + 1;
-        root.add(this.startZ, x, y, TEXT_FIELD_WIDTH, 1);
-        x += TEXT_FIELD_WIDTH + 1;
-        root.add(this.endX, x, y, TEXT_FIELD_WIDTH, 1);
-        x += TEXT_FIELD_WIDTH + 1;
-        root.add(this.endZ, x, y, TEXT_FIELD_WIDTH, 1);
+        helper.putWidget(this.fillButton, BUTTON_WIDTH, BUTTON_HEIGHT, 1);
+        helper.putWidget(this.startX, TEXT_FIELD_WIDTH, 1, 1);
+        helper.putWidget(this.startZ, TEXT_FIELD_WIDTH, 1, 1);
+        helper.putWidget(this.endX, TEXT_FIELD_WIDTH, 1, 1);
+        helper.putWidget(this.endZ, TEXT_FIELD_WIDTH, 1, 1);
 
-        y += LINE_HEIGHT;
-        root.add(createText(Component.literal("botY坐标")), 0, y + DESCRIPTION_Y_SHIFT, DESCRIPTION_WIDTH, 1);
+        helper.newline(LINE_HEIGHT);
+        helper.putText(createText(Component.literal("botY坐标")), DESCRIPTION_Y_SHIFT, DESCRIPTION_WIDTH);
         this.yPosModeButton.setOnClick(this::toggleYPosMode);
-        root.add(this.yPosModeButton, DESCRIPTION_WIDTH, y, BUTTON_WIDTH, BUTTON_HEIGHT);
-        root.add(this.yPos, DESCRIPTION_WIDTH + BUTTON_WIDTH + 1, y, TEXT_FIELD_WIDTH, 1);
+        helper.putWidget(this.yPosModeButton, BUTTON_WIDTH, BUTTON_HEIGHT, 1);
+        helper.putWidget(this.yPos, TEXT_FIELD_WIDTH, 1);
 
-        y += LINE_HEIGHT;
-        root.add(createText(Component.literal("文件名")), 0, y + DESCRIPTION_Y_SHIFT, DESCRIPTION_WIDTH, 1);
-        root.add(this.file, DESCRIPTION_WIDTH, y, TEXT_FIELD_WIDTH * 3, 1);
+        helper.newline(LINE_HEIGHT);
+        helper.putText(createText(Component.literal("文件名")), DESCRIPTION_Y_SHIFT, DESCRIPTION_WIDTH);
+        helper.putWidget(this.file, TEXT_FIELD_WIDTH * 3, 1);
 
-        y += LINE_HEIGHT;
-        x = 0;
+        helper.newline(LINE_HEIGHT);
         this.saveButton.setOnClick(this::save);
-        root.add(this.saveButton, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        helper.putWidget(this.saveButton, BUTTON_WIDTH, BUTTON_HEIGHT, 4);
         this.executeButton.setOnClick(this::execute);
-        x += BUTTON_WIDTH + 4;
-        root.add(this.executeButton, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        helper.putWidget(this.executeButton, BUTTON_WIDTH, BUTTON_HEIGHT, 4);
         WButton cancel = new WButton(Component.literal("取消"));
         cancel.setOnClick(() -> Minecraft.getInstance().setScreen(null));
-        x += BUTTON_WIDTH + 4;
-        root.add(cancel, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        helper.putWidget(cancel, BUTTON_WIDTH, BUTTON_HEIGHT, 4);
 
         root.validate(this);
     }
@@ -165,6 +139,10 @@ public class CMGuiDescription extends LightweightGuiDescription {
     @SuppressWarnings("DataFlowIssue")
     private static TooltipText createText(Component component) {
         return new TooltipText(component, ChatFormatting.AQUA.getColor() | 0xFF_000000);
+    }
+
+    private void onCommandFinish(String command) {
+
     }
 
     private void suggest() {
@@ -233,7 +211,6 @@ public class CMGuiDescription extends LightweightGuiDescription {
 
     @Override
     public void addPainters() {
-        super.addPainters();
         this.rootPanel.setBackgroundPainter(BackgroundPainter.createColorful(1291845632));
     }
 }

@@ -8,7 +8,8 @@ public enum BuiltInCM {
     SPAWN("/player bot_${code} spawn at ${pos}"),
     KILL("/player bot_${code} kill"),
     ATTACK("/player bot_${code} attack"),
-    USE("/player bot_${code} use")
+    USE("/player bot_${code} use"),
+    LOOK("/player bot_${code} look"),
     ;
 
     private final String command;
