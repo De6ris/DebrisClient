@@ -118,11 +118,12 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed AUTO_LEFT = ofBooleanHotkeyed("自动向左", false, "LEFT_ALT,LEFT", "可用于走路，划船");
     public static final ConfigBooleanHotkeyed AUTO_BACK = ofBooleanHotkeyed("自动后退", false, "LEFT_ALT,DOWN", "可用于走路，划船");
     public static final ConfigBooleanHotkeyed AUTO_RIGHT = ofBooleanHotkeyed("自动向右", false, "LEFT_ALT,RIGHT", "可用于走路，划船");
-    public static final ConfigBooleanHotkeyed AUTO_SQUAT = ofBooleanHotkeyed("自动蹲起", false, "LEFT_ALT,RIGHT_SHIFT");
+    public static final ConfigBooleanHotkeyed AUTO_SQUAT = ofBooleanHotkeyed("自动蹲起", false, "LEFT_ALT,RIGHT_SHIFT", "");
+    public static final ConfigBooleanHotkeyed AUTO_ROTATE = ofBooleanHotkeyed("自动旋转", false, "LEFT_ALT,ENTER");
     public static final ConfigBooleanHotkeyed StartStoneCutting = ofBooleanHotkeyed("启动连续切石", false, "", ANY);
     public static final ConfigBooleanHotkeyed StartMassCrafting = ofBooleanHotkeyed("启动连续喷射合成", false, "", ANY);
     public static final ConfigBooleanHotkeyed LoyalerTrident = ofBooleanHotkeyed("更忠诚的三叉戟", false, "", "发射的忠诚三叉戟能够回到副手");
-    public static final ConfigBooleanHotkeyed AutoThrow = ofBooleanHotkeyed("自动丢弃", false, "", "在GUI中不生效");
+    public static final ConfigBooleanHotkeyed AutoThrow = ofBooleanHotkeyed("自动丢弃", false, "", "白名单中的物品会被丢出\n在GUI中不生效");
     public static final ConfigBooleanHotkeyed AutoContainerTaker = ofBooleanHotkeyed("自动从容器取出", false, "", "若完全取出, 自动关闭GUI");
     public static final ConfigBooleanHotkeyed AutoExtinguisher = ofBooleanHotkeyed("自动灭火", false, "", "不影响灵魂火");
     public static final ConfigBooleanHotkeyed AutoBulletCatching = ofBooleanHotkeyed("自动接子弹", false, "", "潜影贝, 恶魂");
@@ -288,6 +289,7 @@ public class DCCommonConfig implements IConfigHandler {
                 AUTO_RIGHT,
                 AUTO_BACK,
                 AUTO_SQUAT,
+                AUTO_ROTATE,
                 StartStoneCutting,
                 StartMassCrafting,
                 LoyalerTrident,

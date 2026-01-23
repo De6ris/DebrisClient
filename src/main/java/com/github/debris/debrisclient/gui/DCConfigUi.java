@@ -83,7 +83,7 @@ public class DCConfigUi extends GuiConfigsBase {
         VALUE("值"),
         COMPAT("兼容"),
         LISTS("列表"),
-        PRESS("按下"),
+        PRESS("热键"),
         TOGGLE("切换"),
         YEETS("禁用"),
         HIGHLIGHTS("高亮"),
