@@ -2,6 +2,7 @@ package com.github.debris.debrisclient.feat;
 
 import com.github.debris.debrisclient.feat.commandmacro.CommandMacro;
 import com.github.debris.debrisclient.util.ChatUtil;
+import com.github.debris.debrisclient.util.Predicates;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class CommandQueue {
     }
 
     public static void onClientTick(Minecraft client) {
+        if (Predicates.notInGame(client)) ENTRIES.clear();
         ENTRIES.removeIf(entry -> {
             if (entry.runTick == TICK_COUNTER) {
                 ChatUtil.sendChat(client, entry.command);
