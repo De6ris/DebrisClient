@@ -34,8 +34,16 @@ public class CMLogic {
         return Either.right(Component.literal("未找到选区").withStyle(ChatFormatting.RED));
     }
 
+    public static CMContext.Type getType(String command) {
+        return command.contains(CMLogic.POS) ? CMContext.Type.SPAWN : CMContext.Type.DEFAULT;
+    }
+
+    public static boolean save(CMInputData record) {
+        return generateMacro(record).saveToFile(record.file());
+    }
+
     @SuppressWarnings({"OptionalGetWithoutIsPresent", "DataFlowIssue", "SwitchStatementWithTooFewBranches"})
-    public static void save(CMInputData record) {
+    public static CommandMacro generateMacro(CMInputData record) {
         CMContext context = record.context();
         CMContext.Type type = context.getType();
 
@@ -81,6 +89,6 @@ public class CMLogic {
             }
         }
 
-        new CommandMacro(record.period(), commands).saveToFile(record.file());
+        return new CommandMacro(record.period(), commands);
     }
 }

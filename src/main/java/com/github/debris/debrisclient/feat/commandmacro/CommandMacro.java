@@ -8,6 +8,7 @@ import fi.dy.masa.malilib.util.JsonUtils;
 import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.Nullable;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -40,12 +41,16 @@ public record CommandMacro(int period, List<String> commands) {
         return object;
     }
 
-    public void saveToFile(String file) {
-        JsonUtils.writeJsonToFileAsPath(this.save(), MACRO_DIR.resolve(file));
+    public boolean saveToFile(String file) {
+        File folder = MACRO_DIR.toFile();
+        if ((folder.exists() && folder.isDirectory()) || folder.mkdirs()) {
+            return JsonUtils.writeJsonToFileAsPath(this.save(), MACRO_DIR.resolve(file));
+        }
+        return false;
     }
 
     @Nullable
-    public static Component run(String file) {
+    public static Component runFile(String file) {
         Path filePath = CommandMacro.MACRO_DIR.resolve(file);
 
         if (!Files.exists(filePath)) {
@@ -63,12 +68,16 @@ public record CommandMacro(int period, List<String> commands) {
             if (macro.period() < 0) {
                 return CommandMacroText.ILLEGAL_PERIOD.translate();
             }
-            CommandQueue.run(macro);
+            macro.run();
         } catch (Exception e) {
             return CommandMacroText.READ_FILE_ERROR.translate();
         }
 
         return null;
+    }
+
+    public void run() {
+        CommandQueue.run(this);
     }
 
 }

@@ -11,7 +11,7 @@ public record CMInputData(
         String command,
         String file
 ) {
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    @SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "SwitchStatementWithTooFewBranches"})
     public static Either<CMInputData, Component> parse(OptionalInt period,
                                                        String command,
                                                        OptionalInt code1,
@@ -27,31 +27,30 @@ public record CMInputData(
         if (period.isEmpty() || period.getAsInt() < 0) return Either.right(Component.literal("无效的时间间隔"));
         if (command.isEmpty()) return Either.right(Component.literal("指令为空"));
 
-        CMContext.Type type;
-        if (command.contains(CMLogic.POS)) {
-            type = CMContext.Type.SPAWN;
-            if (startX.isEmpty() || startZ.isEmpty() || endX.isEmpty() || endZ.isEmpty())
-                return Either.right(Component.literal("无效的XZ坐标范围"));
-            if (yPosMode == YPosMode.FIXED_VALUE && yPos.isEmpty())
-                return Either.right(Component.literal("未提供Y坐标"));
-        } else {
-            type = CMContext.Type.DEFAULT;
-            if (code1.isEmpty() || code2.isEmpty()) return Either.right(Component.literal("无效的编号范围"));
+        CMContext context;
+
+        CMContext.Type type = CMLogic.getType(command);
+        switch (type) {
+            case SPAWN -> {
+                if (startX.isEmpty() || startZ.isEmpty() || endX.isEmpty() || endZ.isEmpty())
+                    return Either.right(Component.literal("无效的XZ坐标范围"));
+                if (yPosMode == YPosMode.FIXED_VALUE && yPos.isEmpty())
+                    return Either.right(Component.literal("未提供Y坐标"));
+                context = new CMContext.Spawn(
+                        startX.getAsInt(),
+                        startZ.getAsInt(),
+                        endX.getAsInt(),
+                        endZ.getAsInt(),
+                        yPosMode,
+                        yPos
+                );
+            }
+            default -> {
+                if (code1.isEmpty() || code2.isEmpty()) return Either.right(Component.literal("无效的编号范围"));
+                context = new CMContext.Default(code1.getAsInt(), code2.getAsInt());
+            }
         }
 
-        CMContext context;
-        if (type == CMContext.Type.SPAWN) {
-            context = new CMContext.Spawn(
-                    startX.getAsInt(),
-                    startZ.getAsInt(),
-                    endX.getAsInt(),
-                    endZ.getAsInt(),
-                    yPosMode,
-                    yPos
-            );
-        } else {
-            context = new CMContext.Default(code1.getAsInt(), code2.getAsInt());
-        }
         return Either.left(new CMInputData(context, period.getAsInt(), command, file));
     }
 }

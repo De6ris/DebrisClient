@@ -6,11 +6,9 @@ import com.github.debris.debrisclient.feat.commandmacro.CommandMacro;
 import com.github.debris.debrisclient.localization.CommandMacroText;
 import com.github.debris.debrisclient.localization.GeneralText;
 import com.github.debris.debrisclient.util.TextFactory;
-import com.google.gson.JsonObject;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import fi.dy.masa.malilib.util.JsonUtils;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
@@ -90,9 +88,9 @@ public class DCCommandMacroCommand {
 
 
     private static int example(FabricClientCommandSource source) {
-        JsonObject jsonObject = new CommandMacro(5, List.of("hello world", "/say 1")).save();
+        CommandMacro example = new CommandMacro(5, List.of("hello world", "/say 1"));
+        example.saveToFile("example.json");
         Path path = CommandMacro.MACRO_DIR.resolve("example.json");
-        JsonUtils.writeJsonToFileAsPath(jsonObject, path);
         source.sendFeedback(
                 CommandMacroText.EXAMPLE_CREATED.translate(
                         TextFactory.here().withStyle(
@@ -128,7 +126,7 @@ public class DCCommandMacroCommand {
     }
 
     private static int run(FabricClientCommandSource source, String file) {
-        Component component = CommandMacro.run(file);
+        Component component = CommandMacro.runFile(file);
         if (component != null) {
             source.sendFeedback(component);
         }

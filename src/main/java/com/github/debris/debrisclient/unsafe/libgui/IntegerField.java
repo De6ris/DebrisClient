@@ -1,13 +1,12 @@
 package com.github.debris.debrisclient.unsafe.libgui;
 
 import io.github.cottonmc.cotton.gui.widget.TooltipBuilder;
-import io.github.cottonmc.cotton.gui.widget.WTextField;
 import net.minecraft.network.chat.Component;
 
 import java.util.OptionalInt;
 import java.util.regex.Pattern;
 
-public class IntegerField extends WTextField {
+public class IntegerField extends TextField {
     private static final Pattern PATTERN_NUMBER = Pattern.compile("-?[0-9]*");
 
     public IntegerField() {
