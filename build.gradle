@@ -9,6 +9,10 @@ plugins {
 version = project.mod_version
 group = project.maven_group
 
+base {
+    archivesName = project.archives_base_name
+}
+
 repositories {
 //    maven { url = 'https://masa.dy.fi/maven' }
     maven { url = "https://www.cursemaven.com" }
@@ -139,9 +143,10 @@ fabricApi {
     }
 }
 
-runClient {
-    args("--username", "De6ris")
-}
+// crashed when I upgrade to IDEA 2025
+//runClient {
+//    args("--username", "De6ris")
+//}
 
 // configure the maven publication
 publishing {
