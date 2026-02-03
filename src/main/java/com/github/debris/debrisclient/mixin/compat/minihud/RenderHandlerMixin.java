@@ -21,7 +21,7 @@ public class RenderHandlerMixin {
     @Final
     private List<String> lines;
 
-    @Inject(method = "updateLines", at = @At("RETURN"))
+    @Inject(method = "updateLines", at = @At("RETURN"), remap = false)
     private void onLinesUpdate(CallbackInfo ci) {
         MiniHudAccess.onLinesUpdate(this.lines);
     }

@@ -4,6 +4,7 @@ import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import com.github.debris.debrisclient.unsafe.LitematicaAccess;
 import com.github.debris.debrisclient.unsafe.MiniHudAccess;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -65,7 +66,11 @@ public class CullingUtil {
     public static boolean shouldCullWthit() {
         if (!DCCommonConfig.WthitMasaCompat.getBooleanValue()) return false;
         if (ModReference.hasMod(ModReference.Litematica) && LitematicaAccess.isRenderingInfoOverlay()) return true;
-        if (ModReference.hasMod(ModReference.MiniHud) && MiniHudAccess.isPreviewingInventory()) return true;
+        if (
+                ModReference.hasMod(ModReference.MiniHud)
+                        && MiniHudAccess.isPreviewingInventory()
+                        && RayTraceUtil.getRayTraceBlockEntity(Minecraft.getInstance()).isPresent()
+        ) return true;
         return false;
     }
 }
