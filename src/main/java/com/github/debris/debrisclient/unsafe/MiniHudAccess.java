@@ -4,6 +4,7 @@ import com.github.debris.debrisclient.feat.interactor.BlockInteractor;
 import com.github.debris.debrisclient.feat.interactor.EntityInteractor;
 import fi.dy.masa.minihud.config.Configs;
 import fi.dy.masa.minihud.gui.GuiConfigs;
+import fi.dy.masa.minihud.renderer.InventoryOverlayHandler;
 
 import java.util.List;
 
@@ -27,5 +28,9 @@ public class MiniHudAccess {
 
     public static boolean isShapeButton(String content) {
         return content.equals(GuiConfigs.ConfigGuiTab.SHAPES.getDisplayName());
+    }
+
+    public static boolean hasTargetInventory() {
+        return !InventoryOverlayHandler.getInstance().isEmpty();
     }
 }

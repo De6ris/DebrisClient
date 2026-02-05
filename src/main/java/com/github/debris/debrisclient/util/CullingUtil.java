@@ -4,7 +4,6 @@ import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import com.github.debris.debrisclient.unsafe.LitematicaAccess;
 import com.github.debris.debrisclient.unsafe.MiniHudAccess;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -69,7 +68,7 @@ public class CullingUtil {
         if (
                 ModReference.hasMod(ModReference.MiniHud)
                         && MiniHudAccess.isPreviewingInventory()
-                        && RayTraceUtil.getRayTraceBlockEntity(Minecraft.getInstance()).isPresent()
+                        && MiniHudAccess.hasTargetInventory()
         ) return true;
         return false;
     }
