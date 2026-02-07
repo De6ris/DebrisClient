@@ -42,6 +42,10 @@ repositories {
     maven {
         url = "https://server.bbkr.space/artifactory/libs-release"
     }
+    maven {
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
 }
 
 dependencies {
@@ -79,6 +83,9 @@ dependencies {
     include(modImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
 
     modCompileOnly("io.github.cottonmc:LibGui:${project.libgui_version}")
+
+    modCompileOnly("mezz.jei:jei-${minecraft_version}-fabric-api:${jei_version}")
+    modRuntimeOnly("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}")
 
 
     //local
