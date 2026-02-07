@@ -24,6 +24,9 @@
     ],
     "modmenu": [
       "com.github.debris.debrisclient.compat.ModMenuImpl"
+    ],
+    "jei_mod_plugin": [
+      "com.github.debris.debrisclient.compat.JeiPluginImpl"
     ]
   },
   "mixins": [

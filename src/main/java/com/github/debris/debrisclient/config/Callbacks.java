@@ -65,6 +65,8 @@ public class Callbacks {
 
         DCCommonConfig.BotSpawnCommand.getKeybind().setCallback((action, key) -> CarpetBot.suggestBotSpawnCommand(client));
 
+        DCCommonConfig.SpawnBotForItem.getKeybind().setCallback((action, key) -> CarpetBot.spawnBotOfItem(client));
+
         DCCommonConfig.ResendLastChat.getKeybind().setCallback((action, key) -> ResendChat.resendLast(client));
 
         DCCommonConfig.RepeatNewestChat.getKeybind().setCallback((action, key) -> ResendChat.repeatNewestChat(client));

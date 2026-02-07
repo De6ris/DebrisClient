@@ -15,4 +15,7 @@ public interface IMixinGuiBase {
 
     @Accessor
     WidgetBase getHoveredWidget();
+
+    @Accessor
+    List<WidgetBase> getWidgets();
 }

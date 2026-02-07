@@ -48,6 +48,7 @@
     "compat.malilib.GuiScrollBarMixin",
     "compat.malilib.IMixinButtonBase",
     "compat.malilib.IMixinGuiBase",
+    "compat.malilib.IMixinGuiListBase",
     "compat.malilib.IMixinWidgetConfigOption",
     "compat.malilib.IMixinWidgetListBase",
     "compat.malilib.WidgetConfigOptionMixin",

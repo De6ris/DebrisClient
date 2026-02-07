@@ -44,7 +44,7 @@ public class InventoryTweaks {
     }
 
     private static boolean templateRun(BiConsumer<ContainerSection, ItemStack> action) {
-        Optional<Slot> optional = InventoryUtil.getSlotMouseOver();
+        Optional<Slot> optional = InventoryUtil.getHoveredSlot();
         if (optional.isEmpty()) return false;
         Slot slot = optional.get();
         if (!slot.hasItem()) return false;

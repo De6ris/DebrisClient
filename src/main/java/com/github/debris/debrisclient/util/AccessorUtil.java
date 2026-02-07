@@ -7,18 +7,17 @@ import com.github.debris.debrisclient.mixin.client.gui.IMixinChatScreen;
 import com.github.debris.debrisclient.mixin.client.gui.IMixinGuiContainer;
 import com.github.debris.debrisclient.mixin.client.gui.IMixinRecipeBookScreen;
 import com.github.debris.debrisclient.mixin.client.input.IClientInputMixin;
-import com.github.debris.debrisclient.mixin.compat.malilib.IMixinButtonBase;
-import com.github.debris.debrisclient.mixin.compat.malilib.IMixinGuiBase;
-import com.github.debris.debrisclient.mixin.compat.malilib.IMixinWidgetConfigOption;
-import com.github.debris.debrisclient.mixin.compat.malilib.IMixinWidgetListBase;
+import com.github.debris.debrisclient.mixin.compat.malilib.*;
 import com.github.debris.debrisclient.mixin.world.inventory.IAbstractContainerMenuMixin;
 import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
+import fi.dy.masa.malilib.gui.GuiListBase;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 import fi.dy.masa.malilib.gui.widgets.WidgetBase;
 import fi.dy.masa.malilib.gui.widgets.WidgetConfigOption;
 import fi.dy.masa.malilib.gui.widgets.WidgetListBase;
+import fi.dy.masa.malilib.gui.widgets.WidgetListEntryBase;
 import net.minecraft.client.ClientRecipeBook;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
@@ -86,6 +85,10 @@ public class AccessorUtil {
         return ((IMixinGuiBase) gui).getHoveredWidget();
     }
 
+    public static List<WidgetBase> getWidgets(GuiBase gui) {
+        return ((IMixinGuiBase) gui).getWidgets();
+    }
+
     @Nullable
     public static IButtonActionListener getActionListener(ButtonBase button) {
         return ((IMixinButtonBase) button).getActionListener();
@@ -100,10 +103,20 @@ public class AccessorUtil {
     }
 
     public static void setAllowKeyboardNavigation(WidgetListBase<?, ?> widget, boolean allow) {
-        ((IMixinWidgetListBase) widget).setAllowKeyboardNavigation(true);
+        ((IMixinWidgetListBase<?, ?>) widget).setAllowKeyboardNavigation(true);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <TYPE, WIDGET extends WidgetListEntryBase<TYPE>> List<WIDGET> getListWidgets(WidgetListBase<TYPE, WIDGET> widget) {
+        return ((IMixinWidgetListBase<TYPE, WIDGET>) widget).getListWidgets();
     }
 
     public static void setMoveVector(ClientInput input, Vec2 vec2) {
         ((IClientInputMixin) input).setMoveVector(vec2);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <TYPE, WIDGET extends WidgetListEntryBase<TYPE>, WIDGETLIST extends WidgetListBase<TYPE, WIDGET>> WIDGETLIST getListWidget(GuiListBase<TYPE, WIDGET, WIDGETLIST> guiListBase) {
+        return ((IMixinGuiListBase<TYPE, WIDGET, WIDGETLIST>) guiListBase).invokeGetListWidget();
     }
 }

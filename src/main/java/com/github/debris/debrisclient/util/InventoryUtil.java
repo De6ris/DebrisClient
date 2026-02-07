@@ -1,8 +1,12 @@
 package com.github.debris.debrisclient.util;
 
+import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.inventory.section.ContainerSection;
+import com.github.debris.debrisclient.unsafe.JeiAccess;
+import com.github.debris.debrisclient.unsafe.LitematicaAccess;
 import fi.dy.masa.malilib.util.GuiUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
@@ -187,7 +191,7 @@ public class InventoryUtil {
         getSlots().stream().filter(x -> predicate.test(x.getItem())).forEach(InventoryUtil::dropStack);
     }
 
-    public static Optional<Slot> getSlotMouseOver() {
+    public static Optional<Slot> getHoveredSlot() {
         return Optional.ofNullable(AccessorUtil.getHoveredSlot(getGuiContainer()));
     }
 
@@ -251,6 +255,24 @@ public class InventoryUtil {
     public static String getTypeString(AbstractContainerMenu container) {
         MenuType<?> menuType = AccessorUtil.getMenuType(container);
         return menuType != null ? BuiltInRegistries.MENU.getKey(menuType).toString() : "<no type>";
+    }
+
+    public static ItemStack getHoveredStack(Screen screen) {
+        if (screen instanceof AbstractContainerScreen<?>) {
+            Optional<Slot> optional = getHoveredSlot();
+            if (optional.isPresent()) {
+                return optional.get().getItem();
+            }
+        }
+        if (ModReference.hasMod(ModReference.Litematica)) {
+            if (LitematicaAccess.isMaterialListScreen(screen)) {
+                return LitematicaAccess.getHoveredStack(screen);
+            }
+        }
+        if (ModReference.hasMod(ModReference.Jei)) {
+            return JeiAccess.getHoveredStack();
+        }
+        return ItemStack.EMPTY;
     }
 
 }

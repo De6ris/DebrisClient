@@ -43,6 +43,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigInteger InteractContainerPeriod = ofInteger("交互容器间隔", 3, 0, 100, true, "按刻计\n高延迟服务器内应调高此项");
     public static final ConfigBoolean RetroDefaultSkin = ofBoolean("怀旧默认皮肤", false, "仅Steve, Alex");
     public static final ConfigBoolean ChunkBorderRenderNotOnTop = ofBoolean("区块边界渲染不再置顶", false, "1.21.11+子区块边界会透视");
+    public static final ConfigString SpawnBotPrefix = ofString("召唤假人前缀", "bot_");
 
 
     // key settings
@@ -96,6 +97,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey KickBot = ofHotkey("踢出假人", "", KeybindSettings.PRESS_ALLOWEXTRA, "按住时踢出准心所指假人\n支持灵魂出窍");
     public static final ConfigHotkey RestoreKicking = ofHotkey("假人复原", "", "召回误踢的假人");
     public static final ConfigHotkey BotSpawnCommand = ofHotkey("假人召唤指令", "", "在聊天栏中建议当前位置");
+    public static final ConfigHotkey SpawnBotForItem = ofHotkey("召唤物品对应假人", "", KeybindSettings.GUI,"对物品按下快捷键可召唤对应假人");
     public static final ConfigHotkey ModifierMoveAll = ofHotkey("移动全部:修饰键", "", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域全部\n兼容carpet假人不会乱点按钮");
     public static final ConfigHotkey ModifierSpreadItem = ofHotkey("分散物品:修饰键", "", GUI_RELAXED_CANCEL, "按住时点击会尝试将手中物品均分到点击区域全部槽位");
     public static final ConfigHotkey ModifierMoveSimilar = ofHotkey("移动类似:修饰键", "", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域类似物品");
@@ -241,7 +243,8 @@ public class DCCommonConfig implements IConfigHandler {
                 ExtraTooltip,
                 InteractContainerPeriod,
                 RetroDefaultSkin,
-                ChunkBorderRenderNotOnTop
+                ChunkBorderRenderNotOnTop,
+                SpawnBotPrefix
         );
         Compat = buildCompat();
         Lists = ImmutableList.of(
@@ -269,6 +272,7 @@ public class DCCommonConfig implements IConfigHandler {
                 KickBot,
                 RestoreKicking,
                 BotSpawnCommand,
+                SpawnBotForItem,
                 ModifierMoveAll,
                 ModifierMoveSimilar,
                 ModifierSpreadItem,

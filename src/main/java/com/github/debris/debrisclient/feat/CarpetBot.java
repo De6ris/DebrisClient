@@ -1,20 +1,23 @@
 package com.github.debris.debrisclient.feat;
 
-import com.github.debris.debrisclient.util.AccessorUtil;
-import com.github.debris.debrisclient.util.ChatUtil;
-import com.github.debris.debrisclient.util.Predicates;
-import com.github.debris.debrisclient.util.RayTraceUtil;
+import com.github.debris.debrisclient.config.DCCommonConfig;
+import com.github.debris.debrisclient.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class CarpetBot {
+    private static final int MAX_NAME_LENGTH = 16;
+
     @SuppressWarnings({"ConstantConditions", "UnnecessaryReturnStatement"})
     public static void tryKickBot(Minecraft client) {
         if (Predicates.notInGame(client)) return;
@@ -52,13 +55,14 @@ public class CarpetBot {
     public static boolean suggestBotSpawnCommand(Minecraft client) {
         if (Predicates.notInGame(client)) return false;
 
-        String command = SpawnContext.fromEntity(client.getCameraEntity()).getSpawnCommand("bot_");
+        String prefix = DCCommonConfig.SpawnBotPrefix.getStringValue();
+        String command = SpawnContext.fromEntity(client.getCameraEntity()).getSpawnCommand(prefix);
 
         ChatScreen chatScreen = new ChatScreen(command, false);
         client.setScreen(chatScreen);
         EditBox chatField = AccessorUtil.getChatField(chatScreen);
         chatField.setValue(command);
-        chatField.moveCursorTo("/player bot_".length(), false);
+        chatField.moveCursorTo(("/player " + prefix).length(), false);
 
         return true;
     }
@@ -87,6 +91,20 @@ public class CarpetBot {
     private static void sendSpawnCommandAndRemoveFromQueue(Minecraft client, KickEntry entry) {
         ChatUtil.sendChat(client, entry.context.getSpawnCommand(entry.name));
         KICK_QUEUE.remove(entry);
+    }
+
+    public static boolean spawnBotOfItem(Minecraft client) {
+        if (Predicates.notInGame(client)) return false;
+        if (client.screen == null) return false;
+        ItemStack stack = InventoryUtil.getHoveredStack(client.screen);
+        if (stack.isEmpty()) return false;
+        String name = DCCommonConfig.SpawnBotPrefix.getStringValue() + BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
+        if (name.length() > MAX_NAME_LENGTH) {
+            ChatUtil.addLocalMessage(Component.literal("假人名称过长: " + name));
+            return true;
+        }
+        ChatUtil.sendChat(client, String.format("/player %s spawn", name));
+        return true;
     }
 
     private record KickEntry(String name, long time, SpawnContext context) {

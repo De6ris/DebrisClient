@@ -14,7 +14,7 @@ public class QuickBundle {
         ItemStack heldStack = InventoryUtil.getHeldStack();
 
         if (heldStack.isEmpty()) {// empty hand, try clear cursor bundle
-            Optional<Slot> slotMouseOver = InventoryUtil.getSlotMouseOver();
+            Optional<Slot> slotMouseOver = InventoryUtil.getHoveredSlot();
             if (slotMouseOver.isPresent()) {
                 Slot slot = slotMouseOver.get();
                 if (ItemUtil.isBundle(slot.getItem())) {
