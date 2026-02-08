@@ -49,15 +49,16 @@
   "debrisclient.adventure_command.status_on": "探索的时光助手已开启",
   "debrisclient.adventure_command.status_off": "探索的时光助手已关闭",
   "debrisclient.command_macro_command.example_created": "示例文件已创建于%1$s",
-  "debrisclient.command_macro_command.file_not_found": "未找到文件",
   "debrisclient.command_macro_command.help": "这允许你按间隔执行一串指令.\n数据以json格式保存在%1$s.\n使用 %2$s 创建示例, %3$s 执行示例",
   "debrisclient.command_macro_command.illegal_period": "间隔无效",
-  "debrisclient.command_macro_command.not_json": "不符Json格式",
-  "debrisclient.command_macro_command.read_file_error": "读取文件错误",
   "debrisclient.command_macro_command.stopped": "指令宏已停止",
   "debrisclient.click_here": "点此",
   "debrisclient.click_to_open": "点击打开",
   "debrisclient.click_to_execute": "点击执行",
   "debrisclient.feature_requires_mod": "功能需要模组: %s",
-  "debrisclient.here": "此处"
+  "debrisclient.file_not_found": "未找到文件",
+  "debrisclient.here": "此处",
+  "debrisclient.not_json": "不符Json格式",
+  "debrisclient.read_file_error": "读取文件错误",
+  "debrisclient.reload_success": "重载成功"
 }

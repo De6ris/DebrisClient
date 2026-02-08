@@ -2,11 +2,8 @@ package com.github.debris.debrisclient.localization;
 
 public enum CommandMacroText implements Translatable {
     EXAMPLE_CREATED,
-    FILE_NOT_FOUND,
     HELP,
     ILLEGAL_PERIOD,
-    NOT_JSON,
-    READ_FILE_ERROR,
     STOPPED,
     ;
 

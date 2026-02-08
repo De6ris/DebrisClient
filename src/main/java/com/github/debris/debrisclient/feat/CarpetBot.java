@@ -5,7 +5,6 @@ import com.github.debris.debrisclient.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -98,12 +97,14 @@ public class CarpetBot {
         if (client.screen == null) return false;
         ItemStack stack = InventoryUtil.getHoveredStack(client.screen);
         if (stack.isEmpty()) return false;
-        String name = DCCommonConfig.SpawnBotPrefix.getStringValue() + BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
-        if (name.length() > MAX_NAME_LENGTH) {
-            ChatUtil.addLocalMessage(Component.literal("假人名称过长: " + name));
-            return true;
+        List<String> names = ItemBotMapping.getNames(stack);
+        for (String name : names) {
+            if (name.length() > MAX_NAME_LENGTH) {
+                ChatUtil.addLocalMessage(Component.literal("假人名称过长: " + name));
+                continue;
+            }
+            ChatUtil.sendChat(client, String.format("/player %s spawn", name));
         }
-        ChatUtil.sendChat(client, String.format("/player %s spawn", name));
         return true;
     }
 
