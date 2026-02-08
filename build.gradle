@@ -150,10 +150,9 @@ fabricApi {
     }
 }
 
-// crashed when I upgrade to IDEA 2025
-//runClient {
-//    args("--username", "De6ris")
-//}
+tasks.named('runClient', JavaExec).configure { exec ->
+    exec.setArgs(['--username', 'De6ris'])
+}
 
 // configure the maven publication
 publishing {
