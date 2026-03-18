@@ -4,6 +4,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.VersionParsingException;
+import net.fabricmc.loader.impl.util.version.VersionPredicateParser;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -17,16 +18,14 @@ public class Platform {
         return FabricLoader.getInstance().isModLoaded(modid);
     }
 
-    public static boolean isModLoadedWithNewEnoughVersion(String modId, String leastVersion) {
+    public static boolean testModVersion(String modId, String versionPredicate) {
         Optional<ModContainer> optional = FabricLoader.getInstance().getModContainer(modId);
         if (optional.isEmpty()) return false;
         Version version = optional.get().getMetadata().getVersion();
         try {
-            Version parse = Version.parse(leastVersion);
-            if (version.compareTo(parse) >= 0) return true;
+            return VersionPredicateParser.parse(versionPredicate).test(version);
         } catch (VersionParsingException e) {
             return false;
         }
-        return false;
     }
 }

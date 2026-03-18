@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.util;
 
-import com.github.debris.debrisclient.feat.FutureTaskQueue;
+import com.github.debris.debrisclient.feat.task.FutureTaskQueue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringUtil;
@@ -23,6 +23,6 @@ public class ChatUtil {
     }
 
     public static void addLocalMessageNextTick(Component message) {
-        FutureTaskQueue.addNextTick(() -> addLocalMessage(message));
+        FutureTaskQueue.scheduleNextTick(client -> addLocalMessage(message));
     }
 }

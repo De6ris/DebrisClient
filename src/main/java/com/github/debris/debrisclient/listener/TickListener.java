@@ -6,6 +6,7 @@ import com.github.debris.debrisclient.feat.*;
 import com.github.debris.debrisclient.feat.advancement.AdventuringTimeHelper;
 import com.github.debris.debrisclient.feat.interactor.BlockInteractor;
 import com.github.debris.debrisclient.feat.interactor.EntityInteractor;
+import com.github.debris.debrisclient.feat.task.FutureTaskQueue;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterUtil;
 import com.github.debris.debrisclient.inventory.feat.AutoThrow;
 import com.github.debris.debrisclient.inventory.feat.LoyalTrident;

@@ -1,5 +1,7 @@
 package com.github.debris.debrisclient.feat;
 
+import com.github.debris.debrisclient.feat.task.FutureTaskQueue;
+import com.github.debris.debrisclient.feat.task.RetryTask;
 import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import com.github.debris.debrisclient.inventory.section.EnumSection;
 import com.github.debris.debrisclient.util.AccessorUtil;
@@ -55,7 +57,7 @@ public class TakeOff {
 
         player.jumpFromGround();
 
-        FutureTaskQueue.addTask(new TakeOffTask(swapTask));
+        FutureTaskQueue.add(new TakeOffTask(swapTask));
 
         return true;
     }
@@ -72,7 +74,7 @@ public class TakeOff {
         return false;
     }
 
-    private record TakeOffTask(Runnable swapTask) implements FutureTask {
+    private record TakeOffTask(Runnable swapTask) implements RetryTask {
         @Override
         public boolean execute(Minecraft client) {
             if (!Predicates.inGameNoGui(client)) return true;

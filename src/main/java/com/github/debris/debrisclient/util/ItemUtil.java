@@ -1,12 +1,10 @@
 package com.github.debris.debrisclient.util;
 
-
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 
-import java.util.Objects;
 import java.util.function.Predicate;
 
 public class ItemUtil {
@@ -14,12 +12,8 @@ public class ItemUtil {
         return ItemStack.isSameItem(itemStack, other);
     }
 
-    public static boolean compareMeta(ItemStack itemStack, ItemStack other) {
-        return Objects.equals(itemStack.getComponents(), other.getComponents());
-    }
-
     public static boolean compareIDMeta(ItemStack itemStack, ItemStack other) {
-        return compareID(itemStack, other) && compareMeta(itemStack, other);
+        return ItemStack.isSameItemSameComponents(itemStack, other);
     }
 
     public static Predicate<ItemStack> predicateID(ItemStack template) {
