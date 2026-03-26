@@ -1,10 +1,10 @@
 package com.github.debris.debrisclient.inventory.cutstone;
 
 import com.github.debris.debrisclient.inventory.section.EnumSection;
-import fi.dy.masa.malilib.util.InventoryUtils;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 
 public class StoneCutterRecipePattern {
@@ -39,8 +39,8 @@ public class StoneCutterRecipePattern {
 
     public void readFromNBT(CompoundTag nbt, RegistryAccess registryManager) {
         if (nbt.contains("Result") && nbt.contains("Input")) {
-            this.input = InventoryUtils.fromNbtOrEmpty(registryManager, nbt.getCompoundOrEmpty("Input"));
-            this.result = InventoryUtils.fromNbtOrEmpty(registryManager, nbt.getCompoundOrEmpty("Result"));
+            this.input = fromNbtOrEmpty(registryManager, nbt.getCompoundOrEmpty("Input"));
+            this.result = fromNbtOrEmpty(registryManager, nbt.getCompoundOrEmpty("Result"));
         }
     }
 
@@ -52,5 +52,13 @@ public class StoneCutterRecipePattern {
         nbt.put("Input", inputNbt);
         nbt.put("Result", resultNbt);
         return nbt;
+    }
+
+    private static ItemStack fromNbtOrEmpty(RegistryAccess registry, Tag tag) {
+        if (tag == null) {
+            return ItemStack.EMPTY;
+        }
+
+        return ItemStack.CODEC.parse(registry.createSerializationContext(NbtOps.INSTANCE), tag).resultOrPartial().orElse(ItemStack.EMPTY);
     }
 }

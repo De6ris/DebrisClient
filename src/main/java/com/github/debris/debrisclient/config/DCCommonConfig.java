@@ -16,7 +16,7 @@ import fi.dy.masa.malilib.config.IHotkeyTogglable;
 import fi.dy.masa.malilib.config.options.*;
 import fi.dy.masa.malilib.hotkeys.KeyAction;
 import fi.dy.masa.malilib.hotkeys.KeybindSettings;
-import fi.dy.masa.malilib.util.JsonUtils;
+import fi.dy.masa.malilib.util.data.json.JsonUtils;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -53,11 +53,11 @@ public class DCCommonConfig implements IConfigHandler {
     private static final KeybindSettings ANY = KeybindSettings.create(KeybindSettings.Context.ANY, KeyAction.PRESS, false, true, false, true);
 
 
-    // compat
+    // integration
     public static final ConfigBoolean FreeCamKeepAutoMoving = ofBoolean("灵魂出窍时允许自动移动", true, "本模组的自动移动, 在灵魂出窍时会默认停止移动");
     public static final ConfigBoolean FreeCamSpectatorFix = ofBoolean("旁观模式灵魂出窍修复", true, "当你附身别的生物, 启动灵魂出窍时相机仍在附身地");
     public static final ConfigBoolean RetroFreeCam = ofBoolean("怀旧灵魂出窍", false, "适用于tweakeroo0.24.1");
-    public static final ConfigBoolean ToolSwitchFix = ofBoolean("工具切换修复", true, "无合适工具时, 不应切换到第一个快捷栏");
+    public static final ConfigBoolean ToolSwitchFix = ofBoolean("工具切换修复", true, "无合适工具时, 不应轻易切换");
     public static final ConfigBoolean ProgressResuming = ofBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度\n对MaLiLib驱动的模组和CommandButton有效");
     public static final ConfigBoolean WorldEditVisibility = ofBoolean("WorldEdit可视化", false, "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
     public static final ConfigColor WorldEditOverlay = ofColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
@@ -172,7 +172,7 @@ public class DCCommonConfig implements IConfigHandler {
 
 
     public static final ImmutableList<IConfigBase> Values;
-    public static final ImmutableList<IConfigBase> Compat;
+    public static final ImmutableList<IConfigBase> Integration;
     public static final ImmutableList<IConfigBase> Lists;
     public static final ImmutableList<ConfigHotkey> KeyPress;
     public static final ImmutableList<IHotkeyTogglable> KeyToggle;
@@ -187,7 +187,7 @@ public class DCCommonConfig implements IConfigHandler {
     public void load() {
         File settingFile = FILE_PATH.toFile();
         if (settingFile.isFile() && settingFile.exists()) {
-            JsonElement jsonElement = JsonUtils.parseJsonFile(settingFile);
+            JsonElement jsonElement = JsonUtils.parseJsonFile(FILE_PATH);
             if (jsonElement != null && jsonElement.isJsonObject()) {
                 JsonObject obj = jsonElement.getAsJsonObject();
                 ConfigUtils.readConfigBase(obj, MOD_NAME, ALL_CONFIGS);
@@ -201,11 +201,11 @@ public class DCCommonConfig implements IConfigHandler {
         if ((folder.exists() && folder.isDirectory()) || folder.mkdirs()) {
             JsonObject configRoot = new JsonObject();
             ConfigUtils.writeConfigBase(configRoot, MOD_NAME, ALL_CONFIGS);
-            JsonUtils.writeJsonToFile(configRoot, FILE_PATH.toFile());
+            JsonUtils.writeJsonToFile(configRoot, FILE_PATH);
         }
     }
 
-    private static ImmutableList<IConfigBase> buildCompat() {
+    private static ImmutableList<IConfigBase> buildIntegration() {
         ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();
         builder.add(ProgressResuming, PinYinSearch, CommentSearch, GlobalConfigEnhance, ScrollerEnhance);
         if (ModReference.hasMod(ModReference.Tweakeroo)) {
@@ -246,7 +246,7 @@ public class DCCommonConfig implements IConfigHandler {
                 ChunkBorderRenderNotOnTop,
                 SpawnBotPrefix
         );
-        Compat = buildCompat();
+        Integration = buildIntegration();
         Lists = ImmutableList.of(
                 AutoRepeatPlayerList,
                 AutoRepeatBlackList,
@@ -339,7 +339,7 @@ public class DCCommonConfig implements IConfigHandler {
         );
         ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();
         builder.addAll(Values);
-        builder.addAll(Compat);
+        builder.addAll(Integration);
         builder.addAll(Lists);
         builder.addAll(KeyToggle);
         builder.addAll(KeyPress);

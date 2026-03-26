@@ -8,7 +8,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.mojang.datafixers.util.Either;
-import fi.dy.masa.malilib.util.JsonUtils;
+import fi.dy.masa.malilib.util.data.json.JsonUtils;
 import net.minecraft.network.chat.Component;
 import org.jspecify.annotations.Nullable;
 
@@ -45,7 +45,7 @@ public record CommandMacro(int period, List<String> commands) {
     public boolean saveToFile(String file) {
         File folder = MACRO_DIR.toFile();
         if ((folder.exists() && folder.isDirectory()) || folder.mkdirs()) {
-            return JsonUtils.writeJsonToFileAsPath(this.save(), MACRO_DIR.resolve(file));
+            return JsonUtils.writeJsonToFile(this.save(), MACRO_DIR.resolve(file));
         }
         return false;
     }

@@ -6,7 +6,7 @@ import com.github.debris.debrisclient.localization.Translatable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import fi.dy.masa.malilib.util.JsonUtils;
+import fi.dy.masa.malilib.util.data.json.JsonUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,7 +41,7 @@ public class LocalizationGen {
         if (!Files.exists(path)) {
             base = new JsonObject();
         } else {
-            JsonElement jsonElement = JsonUtils.parseJsonFileAsPath(path);
+            JsonElement jsonElement = JsonUtils.parseJsonFile(path);
             if (jsonElement == null) throw new AssertionError();
             base = jsonElement.getAsJsonObject();
         }
@@ -50,6 +50,6 @@ public class LocalizationGen {
             base.add(key, new JsonPrimitive(""));
         }
         path.toFile().mkdirs();
-        JsonUtils.writeJsonToFileAsPath(base, path);
+        JsonUtils.writeJsonToFile(base, path);
     }
 }

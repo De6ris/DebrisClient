@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static dev.xpple.clientarguments.arguments.CEntityArgument.entities;
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 public class DCCountEntityCommand {
     private static final int DISTRIBUTION_PRINT_LIMIT = 10;
@@ -37,7 +37,7 @@ public class DCCountEntityCommand {
     }
 
     private static int execute(FabricClientCommandSource source) {
-        return execute(source, Streams.stream(source.getWorld().entitiesForRendering()));
+        return execute(source, Streams.stream(source.getLevel().entitiesForRendering()));
     }
 
     private static int execute(FabricClientCommandSource source, CEntitySelector entitySelector) throws CommandSyntaxException {

@@ -1,7 +1,8 @@
 import java.text.SimpleDateFormat
 
 plugins {
-    id 'fabric-loom' version "${loom_version}"
+//    id 'fabric-loom' version "${loom_version}"
+    id 'net.fabricmc.fabric-loom' version '1.15.+'
 //    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
     id 'maven-publish'
 }
@@ -16,13 +17,16 @@ base {
 repositories {
 //    maven { url = 'https://masa.dy.fi/maven' }
     maven { url = "https://www.cursemaven.com" }
-    maven { url = "https://maven.terraformersmc.com/releases" }
     maven {
-        url "https://server.bbkr.space/artifactory/libs-release"
-        content {
-            includeGroup "io.github.cottonmc"
-        }
+        url = "https://maven.terraformersmc.com/releases/"
+        content { includeGroupAndSubgroups("com.terraformersmc") }
     }
+//    maven {
+//        url "https://server.bbkr.space/artifactory/libs-release"
+//        content {
+//            includeGroup "io.github.cottonmc"
+//        }
+//    }
     maven {
         url 'https://maven.fallenbreath.me/releases'
     }
@@ -40,58 +44,65 @@ repositories {
         url = 'https://maven.parchmentmc.org'
     }
     maven {
-        url = "https://server.bbkr.space/artifactory/libs-release"
-    }
-    maven {
         name = "Jared's maven"
         url = "https://maven.blamejared.com/"
+    }
+    maven {
+        url = 'https://api.modrinth.com/maven'
     }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.layered() {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchment_version}@zip")
-    }
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+//    mappings loom.layered() {
+//        officialMojangMappings()
+//        parchment("org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchment_version}@zip")
+//    }
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
     //masa
-    modImplementation "com.github.sakura-ryoko:malilib:${project.malilib_version}"
-    modCompileOnly "com.github.sakura-ryoko:litematica:${project.litematica_version}"
-    modCompileOnly "com.github.sakura-ryoko:itemscroller:${project.itemscroller_version}"
-    modCompileOnly "com.github.sakura-ryoko:tweakeroo:${project.tweakeroo_version}"
-    modCompileOnly "com.github.sakura-ryoko:minihud:${project.minihud_version}"
+    implementation "com.github.sakura-ryoko:malilib:${project.malilib_version}"
+//    compileOnly "com.github.sakura-ryoko:litematica:${project.litematica_version}"
+    compileOnly("com.github.sakura-ryoko:litematica:DEV~26.1-SNAPSHOT") {
+        exclude group: 'fi.dy.masa.malilib'
+    }
+//    compileOnly "com.github.sakura-ryoko:itemscroller:${project.itemscroller_version}"
+//    compileOnly("com.github.sakura-ryoko:tweakeroo:${project.tweakeroo_version}")
+//    compileOnly "com.github.sakura-ryoko:minihud:${project.minihud_version}"
+
+//    compileOnly "maven.modrinth:litematica:0.27.0"
+    compileOnly "maven.modrinth:item-scroller:QT3ZdOmj"// 0.31.0 is occupied by lite loader 1.12
+    compileOnly "maven.modrinth:tweakeroo:0.28.0"
+    compileOnly "maven.modrinth:minihud:0.39.0"
 
 
     //curse
-    modCompileOnly "curse.maven:roughly-enough-items-${project.rei_projectid}:${project.rei_fileid}"
-    modCompileOnly "curse.maven:worldedit-${project.worldedit_projectid}:${project.worldedit_fileid}"
-    modCompileOnly "curse.maven:advanced-xray-fabric-edition-${project.xray_projectid}:${project.xray_fileid}"
-    modCompileOnly "curse.maven:wthit-${project.wthit_projectid}:${project.wthit_fileid}"
-    modCompileOnly "curse.maven:carpet-${project.carpet_projectid}:${project.carpet_fileid}"
+    compileOnly "curse.maven:roughly-enough-items-${project.rei_projectid}:${project.rei_fileid}"
+    compileOnly "curse.maven:worldedit-${project.worldedit_projectid}:${project.worldedit_fileid}"
+    compileOnly "curse.maven:advanced-xray-fabric-edition-${project.xray_projectid}:${project.xray_fileid}"
+    compileOnly "curse.maven:wthit-${project.wthit_projectid}:${project.wthit_fileid}"
+//    compileOnly "curse.maven:carpet-${project.carpet_projectid}:${project.carpet_fileid}"
 
 
     //misc
-    modCompileOnly "com.terraformersmc:modmenu:${project.mod_menu}"
+    compileOnly "com.terraformersmc:modmenu:${project.mod_menu}"
 
-    modImplementation("dev.xpple:clientarguments:${project.clientarguments_version}")
+    implementation("dev.xpple:clientarguments:${project.clientarguments_version}")
 
-    include(modImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
+    include(implementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
 
-    modCompileOnly("io.github.cottonmc:LibGui:${project.libgui_version}")
+//    compileOnly("io.github.cottonmc:LibGui:${project.libgui_version}")
+    compileOnly(files("remaplibs/remap-LibGui-15.1.0+1.21.11.jar"))
 
-    modCompileOnly("mezz.jei:jei-${minecraft_version}-fabric-api:${jei_version}")
-    modRuntimeOnly("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}")
-
+//    compileOnly("mezz.jei:jei-1.21.11-fabric-api:${jei_version}")
+    compileOnly(files("remaplibs/remap-jei-1.21.11-common-api-27.4.0.15.jar"))
 
     //local
-    modCompileOnly(files("libs\\magiclib-minecraft-api-mc1.21.4-fabric-0.6.83-stable.jar"))
-    modCompileOnly(files("libs\\CommandGUIButtons-mc1.21-2.3.0+build.235+bb785b5.jar"))
-    modCompileOnly(files("libs\\Xaeros_Minimap_25.2.14_Fabric_1.21.9.jar"))
+    compileOnly(files("libs\\CommandGUIButtons-mc1.21-2.3.0+build.235+bb785b5.jar"))
+    compileOnly(files("libs\\Xaeros_Minimap_25.2.14_Fabric_1.21.9.jar"))
 }
 
 processResources {
@@ -107,7 +118,7 @@ processResources {
     }
 }
 
-def targetJavaVersion = 21
+def targetJavaVersion = 25
 tasks.withType(JavaCompile).configureEach {
     // ensure that the encoding is set to UTF-8, no matter what the system default is
     // this fixes some edge cases with special characters not displaying correctly

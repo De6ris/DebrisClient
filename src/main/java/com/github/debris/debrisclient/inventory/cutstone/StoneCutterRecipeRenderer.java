@@ -7,7 +7,7 @@ import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -30,7 +30,7 @@ public class StoneCutterRecipeRenderer {
         return INSTANCE;
     }
 
-    public void renderStoneCutterRecipe(GuiGraphics graphics, int mouseX, int mouseY) {
+    public void renderStoneCutterRecipe(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         if (StoneCutterUtil.isStoneCutterRecipeViewOpen()) {
             StoneCutterRecipeStorage recipeStorage = StoneCutterRecipeStorage.getInstance();
             final int first = recipeStorage.getFirstVisibleRecipeId();

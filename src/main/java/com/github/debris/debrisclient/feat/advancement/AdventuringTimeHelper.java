@@ -71,11 +71,11 @@ public class AdventuringTimeHelper {
     }
 
     public static void onChunkUnload(ClientLevel world, LevelChunk chunk) {
-        CHUNK_QUEUE.remove(chunk.getPos().toLong());
+        CHUNK_QUEUE.remove(chunk.getPos().pack());
     }
 
     private static void addToQueue(ChunkPos chunkPos) {
-        CHUNK_QUEUE.push(chunkPos.toLong());
+        CHUNK_QUEUE.push(chunkPos.pack());
     }
 
     private static boolean isOverworld(Level world) {
@@ -83,7 +83,7 @@ public class AdventuringTimeHelper {
     }
 
     private static boolean newChunk(ChunkPos chunkPos) {
-        long l = chunkPos.toLong();
+        long l = chunkPos.pack();
         return !EXISTING_CHUNKS.contains(l) && !CHUNK_QUEUE.contains(l);
     }
 
@@ -159,7 +159,7 @@ public class AdventuringTimeHelper {
         int process = 0;
         while (!queue.isEmpty() && process < MAX_PROCESS) {
             long pop = queue.pop();
-            CompletableFuture.runAsync(() -> process(world, new ChunkPos(pop)));
+            CompletableFuture.runAsync(() -> process(world, ChunkPos.unpack(pop)));
             EXISTING_CHUNKS.add(pop);
             process++;
         }

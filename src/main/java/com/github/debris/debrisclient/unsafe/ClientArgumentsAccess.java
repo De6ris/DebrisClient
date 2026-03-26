@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceKey;
 
 import java.util.function.BiFunction;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
 
 public class ClientArgumentsAccess {
     public static <T> RequiredArgumentBuilder<FabricClientCommandSource, ?> ofRegistryKey(

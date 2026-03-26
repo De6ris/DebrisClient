@@ -15,7 +15,7 @@ import net.minecraft.world.phys.HitResult;
 import java.util.Optional;
 import java.util.UUID;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 public class DCDataGetCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {

@@ -9,8 +9,8 @@ import net.minecraft.commands.arguments.item.ItemInput;
 
 import static dev.xpple.clientarguments.arguments.CItemArgument.getItemStackArgument;
 import static dev.xpple.clientarguments.arguments.CItemArgument.itemStack;
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 public class DCFindInFrameCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandBuildContext context) {
@@ -22,7 +22,7 @@ public class DCFindInFrameCommand {
     }
 
     private static int find(FabricClientCommandSource source, ItemInput itemInput) {
-        String id = itemInput.getItem().toString();
+        String id = itemInput.item().toString();
         String command = String.format("/cfind @e[type=minecraft:item_frame,nbt={Item:{id:\"%s\"}}]", id);
         ChatUtil.sendChat(source.getClient(), command);
         return Command.SINGLE_SUCCESS;

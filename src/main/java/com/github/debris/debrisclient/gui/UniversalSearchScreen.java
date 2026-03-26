@@ -8,10 +8,11 @@ import fi.dy.masa.malilib.gui.widgets.WidgetConfigOption;
 import fi.dy.masa.malilib.gui.widgets.WidgetListConfigOptions;
 import fi.dy.masa.malilib.gui.widgets.WidgetSearchBar;
 import fi.dy.masa.malilib.util.data.ModInfo;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.CommonColors;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -40,12 +41,12 @@ public class UniversalSearchScreen extends GuiConfigsBase {
     }
 
     @Override
-    public void render(GuiGraphics drawContext, int mouseX, int mouseY, float partialTicks) {
-        super.render(drawContext, mouseX, mouseY, partialTicks);
+    public void extractRenderState(@NonNull GuiGraphicsExtractor drawContext, int mouseX, int mouseY, float partialTicks) {
+        super.extractRenderState(drawContext, mouseX, mouseY, partialTicks);
         this.renderConfigSource(drawContext);
     }
 
-    private void renderConfigSource(GuiGraphics drawContext) {
+    private void renderConfigSource(GuiGraphicsExtractor drawContext) {
         WidgetListConfigOptions listWidget = this.getListWidget();
         WidgetBase hoveredWidget = AccessorUtil.getHoveredWidget(listWidget);
         if (hoveredWidget instanceof WidgetConfigOption widget) {
@@ -57,7 +58,7 @@ public class UniversalSearchScreen extends GuiConfigsBase {
                         .append(Component.literal(source.modName()).withColor(CommonColors.HIGH_CONTRAST_DIAMOND))
                         .append(Component.literal("-").withColor(CommonColors.WHITE))
                         .append(Component.literal(source.tab()).withColor(CommonColors.YELLOW));
-                drawContext.drawString(this.font, text, 20, 35, CommonColors.WHITE, false);
+                drawContext.text(this.font, text, 20, 35, CommonColors.WHITE, false);
             }
         }
     }

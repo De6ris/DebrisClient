@@ -15,7 +15,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -40,17 +40,17 @@ public class InventoryUtil {
 
     // the second param is special
     public static void drop(Slot slot, boolean ctrl) {
-        clickSlot(slot, ctrl ? 1 : 0, ClickType.THROW);
+        clickSlot(slot, ctrl ? 1 : 0, ContainerInput.THROW);
     }
 
     // hotBar: 0-8 or 40
     public static void swapHotBar(Slot slot, int hotBar) {
-        clickSlot(slot, hotBar, ClickType.SWAP);
+        clickSlot(slot, hotBar, ContainerInput.SWAP);
     }
 
     public static void gatherItems(Slot slot) {
         if (isHoldingItem()) {
-            clickSlot(slot, 0, ClickType.PICKUP_ALL);
+            clickSlot(slot, 0, ContainerInput.PICKUP_ALL);
         }
     }
 
@@ -104,67 +104,67 @@ public class InventoryUtil {
 
     public static void dropHeldItem() {
         if (isHoldingItem()) {
-            clickSlot(-999, 0, ClickType.PICKUP);
+            clickSlot(-999, 0, ContainerInput.PICKUP);
         }
     }
 
     public static void quickMove(Slot slot) {
-        click(slot, false, ClickType.QUICK_MOVE);
+        click(slot, false, ContainerInput.QUICK_MOVE);
     }
 
     public static void quickMove(int index) {
-        click(index, false, ClickType.QUICK_MOVE);
+        click(index, false, ContainerInput.QUICK_MOVE);
     }
 
     public static void startSpreading(boolean rightClick) {
-        clickSlot(-999, AbstractContainerMenu.getQuickcraftMask(0, rightClick ? 1 : 0), ClickType.QUICK_CRAFT);
+        clickSlot(-999, AbstractContainerMenu.getQuickcraftMask(0, rightClick ? 1 : 0), ContainerInput.QUICK_CRAFT);
     }
 
     public static void addToSpreading(Slot slot, boolean rightClick) {
-        clickSlot(slot, AbstractContainerMenu.getQuickcraftMask(1, rightClick ? 1 : 0), ClickType.QUICK_CRAFT);
+        clickSlot(slot, AbstractContainerMenu.getQuickcraftMask(1, rightClick ? 1 : 0), ContainerInput.QUICK_CRAFT);
     }
 
     public static void finishSpreading(boolean rightClick) {
-        clickSlot(-999, AbstractContainerMenu.getQuickcraftMask(2, rightClick ? 1 : 0), ClickType.QUICK_CRAFT);
+        clickSlot(-999, AbstractContainerMenu.getQuickcraftMask(2, rightClick ? 1 : 0), ContainerInput.QUICK_CRAFT);
     }
 
     public static void leftClick(Slot slot) {
-        click(slot, false, ClickType.PICKUP);
+        click(slot, false, ContainerInput.PICKUP);
     }
 
     public static void leftClick(int index) {
-        click(index, false, ClickType.PICKUP);
+        click(index, false, ContainerInput.PICKUP);
     }
 
     public static void rightClick(Slot slot) {
-        click(slot, true, ClickType.PICKUP);
+        click(slot, true, ContainerInput.PICKUP);
     }
 
     public static void rightClick(int index) {
-        click(index, true, ClickType.PICKUP);
+        click(index, true, ContainerInput.PICKUP);
     }
 
-    public static void click(Slot slot, boolean rightClick, ClickType type) {
+    public static void click(Slot slot, boolean rightClick, ContainerInput type) {
         click(getSlotId(slot), rightClick, type);
     }
 
-    public static void click(int index, boolean rightClick, ClickType type) {
+    public static void click(int index, boolean rightClick, ContainerInput type) {
         clickSlot(index, rightClick ? 1 : 0, type);
     }
 
     // the button also imply some other data
-    public static void clickSlot(Slot slot, int button, ClickType type) {
+    public static void clickSlot(Slot slot, int button, ContainerInput type) {
         clickSlot(getSlotId(slot), button, type);
     }
 
     // This is the final click slot, act as a valve
-    public static void clickSlot(int index, int button, ClickType type) {
+    public static void clickSlot(int index, int button, ContainerInput type) {
         if (GuiUtils.getCurrentScreen() instanceof CreativeModeInventoryScreen) {
             AbstractContainerMenu currentContainer = getCurrentContainer();
             currentContainer.clicked(index, button, type, getClientPlayer());
             currentContainer.broadcastChanges();
         } else {
-            getController().handleInventoryMouseClick(getWindowID(), index, button, type, getClientPlayer());
+            getController().handleContainerInput(getWindowID(), index, button, type, getClientPlayer());
         }
         markDirty();
     }

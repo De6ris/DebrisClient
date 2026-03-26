@@ -3,7 +3,7 @@ package com.github.debris.debrisclient.feat.log;
 import com.github.debris.debrisclient.DebrisClient;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import fi.dy.masa.malilib.util.JsonUtils;
+import fi.dy.masa.malilib.util.data.json.JsonUtils;
 import org.jspecify.annotations.Nullable;
 
 import java.nio.file.Files;
@@ -50,7 +50,7 @@ public final class GameLogs {
     }
 
     private static void load() {
-        JsonElement jsonElement = JsonUtils.parseJsonFileAsPath(CONFIG_FILE);
+        JsonElement jsonElement = JsonUtils.parseJsonFile(CONFIG_FILE);
         if (jsonElement != null && jsonElement.isJsonObject()) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             MAP.forEach((s, log) -> {
@@ -64,6 +64,6 @@ public final class GameLogs {
     public static void save() {
         JsonObject jsonObject = new JsonObject();
         MAP.forEach((s, log) -> jsonObject.add(s, log.writeJson()));
-        JsonUtils.writeJsonToFileAsPath(jsonObject, CONFIG_FILE);
+        JsonUtils.writeJsonToFile(jsonObject, CONFIG_FILE);
     }
 }

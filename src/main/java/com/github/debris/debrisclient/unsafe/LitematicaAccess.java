@@ -17,7 +17,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import org.joml.Matrix4f;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -43,10 +42,10 @@ public class LitematicaAccess {
                 .map(box -> BoundingBox.fromCorners(box.getPos1(), box.getPos2()));
     }
 
-    public static void renderWorldEditSelectionBox(BlockPos pos1, BlockPos pos2, Matrix4f matrix4f) {
-        LitematicaRenderUtil.renderSelectionBox(pos1, pos2, matrix4f);// those set up codes from OverlayRenderer.renderBoxes
+    public static void renderWorldEditSelectionBox(BlockPos pos1, BlockPos pos2) {
+        LitematicaRenderUtil.renderSelectionBox(pos1, pos2);// those set up codes from OverlayRenderer.renderBoxes
         // a yellow outline to differ from the original
-        RenderUtils.renderAreaSides(pos1, pos2, DCCommonConfig.WorldEditOverlay.getColor(), matrix4f);
+        RenderUtils.renderAreaSides(pos1, pos2, DCCommonConfig.WorldEditOverlay.getColor());
     }
 
     public static void resetTab() {

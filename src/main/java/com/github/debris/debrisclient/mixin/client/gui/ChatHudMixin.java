@@ -1,9 +1,10 @@
 package com.github.debris.debrisclient.mixin.client.gui;
 
 import com.github.debris.debrisclient.listener.ChatListener;
-import net.minecraft.client.GuiMessageTag;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
+import net.minecraft.client.multiplayer.chat.GuiMessageSource;
+import net.minecraft.client.multiplayer.chat.GuiMessageTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MessageSignature;
 import org.spongepowered.asm.mixin.Final;
@@ -19,8 +20,8 @@ public class ChatHudMixin {
     @Final
     private Minecraft minecraft;
 
-    @Inject(method = "addMessage(Lnet/minecraft/network/chat/Component;Lnet/minecraft/network/chat/MessageSignature;Lnet/minecraft/client/GuiMessageTag;)V", at = @At("RETURN"))
-    private void onMessageAdd(Component message, MessageSignature signatureData, GuiMessageTag indicator, CallbackInfo ci) {
-        ChatListener.onMessageAdd(this.minecraft, message);
+    @Inject(method = "addMessage", at = @At("RETURN"))
+    private void onMessageAdd(Component contents, MessageSignature signature, GuiMessageSource source, GuiMessageTag tag, CallbackInfo ci) {
+        ChatListener.onMessageAdd(this.minecraft, contents);
     }
 }

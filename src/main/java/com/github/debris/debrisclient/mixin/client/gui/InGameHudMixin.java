@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(Gui.class)
 public class InGameHudMixin {
-    @WrapOperation(method = "renderHearts", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui$HeartType;forPlayer(Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/client/gui/Gui$HeartType;"))
+    @WrapOperation(method = "extractHearts", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui$HeartType;forPlayer(Lnet/minecraft/world/entity/player/Player;)Lnet/minecraft/client/gui/Gui$HeartType;"))
     private Gui.HeartType overrideHeartType(Player player, Operation<Gui.HeartType> original) {
         HeartType heartType = DCCommonConfig.HeartTypeOverride.getEnumValue();
         if (heartType != HeartType.NONE) {

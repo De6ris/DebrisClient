@@ -17,7 +17,7 @@ public class RenderUtil {
                                        Color4f pos2Color,
                                        Color4f lineColor,
                                        float lineWidth) {
-        RenderUtils.depthTest(false);
+//        RenderUtils.depthTest(false); TODO
 
         Vec3 camPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
         // do not use EntityUtils.getCameraEntity().getPos(), that is not real camera position
@@ -61,7 +61,7 @@ public class RenderUtil {
         } catch (Exception ignored) {
         }
 
-        RenderUtils.depthTest(true);
+//        RenderUtils.depthTest(true); TODO
     }
 
 }

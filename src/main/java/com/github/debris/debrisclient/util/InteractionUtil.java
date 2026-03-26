@@ -41,13 +41,8 @@ public class InteractionUtil {
     }
 
     @SuppressWarnings("DataFlowIssue")
-    public static InteractionResult interactEntity(Minecraft client, Entity entity) {
-        return client.gameMode.interact(client.player, entity, InteractionHand.MAIN_HAND);
-    }
-
-    @SuppressWarnings("DataFlowIssue")
-    public static InteractionResult interactEntityAtLocation(Minecraft client, Entity entity, EntityHitResult hitResult) {
-        return client.gameMode.interactAt(client.player, entity, hitResult, InteractionHand.MAIN_HAND);
+    public static InteractionResult interactEntity(Minecraft client, Entity entity, EntityHitResult hitResult, InteractionHand hand) {
+        return client.gameMode.interact(client.player, entity, hitResult, hand);
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -66,12 +61,7 @@ public class InteractionUtil {
     @SuppressWarnings("DataFlowIssue")
     public static void useEntity(Minecraft client, Entity entity) {
         for (InteractionHand hand : InteractionHand.values()) {
-//            ItemStack itemStack = client.player.getStackInHand(hand);
-
-            InteractionResult actionResult = interactEntityAtLocation(client, entity, new EntityHitResult(entity));
-            if (!actionResult.consumesAction()) {
-                actionResult = interactEntity(client, entity);
-            }
+            InteractionResult actionResult = interactEntity(client, entity, new EntityHitResult(entity), hand);
 
             if (actionResult instanceof InteractionResult.Success success) {
                 if (success.swingSource() == InteractionResult.SwingSource.CLIENT) {
@@ -80,15 +70,6 @@ public class InteractionUtil {
 
                 return;
             }
-
-//            if (!itemStack.isEmpty() && syncLooking(client, entity) && interactItem(client, hand) instanceof ActionResult.Success success3) {
-//                if (success3.swingSource() == ActionResult.SwingSource.CLIENT) {
-//                    client.player.swingHand(hand);
-//                }
-//
-//                client.gameRenderer.firstPersonRenderer.resetEquipProgress(hand);
-//                return;
-//            }
         }
     }
 
@@ -116,15 +97,6 @@ public class InteractionUtil {
             if (actionResult2 instanceof InteractionResult.Fail) {
                 return;
             }
-
-//            if (!itemStack.isEmpty() && syncLooking(client, pos) && interactItem(client, hand) instanceof ActionResult.Success success3) {
-//                if (success3.swingSource() == ActionResult.SwingSource.CLIENT) {
-//                    client.player.swingHand(hand);
-//                }
-//
-//                client.gameRenderer.firstPersonRenderer.resetEquipProgress(hand);
-//                return;
-//            }
         }
     }
 

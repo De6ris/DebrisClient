@@ -16,8 +16,8 @@ import java.util.stream.Stream;
 
 import static dev.xpple.clientarguments.arguments.CItemArgument.getItemStackArgument;
 import static dev.xpple.clientarguments.arguments.CItemArgument.itemStack;
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 public class DCWhereIsItCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandBuildContext context) {
@@ -45,7 +45,7 @@ public class DCWhereIsItCommand {
     }
 
     private static int find(FabricClientCommandSource source, ItemInput itemInput) {
-        Item item = itemInput.getItem();
+        Item item = itemInput.item().value();
         if (FIND_QUEUE.contains(item)) {
             source.sendFeedback(Component.literal(String.format("已在寻找%s!", StringUtil.translateItem(item))));
         } else {

@@ -15,8 +15,8 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 /**
  * Same to vanilla spectate command, but no permission required.
@@ -48,7 +48,7 @@ public class DCSpectateCommand {
         Minecraft client = source.getClient();
         InteractionUtil.spectatorTeleport(client, targetGameProfile.id());
 
-        Player targetPlayerEntity = source.getWorld().getPlayerByUUID(targetGameProfile.id());
+        Player targetPlayerEntity = source.getLevel().getPlayerByUUID(targetGameProfile.id());
         if (targetPlayerEntity == null) {
             source.sendFeedback(Component.literal("未在附近找到该玩家实体, 已请求向该玩家传送, 请在传送完成后重试指令"));
         } else {

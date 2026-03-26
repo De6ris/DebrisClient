@@ -17,14 +17,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 public class DCListCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
@@ -74,7 +73,7 @@ public class DCListCommand {
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeCullBlockEntity() {
         return of("cull_block_entity", BuiltInRegistries.BLOCK_ENTITY_TYPE, DCCommonConfig.CullBlockEntityList)
                 .fastSuggestion(source -> RayTraceUtil.getRayTraceBlockEntity(source.getClient())
-                        .map(blockEntity -> BlockEntityType.getKey(blockEntity.getType()))
+                        .map(blockEntity -> BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntity.getType()))
                         .map(Identifier::toString))
                 .build();
     }

@@ -5,9 +5,9 @@ import com.github.debris.debrisclient.util.ChatUtil;
 import com.github.debris.debrisclient.util.CollectingCharacterVisitor;
 import com.github.debris.debrisclient.util.Predicates;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 
 import java.util.ArrayList;
 import java.util.Comparator;

@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import fi.dy.masa.litematica.render.OverlayRenderer;
 import fi.dy.masa.litematica.selection.Box;
 import net.minecraft.core.BlockPos;
-import org.joml.Matrix4f;
 import org.slf4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,14 +15,14 @@ public class LitematicaRenderUtil {
     private static Method renderSelectionBox = null;
     private static Object AREA_SELECTED = null;
 
-    public static void renderSelectionBox(BlockPos pos1, BlockPos pos2, Matrix4f matrix4f) {
+    public static void renderSelectionBox(BlockPos pos1, BlockPos pos2) {
         if (!setup) return;
         Box box = new Box(pos1, pos2, "WorldEdit");
         float expand = 0.001f;
         float lineWidthBlockBox = 2f;
         float lineWidthArea = 1.5f;
         try {
-            renderSelectionBox.invoke(OverlayRenderer.getInstance(), box, AREA_SELECTED, expand, lineWidthBlockBox, lineWidthArea, null, matrix4f);
+            renderSelectionBox.invoke(OverlayRenderer.getInstance(), box, AREA_SELECTED, expand, lineWidthBlockBox, lineWidthArea, null);
         } catch (IllegalAccessException | InvocationTargetException e) {
             LOGGER.warn("fail to invoke render method", e);
         }

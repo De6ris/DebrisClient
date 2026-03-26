@@ -48,7 +48,7 @@ public class DCConfigUi extends GuiConfigsBase {
 
         configs = switch (tab) {
             case VALUE -> DCCommonConfig.Values;
-            case COMPAT -> DCCommonConfig.Compat;
+            case INTEGRATION -> DCCommonConfig.Integration;
             case LISTS -> DCCommonConfig.Lists;
             case PRESS -> DCCommonConfig.KeyPress;
             case TOGGLE -> DCCommonConfig.KeyToggle;
@@ -74,7 +74,7 @@ public class DCConfigUi extends GuiConfigsBase {
     public enum Tab {
         ALL("全部"),
         VALUE("值"),
-        COMPAT("兼容"),
+        INTEGRATION("联动"),
         LISTS("列表"),
         PRESS("热键"),
         TOGGLE("切换"),

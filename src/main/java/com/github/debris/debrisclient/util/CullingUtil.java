@@ -19,7 +19,7 @@ public class CullingUtil {
         if (isSign && DCCommonConfig.CullSign.getBooleanValue()) return true;
         if (type == BlockEntityType.CHEST && DCCommonConfig.CullChest.getBooleanValue()) return true;
 
-        Identifier id = BlockEntityType.getKey(type);
+        Identifier id = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(type);
         if (id == null) return false;
         return DCCommonConfig.CullBlockEntityList.getStrings().contains(id.toString());
     }

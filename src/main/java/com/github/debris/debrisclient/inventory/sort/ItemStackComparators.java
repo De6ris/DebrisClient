@@ -2,6 +2,7 @@ package com.github.debris.debrisclient.inventory.sort;
 
 import com.github.debris.debrisclient.util.ItemUtil;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.ItemContainerContents;
@@ -20,8 +21,8 @@ public class ItemStackComparators {
 
     public static int compareShulkerBox(ItemStack c1, ItemStack c2) {
         if (ItemUtil.isShulkerBox(c1) && ItemUtil.isShulkerBox(c2)) {
-            List<ItemStack> list1 = c1.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyStream().toList();
-            List<ItemStack> list2 = c2.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyStream().toList();
+            List<ItemStack> list1 = c1.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyItemCopyStream().toList();
+            List<ItemStack> list2 = c2.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).nonEmptyItemCopyStream().toList();
             int compare = Integer.compare(list1.size(), list2.size());// comparing size
             if (compare != 0) return compare;
             if (list1.isEmpty()) return 0;
@@ -38,7 +39,7 @@ public class ItemStackComparators {
         if (ItemUtil.isBundle(c1) && ItemUtil.isBundle(c2)) {
             BundleContents bundle1 = c1.getOrDefault(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY);
             BundleContents bundle2 = c2.getOrDefault(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY);
-            int compare = bundle1.weight().compareTo(bundle2.weight());// comparing occupancy fraction
+            int compare = Float.compare(BundleItem.getFullnessDisplay(c1), BundleItem.getFullnessDisplay(c2));// comparing occupancy fraction
             if (compare != 0) return compare;
             return Integer.compare(bundle1.size(), bundle2.size());// comparing item list size
         }

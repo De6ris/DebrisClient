@@ -6,7 +6,7 @@ import com.github.debris.debrisclient.util.JsonUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
-import fi.dy.masa.malilib.util.JsonUtils;
+import fi.dy.masa.malilib.util.data.json.JsonUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -32,7 +32,7 @@ public class ItemBotMapping {
 
     private static void initialize() {
         if (!Files.exists(PATH)) {
-            JsonUtils.writeJsonToFileAsPath(new JsonObject(), PATH);
+            JsonUtils.writeJsonToFile(new JsonObject(), PATH);
             return;
         }
         reload();
@@ -70,7 +70,7 @@ public class ItemBotMapping {
 
         String prefix = DCCommonConfig.SpawnBotPrefix.getStringValue();
 
-        Stream<String> tagStream = stack.getTags()
+        Stream<String> tagStream = stack.tags()
                 .map(TagKey::location)
                 .filter(TAG_MAP::containsKey)
                 .map(TAG_MAP::get)
