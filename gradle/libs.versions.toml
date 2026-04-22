@@ -1,0 +1,42 @@
+[versions]
+loom = "1.15-SNAPSHOT"
+
+minecraft = "26.1"
+
+fabric_loader = "0.18.4"
+fabric_api = "0.146.1+26.1.2"
+
+malilib = "26.1.1-0.28.2"
+itemscroller = "26.1.1-0.31.1"
+tweakeroo = "26.1.1-0.28.1"
+litematica = "26.1.1-0.27.1"
+minihud = "26.1.1-0.39.1"
+
+conditionalmixin="0.6.4"
+modmenu = "18.0.0-alpha.6"
+clientarguments="1.12.0"
+libgui="16.0.1+26.1"
+jei="29.5.0.26"
+
+
+[libraries]
+minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
+
+fabric_loader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabric_loader" }
+fabric_api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric_api" }
+
+malilib = { group = "com.github.sakura-ryoko", name = "malilib", version.ref = "malilib" }
+itemscroller = { group = "com.github.sakura-ryoko", name = "itemscroller", version.ref = "itemscroller" }
+tweakeroo = { group = "com.github.sakura-ryoko", name = "tweakeroo", version.ref = "tweakeroo" }
+litematica = { group = "com.github.sakura-ryoko", name = "litematica", version.ref = "litematica" }
+minihud = { group = "com.github.sakura-ryoko", name = "minihud", version.ref = "minihud" }
+
+conditionalmixin = { group = "me.fallenbreath", name = "conditional-mixin-fabric", version.ref = "conditionalmixin" }
+modmenu = { group = "com.terraformersmc", name = "modmenu", version.ref = "modmenu" }
+clientarguments = { group = "dev.xpple", name = "clientarguments", version.ref = "clientarguments" }
+libgui = { group = "io.github.cottonmc", name = "LibGui", version.ref = "libgui" }
+jei_api = { group = "mezz.jei", name = "jei-26.1.2-fabric-api", version.ref = "jei" }
+
+
+[plugins]
+loom = { id = "net.fabricmc.fabric-loom", version.ref = "loom" }
