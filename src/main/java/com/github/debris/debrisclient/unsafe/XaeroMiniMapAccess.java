@@ -1,7 +1,6 @@
 package com.github.debris.debrisclient.unsafe;
 
 import net.minecraft.core.BlockPos;
-import xaero.common.HudMod;
 import xaero.common.minimap.waypoints.Waypoint;
 import xaero.hud.minimap.BuiltInHudModules;
 import xaero.hud.minimap.module.MinimapSession;
@@ -29,6 +28,6 @@ public class XaeroMiniMapAccess {
                 true
         );
 
-        currentWorld.getCurrentWaypointSet().add(waypoint, !HudMod.INSTANCE.getSettings().waypointsBottom);
+        currentWorld.getCurrentWaypointSet().add(waypoint, true);
     }
 }

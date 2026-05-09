@@ -14,7 +14,7 @@ public class ModReference {
     public final static String ClientArguments = "clientarguments";
     public static final String ItemScroller = "itemscroller";
     public static final String LibGui = "libgui";
-    public static final String XRay = "advanced-xray-fabric";
+    public static final String XRay = "xray";
     public static final String Wthit = "wthit";
     public static final String BetterPvP = "xaerobetterpvp";
     public static final String XaeroMiniMap = "xaerominimap";

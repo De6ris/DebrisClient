@@ -57,6 +57,7 @@
     "compat.tweakeroo.DummyMovementInputMixin",
     "compat.tweakeroo.InventoryUtilsMixin",
     "compat.wthit.TooltipHandlerMixin",
+    "compat.xray.ScanConfigureScreenMixin",
     "world.PortalForcerMixin",
     "world.WorldMixin",
     "world.entity.LivingEntityMixin",

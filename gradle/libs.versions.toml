@@ -12,11 +12,15 @@ tweakeroo = "26.1.1-0.28.1"
 litematica = "26.1.1-0.27.1"
 minihud = "26.1.1-0.39.1"
 
-conditionalmixin="0.6.4"
+conditionalmixin = "0.6.4"
 modmenu = "18.0.0-alpha.6"
-clientarguments="1.12.0"
-libgui="16.0.1+26.1"
-jei="29.5.0.26"
+clientarguments = "1.12.0"
+libgui = "16.0.1+26.1"
+jei = "29.5.0.26"
+
+xray = "7847444"
+commandbutton = "2.5.0"
+xaerominimap="fabric-26.1.2-25.3.12"
 
 
 [libraries]
@@ -37,6 +41,9 @@ clientarguments = { group = "dev.xpple", name = "clientarguments", version.ref =
 libgui = { group = "io.github.cottonmc", name = "LibGui", version.ref = "libgui" }
 jei_api = { group = "mezz.jei", name = "jei-26.1.2-fabric-api", version.ref = "jei" }
 
+xray = { group = "curse.maven", name = "advanced-xray-fabric-edition-444663", version.ref = "xray" }
+commandbutton = { group = "maven.modrinth", name = "command-gui-buttons", version.ref = "commandbutton" }
+xaerominimap = { group = "maven.modrinth", name = "xaeros-minimap", version.ref = "xaerominimap" }
 
 [plugins]
 loom = { id = "net.fabricmc.fabric-loom", version.ref = "loom" }

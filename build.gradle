@@ -82,13 +82,14 @@ dependencies {
 
     compileOnly "curse.maven:roughly-enough-items-${project.rei_projectid}:${project.rei_fileid}"
     compileOnly "curse.maven:worldedit-${project.worldedit_projectid}:${project.worldedit_fileid}"
-    compileOnly "curse.maven:advanced-xray-fabric-edition-${project.xray_projectid}:${project.xray_fileid}"
     compileOnly "curse.maven:wthit-${project.wthit_projectid}:${project.wthit_fileid}"
 //    compileOnly "curse.maven:carpet-${project.carpet_projectid}:${project.carpet_fileid}"
     compileOnly libs.jei.api
+    compileOnly libs.xray
+//    compileOnly libs.commandbutton
+    compileOnly libs.xaerominimap
 
     compileOnly(files("libs\\CommandGUIButtons-mc1.21-2.3.0+build.235+bb785b5.jar"))
-    compileOnly(files("libs\\Xaeros_Minimap_25.2.14_Fabric_1.21.9.jar"))
 
 
     // runtime test
