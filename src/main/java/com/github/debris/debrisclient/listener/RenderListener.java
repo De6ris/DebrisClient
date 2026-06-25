@@ -19,7 +19,7 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import org.joml.Matrix4fc;
 import org.joml.Vector4f;
 
@@ -38,14 +38,14 @@ public class RenderListener implements IRenderer {
 
         if (DCCommonConfig.WorldEditVisibility.getBooleanValue() && ModReference.hasMod(ModReference.WorldEdit) && ModReference.hasMod(ModReference.Litematica)) {
             WorldEditAccess.getRegion(this.client.player.getScoreboardName())
-                    .ifPresent(x -> LitematicaAccess.renderWorldEditSelectionBox(x.getA(), x.getB()));
+                    .ifPresent(x -> LitematicaAccess.renderWorldEditSelectionBox(x.getFirst(), x.getSecond()));
         }
 
         if (DCCommonConfig.InventoryPreviewSupportComparator.getBooleanValue() && ModReference.hasMod(ModReference.MiniHud) && MiniHudAccess.isPreviewingInventory()) {
             RayTraceUtil.getRayTraceBlock(this.client).ifPresent(pos -> {
                 Level world = WorldUtils.getBestWorld(this.client);// get it through chunk, since the server return you null if you call world.getBlockEntity directly on render thread
                 world.getChunkAt(pos)
-                        .getBlockEntity(pos, BlockEntityType.COMPARATOR)
+                        .getBlockEntity(pos, BlockEntityTypes.COMPARATOR)
                         .ifPresent(comparator ->
                                 RendererFactory.text(Component.literal(String.valueOf(comparator.getOutputSignal())), pos)
                         );
@@ -54,8 +54,6 @@ public class RenderListener implements IRenderer {
 
         float tickDelta = this.client.getDeltaTracker().getGameTimeDeltaPartialTick(false);
         WorldRenderContext context = RenderContext.ofWorld(fb, modelViewMatrix, cameraState, culling, buffers, profiler, tickDelta);
-
-        PathNodesRenderer.getInstance().onRenderWorldPost(this.client.level, context);
 
         RenderQueue.onRenderWorldPost(context);
     }

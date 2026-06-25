@@ -11,13 +11,15 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 
 public class CullingUtil {
     public static boolean shouldCullBlockEntity(BlockEntityType<?> type) {
-        boolean isSign = type == BlockEntityType.SIGN || type == BlockEntityType.HANGING_SIGN;
+        boolean isSign = type == BlockEntityTypes.SIGN || type == BlockEntityTypes.HANGING_SIGN;
         if (isSign && DCCommonConfig.CullSign.getBooleanValue()) return true;
-        if (type == BlockEntityType.CHEST && DCCommonConfig.CullChest.getBooleanValue()) return true;
+        if (type == BlockEntityTypes.CHEST && DCCommonConfig.CullChest.getBooleanValue()) return true;
 
         Identifier id = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(type);
         if (id == null) return false;
@@ -25,10 +27,10 @@ public class CullingUtil {
     }
 
     public static boolean shouldCullEntity(EntityType<?> type) {
-        boolean isFrame = type == EntityType.GLOW_ITEM_FRAME || type == EntityType.ITEM_FRAME;
+        boolean isFrame = type == EntityTypes.GLOW_ITEM_FRAME || type == EntityTypes.ITEM_FRAME;
         if (DCCommonConfig.CullItemFrame.getBooleanValue() && isFrame) return true;
-        if (DCCommonConfig.CullItemEntity.getBooleanValue() && type == EntityType.ITEM) return true;
-        if (DCCommonConfig.CullExperienceOrb.getBooleanValue() && type == EntityType.EXPERIENCE_ORB) return true;
+        if (DCCommonConfig.CullItemEntity.getBooleanValue() && type == EntityTypes.ITEM) return true;
+        if (DCCommonConfig.CullExperienceOrb.getBooleanValue() && type == EntityTypes.EXPERIENCE_ORB) return true;
 
         return DCCommonConfig.CullEntityList.getStrings().contains(EntityType.getKey(type).toString());
     }
@@ -44,7 +46,8 @@ public class CullingUtil {
 
         if (DCCommonConfig.MuteWither.getBooleanValue() && path.startsWith("entity.wither")) return true;
         if (DCCommonConfig.MuteEnderman.getBooleanValue() && path.startsWith("entity.enderman")) return true;
-        if (DCCommonConfig.MuteZombifiedPiglin.getBooleanValue() && path.startsWith("entity.zombified_piglin")) return true;
+        if (DCCommonConfig.MuteZombifiedPiglin.getBooleanValue() && path.startsWith("entity.zombified_piglin"))
+            return true;
         if (DCCommonConfig.MuteMinecart.getBooleanValue() && path.startsWith("entity.minecart")) return true;
         if (DCCommonConfig.MuteThunder.getBooleanValue() && path.startsWith("entity.lightning_bolt")) return true;
         if (DCCommonConfig.MuteGuardian.getBooleanValue() && path.startsWith("entity.guardian")) return true;

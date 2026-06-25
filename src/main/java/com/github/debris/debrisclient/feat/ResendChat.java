@@ -18,7 +18,7 @@ public class ResendChat {
     @SuppressWarnings("ConstantConditions")
     public static boolean resendLast(Minecraft client) {
         if (Predicates.notInGame(client)) return false;
-        String lastChat = client.gui.getChat().getRecentChat().peekLast();
+        String lastChat = client.gui.hud.getChat().getRecentChat().peekLast();
         if (lastChat != null) {
             ChatUtil.sendChat(client, lastChat);
             return true;
@@ -28,7 +28,7 @@ public class ResendChat {
 
     public static boolean repeatNewestChat(Minecraft client) {
         if (Predicates.notInGame(client)) return false;
-        List<GuiMessage.Line> visibleMessages = AccessorUtil.getVisibleMessages(client.gui.getChat());
+        List<GuiMessage.Line> visibleMessages = AccessorUtil.getVisibleMessages(client.gui.hud.getChat());
         if (visibleMessages.isEmpty()) return false;
         List<GuiMessage.Line> parts = new ArrayList<>();
         parts.add(visibleMessages.getFirst());

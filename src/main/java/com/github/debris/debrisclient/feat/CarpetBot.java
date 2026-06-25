@@ -2,9 +2,11 @@ package com.github.debris.debrisclient.feat;
 
 import com.github.debris.debrisclient.config.DCCommonConfig;
 import com.github.debris.debrisclient.util.*;
+import fi.dy.masa.malilib.util.GuiUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -58,7 +60,7 @@ public class CarpetBot {
         String command = SpawnContext.fromEntity(client.getCameraEntity()).getSpawnCommand(prefix);
 
         ChatScreen chatScreen = new ChatScreen(command, false);
-        client.setScreen(chatScreen);
+        client.setScreenAndShow(chatScreen);
         EditBox chatField = AccessorUtil.getChatField(chatScreen);
         chatField.setValue(command);
         chatField.moveCursorTo(("/player " + prefix).length(), false);
@@ -94,8 +96,9 @@ public class CarpetBot {
 
     public static boolean spawnBotOfItem(Minecraft client) {
         if (Predicates.notInGame(client)) return false;
-        if (client.screen == null) return false;
-        ItemStack stack = InventoryUtil.getHoveredStack(client.screen);
+        Screen screen = GuiUtils.getCurrentScreen();
+        if (screen == null) return false;
+        ItemStack stack = InventoryUtil.getHoveredStack(screen);
         if (stack.isEmpty()) return false;
         List<String> names = ItemBotMapping.getNames(stack);
         for (String name : names) {

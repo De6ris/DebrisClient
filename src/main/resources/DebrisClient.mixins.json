@@ -35,7 +35,6 @@
     "client.render.EntityRenderDispatcherMixin",
     "client.render.FogRendererMixin",
     "client.render.ParticleManagerMixin",
-    "client.render.WorldRendererMixin",
     "client.search.SearchProviderMixin",
     "client.sound.SoundSystemMixin",
     "compat.libgui.CottonClientScreenMixin",

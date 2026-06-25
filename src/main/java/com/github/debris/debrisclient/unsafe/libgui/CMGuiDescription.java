@@ -13,6 +13,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
 
 import java.util.List;
 
@@ -140,7 +141,7 @@ public class CMGuiDescription extends LightweightGuiDescription {
         helpButton.setOnClick(() -> {
             Minecraft client = Minecraft.getInstance();
             ChatUtil.sendChat(client, "/dccommand_macro help");
-            client.setScreen(new ChatScreen("", false));
+            client.setScreenAndShow(new ChatScreen("", false));
         });
         helper.putWidget(helpButton, BUTTON_WIDTH, BUTTON_HEIGHT, 4 * GAP);
         this.saveButton.setOnClick(this::save);
@@ -148,15 +149,14 @@ public class CMGuiDescription extends LightweightGuiDescription {
         this.executeButton.setOnClick(this::execute);
         helper.putWidget(this.executeButton, BUTTON_WIDTH, BUTTON_HEIGHT, 4 * GAP);
         WButton cancelButton = new WButton(Component.literal("取消"));
-        cancelButton.setOnClick(() -> Minecraft.getInstance().setScreen(null));
+        cancelButton.setOnClick(() -> Minecraft.getInstance().setScreenAndShow(null));
         helper.putWidget(cancelButton, BUTTON_WIDTH, BUTTON_HEIGHT, 4 * GAP);
 
         root.validate(this);
     }
 
-    @SuppressWarnings("DataFlowIssue")
     private static TooltipText createText(Component component) {
-        return new TooltipText(component, ChatFormatting.AQUA.getColor() | 0xFF_000000);
+        return new TooltipText(component, TextColor.AQUA.getValue() | 0xFF_000000);
     }
 
     private void onCommandFinish(String command) {

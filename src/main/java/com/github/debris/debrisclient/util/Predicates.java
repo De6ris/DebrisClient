@@ -27,7 +27,7 @@ public class Predicates {
 
     public static boolean inGameNoGui(Minecraft client) {
         if (notInGame(client)) return false;
-        return client.screen == null;
+        return client.gui.screen() == null;
     }
 
 }

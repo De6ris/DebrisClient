@@ -12,7 +12,7 @@ public class CMGenerator {
     @Nullable
     public static Component openGui(Minecraft client) {
         if (ModReference.hasMod(ModReference.LibGui)) {
-            FutureTaskQueue.scheduleNextTick(client_ -> client_.setScreen(CMGuiAccess.getScreen()));
+            FutureTaskQueue.scheduleNextTick(client_ -> client_.setScreenAndShow(CMGuiAccess.getScreen()));
             return null;
         } else {
             return GeneralText.FEATURE_REQUIRES_MOD.translate(ModReference.LibGui);

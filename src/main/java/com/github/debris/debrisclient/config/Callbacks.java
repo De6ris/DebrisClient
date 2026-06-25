@@ -18,12 +18,12 @@ import net.minecraft.network.chat.Component;
 public class Callbacks {
     public static void init(Minecraft client) {
         DCCommonConfig.OpenWindow.getKeybind().setCallback((action, key) -> {
-            client.setScreen(new DCConfigUi());
+            client.setScreenAndShow(new DCConfigUi());
             return true;
         });
 
         DCCommonConfig.OpenUniversalSearch.getKeybind().setCallback((action, key) -> {
-            client.setScreen(new UniversalSearchScreen());
+            client.setScreenAndShow(new UniversalSearchScreen());
             return true;
         });
 

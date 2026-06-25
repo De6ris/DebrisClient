@@ -212,7 +212,7 @@ public class InventoryUtil {
     }
 
     public static AbstractContainerScreen<?> getGuiContainer() {
-        return (AbstractContainerScreen<?>) getClient().screen;
+        return (AbstractContainerScreen<?>) GuiUtils.getCurrentScreen();
     }
 
     public static int getWindowID() {

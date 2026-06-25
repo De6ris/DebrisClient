@@ -19,7 +19,7 @@ public class ChatUtil {
     }
 
     public static void addLocalMessage(Component message) {
-        Minecraft.getInstance().gui.getChat().addClientSystemMessage(message);
+        Minecraft.getInstance().gui.hud.getChat().addClientSystemMessage(message);
     }
 
     public static void addLocalMessageNextTick(Component message) {

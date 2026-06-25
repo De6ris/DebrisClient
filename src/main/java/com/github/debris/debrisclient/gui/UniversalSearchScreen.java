@@ -32,7 +32,7 @@ public class UniversalSearchScreen extends GuiConfigsBase {
     @Override
     public void initGui() {
         ConfigCollector.bootStrap();
-        if (this.mc.screen != this) this.mc.setScreen(this);// may go to other screens while collecting configs
+        if (this.mc.gui.screen() != this) this.mc.setScreenAndShow(this);// may go to other screens while collecting configs
         super.initGui();
         WidgetListConfigOptions listWidget = this.getListWidget();
         AccessorUtil.setAllowKeyboardNavigation(listWidget, true);
