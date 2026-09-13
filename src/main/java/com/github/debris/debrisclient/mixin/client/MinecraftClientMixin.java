@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.mixin.client;
 
-import com.github.debris.debrisclient.listener.TickListener;
+import com.github.debris.debrisclient.event.TickListener;
 import com.github.debris.debrisclient.util.HighlightUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;

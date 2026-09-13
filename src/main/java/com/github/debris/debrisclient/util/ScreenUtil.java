@@ -2,7 +2,7 @@ package com.github.debris.debrisclient.util;
 
 import fi.dy.masa.malilib.gui.widgets.WidgetListBase;
 import fi.dy.masa.malilib.gui.widgets.WidgetListEntryBase;
-import fi.dy.masa.malilib.util.InputUtils;
+import fi.dy.masa.malilib.util.input.InputUtils;
 
 import java.util.List;
 import java.util.Optional;

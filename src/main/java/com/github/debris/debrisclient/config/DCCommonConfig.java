@@ -105,7 +105,6 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey ResendLastChat = ofHotkey("重发上一条消息", "", "相当于按UP键");
     public static final ConfigHotkey RepeatNewestChat = ofHotkey("消息复读", "", "复读聊天栏中最新消息");
     public static final ConfigHotkey AlignWithEnderEye = ofHotkey("对齐末影之眼", "");
-    public static final ConfigHotkey ModifierFreeCamInput = ofHotkey("灵魂出窍输入:修饰键", "", "按住时输入将对实际画面生效\n仍需开启tweakeroo中的灵魂出窍用户输入");
     public static final ConfigHotkey TakeOff = ofHotkey("起飞", "", KeybindSettings.PRESS_ALLOWEXTRA, "使用鞘翅和烟花火箭起飞");
     public static final ConfigHotkey SyncContainer = ofHotkey("容器同步", "", ANY, "以当前容器为模板, 将选区内同类容器按模板修改\n再次按下将重置\n思路来自宅咸鱼, 代码独立实现");
     public static final ConfigHotkey OpenSelectionContainers = ofHotkey("打开选区内容器", "", ANY, "记录列表, 之后逐个打开");
@@ -150,7 +149,6 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed MuteDoor = ofBooleanHotkeyed("门静音", false, "", "包括任何门");
     public static final ConfigBooleanHotkeyed CullPoofParticle = ofBooleanHotkeyed("剔除生物死亡粒子", false, "", "即poof, 详见wiki");
     public static final ConfigBooleanHotkeyed BlockBreakingCooldownOverride = ofBooleanHotkeyed("禁用方块挖掘冷却", false, "", "不影响创造模式");
-    public static final ConfigBooleanHotkeyed MuteGLDebugInfo = ofBooleanHotkeyed("禁止打印GL调试信息", false, "有时一直在后台打印, 且难以确定错误原因");
     public static final ConfigBooleanHotkeyed CullFireAnimation = ofBooleanHotkeyed("剔除火焰动画", false, "");
     public static final ConfigBooleanHotkeyed CullArmor = ofBooleanHotkeyed("剔除盔甲", false, "");
 
@@ -280,7 +278,6 @@ public class DCCommonConfig implements IConfigHandler {
                 ResendLastChat,
                 RepeatNewestChat,
                 AlignWithEnderEye,
-                ModifierFreeCamInput,
                 TakeOff,
                 SyncContainer,
                 OpenSelectionContainers,
@@ -321,7 +318,6 @@ public class DCCommonConfig implements IConfigHandler {
                 MuteDoor,
                 CullPoofParticle,
                 BlockBreakingCooldownOverride,
-                MuteGLDebugInfo,
                 CullFireAnimation,
                 CullArmor
         );

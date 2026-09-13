@@ -1,8 +1,8 @@
 package com.github.debris.debrisclient.fabric;
 
 import com.github.debris.debrisclient.command.Commands;
-import com.github.debris.debrisclient.listener.ChunkLoadListener;
-import com.github.debris.debrisclient.listener.InitListener;
+import com.github.debris.debrisclient.event.Hooks;
+import com.github.debris.debrisclient.event.InitListener;
 import fi.dy.masa.malilib.event.InitializationHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -16,7 +16,7 @@ public class ModImpl implements ClientModInitializer {
 
         ClientCommandRegistrationCallback.EVENT.register(Commands::register);
 
-        ClientChunkEvents.CHUNK_LOAD.register(ChunkLoadListener::onChunkLoad);
-        ClientChunkEvents.CHUNK_UNLOAD.register(ChunkLoadListener::onChunkUnload);
+        ClientChunkEvents.CHUNK_LOAD.register(Hooks::onChunkLoad);
+        ClientChunkEvents.CHUNK_UNLOAD.register(Hooks::onChunkUnload);
     }
 }

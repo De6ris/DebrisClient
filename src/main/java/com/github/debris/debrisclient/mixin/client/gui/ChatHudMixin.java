@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.mixin.client.gui;
 
-import com.github.debris.debrisclient.listener.ChatListener;
+import com.github.debris.debrisclient.event.Hooks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.multiplayer.chat.GuiMessageSource;
@@ -22,6 +22,6 @@ public class ChatHudMixin {
 
     @Inject(method = "addMessage", at = @At("RETURN"))
     private void onMessageAdd(Component contents, MessageSignature signature, GuiMessageSource source, GuiMessageTag tag, CallbackInfo ci) {
-        ChatListener.onMessageAdd(this.minecraft, contents);
+        Hooks.onMessageAdd(this.minecraft, contents);
     }
 }

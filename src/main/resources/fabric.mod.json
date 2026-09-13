@@ -23,14 +23,14 @@
       "com.github.debris.debrisclient.datagen.DCDataGen"
     ],
     "modmenu": [
-      "com.github.debris.debrisclient.compat.ModMenuImpl"
+      "com.github.debris.debrisclient.integration.ModMenuImpl"
     ],
     "jei_mod_plugin": [
-      "com.github.debris.debrisclient.compat.JeiPluginImpl"
+      "com.github.debris.debrisclient.integration.JeiPluginImpl"
     ]
   },
   "mixins": [
-    "DebrisClient.mixins.json"
+    "debrisclient.mixins.json"
   ],
   "depends": {
     "fabricloader": "*",
@@ -39,5 +39,5 @@
     "conditional-mixin": ">=0.6.4",
     "fabric-api": "*"
   },
-  "accessWidener": "DebrisClient.accesswidener"
+  "accessWidener": "debrisclient.accesswidener"
 }

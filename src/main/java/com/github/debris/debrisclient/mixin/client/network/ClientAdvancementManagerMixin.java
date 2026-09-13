@@ -19,6 +19,6 @@ public class ClientAdvancementManagerMixin {
 
     @Inject(method = "update", at = @At("RETURN"))
     private void onAdvancements(ClientboundUpdateAdvancementsPacket packet, CallbackInfo ci) {
-        AdventuringTimeHelper.onProgressUpdate(this.minecraft, packet.getProgress());
+        AdventuringTimeHelper.onProgressUpdate(this.minecraft, packet.progress());
     }
 }

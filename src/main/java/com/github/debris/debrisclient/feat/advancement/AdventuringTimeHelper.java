@@ -8,7 +8,6 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.fabricmc.fabric.impl.event.lifecycle.LoadedChunksCache;
 import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.advancements.AdvancementNode;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientAdvancements;
@@ -25,7 +24,6 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
-import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,10 +127,16 @@ public class AdventuringTimeHelper {
         return !PENDING_BIOMES.isEmpty();
     }
 
+    @SuppressWarnings("DataFlowIssue")
     private static void updateProgress(Minecraft client) {
         ClientAdvancements manager = client.getConnection().getAdvancements();
-        manager.setListener(new ProgressCollector());
-        manager.setListener(null);
+
+        Map<AdvancementHolder, AdvancementProgress> map = manager.progress();
+
+        map.entrySet().stream()
+                .filter(x -> x.getKey().id().equals(ADVANCEMENT_ID))
+                .findFirst()
+                .ifPresent(x -> readProgress(client, x.getValue()));
     }
 
     private static void readProgress(Minecraft client, AdvancementProgress progress) {
@@ -189,44 +193,5 @@ public class AdventuringTimeHelper {
         CHUNK_QUEUE.clear();
         EXISTING_CHUNKS.clear();
         GLOWING_BIOMES.clear();
-    }
-
-    private static class ProgressCollector implements ClientAdvancements.Listener {
-        @Override
-        public void onUpdateAdvancementProgress(AdvancementNode advancement, AdvancementProgress progress) {
-            if (advancement.holder().id().equals(ADVANCEMENT_ID)) {
-                readProgress(Minecraft.getInstance(), progress);
-            }
-        }
-
-        @Override
-        public void onSelectedTabChanged(@Nullable AdvancementHolder advancement) {
-
-        }
-
-        @Override
-        public void onAddAdvancementRoot(AdvancementNode root) {
-
-        }
-
-        @Override
-        public void onRemoveAdvancementRoot(AdvancementNode root) {
-
-        }
-
-        @Override
-        public void onAddAdvancementTask(AdvancementNode dependent) {
-
-        }
-
-        @Override
-        public void onRemoveAdvancementTask(AdvancementNode dependent) {
-
-        }
-
-        @Override
-        public void onAdvancementsCleared() {
-
-        }
     }
 }

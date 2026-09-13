@@ -68,16 +68,16 @@ dependencies {
     compileOnly libs.libgui
 
     compileOnly(libs.itemscroller) {
-        exclude group: 'fi.dy.masa.malilib'
+        transitive = false
     }
     compileOnly(libs.tweakeroo) {
-        exclude group: 'fi.dy.masa.malilib'
+        transitive = false
     }
     compileOnly(libs.litematica) {
-        exclude group: 'fi.dy.masa.malilib'
+        transitive = false
     }
     compileOnly(libs.minihud) {
-        exclude group: 'fi.dy.masa.malilib'
+        transitive = false
     }
 
     compileOnly "curse.maven:roughly-enough-items-${project.rei_projectid}:${project.rei_fileid}"
@@ -95,20 +95,6 @@ dependencies {
     // runtime test
     localRuntime libs.clientarguments
     localRuntime libs.modmenu
-    localRuntime libs.libgui
-
-    localRuntime(libs.itemscroller) {
-        exclude group: 'fi.dy.masa.malilib'
-    }
-    localRuntime(libs.tweakeroo) {
-        exclude group: 'fi.dy.masa.malilib'
-    }
-    localRuntime(libs.litematica) {
-        exclude group: 'fi.dy.masa.malilib'
-    }
-    localRuntime(libs.minihud) {
-        exclude group: 'fi.dy.masa.malilib'
-    }
 }
 
 processResources {
@@ -157,7 +143,7 @@ jar {
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/DebrisClient.accesswidener")
+    accessWidenerPath = file("src/main/resources/debrisclient.accesswidener")
 }
 
 fabricApi {

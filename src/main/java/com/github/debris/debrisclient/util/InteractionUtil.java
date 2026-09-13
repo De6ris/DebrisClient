@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -61,11 +62,16 @@ public class InteractionUtil {
     @SuppressWarnings("DataFlowIssue")
     public static void useEntity(Minecraft client, Entity entity) {
         for (InteractionHand hand : InteractionHand.values()) {
-            InteractionResult actionResult = interactEntity(client, entity, new EntityHitResult(entity), hand);
+            ItemStack heldItem = client.player.getItemInHand(hand);
+            if (!heldItem.isItemEnabled(client.level.enabledFeatures())) {
+                return;
+            }
+            SwingAnimation swingAnimation = heldItem.getInteractAnimation();
 
-            if (actionResult instanceof InteractionResult.Success success) {
-                if (success.swingSource() == InteractionResult.SwingSource.CLIENT) {
-                    client.player.swing(InteractionHand.MAIN_HAND);
+            InteractionResult result = interactEntity(client, entity, new EntityHitResult(entity), hand);
+            if (result instanceof InteractionResult.Success success) {
+                if (success.swingSource() == InteractionResult.SwingSource.PREDICTED) {
+                    client.player.swing(InteractionHand.MAIN_HAND, swingAnimation, false);
                 }
 
                 return;
@@ -79,22 +85,26 @@ public class InteractionUtil {
     @SuppressWarnings("DataFlowIssue")
     public static void useBlock(Minecraft client, BlockPos pos) {
         for (InteractionHand hand : InteractionHand.values()) {
-            ItemStack itemStack = client.player.getItemInHand(hand);
+            ItemStack heldItem = client.player.getItemInHand(hand);
+            if (!heldItem.isItemEnabled(client.level.enabledFeatures())) {
+                return;
+            }
+            SwingAnimation swingAnimation = heldItem.getInteractAnimation();
 
-            int i = itemStack.getCount();
-            InteractionResult actionResult2 = interactBlock(client, pos);
-            if (actionResult2 instanceof InteractionResult.Success success2) {
-                if (success2.swingSource() == InteractionResult.SwingSource.CLIENT) {
-                    client.player.swing(hand);
-                    if (!itemStack.isEmpty() && (itemStack.getCount() != i || client.player.hasInfiniteMaterials())) {
-                        client.gameRenderer.itemInHandRenderer.itemUsed(hand);
+            int oldCount = heldItem.getCount();
+            InteractionResult useResult = interactBlock(client, pos);
+            if (useResult instanceof InteractionResult.Success success) {
+                if (success.swingSource() == InteractionResult.SwingSource.PREDICTED) {
+                    client.player.swing(hand, swingAnimation, false);
+                    if (!heldItem.isEmpty() && (heldItem.getCount() != oldCount || client.player.hasInfiniteMaterials())) {
+                        client.player.itemUsed(hand);
                     }
                 }
 
                 return;
             }
 
-            if (actionResult2 instanceof InteractionResult.Fail) {
+            if (useResult instanceof InteractionResult.Fail) {
                 return;
             }
         }

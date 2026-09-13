@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.mixin.client.network;
 
-import com.github.debris.debrisclient.feat.Hooks;
+import com.github.debris.debrisclient.event.Hooks;
 import com.github.debris.debrisclient.inventory.autoprocess.AutoProcessManager;
 import fi.dy.masa.malilib.util.GuiUtils;
 import net.minecraft.client.Minecraft;

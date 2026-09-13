@@ -6,8 +6,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
@@ -29,7 +31,7 @@ public class BlockDigger {
                 DIG_PROGRESS_POS = null;
             }
         }
-        digAreaAndSwingHand(client, BlockPos.withinManhattanStream(playerPos, 4, 4, 4), predicate).ifPresent(pos -> DIG_PROGRESS_POS = pos);
+        digAreaAndSwingHand(client, BlockPos.betweenClosedStream(new BoundingBox(playerPos).inflatedBy(4)), predicate).ifPresent(pos -> DIG_PROGRESS_POS = pos);
     }
 
     // return a progressing pos
@@ -42,7 +44,7 @@ public class BlockDigger {
                     return digResult.inProgress();
                 })
                 .findFirst();
-        if (swingHand.get()) client.player.swing(InteractionHand.MAIN_HAND);
+        if (swingHand.get()) client.player.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, true);
         return optional;
     }
 

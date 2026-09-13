@@ -1,4 +1,4 @@
-package com.github.debris.debrisclient.listener;
+package com.github.debris.debrisclient.event;
 
 import com.github.debris.debrisclient.DebrisClient;
 import com.github.debris.debrisclient.config.DCCommonConfig;
@@ -13,7 +13,7 @@ import com.github.debris.debrisclient.util.InputUtil;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.Predicates;
 import fi.dy.masa.malilib.hotkeys.*;
-import fi.dy.masa.malilib.util.InputUtils;
+import fi.dy.masa.malilib.util.input.InputUtils;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.client.Minecraft;

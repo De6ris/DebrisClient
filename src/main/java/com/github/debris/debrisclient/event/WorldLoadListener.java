@@ -1,4 +1,4 @@
-package com.github.debris.debrisclient.listener;
+package com.github.debris.debrisclient.event;
 
 import com.github.debris.debrisclient.feat.advancement.AdventuringTimeHelper;
 import com.github.debris.debrisclient.feat.log.GameLogs;

@@ -1,4 +1,4 @@
-package com.github.debris.debrisclient.compat;
+package com.github.debris.debrisclient.integration;
 
 import com.github.debris.debrisclient.DebrisClient;
 import com.github.debris.debrisclient.unsafe.JeiAccess;
