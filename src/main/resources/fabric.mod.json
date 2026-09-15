@@ -34,7 +34,7 @@
   ],
   "depends": {
     "fabricloader": "*",
-    "minecraft": ">=26.1",
+    "minecraft": ">=26.3",
     "malilib": "*",
     "conditional-mixin": ">=0.6.4",
     "fabric-api": "*"
