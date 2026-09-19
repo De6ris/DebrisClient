@@ -29,14 +29,14 @@ public class InventoryTweaks {
         return true;
     }
 
-    public static boolean tryMoveSimilar() {
+    public static boolean tryMoveSame() {
         return templateRun((section, template) -> {
             section = expandSectionIfPossible(section);
             section.predicateRun(ItemUtil.predicateIDMeta(template), InventoryUtil::quickMove);
         });
     }
 
-    public static boolean tryDropSimilar() {
+    public static boolean tryDropSame() {
         return templateRun(
                 (section, template) ->
                         section.predicateRun(ItemUtil.predicateIDMeta(template), InventoryUtil::dropStack)

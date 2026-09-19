@@ -56,9 +56,9 @@ public class Callbacks {
             return InventoryTweaks.tryThrowSection();
         });
 
-        DCCommonConfig.ThrowSimilar.getKeybind().setCallback((action, key) -> {
+        DCCommonConfig.ThrowSame.getKeybind().setCallback((action, key) -> {
             if (Predicates.notInGuiContainer(client)) return false;
-            return InventoryTweaks.tryDropSimilar();
+            return InventoryTweaks.tryDropSame();
         });
 
         DCCommonConfig.RestoreKicking.getKeybind().setCallback((action, key) -> CarpetBot.restoreKicking(client));

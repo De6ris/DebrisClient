@@ -5,11 +5,11 @@ import com.github.debris.debrisclient.config.DCCommonConfig;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterRecipeRenderer;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterRecipeStorage;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterUtil;
+import com.github.debris.debrisclient.inventory.feat.HoldInventoryMoving;
 import com.github.debris.debrisclient.inventory.feat.InventoryTweaks;
 import com.github.debris.debrisclient.inventory.feat.QuickBundle;
 import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import com.github.debris.debrisclient.inventory.section.SectionHandler;
-import com.github.debris.debrisclient.util.InputUtil;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import com.github.debris.debrisclient.util.Predicates;
 import fi.dy.masa.malilib.hotkeys.*;
@@ -92,10 +92,8 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
                 }
             }
 
-            if (DCCommonConfig.ModifierMoveSimilar.getKeybind().isKeybindHeld()) {
-                if (InventoryTweaks.tryMoveSimilar()) {
-                    return true;// cancel this click
-                }
+            if (HoldInventoryMoving.start()) {
+                return true;
             }
 
         }
@@ -127,6 +125,14 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
 
     private boolean handleButtonUp(int mouseX, int mouseY, MouseButtonEvent click) {
         int button = click.button();
+
+        if (this.client.options.keyAttack.matchesMouse(click)) {
+            if (Predicates.notInGuiContainer(this.client))
+                return false;// the below assuming valid environment
+
+            HoldInventoryMoving.stop();
+        }
+
         if (BUTTON_UP_CANCEL_SET.contains(button)) {
             BUTTON_UP_CANCEL_SET.remove(button);
             return true;
@@ -151,15 +157,8 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
 
     @Override
     public void onMouseMove(double mouseX, double mouseY) {
-        if (Predicates.notInGuiContainer(this.client))
-            return;// the below assuming valid environment
+        if (Predicates.notInGuiContainer(this.client)) return;// the below assuming valid environment
 
-        if (InputUtil.isLeftClicking()) {// left click down
-
-            if (DCCommonConfig.ModifierMoveSimilar.getKeybind().isKeybindHeld()) {
-                InventoryTweaks.tryMoveSimilar();
-            }
-
-        }
+        HoldInventoryMoving.mouseMove();
     }
 }

@@ -116,6 +116,10 @@ public class InventoryUtil {
         click(index, false, ContainerInput.QUICK_MOVE);
     }
 
+    public static void maybeQuickMove(Slot slot) {
+        if (slot.hasItem()) quickMove(slot);
+    }
+
     public static void startSpreading(boolean rightClick) {
         clickSlot(-999, AbstractContainerMenu.getQuickcraftMask(0, rightClick ? 1 : 0), ContainerInput.QUICK_CRAFT);
     }

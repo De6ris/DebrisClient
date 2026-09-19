@@ -3,6 +3,7 @@ package com.github.debris.debrisclient.unsafe;
 import com.github.debris.debrisclient.feat.interactor.BlockInteractor;
 import com.github.debris.debrisclient.feat.interactor.EntityInteractor;
 import fi.dy.masa.minihud.config.Configs;
+import fi.dy.masa.minihud.config.Hotkeys;
 import fi.dy.masa.minihud.gui.GuiConfigs;
 import fi.dy.masa.minihud.renderer.InventoryOverlayHandler;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class MiniHudAccess {
     public static boolean isPreviewingInventory() {
-        return Configs.Generic.INVENTORY_PREVIEW_ENABLED.getBooleanValue() && Configs.Generic.INVENTORY_PREVIEW.getKeybind().isKeybindHeld();
+        return Configs.Generic.INVENTORY_PREVIEW_ENABLED.getBooleanValue() && Hotkeys.INVENTORY_PREVIEW.getKeybind().isKeybindHeld();
     }
 
     public static void onLinesUpdate(List<String> lines) {
