@@ -89,8 +89,6 @@ dependencies {
 //    compileOnly libs.commandbutton
     compileOnly libs.xaerominimap
 
-    compileOnly(files("libs\\CommandGUIButtons-mc1.21-2.3.0+build.235+bb785b5.jar"))
-
 
     // runtime test
     localRuntime libs.clientarguments
