@@ -10,6 +10,7 @@
     "client.IMixinClientRecipeBook",
     "client.IMixinMinecraftClient",
     "client.MinecraftClientMixin",
+    "client.MouseHandlerMixin",
     "client.gui.AbstractInventoryScreenMixin",
     "client.gui.ChatHudMixin",
     "client.gui.CreativeInventoryScreenMixin",

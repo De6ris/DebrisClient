@@ -64,8 +64,6 @@ public class TickListener implements IClientTickHandler {
         FutureTaskQueue.onClientTick(client);
 
         AdventuringTimeHelper.onClientTick(client);
-
-        AutoRotate.onClientTick(client);
     }
 
 
