@@ -10,20 +10,22 @@ public class AutoMoving {
     private static boolean squatFlag = false;
 
     public static boolean isAutoMoving() {
-        return DCCommonConfig.AUTO_WALK.getBooleanValue() ||
-                DCCommonConfig.AUTO_LEFT.getBooleanValue() ||
-                DCCommonConfig.AUTO_BACK.getBooleanValue() ||
-                DCCommonConfig.AUTO_RIGHT.getBooleanValue();
+        return DCCommonConfig.AUTO_FORWARD.getBooleanValue()
+                || DCCommonConfig.AUTO_LEFT.getBooleanValue()
+                || DCCommonConfig.AUTO_BACK.getBooleanValue()
+                || DCCommonConfig.AUTO_RIGHT.getBooleanValue()
+                || DCCommonConfig.AUTO_JUMP.getBooleanValue()
+                ;
     }
 
     public static void tickInput(ClientInput input) {
         Input oldInput = input.keyPresses;
         input.keyPresses = new Input(
-                oldInput.forward() || DCCommonConfig.AUTO_WALK.getBooleanValue(),
+                oldInput.forward() || DCCommonConfig.AUTO_FORWARD.getBooleanValue(),
                 oldInput.backward() || DCCommonConfig.AUTO_BACK.getBooleanValue(),
                 oldInput.left() || DCCommonConfig.AUTO_LEFT.getBooleanValue(),
                 oldInput.right() || DCCommonConfig.AUTO_RIGHT.getBooleanValue(),
-                oldInput.jump(),
+                oldInput.jump() || DCCommonConfig.AUTO_JUMP.getBooleanValue(),
                 DCCommonConfig.AUTO_SQUAT.getBooleanValue() ? tickSquat() : oldInput.shift(),
                 oldInput.sprint()
         );

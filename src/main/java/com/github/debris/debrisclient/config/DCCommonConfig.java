@@ -116,10 +116,11 @@ public class DCCommonConfig implements IConfigHandler {
 
 
     // toggle
-    public static final ConfigBooleanHotkeyed AUTO_WALK = ofBooleanHotkeyed("自动前进", false, "LEFT_ALT,UP", "可用于走路，划船");
+    public static final ConfigBooleanHotkeyed AUTO_FORWARD = ofBooleanHotkeyed("自动前进", false, "LEFT_ALT,UP", "可用于走路，划船");
     public static final ConfigBooleanHotkeyed AUTO_LEFT = ofBooleanHotkeyed("自动向左", false, "LEFT_ALT,LEFT", "可用于走路，划船");
     public static final ConfigBooleanHotkeyed AUTO_BACK = ofBooleanHotkeyed("自动后退", false, "LEFT_ALT,DOWN", "可用于走路，划船");
     public static final ConfigBooleanHotkeyed AUTO_RIGHT = ofBooleanHotkeyed("自动向右", false, "LEFT_ALT,RIGHT", "可用于走路，划船");
+    public static final ConfigBooleanHotkeyed AUTO_JUMP = ofBooleanHotkeyed("自动跳跃", false, "LEFT_ALT,SPACE", "可用于走路，划船");
     public static final ConfigBooleanHotkeyed AUTO_SQUAT = ofBooleanHotkeyed("自动蹲起", false, "LEFT_ALT,RIGHT_SHIFT", "");
     public static final ConfigBooleanHotkeyed AUTO_ROTATE = ofBooleanHotkeyed("自动旋转", false, "LEFT_ALT,ENTER");
     public static final ConfigBooleanHotkeyed StartStoneCutting = ofBooleanHotkeyed("启动连续切石", false, "", ANY);
@@ -287,10 +288,11 @@ public class DCCommonConfig implements IConfigHandler {
                 TEST
         );
         KeyToggle = ImmutableList.of(
-                AUTO_WALK,
+                AUTO_FORWARD,
                 AUTO_LEFT,
                 AUTO_RIGHT,
                 AUTO_BACK,
+                AUTO_JUMP,
                 AUTO_SQUAT,
                 AUTO_ROTATE,
                 StartStoneCutting,
