@@ -4,11 +4,11 @@ import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 
-public class CMScreen extends CottonClientScreen {
-    public static final CMScreen INSTANCE = new CMScreen();
+public class CMTitleScreen extends CottonClientScreen {
+    public static final CMTitleScreen INSTANCE = new CMTitleScreen();
 
-    public CMScreen() {
-        super(Component.literal("假人指令宏生成器").withStyle(ChatFormatting.LIGHT_PURPLE), new CMGuiDescription());
+    public CMTitleScreen() {
+        super(Component.literal("指令宏").withStyle(ChatFormatting.LIGHT_PURPLE), new CMTitleDescription());
     }
 
     @Override

@@ -1,6 +1,7 @@
-package com.github.debris.debrisclient.feat.commandmacro;
+package com.github.debris.debrisclient.feat.commandmacro.generator;
 
 import com.github.debris.debrisclient.compat.ModReference;
+import com.github.debris.debrisclient.feat.commandmacro.CommandMacro;
 import com.github.debris.debrisclient.localization.GeneralText;
 import com.github.debris.debrisclient.unsafe.LitematicaAccess;
 import com.mojang.datafixers.util.Either;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-public class CMLogic {
+public class Logic {
     public static final int DEFAULT_PERIOD = 5;
     public static final String DEFAULT_COMMAND = "/player bot_${code} spawn at ${pos}";
     public static final String DEFAULT_FILE = "test.json";
@@ -34,24 +35,24 @@ public class CMLogic {
         return Either.right(Component.literal("未找到选区").withStyle(ChatFormatting.RED));
     }
 
-    public static CMContext.Type getType(String command) {
-        return command.contains(CMLogic.POS) ? CMContext.Type.SPAWN : CMContext.Type.DEFAULT;
+    public static Context.Type getType(String command) {
+        return command.contains(Logic.POS) ? Context.Type.SPAWN : Context.Type.DEFAULT;
     }
 
-    public static boolean save(CMInputData record) {
+    public static boolean save(InputData record) {
         return generateMacro(record).saveToFile(record.file());
     }
 
     @SuppressWarnings({"OptionalGetWithoutIsPresent", "DataFlowIssue", "SwitchStatementWithTooFewBranches"})
-    public static CommandMacro generateMacro(CMInputData record) {
-        CMContext context = record.context();
-        CMContext.Type type = context.getType();
+    public static CommandMacro generateMacro(InputData record) {
+        Context context = record.context();
+        Context.Type type = context.getType();
 
         String command = record.command();
         List<String> commands;
         switch (type) {
             case SPAWN -> {
-                CMContext.Spawn asSpawn = (CMContext.Spawn) context;
+                Context.Spawn asSpawn = (Context.Spawn) context;
                 YPosMode yPosMode = asSpawn.yPosMode();
                 BiFunction<Integer, Integer, Integer> yAccess;
                 if (yPosMode == YPosMode.FIXED_VALUE) {
@@ -78,7 +79,7 @@ public class CMLogic {
                 }
             }
             default -> {
-                CMContext.Default asDefault = (CMContext.Default) context;
+                Context.Default asDefault = (Context.Default) context;
                 int code1 = asDefault.code1();
                 int code2 = asDefault.code2();
                 int increment = code2 > code1 ? 1 : -1;

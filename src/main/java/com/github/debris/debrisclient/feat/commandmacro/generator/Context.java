@@ -1,14 +1,14 @@
-package com.github.debris.debrisclient.feat.commandmacro;
+package com.github.debris.debrisclient.feat.commandmacro.generator;
 
 import java.util.OptionalInt;
 
-public interface CMContext {
+public interface Context {
     Type getType();
 
     record Default(
             int code1,
             int code2
-    ) implements CMContext {
+    ) implements Context {
 
         @Override
         public Type getType() {
@@ -23,7 +23,7 @@ public interface CMContext {
             int endZ,
             YPosMode yPosMode,
             OptionalInt yPos
-    ) implements CMContext {
+    ) implements Context {
         @Override
         public Type getType() {
             return Type.SPAWN;

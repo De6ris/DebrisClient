@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.unsafe.libgui;
 
-import com.github.debris.debrisclient.feat.commandmacro.YPosMode;
+import com.github.debris.debrisclient.feat.commandmacro.generator.YPosMode;
 import io.github.cottonmc.cotton.gui.widget.WButton;
 
 public class YPosModeButton extends WButton {

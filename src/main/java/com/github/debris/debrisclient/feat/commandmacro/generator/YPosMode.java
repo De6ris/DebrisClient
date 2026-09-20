@@ -1,4 +1,4 @@
-package com.github.debris.debrisclient.feat.commandmacro;
+package com.github.debris.debrisclient.feat.commandmacro.generator;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.network.chat.Component;

@@ -1,10 +1,10 @@
-package com.github.debris.debrisclient.feat.commandmacro;
+package com.github.debris.debrisclient.feat.commandmacro.generator;
 
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
-public enum BuiltInCM {
+public enum BuiltIn {
     SPAWN("/player bot_${code} spawn at ${pos}"),
     KILL("/player bot_${code} kill"),
     ATTACK("/player bot_${code} attack"),
@@ -14,13 +14,13 @@ public enum BuiltInCM {
 
     private final String command;
 
-    public static final List<BuiltInCM> VALUES = ImmutableList.copyOf(values());
+    public static final List<BuiltIn> VALUES = ImmutableList.copyOf(values());
 
-    BuiltInCM(String command) {
+    BuiltIn(String command) {
         this.command = command;
     }
 
-    public BuiltInCM next() {
+    public BuiltIn next() {
         return VALUES.get((this.ordinal() + 1) % VALUES.size());
     }
 

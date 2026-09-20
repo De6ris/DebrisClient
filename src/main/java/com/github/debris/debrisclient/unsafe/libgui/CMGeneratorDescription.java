@@ -1,6 +1,10 @@
 package com.github.debris.debrisclient.unsafe.libgui;
 
 import com.github.debris.debrisclient.feat.commandmacro.*;
+import com.github.debris.debrisclient.feat.commandmacro.generator.BuiltIn;
+import com.github.debris.debrisclient.feat.commandmacro.generator.Context;
+import com.github.debris.debrisclient.feat.commandmacro.generator.InputData;
+import com.github.debris.debrisclient.feat.commandmacro.generator.Logic;
 import com.github.debris.debrisclient.util.ChatUtil;
 import com.mojang.datafixers.util.Either;
 import io.github.cottonmc.cotton.gui.client.BackgroundPainter;
@@ -17,7 +21,7 @@ import net.minecraft.network.chat.TextColor;
 
 import java.util.List;
 
-public class CMGuiDescription extends LightweightGuiDescription {
+public class CMGeneratorDescription extends LightweightGuiDescription {
     private static final int GRID_SIZE = 5;
 
     private static final int LINE_HEIGHT = 5;
@@ -34,15 +38,15 @@ public class CMGuiDescription extends LightweightGuiDescription {
 
     private final SuppressivePanel root = new SuppressivePanel(GRID_SIZE);
 
-    private final IntegerField period = new IntegerField().setText(CMLogic.DEFAULT_PERIOD);
+    private final IntegerField period = new IntegerField().setText(Logic.DEFAULT_PERIOD);
 
-    private final TextField command = new TextField(Component.literal(CMLogic.DEFAULT_COMMAND)) {
+    private final TextField command = new TextField(Component.literal(Logic.DEFAULT_COMMAND)) {
         {
             this.setMaxLength(256);
-            this.setText(CMLogic.DEFAULT_COMMAND);
+            this.setText(Logic.DEFAULT_COMMAND);
         }
     };
-    private BuiltInCM commandSuggestion = BuiltInCM.SPAWN;
+    private BuiltIn commandSuggestion = BuiltIn.SPAWN;
 
     private final TooltipButton fillCodeButton = new TooltipButton(Component.literal("填充"))
             .setTooltips(Component.literal("根据litematica选区信息"));
@@ -59,10 +63,10 @@ public class CMGuiDescription extends LightweightGuiDescription {
     private final YPosModeButton yPosModeButton = new YPosModeButton();
     private final IntegerField yPos = new IntegerField().setText(100);
 
-    private final WTextField file = new WTextField(Component.literal(CMLogic.DEFAULT_FILE)) {
+    private final WTextField file = new WTextField(Component.literal(Logic.DEFAULT_FILE)) {
         {
             this.setMaxLength(128);
-            this.setText(CMLogic.DEFAULT_FILE);
+            this.setText(Logic.DEFAULT_FILE);
         }
     };
 
@@ -70,11 +74,16 @@ public class CMGuiDescription extends LightweightGuiDescription {
     private final TooltipButton executeButton = new TooltipButton(Component.literal("执行"));
 
 
-    public CMGuiDescription() {
+    public CMGeneratorDescription() {
         this.setupRoot(this.root);
         this.root.setVisible(this.yPos, false);
         this.command.onFocusLost();// to trigger callback
         this.setRootPanel(this.root);
+    }
+
+    @Override
+    public void addPainters() {
+        this.rootPanel.setBackgroundPainter(BackgroundPainter.createColorful(1291845632));
     }
 
     private void setupRoot(SuppressivePanel root) {
@@ -143,14 +152,14 @@ public class CMGuiDescription extends LightweightGuiDescription {
             ChatUtil.sendChat(client, "/dccommand_macro help");
             client.setScreenAndShow(new ChatScreen("", false));
         });
-        helper.putWidget(helpButton, BUTTON_WIDTH, BUTTON_HEIGHT, 4 * GAP);
+        helper.putWidget(helpButton, BUTTON_WIDTH, BUTTON_HEIGHT, 2 * GAP);
         this.saveButton.setOnClick(this::save);
-        helper.putWidget(this.saveButton, BUTTON_WIDTH, BUTTON_HEIGHT, 4 * GAP);
+        helper.putWidget(this.saveButton, BUTTON_WIDTH, BUTTON_HEIGHT, 2 * GAP);
         this.executeButton.setOnClick(this::execute);
-        helper.putWidget(this.executeButton, BUTTON_WIDTH, BUTTON_HEIGHT, 4 * GAP);
+        helper.putWidget(this.executeButton, BUTTON_WIDTH, BUTTON_HEIGHT, 2 * GAP);
         WButton cancelButton = new WButton(Component.literal("取消"));
         cancelButton.setOnClick(() -> Minecraft.getInstance().setScreenAndShow(null));
-        helper.putWidget(cancelButton, BUTTON_WIDTH, BUTTON_HEIGHT, 4 * GAP);
+        helper.putWidget(cancelButton, BUTTON_WIDTH, BUTTON_HEIGHT, 2 * GAP);
 
         root.validate(this);
     }
@@ -160,8 +169,8 @@ public class CMGuiDescription extends LightweightGuiDescription {
     }
 
     private void onCommandFinish(String command) {
-        CMContext.Type type = CMLogic.getType(command);
-        boolean requiresPos = type == CMContext.Type.SPAWN;
+        Context.Type type = Logic.getType(command);
+        boolean requiresPos = type == Context.Type.SPAWN;
         boolean requireCode = !requiresPos;
         this.setGroupEnabled(this.getCodeGroup(), requireCode);
         this.setGroupEnabled(this.getPosGroup(), requiresPos);
@@ -189,14 +198,14 @@ public class CMGuiDescription extends LightweightGuiDescription {
     }
 
     private void fillCode() {
-        CMLogic.getBox().ifLeft(box -> {
+        Logic.getBox().ifLeft(box -> {
             this.code2.setText(box.getXSpan() * box.getZSpan() - 1);
             this.fillCodeButton.setTooltips(Component.literal("填充成功").withStyle(ChatFormatting.GREEN));
         }).ifRight(this.fillCodeButton::setTooltips);
     }
 
     private void fillPos() {
-        CMLogic.getBox().ifLeft(box -> {
+        Logic.getBox().ifLeft(box -> {
             this.startX.setText(box.minX());
             this.startZ.setText(box.minZ());
             this.endX.setText(box.maxX());
@@ -215,7 +224,7 @@ public class CMGuiDescription extends LightweightGuiDescription {
 
     private void save() {
         this.parseInputData().ifLeft(x -> {
-            if (CMLogic.save(x)) {
+            if (Logic.save(x)) {
                 this.saveButton.setTooltips(Component.literal("保存成功").withStyle(ChatFormatting.GREEN));
             } else {
                 this.saveButton.setTooltips(Component.literal("保存失败").withStyle(ChatFormatting.RED).append(": "), Component.literal("无法创建文件"));
@@ -223,8 +232,8 @@ public class CMGuiDescription extends LightweightGuiDescription {
         }).ifRight(x -> this.saveButton.setTooltips(Component.literal("保存失败").withStyle(ChatFormatting.RED).append(": "), x));
     }
 
-    private Either<CMInputData, Component> parseInputData() {
-        return CMInputData.parse(this.period.parseInteger(),
+    private Either<InputData, Component> parseInputData() {
+        return InputData.parse(this.period.parseInteger(),
                 this.command.getText(),
                 this.code1.parseInteger(),
                 this.code2.parseInteger(),
@@ -240,14 +249,9 @@ public class CMGuiDescription extends LightweightGuiDescription {
 
     private void execute() {
         this.parseInputData().ifLeft(x -> {
-            CommandMacro macro = CMLogic.generateMacro(x);
+            CommandMacro macro = Logic.generateMacro(x);
             macro.run();
             this.executeButton.setTooltips(Component.literal("执行成功").withStyle(ChatFormatting.GREEN));
         }).ifRight(component -> this.executeButton.setTooltips(Component.literal("执行失败").withStyle(ChatFormatting.RED).append(": "), component));
-    }
-
-    @Override
-    public void addPainters() {
-        this.rootPanel.setBackgroundPainter(BackgroundPainter.createColorful(1291845632));
     }
 }

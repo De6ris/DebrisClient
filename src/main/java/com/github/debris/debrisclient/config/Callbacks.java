@@ -1,7 +1,7 @@
 package com.github.debris.debrisclient.config;
 
 import com.github.debris.debrisclient.feat.*;
-import com.github.debris.debrisclient.feat.commandmacro.CMGenerator;
+import com.github.debris.debrisclient.feat.commandmacro.CMApi;
 import com.github.debris.debrisclient.feat.interactor.InteractionFactory;
 import com.github.debris.debrisclient.gui.DCConfigUi;
 import com.github.debris.debrisclient.gui.UniversalSearchScreen;
@@ -28,8 +28,8 @@ public class Callbacks {
         });
 
         DCCommonConfig.OpenCommandMacroGenerator.getKeybind().setCallback((action, key) -> {
-            Component component = CMGenerator.openGui(client);
-            ChatUtil.addLocalMessage(component);
+            Component component = CMApi.openGui(client);
+            if (component != null) ChatUtil.addLocalMessage(component);
             return true;
         });
 

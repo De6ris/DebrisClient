@@ -1,7 +1,8 @@
 package com.github.debris.debrisclient.command;
 
 import com.github.debris.debrisclient.feat.CommandQueue;
-import com.github.debris.debrisclient.feat.commandmacro.CMGenerator;
+import com.github.debris.debrisclient.feat.commandmacro.CMApi;
+import com.github.debris.debrisclient.feat.commandmacro.CMStorage;
 import com.github.debris.debrisclient.feat.commandmacro.CommandMacro;
 import com.github.debris.debrisclient.localization.CommandMacroText;
 import com.github.debris.debrisclient.localization.GeneralText;
@@ -15,11 +16,8 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
@@ -37,6 +35,10 @@ public class DCCommandMacroCommand {
                                         .executes(ctx -> example(ctx.getSource()))
                         )
                         .then(
+                                literal("reload")
+                                        .executes(ctx -> reload(ctx.getSource()))
+                        )
+                        .then(
                                 literal("gui")
                                         .executes(ctx -> gui(ctx.getSource()))
                         )
@@ -48,7 +50,7 @@ public class DCCommandMacroCommand {
                                 literal("run")
                                         .then(
                                                 argument("file", StringArgumentType.string())
-                                                        .suggests(CommandFactory.suggestMatching(() -> listFiles().stream()))
+                                                        .suggests(CommandFactory.suggestMatching(CMStorage::streamFiles))
                                                         .executes(ctx ->
                                                                 run(
                                                                         ctx.getSource(),
@@ -65,8 +67,8 @@ public class DCCommandMacroCommand {
                 CommandMacroText.HELP.translate(
                         TextFactory.here()
                                 .withStyle(
-                                        style -> style.withClickEvent(new ClickEvent.OpenUrl(CommandMacro.MACRO_DIR.toUri()))
-                                                .withHoverEvent(new HoverEvent.ShowText(Component.literal(CommandMacro.MACRO_DIR.toAbsolutePath().toString())))
+                                        style -> style.withClickEvent(new ClickEvent.OpenUrl(CMStorage.MACRO_DIR.toUri()))
+                                                .withHoverEvent(new HoverEvent.ShowText(Component.literal(CMStorage.MACRO_DIR.toAbsolutePath().toString())))
                                 ),
                         Component.literal("example")
                                 .withStyle(
@@ -90,7 +92,7 @@ public class DCCommandMacroCommand {
     private static int example(FabricClientCommandSource source) {
         CommandMacro example = new CommandMacro(5, List.of("hello world", "/say 1"));
         example.saveToFile("example.json");
-        Path path = CommandMacro.MACRO_DIR.resolve("example.json");
+        Path path = CMStorage.MACRO_DIR.resolve("example.json");
         source.sendFeedback(
                 CommandMacroText.EXAMPLE_CREATED.translate(
                         TextFactory.here().withStyle(
@@ -102,8 +104,14 @@ public class DCCommandMacroCommand {
         return Command.SINGLE_SUCCESS;
     }
 
+    private static int reload(FabricClientCommandSource source) {
+        Component component = CMStorage.reload();
+        if (component != null) source.sendFeedback(component);
+        return Command.SINGLE_SUCCESS;
+    }
+
     private static int gui(FabricClientCommandSource source) {
-        Component component = CMGenerator.openGui(source.getClient());
+        Component component = CMApi.openGui(source.getClient());
         if (component != null) source.sendFeedback(component);
         return Command.SINGLE_SUCCESS;
     }
@@ -112,17 +120,6 @@ public class DCCommandMacroCommand {
         CommandQueue.stop();
         source.sendFeedback(CommandMacroText.STOPPED.translate());
         return Command.SINGLE_SUCCESS;
-    }
-
-    /**
-     * Should consume this stream, otherwise the thread would lock.
-     */
-    private static List<String> listFiles() {
-        try (Stream<Path> stream = Files.list(CommandMacro.MACRO_DIR)) {
-            return stream.filter(Files::isRegularFile).map(x -> x.getFileName().toString()).toList();
-        } catch (IOException e) {
-            return List.of();
-        }
     }
 
     private static int run(FabricClientCommandSource source, String file) {

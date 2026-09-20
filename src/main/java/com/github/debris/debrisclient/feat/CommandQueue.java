@@ -3,6 +3,7 @@ package com.github.debris.debrisclient.feat;
 import com.github.debris.debrisclient.feat.commandmacro.CommandMacro;
 import com.github.debris.debrisclient.util.ChatUtil;
 import com.github.debris.debrisclient.util.Predicates;
+import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
@@ -35,6 +36,10 @@ public class CommandQueue {
 
     public static void run(CommandMacro macro) {
         int period = macro.period();
+        if (period < 0) {
+            ChatUtil.sendChat(Minecraft.getInstance(), "指令间隔为负值");
+            return;
+        }
         List<String> commands = macro.commands();
         for (int i = 0; i < commands.size(); i++) {
             add(commands.get(i), period * i);
