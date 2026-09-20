@@ -4,7 +4,7 @@ loom = "1.17-SNAPSHOT"
 minecraft = "26.3"
 
 fabric_loader = "0.19.5"
-fabric_api = "0.160.3+26.3"
+fabric_api = "0.161.0+26.3"
 
 malilib = "4cb96026bf"
 itemscroller = "2dde43944d"
@@ -15,7 +15,7 @@ minihud = "dcd3b09a97"
 conditionalmixin = "0.6.4"
 modmenu = "21.0.0-alpha.1"
 clientarguments = "1.14.0"
-libgui = "17.0.0+26.2"
+libgui = "18.0.1+26.3-rc-2"
 jei = "29.5.0.26"
 
 xray = "7847444"
