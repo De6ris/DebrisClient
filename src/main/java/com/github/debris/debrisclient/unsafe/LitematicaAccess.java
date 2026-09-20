@@ -1,7 +1,6 @@
 package com.github.debris.debrisclient.unsafe;
 
 import com.github.debris.debrisclient.config.DCCommonConfig;
-import com.github.debris.debrisclient.unsafe.litematica.LitematicaRenderUtil;
 import com.github.debris.debrisclient.util.AccessorUtil;
 import com.github.debris.debrisclient.util.ScreenUtil;
 import fi.dy.masa.litematica.config.Hotkeys;
@@ -11,7 +10,9 @@ import fi.dy.masa.litematica.gui.GuiMaterialList;
 import fi.dy.masa.litematica.gui.widgets.WidgetListMaterialList;
 import fi.dy.masa.litematica.gui.widgets.WidgetMaterialListEntry;
 import fi.dy.masa.litematica.materials.MaterialListEntry;
+import fi.dy.masa.litematica.render.OverlayRenderer;
 import fi.dy.masa.litematica.selection.AreaSelection;
+import fi.dy.masa.litematica.selection.Box;
 import fi.dy.masa.malilib.render.RenderUtils;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -43,7 +44,11 @@ public class LitematicaAccess {
     }
 
     public static void renderWorldEditSelectionBox(BlockPos pos1, BlockPos pos2) {
-        LitematicaRenderUtil.renderSelectionBox(pos1, pos2);// those set up codes from OverlayRenderer.renderBoxes
+        Box box = new Box(pos1, pos2, "WorldEdit");
+        float expand = 0.001f;
+        float lineWidthBlockBox = 2f;
+        float lineWidthArea = 1.5f;
+        OverlayRenderer.getInstance().renderSelectionBox(box, OverlayRenderer.BoxType.AREA_SELECTED, expand, lineWidthBlockBox, lineWidthArea, null);
         // a yellow outline to differ from the original
         RenderUtils.renderAreaSides(pos1, pos2, DCCommonConfig.WorldEditOverlay.getColor());
     }
