@@ -33,7 +33,7 @@ public class Callbacks {
             return true;
         });
 
-        DCCommonConfig.SortItem.getKeybind().setCallback((action, key) -> SortInventory.onKey(client));
+        DCCommonConfig.SortInventory.getKeybind().setCallback((action, key) -> SortInventory.onKey(client));
 
         DCCommonConfig.StoreStoneCutterRecipe.getKeybind().setCallback((action, key) -> {
             if (StoneCutterUtil.isStoneCutterRecipeViewOpen() && StoneCutterUtil.isOverStoneCutterResult()) {

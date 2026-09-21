@@ -86,11 +86,11 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey OpenWindow = ofHotkey("打开设置菜单", "D,C", "打开设置菜单");
     public static final ConfigHotkey OpenUniversalSearch = ofHotkey("打开全局搜索", "", "masa驱动");
     public static final ConfigHotkey OpenCommandMacroGenerator = ofHotkey("打开指令宏生成器", "", "详见/dccommand_macro help");
-    public static final ConfigHotkey SortItem = ofHotkey("整理物品", "", KeybindSettings.GUI, "按区域进行\n兼容carpet假人不会乱点按钮\n兼容创造模式物品栏");
+    public static final ConfigHotkey SortInventory = ofHotkey("整理物品栏", "", KeybindSettings.GUI, "按区域进行\n兼容carpet假人不会乱点按钮\n兼容创造模式物品栏");
     public static final ConfigHotkey StoneCutterRecipeView = ofHotkey("展示切石机配方", "A", GUI_RELAXED);
     public static final ConfigHotkey StoreStoneCutterRecipe = ofHotkey("储存切石机配方", "BUTTON_3", GUI_RELAXED_CANCEL);
     public static final ConfigHotkey CutStone = ofHotkey("切石", "LEFT_CONTROL, C", GUI_NO_ORDER);
-    public static final ConfigHotkey CutStoneThenThrow = ofHotkey("切石并丢出", "LEFT_CONTROL,LEFT_ALT,C", GUI_NO_ORDER);
+    public static final ConfigHotkey CutStoneAndThrow = ofHotkey("切石并丢出", "LEFT_CONTROL,LEFT_ALT,C", GUI_NO_ORDER);
     public static final ConfigHotkey MyMassCrafting = ofHotkey("我的喷射合成", "", GUI_NO_ORDER, "作为ItemScroller的替代品\n虽然仍然需要安装它才能用(以便读取配方)\n而且需要较高版本");
     public static final ConfigHotkey ThrowSection = ofHotkey("清空区域", "", KeybindSettings.GUI, "全部丢出");
     public static final ConfigHotkey ThrowSame = ofHotkey("丢出相同", "", KeybindSettings.GUI);
@@ -261,11 +261,11 @@ public class DCCommonConfig implements IConfigHandler {
                 OpenWindow,
                 OpenUniversalSearch,
                 OpenCommandMacroGenerator,
-                SortItem,
+                SortInventory,
                 StoneCutterRecipeView,
                 StoreStoneCutterRecipe,
                 CutStone,
-                CutStoneThenThrow,
+                CutStoneAndThrow,
                 MyMassCrafting,
                 ThrowSection,
                 ThrowSame,

@@ -19,7 +19,7 @@ import net.minecraft.client.Minecraft;
 public class TickListener implements IClientTickHandler {
     @Override
     public void onClientTick(Minecraft client) {
-        if (DCCommonConfig.CutStoneThenThrow.getKeybind().isKeybindHeld() || DCCommonConfig.StartStoneCutting.getBooleanValue()) {
+        if (DCCommonConfig.CutStoneAndThrow.getKeybind().isKeybindHeld() || DCCommonConfig.StartStoneCutting.getBooleanValue()) {
             if (StoneCutterUtil.isStoneCutterGui()) {
                 StoneCutterUtil.cutStoneThenDrop();
             }
