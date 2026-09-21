@@ -24,6 +24,7 @@ public class Commands {
             DCSpectateCommand.register(dispatcher);
             DCTeleportCommand.register(dispatcher);
             DCWhereIsItCommand.register(dispatcher, context);
+            DCItemBotMappingCommand.register(dispatcher);
         }
 
         if (ModReference.hasMod(ModReference.ClientCommands)) {

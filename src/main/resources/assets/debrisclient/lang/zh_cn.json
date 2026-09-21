@@ -60,5 +60,5 @@
   "debrisclient.here": "此处",
   "debrisclient.not_json": "不符Json格式",
   "debrisclient.read_file_error": "读取文件错误",
-  "debrisclient.reload_success": "重载成功"
+  "debrisclient.operation_success": "操作成功"
 }

@@ -9,7 +9,7 @@ public enum GeneralText implements Translatable {
     HERE,
     NOT_JSON,
     READ_FILE_ERROR,
-    RELOAD_SUCCESS
+    OPERATION_SUCCESS
     ;
 
     @Override

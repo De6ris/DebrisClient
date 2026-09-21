@@ -26,7 +26,7 @@ public class DCReloadCommand {
     private static int reloadCommandButton(FabricClientCommandSource source) {
         if (ModReference.hasMod(ModReference.CommandButton)) {
             MGButtonAccess.reload();
-            source.sendFeedback(GeneralText.RELOAD_SUCCESS.translate());
+            source.sendFeedback(GeneralText.OPERATION_SUCCESS.translate());
             return Command.SINGLE_SUCCESS;
         } else {
             source.sendFeedback(GeneralText.FEATURE_REQUIRES_MOD.translate(ModReference.CommandButton));
@@ -35,9 +35,9 @@ public class DCReloadCommand {
     }
 
     private static int reloadItemBotMapping(FabricClientCommandSource source) {
-        Component component = ItemBotMapping.reload();
+        Component component = ItemBotMapping.load();
         if (component == null) {
-            source.sendFeedback(GeneralText.RELOAD_SUCCESS.translate());
+            source.sendFeedback(GeneralText.OPERATION_SUCCESS.translate());
             return Command.SINGLE_SUCCESS;
         } else {
             source.sendFeedback(component);

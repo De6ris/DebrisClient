@@ -60,5 +60,5 @@
   "debrisclient.here": "here",
   "debrisclient.not_json": "Not json format",
   "debrisclient.read_file_error": "Error reading file",
-  "debrisclient.reload_success": "Reload success"
+  "debrisclient.operation_success": "Operation success"
 }
