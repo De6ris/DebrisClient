@@ -2,6 +2,8 @@ package com.github.debris.debrisclient.config;
 
 import com.github.debris.debrisclient.DebrisClient;
 import com.github.debris.debrisclient.compat.ModReference;
+import com.github.debris.debrisclient.config.api.MatchType;
+import com.github.debris.debrisclient.config.api.RequiresMod;
 import com.github.debris.debrisclient.config.options.ConfigEnum;
 import com.github.debris.debrisclient.feat.HeartType;
 import com.github.debris.debrisclient.inventory.sort.SortCategory;
@@ -54,20 +56,30 @@ public class DCCommonConfig implements IConfigHandler {
 
 
     // integration
-    public static final ConfigBoolean FreeCamKeepAutoMoving = ofBoolean("灵魂出窍时允许自动移动", true, "本模组的自动移动, 在灵魂出窍时会默认停止移动");
-    public static final ConfigBoolean FreeCamSpectatorFix = ofBoolean("旁观模式灵魂出窍修复", true, "当你附身别的生物, 启动灵魂出窍时相机仍在附身地");
-    public static final ConfigBoolean RetroFreeCam = ofBoolean("怀旧灵魂出窍", false, "适用于tweakeroo0.24.1");
-    public static final ConfigBoolean ToolSwitchFix = ofBoolean("工具切换修复", true, "无合适工具时, 不应轻易切换");
     public static final ConfigBoolean ProgressResuming = ofBoolean("进度恢复", true, "打开配置页面时, 能跳转上次进度\n对MaLiLib驱动的模组和CommandButton有效");
-    public static final ConfigBoolean WorldEditVisibility = ofBoolean("WorldEdit可视化", false, "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
-    public static final ConfigColor WorldEditOverlay = ofColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
-    public static final ConfigBoolean InventoryPreviewSupportComparator = ofBoolean("物品栏预览支持比较器", true);
     public static final ConfigBoolean PinYinSearch = ofBoolean("拼音搜索", false, "需要Rei, 支持由MaLiLib驱动的模组, 创造模式物品栏, 配方书");
     public static final ConfigBoolean CommentSearch = ofBoolean("注释搜索", false, "对MaLiLib驱动的模组有效");
     public static final ConfigBoolean GlobalConfigEnhance = ofBoolean("全局配置加强", false, "将本模组的配置加强应用到所有masa模组,包含以下功能:\n为热键添加触发按钮\n为枚举列表提供预览");
     public static final ConfigBoolean ScrollerEnhance = ofBoolean("滑动条改进", true, "masa驱动\n允许点击白块之外拖动");
+    @RequiresMod(ModReference.Tweakeroo)
+    public static final ConfigBoolean FreeCamKeepAutoMoving = ofBoolean("灵魂出窍时允许自动移动", true, "本模组的自动移动, 在灵魂出窍时会默认停止移动");
+    @RequiresMod(ModReference.Tweakeroo)
+    public static final ConfigBoolean FreeCamSpectatorFix = ofBoolean("旁观模式灵魂出窍修复", true, "当你附身别的生物, 启动灵魂出窍时相机仍在附身地");
+    @RequiresMod(ModReference.Tweakeroo)
+    public static final ConfigBoolean RetroFreeCam = ofBoolean("怀旧灵魂出窍", false, "适用于tweakeroo0.24.1");
+    @RequiresMod(ModReference.Tweakeroo)
+    public static final ConfigBoolean ToolSwitchFix = ofBoolean("工具切换修复", true, "无合适工具时, 不应轻易切换");
+    @RequiresMod(value = {ModReference.WorldEdit, ModReference.Litematica}, matchType = MatchType.ALL)
+    public static final ConfigBoolean WorldEditVisibility = ofBoolean("WorldEdit可视化", false, "作为WECUI的暂时替代, 仅支持长方体选区, 且渲染需要litematica");
+    @RequiresMod(value = {ModReference.WorldEdit, ModReference.Litematica}, matchType = MatchType.ALL)
+    public static final ConfigColor WorldEditOverlay = ofColor("WorldEdit滤镜", "#30FFFF00", "在WE选区渲染后再加上, 以区分litematica的选区");
+    @RequiresMod(value = {ModReference.MiniHud, ModReference.MagicLibMCApi})
+    public static final ConfigBoolean InventoryPreviewOnComparator = ofBoolean("物品栏预览于比较器", true);
+    @RequiresMod(ModReference.XRay)
     public static final ConfigBoolean XRayAutoColor = ofBoolean("XRay自动取色", true);
-    public static final ConfigBoolean WthitMasaCompat = ofBoolean("Wthit与Masa兼容", true, "在合适的时机不渲染tooltip");
+    @RequiresMod(value = {ModReference.Jade, ModReference.Wthit}, matchType = MatchType.ANY)
+    public static final ConfigBoolean WailaMasaCompat = ofBoolean("Waila与Masa兼容", true, "在合适的时机不渲染tooltip\njade, wthit");
+    @RequiresMod(ModReference.REI)
     public static final ConfigBoolean DisableREIWarning = ofBoolean("禁用REI警告", false, "至少在18.0.796版本仍然每次进服都在弹窗");
 
 
@@ -85,7 +97,6 @@ public class DCCommonConfig implements IConfigHandler {
     // key
     public static final ConfigHotkey OpenWindow = ofHotkey("打开设置菜单", "D,C", "打开设置菜单");
     public static final ConfigHotkey OpenUniversalSearch = ofHotkey("打开全局搜索", "", "masa驱动");
-    public static final ConfigHotkey OpenCommandMacroGenerator = ofHotkey("打开指令宏生成器", "", "详见/dccommand_macro help");
     public static final ConfigHotkey SortInventory = ofHotkey("整理物品栏", "", KeybindSettings.GUI, "按区域进行\n兼容carpet假人不会乱点按钮\n兼容创造模式物品栏");
     public static final ConfigHotkey StoneCutterRecipeView = ofHotkey("展示切石机配方", "A", GUI_RELAXED);
     public static final ConfigHotkey StoreStoneCutterRecipe = ofHotkey("储存切石机配方", "BUTTON_3", GUI_RELAXED_CANCEL);
@@ -97,7 +108,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigHotkey KickBot = ofHotkey("踢出假人", "", KeybindSettings.PRESS_ALLOWEXTRA, "按住时踢出准心所指假人\n支持灵魂出窍");
     public static final ConfigHotkey RestoreKicking = ofHotkey("假人复原", "", "召回误踢的假人");
     public static final ConfigHotkey BotSpawnCommand = ofHotkey("假人召唤指令", "", "在聊天栏中建议当前位置");
-    public static final ConfigHotkey SpawnBotForItem = ofHotkey("召唤物品对应假人", "", KeybindSettings.GUI,"对物品按下快捷键可召唤对应假人\n使用/dcreload item_bot_mapping以加载映射");
+    public static final ConfigHotkey SpawnBotForItem = ofHotkey("召唤物品对应假人", "", KeybindSettings.GUI, "对物品按下快捷键可召唤对应假人\n使用/dcreload item_bot_mapping以加载映射");
     public static final ConfigHotkey ModifierMoveAll = ofHotkey("移动全部:修饰键", "", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域全部\n兼容carpet假人不会乱点按钮");
     public static final ConfigHotkey ModifierMoveStack = ofHotkey("移动一组:修饰键", "", GUI_RELAXED_CANCEL, "按住时左键会移动当前物品");
     public static final ConfigHotkey ModifierMoveSame = ofHotkey("移动相同:修饰键", "", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域相同物品");
@@ -211,22 +222,6 @@ public class DCCommonConfig implements IConfigHandler {
         if (ModReference.hasMod(ModReference.Tweakeroo)) {
             builder.add(FreeCamKeepAutoMoving, FreeCamSpectatorFix, RetroFreeCam, ToolSwitchFix);
         }
-        if (ModReference.hasMod(ModReference.MiniHud) && ModReference.hasMod(ModReference.MagicLibMCApi)) {
-            builder.add(InventoryPreviewSupportComparator);
-        }
-        if (ModReference.hasMod(ModReference.WorldEdit) && ModReference.hasMod(ModReference.Litematica)) {
-            builder.add(WorldEditVisibility);
-            builder.add(WorldEditOverlay);
-        }
-        if (ModReference.hasMod(ModReference.XRay)) {
-            builder.add(XRayAutoColor);
-        }
-        if (ModReference.hasMod(ModReference.Wthit)) {
-            builder.add(WthitMasaCompat);
-        }
-        if (ModReference.hasMod(ModReference.REI)) {
-            builder.add(DisableREIWarning);
-        }
         return builder.build();
     }
 
@@ -246,7 +241,23 @@ public class DCCommonConfig implements IConfigHandler {
                 ChunkBorderRenderNotOnTop,
                 SpawnBotPrefix
         );
-        Integration = buildIntegration();
+        Integration = ImmutableList.of(
+                ProgressResuming,
+                PinYinSearch,
+                CommentSearch,
+                GlobalConfigEnhance,
+                ScrollerEnhance,
+                FreeCamKeepAutoMoving,
+                FreeCamSpectatorFix,
+                RetroFreeCam,
+                ToolSwitchFix,
+                WorldEditVisibility,
+                WorldEditOverlay,
+                InventoryPreviewOnComparator,
+                XRayAutoColor,
+                WailaMasaCompat,
+                DisableREIWarning
+        );
         Lists = ImmutableList.of(
                 AutoRepeatPlayerList,
                 AutoRepeatBlackList,
@@ -260,7 +271,6 @@ public class DCCommonConfig implements IConfigHandler {
         KeyPress = ImmutableList.of(
                 OpenWindow,
                 OpenUniversalSearch,
-                OpenCommandMacroGenerator,
                 SortInventory,
                 StoneCutterRecipeView,
                 StoreStoneCutterRecipe,

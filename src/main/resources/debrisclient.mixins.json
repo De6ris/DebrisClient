@@ -37,6 +37,7 @@
     "client.render.ParticleManagerMixin",
     "client.search.SearchProviderMixin",
     "client.sound.SoundSystemMixin",
+    "compat.jade.WailaTickHandlerMixin",
     "compat.libgui.CottonClientScreenMixin",
     "compat.malilib.ConfigButtonOptionListMixin",
     "compat.malilib.GuiConfigsBaseMixin",

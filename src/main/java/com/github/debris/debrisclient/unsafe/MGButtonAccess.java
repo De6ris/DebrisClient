@@ -36,7 +36,7 @@ public class MGButtonAccess {
             method.invoke(null);
         } catch (ClassNotFoundException | InvocationTargetException | NoSuchMethodException |
                  IllegalAccessException e) {
-            DebrisClient.logger.warn("reloading mg buttons", e);
+            DebrisClient.LOGGER.warn("reloading mg buttons", e);
         }
     }
 
@@ -50,7 +50,7 @@ public class MGButtonAccess {
                         .filter(clazzCommandListPanel::isInstance)
                         .toList();
                 if (listPanels.size() != 1) {
-                    DebrisClient.logger.warn("Mixin CottonClientScreen: Why CommandGUI contains 0 or >1 list panel");
+                    DebrisClient.LOGGER.warn("Mixin CottonClientScreen: Why CommandGUI contains 0 or >1 list panel");
                 } else {
                     WWidget first = listPanels.getFirst();
                     Method method = clazzCommandListPanel.getMethod("getScrollBar");
@@ -59,7 +59,7 @@ public class MGButtonAccess {
             }
         } catch (ClassNotFoundException | InvocationTargetException | NoSuchMethodException |
                  IllegalAccessException e) {
-            DebrisClient.logger.warn("find mg buttons scroll bar", e);
+            DebrisClient.LOGGER.warn("find mg buttons scroll bar", e);
         }
     }
 }

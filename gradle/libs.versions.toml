@@ -21,6 +21,7 @@ jei = "29.5.0.26"
 xray = "7847444"
 commandbutton = "2.5.0"
 xaerominimap="fabric-26.1.2-25.3.12"
+jade="26.3.1+fabric"
 
 
 [libraries]
@@ -44,6 +45,7 @@ jei_api = { group = "mezz.jei", name = "jei-26.1.2-fabric-api", version.ref = "j
 xray = { group = "curse.maven", name = "advanced-xray-fabric-edition-444663", version.ref = "xray" }
 commandbutton = { group = "maven.modrinth", name = "command-gui-buttons", version.ref = "commandbutton" }
 xaerominimap = { group = "maven.modrinth", name = "xaeros-minimap", version.ref = "xaerominimap" }
+jade = { group = "maven.modrinth", name = "jade", version.ref = "jade" }
 
 [plugins]
 loom = { id = "net.fabricmc.fabric-loom", version.ref = "loom" }

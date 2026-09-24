@@ -1,6 +1,7 @@
 package com.github.debris.debrisclient.gui;
 
 import com.github.debris.debrisclient.config.DCCommonConfig;
+import com.github.debris.debrisclient.config.HideConfig;
 import fi.dy.masa.malilib.config.IConfigBase;
 import fi.dy.masa.malilib.gui.GuiConfigsBase;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
@@ -48,7 +49,7 @@ public class DCConfigUi extends GuiConfigsBase {
 
         configs = switch (tab) {
             case VALUE -> DCCommonConfig.Values;
-            case INTEGRATION -> DCCommonConfig.Integration;
+            case INTEGRATION -> HideConfig.filter(DCCommonConfig.Integration);
             case LISTS -> DCCommonConfig.Lists;
             case PRESS -> DCCommonConfig.KeyPress;
             case TOGGLE -> DCCommonConfig.KeyToggle;

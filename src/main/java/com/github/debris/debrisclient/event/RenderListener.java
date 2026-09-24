@@ -43,7 +43,7 @@ public class RenderListener implements IRenderer {
                     .ifPresent(x -> LitematicaAccess.renderWorldEditSelectionBox(x.getFirst(), x.getSecond()));
         }
 
-        if (DCCommonConfig.InventoryPreviewSupportComparator.getBooleanValue() && ModReference.hasMod(ModReference.MiniHud) && MiniHudAccess.isPreviewingInventory()) {
+        if (DCCommonConfig.InventoryPreviewOnComparator.getBooleanValue() && ModReference.hasMod(ModReference.MiniHud) && MiniHudAccess.isPreviewingInventory()) {
             RayTraceUtil.getRayTraceBlock(this.client).ifPresent(pos -> {
                 Level world = WorldUtils.getBestWorld(this.client);// get it through chunk, since the server return you null if you call world.getBlockEntity directly on render thread
                 world.getChunkAt(pos)

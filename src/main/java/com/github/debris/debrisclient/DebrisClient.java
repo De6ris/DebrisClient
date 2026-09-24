@@ -13,5 +13,5 @@ public class DebrisClient {
 
     public static final Path CONFIG_DIR = Platform.getConfigDir().resolve(DebrisClient.MOD_NAME);
 
-    public static final Logger logger = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 }

@@ -1,20 +1,20 @@
-package com.github.debris.debrisclient.mixin.compat.wthit;
+package com.github.debris.debrisclient.mixin.compat.jade;
 
 import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.util.CullingUtil;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import mcp.mobius.waila.gui.hud.TooltipHandler;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import snownee.jade.overlay.WailaTickHandler;
 
-@Restriction(require = @Condition(ModReference.Wthit))
-@Mixin(value = TooltipHandler.class, remap = false)
-public class TooltipHandlerMixin {
-    @ModifyExpressionValue(method = "_tick",
+@Restriction(require = @Condition(ModReference.Jade))
+@Mixin(value = WailaTickHandler.class, remap = false)
+public class WailaTickHandlerMixin {
+    @ModifyExpressionValue(method = "tickClient",
             at = @At(value = "INVOKE",
-                    target = "Lmcp/mobius/waila/config/WailaConfig$General;isDisplayTooltip()Z",
+                    target = "Lsnownee/jade/api/config/IWailaConfig$General;shouldDisplayTooltip()Z",
                     remap = false),
             remap = false
     )

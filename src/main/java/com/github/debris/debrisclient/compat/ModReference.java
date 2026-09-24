@@ -20,6 +20,7 @@ public class ModReference {
     public static final String XaeroMiniMap = "xaerominimap";
     public static final String JourneyMap = "journeymap";
     public static final String Jei = "jei";
+    public static final String Jade = "jade";
 
     public static boolean hasMod(String modid) {
         return Platform.hasMod(modid);
