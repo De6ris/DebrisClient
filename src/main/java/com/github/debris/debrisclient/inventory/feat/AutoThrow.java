@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.inventory.feat;
 
-import com.github.debris.debrisclient.config.DCCommonConfig;
+import com.github.debris.debrisclient.config.InventoryConfig;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class AutoThrow {
     public static void runAutoThrow() {
-        List<Item> list = parseItemList(DCCommonConfig.AutoThrowWhiteList.getStrings());
+        List<Item> list = parseItemList(InventoryConfig.AutoThrowWhiteList.getStrings());
         if (list.isEmpty()) return;
         for (Slot slot : InventoryUtil.getInventoryContainer().slots) {
             if (isItemInList(slot.getItem(), list)) {

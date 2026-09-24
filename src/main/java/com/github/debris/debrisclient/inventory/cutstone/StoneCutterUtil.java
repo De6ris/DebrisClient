@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.inventory.cutstone;
 
-import com.github.debris.debrisclient.config.DCCommonConfig;
+import com.github.debris.debrisclient.config.InventoryConfig;
 import com.github.debris.debrisclient.inventory.feat.InventoryTweaks;
 import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import com.github.debris.debrisclient.inventory.section.EnumSection;
@@ -29,7 +29,7 @@ public class StoneCutterUtil {
 
     public static boolean isStoneCutterRecipeViewOpen() {
         return GuiUtils.getCurrentScreen() != null &&
-                DCCommonConfig.StoneCutterRecipeView.getKeybind().isKeybindHeld() &&
+                InventoryConfig.StoneCutterRecipeView.getKeybind().isKeybindHeld() &&
                 isStoneCutterGui();
     }
 

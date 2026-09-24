@@ -2,7 +2,6 @@ package com.github.debris.debrisclient.feat;
 
 import com.github.debris.debrisclient.DebrisClient;
 import com.github.debris.debrisclient.compat.ModReference;
-import com.github.debris.debrisclient.gui.DCConfigUi;
 import com.github.debris.debrisclient.gui.UniversalSearchScreen;
 import com.github.debris.debrisclient.unsafe.LitematicaAccess;
 import com.github.debris.debrisclient.unsafe.MiniHudAccess;
@@ -113,7 +112,6 @@ public class ConfigCollector {
         String modId = mod.modId();
         switch (modId) {
             case DebrisClient.MOD_ID -> {
-                if (content.equals(DCConfigUi.Tab.ALL.getDisplayName())) return true;
                 if (content.contains("全部")) return true;
             }
             case ModReference.Litematica -> {

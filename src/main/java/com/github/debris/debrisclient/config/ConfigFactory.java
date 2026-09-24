@@ -49,8 +49,8 @@ public class ConfigFactory {
         return new ConfigStringList(name, defaultValue, comment);
     }
 
-    public static ConfigHotkey ofHotkey(String name, String defaultStorageString) {
-        return ofHotkey(name, defaultStorageString, DEFAULT_COMMENT);
+    public static ConfigHotkey ofHotkey(String name) {
+        return ofHotkey(name, "", DEFAULT_COMMENT);
     }
 
     public static ConfigHotkey ofHotkey(String name, String defaultStorageString, String comment) {

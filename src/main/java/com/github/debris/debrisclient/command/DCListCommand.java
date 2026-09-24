@@ -1,6 +1,7 @@
 package com.github.debris.debrisclient.command;
 
 import com.github.debris.debrisclient.config.DCCommonConfig;
+import com.github.debris.debrisclient.config.InventoryConfig;
 import com.github.debris.debrisclient.localization.ListCommandText;
 import com.github.debris.debrisclient.util.RayTraceUtil;
 import com.mojang.brigadier.Command;
@@ -62,7 +63,7 @@ public class DCListCommand {
     }
 
     private static LiteralArgumentBuilder<FabricClientCommandSource> makeAutoThrow() {
-        return of("auto_throw", BuiltInRegistries.ITEM, DCCommonConfig.AutoThrowWhiteList)
+        return of("auto_throw", BuiltInRegistries.ITEM, InventoryConfig.AutoThrowWhiteList)
                 .fastSuggestion(source -> {
                     ItemStack stack = source.getPlayer().getMainHandItem();
                     return stack.isEmpty() ? Optional.empty() : Optional.of(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());

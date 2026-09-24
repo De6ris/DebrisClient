@@ -26,13 +26,10 @@ public abstract class WidgetConfigOptionMixin extends WidgetConfigOptionBase<Gui
             IKeybind keybind = hotkey.getKeybind();
             IHotkeyCallback callback = ((KeybindMulti) keybind).getCallback();
             if (callback == null) return;
-            this.addButton(new ConfigButtonTrigger(x + DCCommonConfig.TriggerButtonOffset.getIntegerValue(), y), (buttonBase, i) -> {
-                if (i == 0) {
-                    boolean cancel = callback.onKeyAction(KeyAction.PRESS, keybind);
-                    if (cancel) return;
-                    callback.onKeyAction(KeyAction.RELEASE, keybind);
-                }
+            this.addButton(new ConfigButtonTrigger(x + DCCommonConfig.TriggerButtonOffset.getIntegerValue(), y), (buttonBase, mouseButton) -> {
+                EnhanceConfig.triggerCallback(mouseButton, callback, keybind);
             });
         }
     }
+
 }

@@ -2,7 +2,8 @@ package com.github.debris.debrisclient.config;
 
 import com.github.debris.debrisclient.feat.*;
 import com.github.debris.debrisclient.feat.interactor.InteractionFactory;
-import com.github.debris.debrisclient.gui.DCConfigUi;
+import com.github.debris.debrisclient.gui.InventoryConfigScreen;
+import com.github.debris.debrisclient.gui.MainConfigScreen;
 import com.github.debris.debrisclient.gui.UniversalSearchScreen;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterRecipeStorage;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterUtil;
@@ -14,8 +15,13 @@ import net.minecraft.client.Minecraft;
 
 public class Callbacks {
     public static void init(Minecraft client) {
-        DCCommonConfig.OpenWindow.getKeybind().setCallback((action, key) -> {
-            client.setScreenAndShow(new DCConfigUi());
+        DCCommonConfig.OpenConfigScreen.getKeybind().setCallback((action, key) -> {
+            client.setScreenAndShow(MainConfigScreen.getInstance(null));
+            return true;
+        });
+
+        DCCommonConfig.OpenInventoryConfigScreen.getKeybind().setCallback((action, key) -> {
+            client.setScreenAndShow(InventoryConfigScreen.getInstance(null));
             return true;
         });
 
@@ -24,39 +30,10 @@ public class Callbacks {
             return true;
         });
 
-        DCCommonConfig.SortInventory.getKeybind().setCallback((action, key) -> SortInventory.onKey(client));
-
-        DCCommonConfig.StoreStoneCutterRecipe.getKeybind().setCallback((action, key) -> {
-            if (StoneCutterUtil.isStoneCutterRecipeViewOpen() && StoneCutterUtil.isOverStoneCutterResult()) {
-                StoneCutterRecipeStorage.getInstance().storeRecipe();
-                return true;
-            }
-            return false;
-        });
-
-        DCCommonConfig.CutStone.getKeybind().setCallback((action, key) -> {
-            if (StoneCutterUtil.isStoneCutterGui()) {
-                StoneCutterUtil.cutStone();
-                return true;
-            }
-            return false;
-        });
-
-        DCCommonConfig.ThrowSection.getKeybind().setCallback((action, key) -> {
-            if (Predicates.notInGuiContainer(client)) return false;
-            return InventoryTweaks.tryThrowSection();
-        });
-
-        DCCommonConfig.ThrowSame.getKeybind().setCallback((action, key) -> {
-            if (Predicates.notInGuiContainer(client)) return false;
-            return InventoryTweaks.tryDropSame();
-        });
 
         DCCommonConfig.RestoreKicking.getKeybind().setCallback((action, key) -> CarpetBot.restoreKicking(client));
 
-        DCCommonConfig.BotSpawnCommand.getKeybind().setCallback((action, key) -> CarpetBot.suggestBotSpawnCommand(client));
-
-        DCCommonConfig.SpawnBotForItem.getKeybind().setCallback((action, key) -> CarpetBot.spawnBotOfItem(client));
+        DCCommonConfig.SuggestBotSpawnCommand.getKeybind().setCallback((action, key) -> CarpetBot.suggestBotSpawnCommand(client));
 
         DCCommonConfig.ResendLastChat.getKeybind().setCallback((action, key) -> ResendChat.resendLast(client));
 
@@ -65,8 +42,6 @@ public class Callbacks {
         DCCommonConfig.AlignWithEnderEye.getKeybind().setCallback((action, key) -> MiscFeat.alignWithEnderEye(client));
 
         DCCommonConfig.TakeOff.getKeybind().setCallback((action, key) -> TakeOff.tryTakeOff(client));
-
-        DCCommonConfig.SyncContainer.getKeybind().setCallback((action, key) -> SyncContainer.trySync(client));
 
         DCCommonConfig.OpenSelectionContainers.getKeybind().setCallback(((action, key) -> InteractionFactory.addBlockTask(client, InteractionFactory.BlockPredicate.CONTAINER, true)));
 
@@ -78,6 +53,43 @@ public class Callbacks {
 
         DCCommonConfig.AutoRepeatBlackList.setValueChangeCallback(config -> AutoRepeat.updateBlackList(config.getStrings()));
 
+        initInventory(client);
+    }
+
+    private static void initInventory(Minecraft client) {
+        InventoryConfig.SwitchPreset.setValueChangeCallback(InventoryPreset::switchPreset);
+
+        InventoryConfig.SortInventory.getKeybind().setCallback((action, key) -> SortInventory.onKey(client));
+
+        InventoryConfig.StoreStoneCutterRecipe.getKeybind().setCallback((action, key) -> {
+            if (StoneCutterUtil.isStoneCutterRecipeViewOpen() && StoneCutterUtil.isOverStoneCutterResult()) {
+                StoneCutterRecipeStorage.getInstance().storeRecipe();
+                return true;
+            }
+            return false;
+        });
+
+        InventoryConfig.CutStone.getKeybind().setCallback((action, key) -> {
+            if (StoneCutterUtil.isStoneCutterGui()) {
+                StoneCutterUtil.cutStone();
+                return true;
+            }
+            return false;
+        });
+
+        InventoryConfig.ThrowSection.getKeybind().setCallback((action, key) -> {
+            if (Predicates.notInGuiContainer(client)) return false;
+            return InventoryTweaks.tryThrowSection();
+        });
+
+        InventoryConfig.ThrowSame.getKeybind().setCallback((action, key) -> {
+            if (Predicates.notInGuiContainer(client)) return false;
+            return InventoryTweaks.tryDropSame();
+        });
+
+        InventoryConfig.SpawnBotForItem.getKeybind().setCallback((action, key) -> CarpetBot.spawnBotOfItem(client));
+
+        InventoryConfig.SyncContainer.getKeybind().setCallback((action, key) -> SyncContainer.trySync(client));
     }
 
 }

@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.inventory.sort;
 
-import com.github.debris.debrisclient.config.DCCommonConfig;
+import com.github.debris.debrisclient.config.InventoryConfig;
 import com.github.debris.debrisclient.feat.PinYinSupport;
 import com.github.debris.debrisclient.util.StringUtil;
 import net.minecraft.client.Minecraft;
@@ -32,7 +32,7 @@ public enum SortCategory {
      * Thus, if you want a comes before b, you should let a be smaller than b in the comparator.
      * */
     public static Comparator<ItemStack> getItemStackSorter() {
-        Comparator<Item> itemOrderByConfig = DCCommonConfig.ItemSortingOrder.getEnumValue().order;
+        Comparator<Item> itemOrderByConfig = InventoryConfig.ItemSortingOrder.getEnumValue().order;
         Comparator<ItemStack> itemTypeComparator = (c1, c2) -> {
             if (ItemStack.isSameItem(c1, c2)) {
                 return 0;

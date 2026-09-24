@@ -2,6 +2,7 @@ package com.github.debris.debrisclient.event;
 
 import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.config.DCCommonConfig;
+import com.github.debris.debrisclient.config.InventoryConfig;
 import com.github.debris.debrisclient.feat.*;
 import com.github.debris.debrisclient.feat.advancement.AdventuringTimeHelper;
 import com.github.debris.debrisclient.feat.interactor.BlockInteractor;
@@ -19,13 +20,13 @@ import net.minecraft.client.Minecraft;
 public class TickListener implements IClientTickHandler {
     @Override
     public void onClientTick(Minecraft client) {
-        if (DCCommonConfig.CutStoneAndThrow.getKeybind().isKeybindHeld() || DCCommonConfig.StartStoneCutting.getBooleanValue()) {
+        if (InventoryConfig.CutStoneAndThrow.getKeybind().isKeybindHeld() || InventoryConfig.StartStoneCutting.getBooleanValue()) {
             if (StoneCutterUtil.isStoneCutterGui()) {
                 StoneCutterUtil.cutStoneThenDrop();
             }
         }
 
-        if (DCCommonConfig.MyMassCrafting.getKeybind().isKeybindHeld() || DCCommonConfig.StartMassCrafting.getBooleanValue()) {
+        if (InventoryConfig.MyMassCrafting.getKeybind().isKeybindHeld() || InventoryConfig.StartMassCrafting.getBooleanValue()) {
             if (ModReference.hasMod(ModReference.ItemScroller)) {
                 if (MassCraftingApi.isCraftingGui()) {
                     MassCraftingApi.tryMassCrafting();
@@ -37,7 +38,7 @@ public class TickListener implements IClientTickHandler {
             CarpetBot.tryKickBot(client);
         }
 
-        if (DCCommonConfig.AutoThrow.getBooleanValue() && Predicates.inGameNoGui(client)) {
+        if (InventoryConfig.AutoThrow.getBooleanValue() && Predicates.inGameNoGui(client)) {
             AutoThrow.runAutoThrow();
         }
 

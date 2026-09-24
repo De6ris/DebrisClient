@@ -6,37 +6,28 @@ import com.github.debris.debrisclient.config.api.MatchType;
 import com.github.debris.debrisclient.config.api.RequiresMod;
 import com.github.debris.debrisclient.config.options.ConfigEnum;
 import com.github.debris.debrisclient.feat.HeartType;
-import com.github.debris.debrisclient.inventory.sort.SortCategory;
-import com.github.debris.debrisclient.unsafe.itemScroller.MassCraftingImpl;
+import com.github.debris.debrisclient.gui.MainConfigScreen;
 import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import fi.dy.masa.malilib.config.ConfigUtils;
 import fi.dy.masa.malilib.config.IConfigBase;
-import fi.dy.masa.malilib.config.IConfigHandler;
 import fi.dy.masa.malilib.config.IHotkeyTogglable;
 import fi.dy.masa.malilib.config.options.*;
 import fi.dy.masa.malilib.hotkeys.KeyAction;
 import fi.dy.masa.malilib.hotkeys.KeybindSettings;
-import fi.dy.masa.malilib.util.data.json.JsonUtils;
+import fi.dy.masa.malilib.util.data.ModInfo;
+import net.minecraft.resources.Identifier;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
-import static com.github.debris.debrisclient.DebrisClient.MOD_NAME;
 import static com.github.debris.debrisclient.config.ConfigFactory.*;
 
-public class DCCommonConfig implements IConfigHandler {
-    private static final DCCommonConfig INSTANCE = new DCCommonConfig();
-    private static final Path FILE_PATH = DebrisClient.CONFIG_DIR.resolve("config_common.json");
+public class DCCommonConfig extends ConfigHandlerImpl {
+    private static final DCCommonConfig INSTANCE;
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(DebrisClient.MOD_ID, "main");
+    public static final ModInfo MOD_INFO = new ModInfo(ID.toString(), DebrisClient.MOD_NAME + " Main", () -> MainConfigScreen.getInstance(null));
 
 
     // value
-    public static final ConfigBoolean SortingContainersLast = ofBoolean("整理时容器置于末端", true, "潜影盒, 收纳袋");
-    public static final ConfigBoolean CachedSorting = ofBoolean("整理时使用缓存算法", true, "相比直接操作, 可减少发包");
-    public static final ConfigEnum<SortCategory> ItemSortingOrder = ofEnum("物品整理顺序", SortCategory.CREATIVE_INVENTORY, "1.翻译键顺序\n2.按创造模式物品栏顺序\n3.按翻译后名称顺序\n4.按拼音顺序(需要Rei)");
-    public static final ConfigEnum<MassCraftingImpl> MassCraftingMode = ofEnum("喷射合成实现", MassCraftingImpl.RECIPE_BOOK, "配方书依赖服务器,较慢但不出错\n手动依赖客户端,可能与服务器不同步导致合成错误");
     public static final ConfigInteger TriggerButtonOffset = ofInteger("触发按钮的坐标偏移", 42, -100, 100, true, "自动对齐可能有问题");
     public static final ConfigInteger AutoRepeatAntiDDos = ofInteger("自动复读防刷屏", Integer.MAX_VALUE, 1, Integer.MAX_VALUE, false, "1秒内同一条消息被发送次数超过阈值时, 将取消之后的发送");
     public static final ConfigBoolean FullDebugInfo = ofBoolean("完整调试权限", false);
@@ -46,13 +37,6 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBoolean RetroDefaultSkin = ofBoolean("怀旧默认皮肤", false, "仅Steve, Alex");
     public static final ConfigBoolean ChunkBorderRenderNotOnTop = ofBoolean("区块边界渲染不再置顶", false, "1.21.11+子区块边界会透视");
     public static final ConfigString SpawnBotPrefix = ofString("召唤假人前缀", "bot_");
-
-
-    // key settings
-    private static final KeybindSettings GUI_RELAXED = KeybindSettings.create(KeybindSettings.Context.GUI, KeyAction.PRESS, true, false, false, false);
-    private static final KeybindSettings GUI_RELAXED_CANCEL = KeybindSettings.create(KeybindSettings.Context.GUI, KeyAction.PRESS, true, false, false, true);
-    private static final KeybindSettings GUI_NO_ORDER = KeybindSettings.create(KeybindSettings.Context.GUI, KeyAction.PRESS, false, false, false, true);
-    private static final KeybindSettings ANY = KeybindSettings.create(KeybindSettings.Context.ANY, KeyAction.PRESS, false, true, false, true);
 
 
     // integration
@@ -86,7 +70,6 @@ public class DCCommonConfig implements IConfigHandler {
     // list
     public static final ConfigStringList AutoRepeatPlayerList = ofStringList("自动复读玩家列表");
     public static final ConfigStringList AutoRepeatBlackList = ofStringList("自动复读字符串黑名单", ImmutableList.of(), "可用样式如下:\n直接取消复读,如\"debris\"\n箭头->表示替换,如\"debris->spirit\"");
-    public static final ConfigStringList AutoThrowWhiteList = ofStringList("自动丢弃白名单");
     public static final ConfigStringList CullBlockEntityList = ofStringList("剔除方块实体列表");
     public static final ConfigStringList CullEntityList = ofStringList("剔除实体渲染列表");
     public static final ConfigStringList CullParticleList = ofStringList("剔除粒子列表");
@@ -94,31 +77,21 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigStringList HighlightEntityList = ofStringList("高亮实体列表");
 
 
+    // key setting
+    private static final KeybindSettings ANY = KeybindSettings.create(KeybindSettings.Context.ANY, KeyAction.PRESS, false, true, false, true);
+
+
     // key
-    public static final ConfigHotkey OpenWindow = ofHotkey("打开设置菜单", "D,C", "打开设置菜单");
+    public static final ConfigHotkey OpenConfigScreen = ofHotkey("打开设置菜单", "D,C", "打开设置菜单");
+    public static final ConfigHotkey OpenInventoryConfigScreen = ofHotkey("打开物品栏设置", "D,I", "可以直接点击触发");
     public static final ConfigHotkey OpenUniversalSearch = ofHotkey("打开全局搜索", "", "masa驱动");
-    public static final ConfigHotkey SortInventory = ofHotkey("整理物品栏", "", KeybindSettings.GUI, "按区域进行\n兼容carpet假人不会乱点按钮\n兼容创造模式物品栏");
-    public static final ConfigHotkey StoneCutterRecipeView = ofHotkey("展示切石机配方", "A", GUI_RELAXED);
-    public static final ConfigHotkey StoreStoneCutterRecipe = ofHotkey("储存切石机配方", "BUTTON_3", GUI_RELAXED_CANCEL);
-    public static final ConfigHotkey CutStone = ofHotkey("切石", "LEFT_CONTROL, C", GUI_NO_ORDER);
-    public static final ConfigHotkey CutStoneAndThrow = ofHotkey("切石并丢出", "LEFT_CONTROL,LEFT_ALT,C", GUI_NO_ORDER);
-    public static final ConfigHotkey MyMassCrafting = ofHotkey("我的喷射合成", "", GUI_NO_ORDER, "作为ItemScroller的替代品\n虽然仍然需要安装它才能用(以便读取配方)\n而且需要较高版本");
-    public static final ConfigHotkey ThrowSection = ofHotkey("清空区域", "", KeybindSettings.GUI, "全部丢出");
-    public static final ConfigHotkey ThrowSame = ofHotkey("丢出相同", "", KeybindSettings.GUI);
     public static final ConfigHotkey KickBot = ofHotkey("踢出假人", "", KeybindSettings.PRESS_ALLOWEXTRA, "按住时踢出准心所指假人\n支持灵魂出窍");
     public static final ConfigHotkey RestoreKicking = ofHotkey("假人复原", "", "召回误踢的假人");
-    public static final ConfigHotkey BotSpawnCommand = ofHotkey("假人召唤指令", "", "在聊天栏中建议当前位置");
-    public static final ConfigHotkey SpawnBotForItem = ofHotkey("召唤物品对应假人", "", KeybindSettings.GUI, "对物品按下快捷键可召唤对应假人\n使用/dcreload item_bot_mapping以加载映射");
-    public static final ConfigHotkey ModifierMoveAll = ofHotkey("移动全部:修饰键", "", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域全部\n兼容carpet假人不会乱点按钮");
-    public static final ConfigHotkey ModifierMoveStack = ofHotkey("移动一组:修饰键", "", GUI_RELAXED_CANCEL, "按住时左键会移动当前物品");
-    public static final ConfigHotkey ModifierMoveSame = ofHotkey("移动相同:修饰键", "", GUI_RELAXED_CANCEL, "按住时左键会移动当前区域相同物品");
-    public static final ConfigHotkey ModifierSpreadItem = ofHotkey("分散物品:修饰键", "", GUI_RELAXED_CANCEL, "按住时点击会尝试将手中物品均分到点击区域全部槽位");
-    public static final ConfigHotkey ModifierClearBundle = ofHotkey("清空收纳袋:修饰键", "", GUI_RELAXED_CANCEL, "");
+    public static final ConfigHotkey SuggestBotSpawnCommand = ofHotkey("假人召唤指令", "", "在聊天栏中建议当前位置");
     public static final ConfigHotkey ResendLastChat = ofHotkey("重发上一条消息", "", "相当于按UP键");
     public static final ConfigHotkey RepeatNewestChat = ofHotkey("消息复读", "", "复读聊天栏中最新消息");
-    public static final ConfigHotkey AlignWithEnderEye = ofHotkey("对齐末影之眼", "");
+    public static final ConfigHotkey AlignWithEnderEye = ofHotkey("对齐末影之眼");
     public static final ConfigHotkey TakeOff = ofHotkey("起飞", "", KeybindSettings.PRESS_ALLOWEXTRA, "使用鞘翅和烟花火箭起飞");
-    public static final ConfigHotkey SyncContainer = ofHotkey("容器同步", "", ANY, "以当前容器为模板, 将选区内同类容器按模板修改\n再次按下将重置\n思路来自宅咸鱼, 代码独立实现");
     public static final ConfigHotkey OpenSelectionContainers = ofHotkey("打开选区内容器", "", ANY, "记录列表, 之后逐个打开");
     public static final ConfigHotkey InteractSelectionEntities = ofHotkey("交互选区内实体", "", ANY, "记录列表, 之后逐个交互");
 
@@ -134,11 +107,7 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ConfigBooleanHotkeyed AUTO_JUMP = ofBooleanHotkeyed("自动跳跃", false, "LEFT_ALT,SPACE", "可用于走路，划船");
     public static final ConfigBooleanHotkeyed AUTO_SQUAT = ofBooleanHotkeyed("自动蹲起", false, "LEFT_ALT,RIGHT_SHIFT", "");
     public static final ConfigBooleanHotkeyed AUTO_ROTATE = ofBooleanHotkeyed("自动旋转", false, "LEFT_ALT,ENTER");
-    public static final ConfigBooleanHotkeyed StartStoneCutting = ofBooleanHotkeyed("启动连续切石", false, "", ANY);
-    public static final ConfigBooleanHotkeyed StartMassCrafting = ofBooleanHotkeyed("启动连续喷射合成", false, "", ANY);
     public static final ConfigBooleanHotkeyed LoyalerTrident = ofBooleanHotkeyed("更忠诚的三叉戟", false, "", "发射的忠诚三叉戟能够回到副手");
-    public static final ConfigBooleanHotkeyed AutoThrow = ofBooleanHotkeyed("自动丢弃", false, "", "白名单中的物品会被丢出\n在GUI中不生效");
-    public static final ConfigBooleanHotkeyed AutoContainerTaker = ofBooleanHotkeyed("自动从容器取出", false, "", "若完全取出, 自动关闭GUI");
     public static final ConfigBooleanHotkeyed AutoExtinguisher = ofBooleanHotkeyed("自动灭火", false, "", "不影响灵魂火");
     public static final ConfigBooleanHotkeyed AutoBulletCatching = ofBooleanHotkeyed("自动接子弹", false, "", "潜影贝, 恶魂");
 
@@ -190,47 +159,16 @@ public class DCCommonConfig implements IConfigHandler {
     public static final ImmutableList<IHotkeyTogglable> Yeets;
     public static final ImmutableList<IHotkeyTogglable> Highlights;
 
+    public DCCommonConfig(Path path, List<? extends IConfigBase> configs) {
+        super(path, configs);
+    }
+
     public static DCCommonConfig getInstance() {
         return INSTANCE;
     }
 
-    @Override
-    public void load() {
-        File settingFile = FILE_PATH.toFile();
-        if (settingFile.isFile() && settingFile.exists()) {
-            JsonElement jsonElement = JsonUtils.parseJsonFile(FILE_PATH);
-            if (jsonElement != null && jsonElement.isJsonObject()) {
-                JsonObject obj = jsonElement.getAsJsonObject();
-                ConfigUtils.readConfigBase(obj, MOD_NAME, ALL_CONFIGS);
-            }
-        }
-    }
-
-    @Override
-    public void save() {
-        File folder = DebrisClient.CONFIG_DIR.toFile();
-        if ((folder.exists() && folder.isDirectory()) || folder.mkdirs()) {
-            JsonObject configRoot = new JsonObject();
-            ConfigUtils.writeConfigBase(configRoot, MOD_NAME, ALL_CONFIGS);
-            JsonUtils.writeJsonToFile(configRoot, FILE_PATH);
-        }
-    }
-
-    private static ImmutableList<IConfigBase> buildIntegration() {
-        ImmutableList.Builder<IConfigBase> builder = ImmutableList.builder();
-        builder.add(ProgressResuming, PinYinSearch, CommentSearch, GlobalConfigEnhance, ScrollerEnhance);
-        if (ModReference.hasMod(ModReference.Tweakeroo)) {
-            builder.add(FreeCamKeepAutoMoving, FreeCamSpectatorFix, RetroFreeCam, ToolSwitchFix);
-        }
-        return builder.build();
-    }
-
     static {
         Values = ImmutableList.of(
-                SortingContainersLast,
-                CachedSorting,
-                ItemSortingOrder,
-                MassCraftingMode,
                 TriggerButtonOffset,
                 AutoRepeatAntiDDos,
                 FullDebugInfo,
@@ -261,7 +199,6 @@ public class DCCommonConfig implements IConfigHandler {
         Lists = ImmutableList.of(
                 AutoRepeatPlayerList,
                 AutoRepeatBlackList,
-                AutoThrowWhiteList,
                 CullBlockEntityList,
                 CullEntityList,
                 CullParticleList,
@@ -269,30 +206,16 @@ public class DCCommonConfig implements IConfigHandler {
                 HighlightEntityList
         );
         KeyPress = ImmutableList.of(
-                OpenWindow,
+                OpenConfigScreen,
+                OpenInventoryConfigScreen,
                 OpenUniversalSearch,
-                SortInventory,
-                StoneCutterRecipeView,
-                StoreStoneCutterRecipe,
-                CutStone,
-                CutStoneAndThrow,
-                MyMassCrafting,
-                ThrowSection,
-                ThrowSame,
                 KickBot,
                 RestoreKicking,
-                BotSpawnCommand,
-                SpawnBotForItem,
-                ModifierMoveAll,
-                ModifierMoveStack,
-                ModifierMoveSame,
-                ModifierSpreadItem,
-                ModifierClearBundle,
+                SuggestBotSpawnCommand,
                 ResendLastChat,
                 RepeatNewestChat,
                 AlignWithEnderEye,
                 TakeOff,
-                SyncContainer,
                 OpenSelectionContainers,
                 InteractSelectionEntities,
                 TEST
@@ -305,11 +228,7 @@ public class DCCommonConfig implements IConfigHandler {
                 AUTO_JUMP,
                 AUTO_SQUAT,
                 AUTO_ROTATE,
-                StartStoneCutting,
-                StartMassCrafting,
                 LoyalerTrident,
-                AutoThrow,
-                AutoContainerTaker,
                 AutoExtinguisher,
                 AutoBulletCatching
         );
@@ -356,6 +275,7 @@ public class DCCommonConfig implements IConfigHandler {
         builder.addAll(Yeets);
         builder.addAll(Highlights);
         ALL_CONFIGS = builder.build();
+        INSTANCE = new DCCommonConfig(DebrisClient.CONFIG_DIR.resolve("config_common.json"), ALL_CONFIGS);
         INSTANCE.load();
     }
 }

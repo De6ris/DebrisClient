@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.inventory.autoprocess;
 
-import com.github.debris.debrisclient.config.DCCommonConfig;
+import com.github.debris.debrisclient.config.InventoryConfig;
 import com.github.debris.debrisclient.inventory.section.ContainerSection;
 import com.github.debris.debrisclient.localization.AutoProcessText;
 import com.github.debris.debrisclient.util.InventoryUtil;
@@ -12,7 +12,7 @@ import java.util.List;
 public class ContainerTaker implements IAutoProcessor {
     @Override
     public boolean isActive() {
-        return DCCommonConfig.AutoContainerTaker.getBooleanValue();
+        return InventoryConfig.AutoContainerTaker.getBooleanValue();
     }
 
     @Override

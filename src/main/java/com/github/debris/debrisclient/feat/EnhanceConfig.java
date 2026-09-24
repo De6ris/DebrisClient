@@ -1,9 +1,13 @@
 package com.github.debris.debrisclient.feat;
 
 import com.github.debris.debrisclient.config.DCCommonConfig;
+import com.mojang.blaze3d.platform.InputConstants;
 import fi.dy.masa.malilib.config.IConfigOptionList;
 import fi.dy.masa.malilib.config.IConfigOptionListEntry;
 import fi.dy.masa.malilib.gui.GuiBase;
+import fi.dy.masa.malilib.hotkeys.IHotkeyCallback;
+import fi.dy.masa.malilib.hotkeys.IKeybind;
+import fi.dy.masa.malilib.hotkeys.KeyAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,5 +47,13 @@ public class EnhanceConfig {
             }
         }
         return hover;
+    }
+
+    public static void triggerCallback(int mouseButton, IHotkeyCallback callback, IKeybind keybind) {
+        if (mouseButton == InputConstants.MOUSE_BUTTON_LEFT) {
+            boolean cancel = callback.onKeyAction(KeyAction.PRESS, keybind);
+            if (cancel) return;
+            callback.onKeyAction(KeyAction.RELEASE, keybind);
+        }
     }
 }

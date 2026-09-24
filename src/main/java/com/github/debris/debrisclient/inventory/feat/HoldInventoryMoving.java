@@ -1,6 +1,6 @@
 package com.github.debris.debrisclient.inventory.feat;
 
-import com.github.debris.debrisclient.config.DCCommonConfig;
+import com.github.debris.debrisclient.config.InventoryConfig;
 import com.github.debris.debrisclient.util.InventoryUtil;
 import net.minecraft.world.inventory.Slot;
 import org.jspecify.annotations.Nullable;
@@ -28,10 +28,10 @@ public class HoldInventoryMoving {
     }
 
     private static Mode detectMode() {
-        if (DCCommonConfig.ModifierMoveStack.getKeybind().isKeybindHeld()) {
+        if (InventoryConfig.ModifierMoveStack.getKeybind().isKeybindHeld()) {
             return Mode.SINGLE;
         }
-        if (DCCommonConfig.ModifierMoveSame.getKeybind().isKeybindHeld()) {
+        if (InventoryConfig.ModifierMoveSame.getKeybind().isKeybindHeld()) {
             return Mode.SAME;
         }
         return Mode.NONE;

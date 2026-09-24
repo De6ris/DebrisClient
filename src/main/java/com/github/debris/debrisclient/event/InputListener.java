@@ -1,7 +1,7 @@
 package com.github.debris.debrisclient.event;
 
-import com.github.debris.debrisclient.DebrisClient;
 import com.github.debris.debrisclient.config.DCCommonConfig;
+import com.github.debris.debrisclient.config.InventoryConfig;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterRecipeRenderer;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterRecipeStorage;
 import com.github.debris.debrisclient.inventory.cutstone.StoneCutterUtil;
@@ -19,7 +19,10 @@ import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.MouseButtonEvent;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class InputListener implements IKeybindProvider, IKeyboardInputHandler, IMouseInputHandler {
     private static final InputListener INSTANCE = new InputListener();
@@ -32,26 +35,28 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
 
     @Override
     public void addKeysToMap(IKeybindManager manager) {
-        for (IHotkey hotkey : DCCommonConfig.KeyPress) {
-            manager.addKeybindToMap(hotkey.getKeybind());
-        }
-        for (IHotkey hotkey : DCCommonConfig.KeyToggle) {
-            manager.addKeybindToMap(hotkey.getKeybind());
-        }
-        for (IHotkey hotkey : DCCommonConfig.Yeets) {
-            manager.addKeybindToMap(hotkey.getKeybind());
-        }
-        for (IHotkey hotkey : DCCommonConfig.Highlights) {
-            manager.addKeybindToMap(hotkey.getKeybind());
-        }
+        Stream<List<? extends IHotkey>> stream = Stream.of(
+                DCCommonConfig.KeyPress,
+                DCCommonConfig.KeyToggle,
+                DCCommonConfig.Yeets,
+                DCCommonConfig.Highlights,
+                InventoryConfig.HOTKEY,
+                InventoryConfig.TOGGLE
+        );
+        stream.flatMap(Collection::stream).forEach(x -> manager.addKeybindToMap(x.getKeybind()));
     }
 
     @Override
     public void addHotkeys(IKeybindManager manager) {
-        manager.addHotkeysForCategory(DebrisClient.MOD_NAME, "按下式", DCCommonConfig.KeyPress);
-        manager.addHotkeysForCategory(DebrisClient.MOD_NAME, "切换式", DCCommonConfig.KeyToggle);
-        manager.addHotkeysForCategory(DebrisClient.MOD_NAME, "禁用", DCCommonConfig.Yeets);
-        manager.addHotkeysForCategory(DebrisClient.MOD_NAME, "高亮", DCCommonConfig.Highlights);
+        String id = DCCommonConfig.ID.toString();
+        manager.addHotkeysForCategory(id, "热键", DCCommonConfig.KeyPress);
+        manager.addHotkeysForCategory(id, "切换", DCCommonConfig.KeyToggle);
+        manager.addHotkeysForCategory(id, "禁用", DCCommonConfig.Yeets);
+        manager.addHotkeysForCategory(id, "高亮", DCCommonConfig.Highlights);
+
+        id = InventoryConfig.ID.toString();
+        manager.addHotkeysForCategory(id, "热键", InventoryConfig.HOTKEY);
+        manager.addHotkeysForCategory(id, "切换", InventoryConfig.TOGGLE);
     }
 
     @Override
@@ -77,7 +82,7 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
             if (Predicates.notInGuiContainer(this.client))
                 return false;// the below assuming valid environment
 
-            if (DCCommonConfig.ModifierMoveAll.getKeybind().isKeybindHeld()) {
+            if (InventoryConfig.ModifierMoveAll.getKeybind().isKeybindHeld()) {
                 Optional<ContainerSection> optional = SectionHandler.getSectionMouseOver();
                 if (optional.isPresent()) {
                     optional.get().notEmptyRun(InventoryUtil::quickMove);
@@ -85,7 +90,7 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
                 }
             }
 
-            if (DCCommonConfig.ModifierSpreadItem.getKeybind().isKeybindHeld()) {
+            if (InventoryConfig.ModifierSpreadItem.getKeybind().isKeybindHeld()) {
                 if (InventoryTweaks.trySpreading(false)) {
                     this.cancelButtonUp(eventButton);
                     return true;
@@ -104,14 +109,14 @@ public class InputListener implements IKeybindProvider, IKeyboardInputHandler, I
             if (Predicates.notInGuiContainer(this.client))
                 return false;// the below assuming valid environment
 
-            if (DCCommonConfig.ModifierSpreadItem.getKeybind().isKeybindHeld()) {
+            if (InventoryConfig.ModifierSpreadItem.getKeybind().isKeybindHeld()) {
                 if (InventoryTweaks.trySpreading(true)) {
                     this.cancelButtonUp(eventButton);// will put down one at HandledScreen.mouseReleased if not canceled
                     return true;
                 }
             }
 
-            if (DCCommonConfig.ModifierClearBundle.getKeybind().isKeybindHeld()) {
+            if (InventoryConfig.ModifierClearBundle.getKeybind().isKeybindHeld()) {
                 if (QuickBundle.tryClearBundle()) {
                     this.cancelButtonUp(eventButton);
                     return true;// cancel this click
