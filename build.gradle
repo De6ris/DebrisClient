@@ -84,7 +84,7 @@ dependencies {
     compileOnly "curse.maven:worldedit-${project.worldedit_projectid}:${project.worldedit_fileid}"
     compileOnly "curse.maven:wthit-${project.wthit_projectid}:${project.wthit_fileid}"
 //    compileOnly "curse.maven:carpet-${project.carpet_projectid}:${project.carpet_fileid}"
-    compileOnly libs.jei.api
+    compileOnly libs.jei
     compileOnly libs.xray
 //    compileOnly libs.commandbutton
     compileOnly libs.xaerominimap

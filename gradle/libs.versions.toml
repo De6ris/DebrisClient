@@ -16,7 +16,7 @@ conditionalmixin = "0.6.4"
 modmenu = "21.0.0-alpha.1"
 clientarguments = "1.14.0"
 libgui = "18.0.1+26.3-rc-2"
-jei = "29.5.0.26"
+jei = "31.6.0.25"
 
 xray = "7847444"
 commandbutton = "2.5.0"
@@ -40,7 +40,7 @@ conditionalmixin = { group = "me.fallenbreath", name = "conditional-mixin-fabric
 modmenu = { group = "com.terraformersmc", name = "modmenu", version.ref = "modmenu" }
 clientarguments = { group = "dev.xpple", name = "clientarguments", version.ref = "clientarguments" }
 libgui = { group = "io.github.cottonmc", name = "LibGui", version.ref = "libgui" }
-jei_api = { group = "mezz.jei", name = "jei-26.1.2-fabric-api", version.ref = "jei" }
+jei = { group = "mezz.jei", name = "jei-26.3-fabric", version.ref = "jei" }
 
 xray = { group = "curse.maven", name = "advanced-xray-fabric-edition-444663", version.ref = "xray" }
 commandbutton = { group = "maven.modrinth", name = "command-gui-buttons", version.ref = "commandbutton" }
