@@ -1,6 +1,5 @@
 package com.github.debris.debrisclient.feat;
 
-import com.github.debris.debrisclient.DebrisClient;
 import com.github.debris.debrisclient.compat.ModReference;
 import com.github.debris.debrisclient.gui.UniversalSearchScreen;
 import com.github.debris.debrisclient.unsafe.LitematicaAccess;
@@ -85,9 +84,7 @@ public class ConfigCollector {
         processGui(mod, gui);
         gui.initGui();//add buttons
 
-        for (ButtonBase button : AccessorUtil.getButtons(gui).toArray(new ButtonBase[0])) {
-            if (shouldSkipButton(mod, gui, button)) continue;
-
+        for (ButtonBase button : filterButtons(mod, gui, AccessorUtil.getButtons(gui))) {
             IButtonActionListener listener = AccessorUtil.getActionListener(button);
             if (listener == null) continue;
 
@@ -107,21 +104,28 @@ public class ConfigCollector {
         }
     }
 
-    private static boolean shouldSkipButton(ModInfo mod, GuiConfigsBase gui, ButtonBase button) {
-        String content = AccessorUtil.getDisplayString(button);
-        String modId = mod.modId();
-        switch (modId) {
-            case DebrisClient.MOD_ID -> {
-                if (content.contains("全部")) return true;
+    private static List<ButtonBase> filterButtons(ModInfo mod, GuiConfigsBase gui, List<ButtonBase> list) {
+        ArrayList<ButtonBase> filtered = new ArrayList<>();
+        for (ButtonBase button : list) {
+            String content = AccessorUtil.getDisplayString(button);
+            if (isAllTab(content)) return List.of(button);
+
+            String modId = mod.modId();
+            switch (modId) {
+                case ModReference.Litematica -> {
+                    if (LitematicaAccess.isRenderLayerButton(content)) continue;
+                }
+                case ModReference.MiniHud -> {
+                    if (MiniHudAccess.isShapeButton(content)) continue;
+                }
             }
-            case ModReference.Litematica -> {
-                if (LitematicaAccess.isRenderLayerButton(content)) return true;
-            }
-            case ModReference.MiniHud -> {
-                if (MiniHudAccess.isShapeButton(content)) return true;
-            }
+            filtered.add(button);
         }
-        return false;
+        return filtered;
+    }
+
+    private static boolean isAllTab(String content) {
+        return content.contains("全部") || content.contains("All");
     }
 
     public static Map<GuiConfigsBase.ConfigOptionWrapper, Source> buildSourceMap(Map<Source, List<GuiConfigsBase.ConfigOptionWrapper>> configMap) {
