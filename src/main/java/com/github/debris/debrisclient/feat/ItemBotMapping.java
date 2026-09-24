@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class ItemBotMapping {
+    public static final String ID_SPLIT = ":";
     public static final String TAG_PREFIX = "#";
     public static final String TAG_SPLIT = "/";
 
@@ -121,8 +122,17 @@ public class ItemBotMapping {
 
         List<String> list = new ArrayList<>();
 
-        list.add(BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath());
-        list.addAll(stack.tags().map(TagKey::location).map(x -> "\"" + TAG_PREFIX + x.getPath() + "\"").toList());
+        list.add(
+                quoted(
+                        BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath()
+                )
+        );
+        list.addAll(
+                stack.tags()
+                        .map(TagKey::location)
+                        .map(x -> quoted(TAG_PREFIX + x))
+                        .toList()
+        );
 
         return list;
     }
@@ -131,11 +141,11 @@ public class ItemBotMapping {
         if (string.startsWith(TAG_PREFIX)) {
             string = string.substring(1);
             if (isPlural(string)) {
-                String[] split = string.split("[_/]", -1);
+                String[] split = string.split("[:_/]", -1);
                 return Stream.concat(Arrays.stream(split), Stream.of(getSingular(split[split.length - 1])));
             }
         }
-        return Arrays.stream(string.split("[_/]", -1));
+        return Arrays.stream(string.split("[:_/]", -1));
     }
 
     private static boolean isPlural(String tag) {
@@ -144,6 +154,10 @@ public class ItemBotMapping {
 
     private static String getSingular(String tag) {
         return tag.substring(0, tag.length() - 1);
+    }
+
+    private static String quoted(String s) {
+        return "\"" + s + "\"";
     }
 
     static {

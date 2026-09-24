@@ -65,6 +65,8 @@ public class DCCommonConfig extends ConfigHandlerImpl {
     public static final ConfigBoolean WailaMasaCompat = ofBoolean("Waila与Masa兼容", true, "在合适的时机不渲染tooltip\njade, wthit");
     @RequiresMod(ModReference.REI)
     public static final ConfigBoolean DisableREIWarning = ofBoolean("禁用REI警告", false, "至少在18.0.796版本仍然每次进服都在弹窗");
+    @RequiresMod(ModReference.MiniHud)
+    public static final ConfigBoolean AlwaysAssumeServux = ofBoolean("总是假定Servux", false, "在0.41.1中重新进入服务器会使配置关闭");
 
 
     // list
@@ -194,7 +196,8 @@ public class DCCommonConfig extends ConfigHandlerImpl {
                 InventoryPreviewOnComparator,
                 XRayAutoColor,
                 WailaMasaCompat,
-                DisableREIWarning
+                DisableREIWarning,
+                AlwaysAssumeServux
         );
         Lists = ImmutableList.of(
                 AutoRepeatPlayerList,

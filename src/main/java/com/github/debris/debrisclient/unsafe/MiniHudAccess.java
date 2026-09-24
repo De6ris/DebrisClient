@@ -34,4 +34,9 @@ public class MiniHudAccess {
     public static boolean hasTargetInventory() {
         return !InventoryOverlayHandler.getInstance().isEmpty();
     }
+
+    public static void setServux(boolean value) {
+        Configs.Generic.HUD_DATA_SYNC.setBooleanValue(value);
+        Configs.Generic.ENTITY_DATA_SYNC.setBooleanValue(value);
+    }
 }
