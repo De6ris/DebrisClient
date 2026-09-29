@@ -29,10 +29,18 @@ public class DCCountEntityCommand {
     private static final int DISTRIBUTION_PRINT_LIMIT = 10;
 
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        dispatcher.register(literal(Commands.PREFIX + "count_entity")
-                .executes(ctx -> execute(ctx.getSource()))
-                .then(argument("filter", entities())
-                        .executes(ctx -> execute(ctx.getSource(), ctx.getArgument("filter", CEntitySelector.class))))
+        dispatcher.register(
+                literal(Commands.PREFIX + "count_entity")
+                        .executes(ctx -> execute(ctx.getSource()))
+                        .then(
+                                argument("filter", entities())
+                                        .executes(
+                                                ctx -> execute(
+                                                        ctx.getSource(),
+                                                        ctx.getArgument("filter", CEntitySelector.class)
+                                                )
+                                        )
+                        )
         );
     }
 
@@ -45,25 +53,32 @@ public class DCCountEntityCommand {
     }
 
     private static int execute(FabricClientCommandSource source, Stream<? extends Entity> stream) {
-        Map<? extends EntityType<?>, Distribution> map = stream.collect(Collectors.groupingBy(Entity::getType))
+        List<Distribution> list = stream.collect(Collectors.groupingBy(Entity::getType))
                 .entrySet().stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> distributeByPosition(entry.getValue())
-                ));
-        source.sendFeedback(Component.literal(String.format("已找到%d种实体, 共%d个", map.size(), map.values().stream().mapToInt(Distribution::getTotal).sum())));
-        map.forEach((entityType, distribution) -> source.sendFeedback(getFeedback(source, entityType, distribution)));
+                .map(x -> distributeByPosition(x.getKey(), x.getValue()))
+                .sorted(Comparator.comparing(Distribution::totalCount).reversed())
+                .toList();
+        source.sendFeedback(
+                Component.literal(
+                        String.format(
+                                "已找到%d种实体, 共%d个",
+                                list.size(),
+                                list.stream().mapToInt(Distribution::totalCount).sum())
+                )
+        );
+        list.forEach(distribution -> source.sendFeedback(getFeedback(source, distribution)));
         return Command.SINGLE_SUCCESS;
     }
 
-    private static MutableComponent getFeedback(FabricClientCommandSource source, EntityType<?> entityType, Distribution distribution) {
+    private static MutableComponent getFeedback(FabricClientCommandSource source, Distribution distribution) {
+        EntityType<?> entityType = distribution.entityType;
         MutableComponent feedback = TextFactory.listEntry(
                 Component.empty()
                         .append(entityType.getDescription())
                         .withStyle(style -> style.withColor(ColorUtil.getColor(entityType)))
-                        .append(String.format("(%d)", distribution.getTotal()))
+                        .append(String.format("(%d)", distribution.totalCount))
         );
-        int originalSize = distribution.size();
+        int originalSize = distribution.entries.size();
         int printSize;
         boolean reduced;
         if (originalSize > DISTRIBUTION_PRINT_LIMIT) {
@@ -75,7 +90,7 @@ public class DCCountEntityCommand {
         }
 
         for (int i = 0; i < printSize; i++) {
-            DistributionEntry entry = distribution.get(i);
+            DistributionEntry entry = distribution.entries.get(i);
             BlockPos blockPos = entry.pos;
             int count = entry.count;
 
@@ -103,26 +118,18 @@ public class DCCountEntityCommand {
         return feedback;
     }
 
-    private static Distribution distributeByPosition(List<? extends Entity> entities) {
-        Map<BlockPos, Long> distribution = entities.stream().collect(Collectors.groupingBy(Entity::blockPosition, Collectors.counting()));
+    private static Distribution distributeByPosition(EntityType<?> entityType, List<? extends Entity> entities) {
+        Map<BlockPos, Long> distribution = entities
+                .stream()
+                .collect(Collectors.groupingBy(Entity::blockPosition, Collectors.counting()));
         Comparator<DistributionEntry> comparator = Comparator.comparingInt(DistributionEntry::count);
         List<DistributionEntry> list = distribution.entrySet().stream()
-                .map(x -> new DistributionEntry(x.getKey(), x.getValue())).sorted(comparator.reversed()).toList();
-        return new Distribution(list);
+                .map(x -> new DistributionEntry(x.getKey(), x.getValue())).sorted(comparator.reversed())
+                .toList();
+        return new Distribution(entityType, list, entities.size());
     }
 
-    private record Distribution(List<DistributionEntry> entries) {
-        private int getTotal() {
-            return entries.stream().mapToInt(DistributionEntry::count).sum();
-        }
-
-        private int size() {
-            return entries.size();
-        }
-
-        private DistributionEntry get(int index) {
-            return entries.get(index);
-        }
+    private record Distribution(EntityType<?> entityType, List<DistributionEntry> entries, int totalCount) {
     }
 
     private record DistributionEntry(BlockPos pos, int count) {
